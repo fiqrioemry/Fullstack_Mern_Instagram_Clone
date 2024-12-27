@@ -10,12 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useProvider } from "../../context/GlobalProvider";
 
-const CreatePostModal = () => {
-  const { openModal, setOpenModal, handleCloseModal } = useProvider();
-
-  const handleDiscard = () => {
-    h;
-  };
+const DiscardPostModal = () => {
+  const { openModal, handleCloseModal, handleCloseAllModals } = useProvider();
 
   return (
     <Dialog
@@ -24,19 +20,17 @@ const CreatePostModal = () => {
     >
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when youre done.
+            Are you sure want to remove this post ?
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button onClick={() => handleCloseModal("discard")}>
-            Save changes
-          </Button>
+          <Button onClick={() => handleCloseAllModals()}>Discard</Button>
+          <Button onClick={() => handleCloseModal("discard")}>Cancel</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default CreatePostModal;
+export default DiscardPostModal;

@@ -9,8 +9,13 @@ export const GlobalProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
-  const { openModal, setOpenModal, handleOpenModal, handleCloseModal } =
-    useHandleModal();
+  const {
+    openModal,
+    setOpenModal,
+    handleOpenModal,
+    handleCloseModal,
+    handleCloseAllModals,
+  } = useHandleModal();
 
   return (
     <GlobalContext.Provider
@@ -21,6 +26,7 @@ export const GlobalProvider = ({ children }) => {
         setOpenModal,
         handleOpenModal,
         handleCloseModal,
+        handleCloseAllModals,
       }}
     >
       {children}

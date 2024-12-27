@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useProvider } from "../../context/GlobalProvider";
 
 const CreatePostModal = () => {
-  const { openModal, handleCloseModal } = useProvider();
+  const { openModal, handleOpenModal, handleCloseModal } = useProvider();
 
   return (
     <Dialog
@@ -26,7 +26,7 @@ const CreatePostModal = () => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button onClick={() => handleCloseModal("create")}>
+          <Button onClick={() => handleOpenModal("discard")}>
             Save changes
           </Button>
         </DialogFooter>
