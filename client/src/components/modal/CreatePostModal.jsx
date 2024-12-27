@@ -9,28 +9,20 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { useProvider } from "../../context/GlobalProvider";
+import { useHandleForm } from "../../hooks/useHandleForm";
+import { initialPostForm } from "../../config";
 
 const CreatePostModal = () => {
-  const { openModal, handleOpenModal, handleCloseModal } = useProvider();
+  const { openModal, handleCloseModal } = useProvider();
+  const { formData, handleChange, handleMediaFile } =
+    useHandleForm(initialPostForm);
 
   return (
     <Dialog
       open={openModal.create}
       onOpenChange={(isOpen) => (isOpen ? null : handleCloseModal("create"))}
     >
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when youre done.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button onClick={() => handleOpenModal("discard")}>
-            Save changes
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+      <DialogContent className="sm:max-w-[425px]"></DialogContent>
     </Dialog>
   );
 };

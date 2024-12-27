@@ -26,6 +26,22 @@ export const useHandleForm = (initialFormState) => {
     }
   };
 
+  const handleMediaFile = (e) => {
+    e.preventDefault();
+
+    let files = [];
+    if (e.dataTransfer) {
+      files = Array.from(e.dataTransfer.files);
+    } else {
+      files = Array.from(e.target.files);
+    }
+    const newMediaFiles = files.map((file) => ({
+      url: URL.createObjectURL(file),
+      type: file.type,
+    }));
+    setFormData((prev) => [...prev, [e.target.name], ...newMediaFiles]);
+  };
+
   const handleValidate = () => {
     for (const key in formData) {
       // eslint-disable-next-line no-prototype-builtins
@@ -56,5 +72,6 @@ export const useHandleForm = (initialFormState) => {
     handleRemove,
     handleSubmit,
     fileInputRef,
+    handleMediaFile,
   };
 };

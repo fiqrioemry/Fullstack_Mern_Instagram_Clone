@@ -10,30 +10,29 @@ import {
 import { Button } from "@/components/ui/button";
 import { useProvider } from "../../context/GlobalProvider";
 
-const DiscardPostModal = () => {
-  const { openModal, handleCloseModal, handleCloseAllModals } = useProvider();
+const DetailPostModal = () => {
+  const { openModal, handleOpenModal, handleCloseModal } = useProvider();
 
   return (
     <Dialog
-      open={openModal.discard}
-      onOpenChange={(isOpen) => (isOpen ? null : handleCloseModal("discard"))}
+      open={openModal.create}
+      onOpenChange={(isOpen) => (isOpen ? null : handleCloseModal("create"))}
     >
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Delete Confirmation</DialogTitle>
+          <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>
-            Are you sure want to remove this post ?
+            Make changes to your profile here. Click save when youre done.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="destructive" onClick={() => handleCloseAllModals()}>
-            Discard
+          <Button onClick={() => handleOpenModal("discard")}>
+            Save changes
           </Button>
-          <Button onClick={() => handleCloseModal("discard")}>Cancel</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default DiscardPostModal;
+export default DetailPostModal;

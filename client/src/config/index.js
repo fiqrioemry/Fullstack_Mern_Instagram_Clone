@@ -18,6 +18,11 @@ export const initialSignUpForm = {
   password: "",
 };
 
+export const initialPostForm = {
+  content: "",
+  images: [],
+};
+
 export const controlSignInForm = [
   {
     name: "email",
