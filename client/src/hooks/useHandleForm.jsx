@@ -35,11 +35,16 @@ export const useHandleForm = (initialFormState) => {
     } else {
       files = Array.from(e.target.files);
     }
+
     const newMediaFiles = files.map((file) => ({
       url: URL.createObjectURL(file),
       type: file.type,
     }));
-    setFormData((prev) => [...prev, [e.target.name], ...newMediaFiles]);
+
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...newMediaFiles],
+    }));
   };
 
   const handleValidate = () => {

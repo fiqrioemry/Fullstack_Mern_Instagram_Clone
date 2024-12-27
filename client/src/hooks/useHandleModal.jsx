@@ -8,7 +8,6 @@ const useHandleModal = () => {
   });
 
   const handleOpenModal = (name) => {
-    console.log("name");
     setOpenModal((prev) => ({ ...prev, [name]: true }));
   };
 
