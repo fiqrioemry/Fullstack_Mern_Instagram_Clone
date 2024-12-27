@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { createContext, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import useHandleModal from "../hooks/useHandleModal";
 
 const GlobalContext = createContext();
 
@@ -8,9 +9,20 @@ export const GlobalProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const { openModal, setOpenModal, handleOpenModal, handleCloseModal } =
+    useHandleModal();
 
   return (
-    <GlobalContext.Provider value={{ currentPath, navigate }}>
+    <GlobalContext.Provider
+      value={{
+        currentPath,
+        navigate,
+        openModal,
+        setOpenModal,
+        handleOpenModal,
+        handleCloseModal,
+      }}
+    >
       {children}
     </GlobalContext.Provider>
   );

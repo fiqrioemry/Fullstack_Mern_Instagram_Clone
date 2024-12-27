@@ -11,12 +11,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sidebarConfiguration } from "../../config";
-import useHandleModal from "../../hooks/useHandleModal";
+import { useProvider } from "../../context/GlobalProvider";
 
 // eslint-disable-next-line react/prop-types
 const SidebarContent = ({ openSearch, handleSearch }) => {
   const navigate = useNavigate();
-  const { handleOpenModal } = useHandleModal();
+  const { handleOpenModal } = useProvider();
   const { handleDarkMode, darkMode } = useHandleDarkMode();
 
   const handleNavigate = (params) => {
@@ -44,7 +44,6 @@ const SidebarContent = ({ openSearch, handleSearch }) => {
           <Button
             size="lg"
             variant="nav"
-            name={menu.title}
             onClick={menu.action}
             key={menu.title}
           >

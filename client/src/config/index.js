@@ -62,7 +62,7 @@ export const controlSignUpForm = [
 
 export const sidebarConfiguration = ({
   handleNavigate,
-  handlePost,
+  handleOpenModal,
   handleSearch,
 }) => [
   {
@@ -82,12 +82,12 @@ export const sidebarConfiguration = ({
   },
   {
     icon: Search,
-    action: () => handleSearch(),
+    action: () => handleSearch("search"),
     title: "search",
   },
   {
     icon: SquarePlus,
-    action: () => handlePost(),
+    action: () => handleOpenModal("create"),
     title: "create",
   },
 ];

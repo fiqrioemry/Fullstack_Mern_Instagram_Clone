@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { animateSearch } from "../../config";
 import { Input } from "@/components/ui/input";
 
+// eslint-disable-next-line react/prop-types
 const SidebarSearchPanel = ({ openSearch }) => {
   return (
     <motion.div
