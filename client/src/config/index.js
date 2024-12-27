@@ -68,31 +68,26 @@ export const sidebarConfiguration = ({
   {
     icon: HomeIcon,
     action: () => handleNavigate(""),
-    path: "",
     title: "home",
   },
   {
     icon: CircleUserRound,
     action: () => handleNavigate("profile"),
-    path: "profile",
     title: "profile",
   },
   {
     icon: Compass,
     title: "explore",
     action: () => handleNavigate("explore"),
-    path: "explore",
   },
   {
     icon: Search,
     action: () => handleSearch(),
-    path: null,
     title: "search",
   },
   {
     icon: SquarePlus,
     action: () => handlePost(),
-    path: null,
     title: "create",
   },
 ];

@@ -2,16 +2,16 @@ import { motion } from "framer-motion";
 import { animateSearch } from "../../config";
 import { Input } from "@/components/ui/input";
 
-const SidebarSearchPanel = ({ searchActive }) => {
+const SidebarSearchPanel = ({ openSearch }) => {
   return (
     <motion.div
-      className="fixed top-0 bottom-0 left-[75px] w-[325px] h-full bg-background border-r z-10"
+      className="searchbar_wrapper"
       initial="close"
-      animate={searchActive ? "open" : "close"}
+      animate={openSearch ? "open" : "close"}
       variants={animateSearch}
     >
       <div className="px-3">
-        <div className="flex items-center h-[100px]">
+        <div className="flex py-10">
           <h3>Search panel</h3>
         </div>
         <form>

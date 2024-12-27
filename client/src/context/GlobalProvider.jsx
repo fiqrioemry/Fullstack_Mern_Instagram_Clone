@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { createContext, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import useSearchPanel from "../hooks/useSearchPanel";
 
 const GlobalContext = createContext();
 
@@ -10,12 +9,8 @@ export const GlobalProvider = ({ children }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const { searchActive, handleSearch, searchRef } = useSearchPanel();
-
   return (
-    <GlobalContext.Provider
-      value={{ currentPath, navigate, searchRef, searchActive, handleSearch }}
-    >
+    <GlobalContext.Provider value={{ currentPath, navigate }}>
       {children}
     </GlobalContext.Provider>
   );

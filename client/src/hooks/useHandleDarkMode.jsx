@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useToggleDarkMode = () => {
+const useHandleDarkMode = () => {
   const [darkMode, setDarkMode] = useState(
     JSON.parse(localStorage.getItem("darkMode")) || false
   );
@@ -22,4 +22,4 @@ const useToggleDarkMode = () => {
   return { handleDarkMode, darkMode };
 };
 
-export default useToggleDarkMode;
+export default useHandleDarkMode;

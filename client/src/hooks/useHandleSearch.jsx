@@ -1,20 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 
-const useSearchPanel = () => {
+const useHandleSearch = () => {
   const searchRef = useRef(null);
-  const [searchActive, setSearchActive] = useState(false);
+  const [openSearch, setOpenSearch] = useState(false);
 
   const handleSearch = () => {
-    setSearchActive((prevState) => !prevState);
+    setOpenSearch((prevState) => !prevState);
   };
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768 && searchActive) setSearchActive(false);
+      if (window.innerWidth <= 768 && openSearch) setOpenSearch(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [searchActive]);
+  }, [openSearch]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -29,10 +29,10 @@ const useSearchPanel = () => {
   }, [searchRef]);
 
   return {
-    searchActive,
-    handleSearch,
     searchRef,
+    openSearch,
+    handleSearch,
   };
 };
 
-export default useSearchPanel;
+export default useHandleSearch;

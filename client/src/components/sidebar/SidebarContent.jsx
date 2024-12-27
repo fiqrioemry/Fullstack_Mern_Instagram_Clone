@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import InstagramLogo from "../common/InstagramLogo";
 import InstagramIcon from "../common/InstagramIcon";
 import { MenuIcon, MoonIcon, SunIcon } from "lucide-react";
-import useToggleDarkMode from "../../hooks/useToggleDarkMode";
-
+import useHandleDarkMode from "../../hooks/useHandleDarkMode";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,45 +11,45 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sidebarConfiguration } from "../../config";
+import useHandleModal from "../../hooks/useHandleModal";
 
-const SidebarContent = ({ searchActive, handleSearch }) => {
-  const { handleDarkMode, darkMode } = useToggleDarkMode();
+// eslint-disable-next-line react/prop-types
+const SidebarContent = ({ openSearch, handleSearch }) => {
   const navigate = useNavigate();
+  const { handleOpenModal } = useHandleModal();
+  const { handleDarkMode, darkMode } = useHandleDarkMode();
 
   const handleNavigate = (params) => {
     navigate(`/${params}`);
   };
 
-  const handlePost = () => {
-    alert("create a post");
-  };
-
   const navigationMenu = sidebarConfiguration({
     handleNavigate,
-    handlePost,
+    handleOpenModal,
     handleSearch,
   });
 
   return (
     <div className="px-3">
-      <header className="hidden md:flex items-center px-3 h-[100px]">
-        {searchActive ? (
+      <div className="hidden md:block py-10 px-3">
+        {openSearch ? (
           <InstagramIcon />
         ) : (
           <InstagramLogo size={30} width={105} />
         )}
-      </header>
+      </div>
 
       <div className="flex md:block">
         {navigationMenu.map((menu) => (
           <Button
             size="lg"
             variant="nav"
+            name={menu.title}
             onClick={menu.action}
             key={menu.title}
           >
             <menu.icon size={26} />
-            {!searchActive && (
+            {!openSearch && (
               <span className="hidden md:block">{menu.title}</span>
             )}
           </Button>
@@ -61,7 +60,7 @@ const SidebarContent = ({ searchActive, handleSearch }) => {
           <DropdownMenuTrigger asChild>
             <Button size="lg" variant="nav">
               <MenuIcon size={26} />
-              {!searchActive && <span className="hidden md:block">more</span>}
+              {!openSearch && <span className="hidden md:block">more</span>}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
