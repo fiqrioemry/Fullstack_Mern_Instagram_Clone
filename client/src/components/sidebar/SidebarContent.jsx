@@ -1,6 +1,5 @@
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
-import { sidebarNavigation } from "../../config";
+import { useNavigate } from "react-router-dom";
 import InstagramLogo from "../common/InstagramLogo";
 import InstagramIcon from "../common/InstagramIcon";
 import { MenuIcon, MoonIcon, SunIcon } from "lucide-react";
@@ -12,9 +11,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { sidebarConfiguration } from "../../config";
 
 const SidebarContent = ({ searchActive, handleSearch }) => {
   const { handleDarkMode, darkMode } = useToggleDarkMode();
+  const navigate = useNavigate();
+
+  const handleNavigate = (params) => {
+    navigate(`/${params}`);
+  };
+
+  const handlePost = () => {
+    alert("create a post");
+  };
+
+  const navigationMenu = sidebarConfiguration({
+    handleNavigate,
+    handlePost,
+    handleSearch,
+  });
 
   return (
     <div className="px-3">
@@ -27,17 +42,18 @@ const SidebarContent = ({ searchActive, handleSearch }) => {
       </header>
 
       <div className="flex md:block">
-        {sidebarNavigation.map((menu) => (
-          <Link className="w-full" to={menu.path} key={menu.title}>
-            <Button size="lg" variant="nav" onClick={handleSearch}>
-              <menu.icon size={26} />
-              {searchActive ? (
-                ""
-              ) : (
-                <span className="hidden md:block">{menu.title}</span>
-              )}
-            </Button>
-          </Link>
+        {navigationMenu.map((menu) => (
+          <Button
+            size="lg"
+            variant="nav"
+            onClick={menu.action}
+            key={menu.title}
+          >
+            <menu.icon size={26} />
+            {!searchActive && (
+              <span className="hidden md:block">{menu.title}</span>
+            )}
+          </Button>
         ))}
       </div>
       <div className="hidden md:block">
@@ -45,7 +61,7 @@ const SidebarContent = ({ searchActive, handleSearch }) => {
           <DropdownMenuTrigger asChild>
             <Button size="lg" variant="nav">
               <MenuIcon size={26} />
-              {searchActive ? "" : <span>more</span>}
+              {!searchActive && <span className="hidden md:block">more</span>}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>

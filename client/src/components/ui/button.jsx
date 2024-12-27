@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        nav: "hover:bg-accent hover:text-accent-foreground flex items-center justify-start gap-x-3 w-full capitalize text-md",
+        nav: "hover:bg-accent hover:text-accent-foreground flex items-center justify-center md:justify-start gap-x-3 w-full capitalize text-md",
         custom: "bg-custom text-primary-foreground shadow hover:bg-custom/90",
         menu: "hover:bg-accent hover:text-accent-foreground flex items-center justify-between gap-x-3 w-full",
       },
