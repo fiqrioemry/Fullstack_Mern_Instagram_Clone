@@ -11,7 +11,7 @@ const Layout = () => {
       <main className="flex h-auto md:h-screen ">
         <Sidebar />
         <CreatePostModal />
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto">
           <Outlet />
         </div>
       </main>
