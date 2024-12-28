@@ -2,6 +2,8 @@ import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import InstagramLogo from "../common/InstagramLogo";
 import InstagramIcon from "../common/InstagramIcon";
+import { sidebarConfiguration } from "../../config";
+import useHandleModal from "../../hooks/useHandleModal";
 import { MenuIcon, MoonIcon, SunIcon } from "lucide-react";
 import useHandleDarkMode from "../../hooks/useHandleDarkMode";
 import {
@@ -10,7 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { sidebarConfiguration } from "../../config";
 import { useProvider } from "../../context/GlobalProvider";
 
 // eslint-disable-next-line react/prop-types

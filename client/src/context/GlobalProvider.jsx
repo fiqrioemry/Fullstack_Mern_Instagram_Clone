@@ -12,6 +12,8 @@ export const GlobalProvider = ({ children }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
+  useHandleSearch();
+  useHandleDarkMode();
   const {
     openModal,
     setOpenModal,
@@ -20,15 +22,11 @@ export const GlobalProvider = ({ children }) => {
     handleCloseAllModals,
   } = useHandleModal();
 
-  useHandleDarkMode();
-
-  useHandleSearch();
-
   return (
     <GlobalContext.Provider
       value={{
-        currentPath,
         navigate,
+        currentPath,
         openModal,
         setOpenModal,
         handleOpenModal,

@@ -8,8 +8,10 @@ const useHandleModal = () => {
   });
 
   const handleOpenModal = (name) => {
+    console.log("success");
     setOpenModal((prev) => ({ ...prev, [name]: true }));
   };
+  console.log(openModal);
 
   const handleCloseModal = (name) => {
     setOpenModal((prev) => ({ ...prev, [name]: false }));

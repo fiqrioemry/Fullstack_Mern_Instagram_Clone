@@ -21,6 +21,8 @@ const CreatePostModal = () => {
     e.preventDefault();
   };
 
+  console.log(openModal);
+
   const handleDiscardChanges = () => {
     setNextInput(false);
     handleCloseAllModals();
