@@ -116,7 +116,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground dark;
+    @apply bg-background text-foreground;
   }
 
   .sidebar_wrapper {

@@ -20,14 +20,14 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         nav: "hover:bg-accent hover:text-accent-foreground flex items-center justify-center md:justify-start gap-x-3 w-full capitalize text-md",
-        custom: "bg-custom  shadow hover:bg-custom/90 w-full",
+        custom: "bg-custom shadow hover:bg-custom/90 w-full",
         menu: "hover:bg-accent hover:text-accent-foreground flex items-center justify-between gap-x-3 w-full",
       },
       size: {
         default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-12 rounded-md px-3 py-3",
-        icon: "h-9 w-9",
+        sm: "h-8 rounded-md px-3 py-3 text-xs",
+        lg: "h-12 rounded-md px-3 py-3 text-md",
+        icon: "h-9 w-9 ",
       },
     },
     defaultVariants: {
