@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import InstagramLogo from "../common/InstagramLogo";
 import InstagramIcon from "../common/InstagramIcon";
 import { sidebarConfiguration } from "../../config";
-import useHandleModal from "../../hooks/useHandleModal";
 import { MenuIcon, MoonIcon, SunIcon } from "lucide-react";
 import useHandleDarkMode from "../../hooks/useHandleDarkMode";
 import {

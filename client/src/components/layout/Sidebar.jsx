@@ -3,12 +3,12 @@ import SidebarSearchPanel from "../sidebar/SidebarSearchPanel";
 import useHandleSearch from "../../hooks/useHandleSearch";
 
 const Sidebar = () => {
-  const { openSearch, handleSearch } = useHandleSearch();
-
+  const { openSearch, handleSearch, searchRef } = useHandleSearch();
+  console.log(openSearch);
   return (
     <aside className="sidebar_wrapper">
-      <SidebarSearchPanel openSearch={openSearch} />
-      
+      <SidebarSearchPanel openSearch={openSearch} searchRef={searchRef} />
+
       <div
         className={` ${
           openSearch ? "w-[75px]" : "w-full"

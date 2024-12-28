@@ -8,6 +8,12 @@ const useHandleSearch = () => {
     setOpenSearch((prevState) => !prevState);
   };
 
+  const handleClickOutside = (event) => {
+    if (searchRef.current && !searchRef.current.contains(event.target)) {
+      setOpenSearch(false);
+    }
+  };
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768 && openSearch) setOpenSearch(false);
@@ -17,21 +23,18 @@ const useHandleSearch = () => {
   }, [openSearch]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        handleSearch();
-      }
-
-      if (!searchRef || !searchRef.current) return;
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      // Bersihkan event listener saat komponen dilepas
+      document.removeEventListener("click", handleClickOutside);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [searchRef]);
+  }, []);
 
   return {
     searchRef,
     openSearch,
     handleSearch,
+    handleClickOutside,
   };
 };
 
