@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 const useHandleSearch = () => {
   const searchRef = useRef(null);
+  const buttonRef = useRef(null);
   const [openSearch, setOpenSearch] = useState(false);
 
   const handleSearch = () => {
@@ -9,7 +10,12 @@ const useHandleSearch = () => {
   };
 
   const handleClickOutside = (event) => {
-    if (searchRef.current && !searchRef.current.contains(event.target)) {
+    if (
+      openSearch &&
+      searchRef.current &&
+      !buttonRef.current.contains(event.target) &&
+      !searchRef.current.contains(event.target)
+    ) {
       setOpenSearch(false);
     }
   };
@@ -23,14 +29,14 @@ const useHandleSearch = () => {
   }, [openSearch]);
 
   useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
-      // Bersihkan event listener saat komponen dilepas
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
   return {
+    buttonRef,
     searchRef,
     openSearch,
     handleSearch,

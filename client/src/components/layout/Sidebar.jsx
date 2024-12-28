@@ -3,8 +3,8 @@ import SidebarSearchPanel from "../sidebar/SidebarSearchPanel";
 import useHandleSearch from "../../hooks/useHandleSearch";
 
 const Sidebar = () => {
-  const { openSearch, handleSearch, searchRef } = useHandleSearch();
-  console.log(openSearch);
+  const { openSearch, handleSearch, searchRef, buttonRef } = useHandleSearch();
+
   return (
     <aside className="sidebar_wrapper">
       <SidebarSearchPanel openSearch={openSearch} searchRef={searchRef} />
@@ -14,7 +14,11 @@ const Sidebar = () => {
           openSearch ? "w-[75px]" : "w-full"
         } sidebar_content_wrapper `}
       >
-        <SidebarContent openSearch={openSearch} handleSearch={handleSearch} />
+        <SidebarContent
+          openSearch={openSearch}
+          handleSearch={handleSearch}
+          buttonRef={buttonRef}
+        />
       </div>
     </aside>
   );

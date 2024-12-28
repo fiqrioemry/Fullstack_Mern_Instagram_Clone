@@ -14,7 +14,7 @@ import {
 import { useProvider } from "../../context/GlobalProvider";
 
 // eslint-disable-next-line react/prop-types
-const SidebarContent = ({ openSearch, handleSearch }) => {
+const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
   const navigate = useNavigate();
   const { handleOpenModal } = useProvider();
   const { handleDarkMode, darkMode } = useHandleDarkMode();
@@ -42,6 +42,7 @@ const SidebarContent = ({ openSearch, handleSearch }) => {
       <div className="flex md:block">
         {navigationMenu.map((menu) => (
           <Button
+            ref={buttonRef}
             size="lg"
             variant="nav"
             onClick={menu.action}
