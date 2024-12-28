@@ -39,7 +39,7 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
         )}
       </div>
 
-      <div className="flex md:block">
+      <div className="flex md:block space-y-2">
         {navigationMenu.map((menu) => (
           <Button
             size="lg"
@@ -50,7 +50,7 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
           >
             <menu.icon size={26} />
             {!openSearch && (
-              <span className="hidden md:block">{menu.title}</span>
+              <span className="hidden xl:block">{menu.title}</span>
             )}
           </Button>
         ))}
@@ -60,7 +60,7 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
           <DropdownMenuTrigger asChild>
             <Button size="lg" variant="nav">
               <MenuIcon size={26} />
-              {!openSearch && <span className="hidden md:block">more</span>}
+              {!openSearch && <span className="hidden xl:block">more</span>}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>

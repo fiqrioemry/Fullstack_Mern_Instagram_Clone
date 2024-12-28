@@ -120,7 +120,7 @@
   }
 
   .sidebar_wrapper {
-    @apply fixed bottom-0 right-0 left-0 w-full lg:relative lg:w-[245px] z-10;
+    @apply fixed bottom-0 right-0 left-0 w-full md:relative md:w-[75px] xl:w-[245px] z-10 duration-300 transition-all;
   }
 
   .sidebar_content_wrapper {

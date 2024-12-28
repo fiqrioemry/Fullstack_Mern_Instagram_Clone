@@ -7,15 +7,15 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const CarouselMediaPost = ({ formData }) => {
+const CarouselMediaPost = ({ images }) => {
   return (
     <Carousel>
       <CarouselContent className="flex items-center">
-        {formData.images.map((media, index) => (
+        {images.map((url, index) => (
           <CarouselItem key={index}>
             <div className="flex aspect-square">
               <img
-                src={media.url}
+                src={url}
                 alt={`Uploaded ${index + 1}`}
                 className="w-full h-full"
               />
@@ -23,8 +23,8 @@ const CarouselMediaPost = ({ formData }) => {
           </CarouselItem>
         ))}
       </CarouselContent>
-      {formData.images.length > 1 && <CarouselPrevious />}
-      {formData.images.length > 1 && <CarouselNext />}
+      {images.length > 1 && <CarouselPrevious />}
+      {images.length > 1 && <CarouselNext />}
     </Carousel>
   );
 };
