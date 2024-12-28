@@ -2,6 +2,7 @@
 import { createContext, useContext } from "react";
 import useHandleModal from "../hooks/useHandleModal";
 import { useLocation, useNavigate } from "react-router-dom";
+import useHandleDarkMode from "../hooks/useHandleDarkMode";
 
 const GlobalContext = createContext();
 
@@ -18,10 +19,14 @@ export const GlobalProvider = ({ children }) => {
     handleCloseAllModals,
   } = useHandleModal();
 
+  const { handleDarkMode, darkMode } = useHandleDarkMode();
+
   return (
     <GlobalContext.Provider
       value={{
         currentPath,
+        darkMode,
+        handleDarkMode,
         navigate,
         openModal,
         setOpenModal,
