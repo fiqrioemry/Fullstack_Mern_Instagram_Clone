@@ -11,10 +11,10 @@ const useHandleSearch = () => {
 
   const handleClickOutside = (event) => {
     if (
-      openSearch &&
+      openSearch === true &&
       searchRef.current &&
-      !buttonRef.current.contains(event.target) &&
-      !searchRef.current.contains(event.target)
+      !searchRef.current.contains(event.target) &&
+      !buttonRef.current.contains(event.target)
     ) {
       setOpenSearch(false);
     }
@@ -34,7 +34,7 @@ const useHandleSearch = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [openSearch]);
   return {
     buttonRef,
     searchRef,

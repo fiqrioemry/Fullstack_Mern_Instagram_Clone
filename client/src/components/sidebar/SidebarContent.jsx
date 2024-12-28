@@ -31,7 +31,7 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
 
   return (
     <div className="px-3">
-      <div className="hidden md:block py-10 px-3">
+      <div className="hidden md:flex items-center h-[6.5rem] px-3">
         {openSearch ? (
           <InstagramIcon />
         ) : (
@@ -42,10 +42,10 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
       <div className="flex md:block">
         {navigationMenu.map((menu) => (
           <Button
-            ref={buttonRef}
             size="lg"
             variant="nav"
             onClick={menu.action}
+            ref={menu.title !== "create" ? buttonRef : null}
             key={menu.title}
           >
             <menu.icon size={26} />
