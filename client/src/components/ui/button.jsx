@@ -20,7 +20,8 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         nav: "hover:bg-accent hover:text-accent-foreground flex items-center justify-center md:justify-start gap-x-3 w-full capitalize text-md",
-        custom: "bg-custom text-primary-foreground shadow hover:bg-custom/90",
+        custom:
+          "bg-custom text-primary-foreground shadow hover:bg-custom/90 w-full",
         menu: "hover:bg-accent hover:text-accent-foreground flex items-center justify-between gap-x-3 w-full",
       },
       size: {

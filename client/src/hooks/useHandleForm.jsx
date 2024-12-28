@@ -7,44 +7,27 @@ export const useHandleForm = (initialFormState) => {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    if (files && files[0]) {
-      const file = files[0];
-      const reader = new FileReader();
+    // Handle media files
+    if (files && files.length > 0) {
+      const fileArray = Array.from(files);
 
-      reader.onloadend = () => {
-        setFormData((prev) => ({
-          ...prev,
-          file: { name: file.name, type: name, path: reader.result },
-        }));
-      };
-      reader.readAsDataURL(file);
+      // Generate media file objects
+      const mediaFiles = fileArray.map((file) => ({
+        name: file,
+        url: URL.createObjectURL(file),
+      }));
+
+      setFormData((prev) => ({
+        ...prev,
+        images: [...(prev.images || []), ...mediaFiles],
+      }));
     } else {
+      // Handle other input changes
       setFormData((prev) => ({
         ...prev,
         [name]: value,
       }));
     }
-  };
-
-  const handleMediaFile = (e) => {
-    e.preventDefault();
-
-    let files = [];
-    if (e.dataTransfer) {
-      files = Array.from(e.dataTransfer.files);
-    } else {
-      files = Array.from(e.target.files);
-    }
-
-    const newMediaFiles = files.map((file) => ({
-      url: URL.createObjectURL(file),
-      type: file.type,
-    }));
-
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, ...newMediaFiles],
-    }));
   };
 
   const handleValidate = () => {
@@ -77,6 +60,5 @@ export const useHandleForm = (initialFormState) => {
     handleRemove,
     handleSubmit,
     fileInputRef,
-    handleMediaFile,
   };
 };

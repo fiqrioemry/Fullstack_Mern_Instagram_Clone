@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Dialog,
   DialogContent,
@@ -6,27 +7,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
 import { Button } from "@/components/ui/button";
 import { useProvider } from "../../context/GlobalProvider";
 
-const DiscardPostModal = () => {
-  const { openModal, handleCloseModal, handleCloseAllModals } = useProvider();
+const DiscardPostModal = ({ handleDiscardChanges }) => {
+  const { openModal, handleCloseModal } = useProvider();
 
   return (
     <Dialog
       open={openModal.discard}
       onOpenChange={(isOpen) => (isOpen ? null : handleCloseModal("discard"))}
     >
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[20rem] md:max-w-[24rem] gap-4 p-6">
         <DialogHeader>
-          <DialogTitle>Delete Confirmation</DialogTitle>
+          <DialogTitle>Discard Post ? </DialogTitle>
           <DialogDescription>
-            Are you sure want to remove this post ?
+            If you leave, your edits wont be saved.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Button variant="destructive" onClick={() => handleCloseAllModals()}>
+        <DialogFooter className="gap-y-3">
+          <Button variant="destructive" onClick={handleDiscardChanges}>
             Discard
           </Button>
           <Button onClick={() => handleCloseModal("discard")}>Cancel</Button>

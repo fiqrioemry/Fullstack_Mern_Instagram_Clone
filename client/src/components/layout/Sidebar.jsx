@@ -8,6 +8,7 @@ const Sidebar = () => {
   return (
     <aside className="sidebar_wrapper">
       <SidebarSearchPanel openSearch={openSearch} />
+      
       <div
         className={` ${
           openSearch ? "w-[75px]" : "w-full"

@@ -16,12 +16,11 @@ const useHandleModal = () => {
   };
 
   const handleCloseAllModals = () => {
-    setOpenModal((prev) =>
-      Object.keys(prev).reduce((acc, key) => {
-        acc[key] = false;
-        return acc;
-      }, {})
-    );
+    setOpenModal({
+      create: false,
+      discard: false,
+      detail: false,
+    });
   };
 
   return {
