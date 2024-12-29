@@ -7,22 +7,26 @@ export const useHandleForm = (initialFormState) => {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    // Handle media files
     if (files && files.length > 0) {
       const fileArray = Array.from(files);
 
-      // Generate media file objects
       const mediaFiles = fileArray.map((file) => ({
-        name: file,
+        fileName: file.name,
         url: URL.createObjectURL(file),
       }));
 
       setFormData((prev) => ({
         ...prev,
-        images: [...(prev.images || []), ...mediaFiles],
+        preview: [
+          ...(prev.preview || []),
+          ...mediaFiles.map((file) => file.url),
+        ],
+        images: [
+          ...(prev.images || []),
+          ...mediaFiles.map((file) => file.fileName),
+        ],
       }));
     } else {
-      // Handle other input changes
       setFormData((prev) => ({
         ...prev,
         [name]: value,

@@ -1,10 +1,12 @@
 import Posts from "../components/post/Posts";
+import DetailPostModal from "../components/modal/DetailPostModal";
 
 const Home = () => {
   return (
     <div className="flex">
       <div className="flex-grow">
-        <div className="flex justify-center h-[300vh]">
+        <DetailPostModal />
+        <div className="flex justify-center">
           <Posts />
         </div>
       </div>

@@ -18,7 +18,7 @@ const DiscardPostModal = ({ handleDiscardChanges }) => {
       open={openModal.discard}
       onOpenChange={(isOpen) => (isOpen ? null : handleCloseModal("discard"))}
     >
-      <DialogContent className="max-w-[20rem] md:max-w-[24rem] gap-4 p-6">
+      <DialogContent variant="discard">
         <DialogHeader>
           <DialogTitle>Discard Post ? </DialogTitle>
           <DialogDescription>

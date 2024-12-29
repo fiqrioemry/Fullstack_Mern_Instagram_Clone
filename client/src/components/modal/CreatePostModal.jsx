@@ -21,8 +21,6 @@ const CreatePostModal = () => {
     e.preventDefault();
   };
 
-  console.log(openModal);
-
   const handleDiscardChanges = () => {
     setNextInput(false);
     handleCloseAllModals();
@@ -50,9 +48,8 @@ const CreatePostModal = () => {
       <Dialog open={openModal.create} onOpenChange={handleClosePost}>
         <DialogTitle>
           <DialogContent
-            className={`${
-              nextInput ? "md:max-w-[48rem]" : "md:max-w-[24rem]"
-            } bg-accent max-w-[24rem] overflow-hidden duration-300 transition-all`}
+            variant="create"
+            className={`${nextInput ? "md:max-w-[48rem]" : ""} `}
           >
             <div className="flex items-center justify-between py-3 px-3 border-b border-muted-foreground">
               {nextInput === true && (
@@ -87,7 +84,7 @@ const CreatePostModal = () => {
                   />
                 ) : (
                   <div className="h-full w-full">
-                    <CarouselMediaPost formData={formData} />
+                    <CarouselMediaPost images={formData.preview} />
                   </div>
                 )}
 

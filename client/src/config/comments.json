@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "postId": "post001",
+      "commentId": "comment101",
+      "userId": "user456",
+      "username": "jane_smith",
+      "content": "Looks amazing! 😍",
+      "replies": [
+        {
+          "replyId": "reply201",
+          "commentId": "comment101",
+          "userId": "user789",
+          "username": "mike_lee",
+          "content": "Totally agree!"
+        },
+        {
+          "replyId": "reply202",
+          "commentId": "comment101",
+          "userId": "user123",
+          "username": "john_doe",
+          "content": "Thanks, Jane!"
+        }
+      ]
+    },
+    {
+      "postId": "post001",
+      "commentId": "comment102",
+      "userId": "user789",
+      "username": "mike_lee",
+      "content": "What a great spot!",
+      "replies": [
+        {
+          "replyId": "reply203",
+          "commentId": "comment102",
+          "userId": "user456",
+          "username": "jane_smith",
+          "content": "I need to visit this place."
+        },
+        {
+          "replyId": "reply204",
+          "commentId": "comment102",
+          "userId": "user123",
+          "username": "john_doe",
+          "content": "You definitely should!"
+        }
+      ]
+    }
+  ]
+}
