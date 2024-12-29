@@ -19,6 +19,10 @@ const Settings = () => {
 
   const isValid = handleValidate();
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
   return (
     <div className="flex">
       <div className="flex-grow">
@@ -38,7 +42,7 @@ const Settings = () => {
                 </div>
               </div>
             </div>
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label className="px-2 text-lg font-semibold">Fullname</label>
                 <Input
@@ -65,7 +69,9 @@ const Settings = () => {
                 <Select
                   name="gender"
                   value={formData.gender}
-                  onChange={handleChange}
+                  onValueChange={(value) =>
+                    handleChange({ target: { name: "gender", value } })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a gender" />
