@@ -14,15 +14,20 @@ import { useHandleForm } from "../hooks/useHandleForm";
 import { initialProfileForm } from "../config";
 
 const Settings = () => {
-  const { formData, handleChange, handleValidate } =
+  const { formData, handleChange, handleValidate, fileInputRef } =
     useHandleForm(initialProfileForm);
 
   const isValid = handleValidate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    console.log("Form submitted with data:", formData);
   };
+
+  const handlePhotoChange = () => {
+    fileInputRef.current.click();
+  };
+
   return (
     <div className="flex">
       <div className="flex-grow">
@@ -33,12 +38,30 @@ const Settings = () => {
                 <label className="px-2 text-lg font-semibold">Profile</label>
               </div>
               <div className="p-6 flex gap-8 border rounded-lg">
-                <div className="w-28 h-28 rounded-full border bg-white"></div>
+                <div className="w-28 h-28 rounded-full border">
+                  <img
+                    src={formData.avatar}
+                    alt="Profile Preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div className="space-y-3">
                   <h2 className=" text-xl font-semibold">ahmadfiqri95</h2>
-                  <Button variant="custom" size="md">
+                  <Button
+                    variant="custom"
+                    size="md"
+                    onClick={handlePhotoChange}
+                  >
                     Change photo
                   </Button>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleChange}
+                    name="avatar"
+                    className="hidden"
+                  />
                 </div>
               </div>
             </div>

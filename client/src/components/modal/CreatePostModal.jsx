@@ -9,6 +9,7 @@ import { useProvider } from "../../context/GlobalProvider";
 import { ArrowLeft, ArrowRight, SquarePlus } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import axios from "axios";
 
 const CreatePostModal = () => {
   const [nextInput, setNextInput] = useState(false);
@@ -37,12 +38,31 @@ const CreatePostModal = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    handleDiscardChanges();
-  };
+    handleDiscardChanges(); //
+    const dataToSubmit = new FormData();
+    dataToSubmit.append("content", formData.content);
+    formData.images.forEach((image) => {
+      dataToSubmit.append("images", image);
+    });
 
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/post/create",
+        dataToSubmit,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(response); // Log the server response
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
   return (
     <>
       <Dialog open={openModal.create} onOpenChange={handleClosePost}>

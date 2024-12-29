@@ -19,8 +19,10 @@ export const initialSignUpForm = {
 };
 
 export const initialProfileForm = {
+  avatar:
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmYb6Pn2mA3WBta7vCKwtjxoGyRWQxOgtc6Q&s",
   fullname: "ahmad fiqri oemry",
-  bio: "",
+  bio: "im so goood",
   gender: "male",
 };
 

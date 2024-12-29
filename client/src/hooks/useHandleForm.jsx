@@ -11,7 +11,7 @@ export const useHandleForm = (initialFormState) => {
       const fileArray = Array.from(files);
 
       const mediaFiles = fileArray.map((file) => ({
-        fileName: file.name,
+        original: file,
         url: URL.createObjectURL(file),
       }));
 
@@ -21,9 +21,13 @@ export const useHandleForm = (initialFormState) => {
           ...(prev.preview || []),
           ...mediaFiles.map((file) => file.url),
         ],
-        images: [
-          ...(prev.images || []),
-          ...mediaFiles.map((file) => file.fileName),
+      }));
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: [
+          ...(prev[name] || []),
+          ...mediaFiles.map((file) => file.original),
         ],
       }));
     } else {
