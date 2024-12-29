@@ -18,7 +18,8 @@ const buttonVariants = cva(
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         nav: "hover:bg-accent flex md:justify-start gap-x-3 w-full capitalize",
-        custom: "bg-custom hover:bg-custom/80 text-background",
+        custom:
+          "bg-custom hover:bg-custom/80 text-background dark:text-foreground",
       },
       size: {
         default: "h-6 py-3",
