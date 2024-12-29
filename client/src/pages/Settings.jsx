@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -10,8 +10,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useHandleForm } from "../hooks/useHandleForm";
+import { initialProfileForm } from "../config";
 
 const Settings = () => {
+  const { formData, handleChange, handleValidate } =
+    useHandleForm(initialProfileForm);
+
+  const isValid = handleValidate();
+
   return (
     <div className="flex">
       <div className="flex-grow">
@@ -36,24 +43,32 @@ const Settings = () => {
                 <label className="px-2 text-lg font-semibold">Fullname</label>
                 <Input
                   className="bg-background"
-                  value="Ahmad fiqri oemry"
-                  placeholder=""
+                  name="fullname"
+                  value={formData.fullname}
+                  onChange={handleChange}
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="px-2 text-lg font-semibold">Bio</label>
                 <Textarea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
                   className="w-full py-2 text-sm bg-background resize-none focus:outline-none overflow-y-scroll no-scrollbar"
-                  placeholder=""
+                  placeholder="Write your bio here ..."
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="px-2 text-lg font-semibold">Gender</label>
-                <Select>
+                <Select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a fruit" />
+                    <SelectValue placeholder="Select a gender" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -64,8 +79,14 @@ const Settings = () => {
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="flex justify-end py-3">
-                <Button variant="custom" size="md">
+                <Button
+                  type="submit"
+                  disabled={!isValid}
+                  variant="custom"
+                  size="md"
+                >
                   Save changes
                 </Button>
               </div>

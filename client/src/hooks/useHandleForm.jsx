@@ -35,13 +35,30 @@ export const useHandleForm = (initialFormState) => {
   };
 
   const handleValidate = () => {
+    // Field yang boleh kosong
+    const allowedEmptyFields = Object.keys(initialFormState).filter(
+      (key) => !initialFormState[key]
+    );
+
+    // Validasi apakah ada field kosong yang wajib diisi
     for (const key in formData) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (formData.hasOwnProperty(key) && !formData[key]) {
+      if (
+        formData.hasOwnProperty(key) &&
+        !formData[key]?.trim() && // Pastikan nilai ter-trim bukan kosong
+        !allowedEmptyFields.includes(key)
+      ) {
         return false;
       }
     }
-    return true;
+
+    // Validasi apakah ada perubahan dari initialFormState (mengabaikan spasi)
+    const hasChanges = Object.keys(initialFormState).some((key) => {
+      const trimmedInitial = initialFormState[key]?.trim() || "";
+      const trimmedCurrent = formData[key]?.trim() || "";
+      return trimmedInitial !== trimmedCurrent;
+    });
+
+    return hasChanges; // Tombol hanya aktif jika ada perubahan signifikan
   };
 
   const handleRemove = () => {

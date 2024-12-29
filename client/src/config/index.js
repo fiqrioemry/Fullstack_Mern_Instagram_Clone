@@ -77,6 +77,12 @@ export const initialCommentConfig = [
     placeholder: "Add a comment ...",
   },
 ];
+export const initialProfileForm = {
+  avatar: "",
+  fullname: "ahmad fiqri oemry",
+  bio: "",
+  gender: "male",
+};
 
 export const sidebarConfiguration = ({
   handleNavigate,
