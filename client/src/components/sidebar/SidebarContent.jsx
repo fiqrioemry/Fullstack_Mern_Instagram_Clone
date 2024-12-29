@@ -39,7 +39,7 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
         )}
       </div>
 
-      <div className="flex md:block space-y-2">
+      <div className="flex md:block ">
         {navigationMenu.map((menu) => (
           <Button
             size="lg"

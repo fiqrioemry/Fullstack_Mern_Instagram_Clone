@@ -75,10 +75,6 @@ export const initialCommentConfig = [
     name: "comment",
     type: "text",
     placeholder: "Add a comment ...",
-    wrapperStyle: "flex items-center gap-x-3",
-    formStyle: "py-6 border-b",
-    inputStyle:
-      "w-full text-sm bg-background resize-none px-2 focus:outline-none",
   },
 ];
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 "use client";
 
 import * as React from "react";
@@ -31,7 +32,7 @@ const dialogVariants = cva(
           "bg-accent sm:rounded-lg rounded-md border max-w-[24rem] overflow-hidden",
         discard:
           "bg-accent sm:rounded-lg rounded-md border max-w-[20rem] md:max-w-[24rem] gap-4 p-6",
-        detail: "bg-accent md:max-w-[47em] lg:max-w-[55em]",
+        detail: "bg-background md:max-w-[46em] lg:max-w-[56em]",
       },
     },
     defaultVariants: {

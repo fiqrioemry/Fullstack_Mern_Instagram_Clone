@@ -11,28 +11,29 @@ const PostComments = () => {
 
   return (
     <>
-      {comments.map((comment, index) =>
-        console.log(comment)(
-          <div key={index}>
-            <PostContent data={comment} />
-            <PostContentControl />
-            <div className="pl-11 text-xs">
-              <button onClick={() => setShowReplies((prev) => !prev)}>
-                ----- {showReplies ? "hidden reply" : "show reply"} (3)
-              </button>
-            </div>
-
-            {showReplies &&
-              comment.replies.length > 0 &&
-              comment.replies.map((reply, index) => (
-                <div className="pl-11 py-3 space-y-3" key={index}>
-                  <PostContent data={reply} />
-                  <PostContentControl />
-                </div>
-              ))}
+      {comments.map((comment, index) => (
+        <div key={index}>
+          <PostContent username={comment.username} content={comment.content} />
+          <PostContentControl />
+          <div className="pl-11 py-2 text-xs">
+            <button onClick={() => setShowReplies((prev) => !prev)}>
+              ----- {showReplies ? "Hide reply" : "Show reply"} (3)
+            </button>
           </div>
-        )
-      )}
+
+          {showReplies &&
+            comment.replies.length > 0 &&
+            comment.replies.map((reply, index) => (
+              <div className="pl-11 py-2" key={index}>
+                <PostContent
+                  username={reply.username}
+                  content={reply.content}
+                />
+                <PostContentControl />
+              </div>
+            ))}
+        </div>
+      ))}
     </>
   );
 };

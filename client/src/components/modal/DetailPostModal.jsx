@@ -1,15 +1,11 @@
-import PostHead from "../post/PostHead";
-import PostControl from "../post/PostControl";
-import { Ellipsis } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import CommentForm from "../form/CommentForm";
-import PostContainer from "../layout/PostContainer";
-import CarouselMediaPost from "../post/CarouselMediaPost";
-import { useProvider } from "../../context/GlobalProvider";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { initialCommentConfig, initialCommentForm } from "../../config";
-import PostComments from "../post/PostComments";
 import PostContent from "../post/PostContent";
+import PostControl from "../post/PostControl";
+import CommentForm from "../form/CommentForm";
+import PostComments from "../post/PostComments";
+import PostImagesDisplay from "../post/PostImagesDisplay";
+import { useProvider } from "../../context/GlobalProvider";
+import { initialCommentConfig, initialCommentForm } from "../../config";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 const DetailPostModal = () => {
   const { openModal, handleCloseModal } = useProvider();
@@ -26,50 +22,31 @@ const DetailPostModal = () => {
       >
         <DialogTitle>
           <DialogContent variant="detail">
-            <PostContainer style="flex flex-row">
+            <div className="flex flex-row">
               <div className=" md:block hidden md:w-[45%]">
-                <CarouselMediaPost images={images} />
+                <PostImagesDisplay images={images} />
               </div>
 
-              <div className="w-full md:w-[55%]">
-                <div className="border-b px-2 py-3 border-white">
-                  <div className="flex gap-x-3">
-                    <div>
-                      <Avatar>
-                        <AvatarImage
-                          src="https://github.com/shadcn.png"
-                          alt="@shadcn"
-                        />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                    </div>
-
-                    <div className="text-sm text-justify">
-                      <span>username </span>
-                      <span>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Laborum voluptatibus voluptates odit, est voluptatem
-                        sapiente!
-                      </span>
-                    </div>
-
-                    <div>
-                      <Ellipsis />
-                    </div>
+              <div className="w-full md:w-[55%] flex flex-col justify-between">
+                <div>
+                  <div className="border-b border-muted-foreground/25">
+                    <PostContent />
+                  </div>
+                  <div className="h-[180px] space-y-3 overflow-y-scroll no-scrollbar">
+                    <PostContent />
+                    <PostComments />
                   </div>
                 </div>
 
-                <div className="h-[200px] px-2 py-3 space-y-3  overflow-y-scroll no-scrollbar">
-                  <PostContent />
-                  <PostComments />
+                <div className="px-2">
+                  <PostControl />
+                  <CommentForm
+                    initialFormConfig={initialCommentConfig}
+                    initialFormState={initialCommentForm}
+                  />
                 </div>
-                <PostControl />
-                <CommentForm
-                  initialFormConfig={initialCommentConfig}
-                  initialFormState={initialCommentForm}
-                />
               </div>
-            </PostContainer>
+            </div>
           </DialogContent>
         </DialogTitle>
       </Dialog>

@@ -10,15 +10,15 @@ const CommentForm = ({ initialFormConfig, initialFormState }) => {
   return (
     <>
       {initialFormConfig.map((set) => (
-        <form onSubmit={handleSubmit} className={set.formStyle} key={set}>
-          <div className={set.wrapperStyle}>
+        <form onSubmit={handleSubmit} key={set}>
+          <div className="flex items-center">
             <textarea
               name={set.name}
               type={set.type}
               value={formData[set.name]}
               onChange={handleChange}
               placeholder="Add a comment ..."
-              className={set.inputStyle}
+              className="w-full py-2 text-sm bg-background resize-none  focus:outline-none overflow-y-scroll no-scrollbar"
             />
             <Button disabled={!isValid}>Post</Button>
           </div>

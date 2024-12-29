@@ -10,8 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        default: "",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
@@ -23,11 +22,9 @@ const buttonVariants = cva(
         nav: "hover:bg-accent hover:text-accent-foreground flex items-center justify-center md:justify-start gap-x-3 w-full capitalize text-md",
         custom: "bg-custom shadow hover:bg-custom/90 w-full",
         menu: "hover:bg-accent hover:text-accent-foreground flex items-center justify-between gap-x-3 w-full",
-        none: "",
       },
       size: {
-        none: "",
-        default: "h-9 px-4 py-2",
+        default: "h-8 py-2",
         sm: "h-8 rounded-md px-3 py-3 text-xs",
         lg: "h-12 rounded-md px-3 py-3 text-md",
         icon: "h-9 w-9 ",
