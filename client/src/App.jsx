@@ -5,6 +5,7 @@ import Explore from "./pages/Explore";
 import Profile from "./pages/Profile";
 import Layout from "./components/layout/Layout";
 import { Route, Routes } from "react-router-dom";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </>
