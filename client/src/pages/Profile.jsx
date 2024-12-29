@@ -1,4 +1,10 @@
-import { Bookmark, Grid2X2, Settings, SquareUserRound } from "lucide-react";
+import {
+  Bookmark,
+  Camera,
+  Grid2X2,
+  Settings,
+  SquareUserRound,
+} from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -53,13 +59,86 @@ const Profile = () => {
               <TabsTrigger value="saved">
                 <Bookmark /> <span>Saved</span>
               </TabsTrigger>
-              <TabsTrigger value="tagged">
+              <TabsTrigger value="tags">
                 <SquareUserRound /> <span>Tagged</span>
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="post">
-              <div></div>
+              <div className="text-center space-y-3 py-12">
+                <div className="flex items-center justify-center">
+                  <div className="p-4  rounded-full border">
+                    <Camera size={50} />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-2xl font-semibold">SHARE PHOTOS</h1>
+                </div>
+                <div className="flex justify-center">
+                  <div className="max-w-96 text-sm">
+                    When you share photos, they will appear on your profile.
+                  </div>
+                </div>
+                <div>
+                  <Button variant="custom" size="md">
+                    Share a photos
+                  </Button>
+                </div>
+              </div>
+              {/* <div className="grid grid-cols-3 gap-2">
+                <div className="h-40 md:h-60 bg-red-500"></div>
+                <div className="h-40 md:h-60 bg-red-500"></div>
+                <div className="h-40 md:h-60 bg-red-500"></div>
+              </div> */}
+            </TabsContent>
+
+            <TabsContent value="saved">
+              <div className="text-center space-y-3 py-12">
+                <div className="flex items-center justify-center">
+                  <div className="p-4  rounded-full border">
+                    <Bookmark size={50} />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-2xl font-semibold">SAVED</h1>
+                </div>
+                <div className="flex justify-center">
+                  <div className="max-w-96 text-sm">
+                    Save photos and videos that you want to see again. No one is
+                    notified, and only you can see what you have saved.
+                  </div>
+                </div>
+              </div>
+
+              {/* <div className="grid grid-cols-3 gap-2">
+                <div className="h-40 md:h-60 bg-red-500"></div>
+                <div className="h-40 md:h-60 bg-red-500"></div>
+                <div className="h-40 md:h-60 bg-red-500"></div>
+              </div> */}
+            </TabsContent>
+
+            <TabsContent value="tags">
+              <div className="text-center space-y-3 py-12">
+                <div className="flex items-center justify-center">
+                  <div className="p-4  rounded-full border">
+                    <Camera size={50} />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-2xl font-semibold">PHOTOS OF YOU</h1>
+                </div>
+                <div className="flex justify-center">
+                  <div className="max-w-96 text-sm">
+                    When you share photos, they will appear on your profile.
+                  </div>
+                </div>
+              </div>
+
+              {/* <div className="grid grid-cols-3 gap-2">
+                <div className="h-40 md:h-60 bg-red-500"></div>
+                <div className="h-40 md:h-60 bg-red-500"></div>
+                <div className="h-40 md:h-60 bg-red-500"></div>
+              </div> */}
             </TabsContent>
           </Tabs>
         </div>
