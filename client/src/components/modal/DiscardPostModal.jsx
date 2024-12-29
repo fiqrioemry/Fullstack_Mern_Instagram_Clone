@@ -26,10 +26,20 @@ const DiscardPostModal = ({ handleDiscardChanges }) => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-y-3">
-          <Button variant="destructive" onClick={handleDiscardChanges}>
+          <Button
+            variant="destructive"
+            size="md"
+            onClick={handleDiscardChanges}
+          >
             Discard
           </Button>
-          <Button onClick={() => handleCloseModal("discard")}>Cancel</Button>
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={() => handleCloseModal("discard")}
+          >
+            Cancel
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

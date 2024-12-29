@@ -18,7 +18,7 @@ const useHandleDarkMode = () => {
       document.body.classList.remove("dark");
     }
   }, [darkMode]);
-
+  console.log("tes");
   return { handleDarkMode, darkMode };
 };
 

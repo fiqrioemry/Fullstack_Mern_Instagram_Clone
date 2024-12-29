@@ -10,9 +10,7 @@ const Home = () => {
           <Posts />
         </div>
       </div>
-      <div className="w-[24rem] xl:block hidden bg-blue-500">
-        {/* right sidebar */}
-      </div>
+      <div className="w-[24rem] xl:block hidden"></div>
     </div>
   );
 };

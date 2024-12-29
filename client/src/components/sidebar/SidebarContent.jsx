@@ -39,7 +39,7 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
         )}
       </div>
 
-      <div className="flex md:block ">
+      <div className="flex md:block">
         {navigationMenu.map((menu) => (
           <Button
             size="lg"
@@ -64,7 +64,10 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <Button size="lg" variant="menu" onClick={handleDarkMode}>
+            <Button
+              className="h-12 rounded-md px-3 py-3 text-sm hover:bg-accent hover:text-accent-foreground flex items-center justify-between gap-x-3 w-full"
+              onClick={handleDarkMode}
+            >
               {darkMode ? <span>Light mode</span> : <span>Dark mode</span>}
               {darkMode ? <MoonIcon /> : <SunIcon />}
             </Button>

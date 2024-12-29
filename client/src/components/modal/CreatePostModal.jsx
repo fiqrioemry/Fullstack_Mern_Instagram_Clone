@@ -79,7 +79,9 @@ const CreatePostModal = () => {
                   <PostImageForm
                     title={"Drag & drop media here"}
                     label={"Select from computer"}
-                    style={"bg-blue-500 p-2 rounded-md cursor-pointer"}
+                    style={
+                      "bg-custom px-2 py-2 text-secondary rounded-md cursor-pointer"
+                    }
                     handleChange={handleChange}
                   />
                 ) : (
@@ -119,7 +121,7 @@ const CreatePostModal = () => {
                   <div className="text-sm text-end px-2">
                     <span>{formData.content.length}</span>/ 1000 characters
                   </div>
-                  <Button variant="custom" type="submit">
+                  <Button variant="custom" size="md" type="submit">
                     Create Post
                   </Button>
                 </div>
