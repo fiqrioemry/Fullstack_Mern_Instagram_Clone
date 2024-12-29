@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InstagramLogo from "../common/InstagramLogo";
 import InstagramIcon from "../common/InstagramIcon";
 import { sidebarConfiguration } from "../../config";
@@ -71,7 +71,9 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
               {darkMode ? <span>Light mode</span> : <span>Dark mode</span>}
               {darkMode ? <MoonIcon /> : <SunIcon />}
             </Button>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to="settings">Settings</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

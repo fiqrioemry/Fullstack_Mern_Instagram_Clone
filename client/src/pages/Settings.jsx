@@ -15,8 +15,8 @@ const Settings = () => {
   return (
     <div className="flex">
       <div className="flex-grow">
-        <div className="flex justify-center max-w-3xl px-8 md:px-12 py-8 md:py-12 ">
-          <div className="h-screen w-full space-y-6">
+        <div className="flex justify-center max-w-3xl px-6 mt-20 md:mt-10 mb-20">
+          <div className="w-full space-y-6">
             <div className="space-y-2">
               <div className="py-2">
                 <label className="px-2 text-lg font-semibold">Profile</label>
