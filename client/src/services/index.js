@@ -1,7 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-// Buat Axios Instance
 export const axiosInstance = axios.create({
   baseURL: "http://localhost:5000",
   withCredentials: true,
@@ -33,21 +32,19 @@ axiosInstance.interceptors.response.use(
             withCredentials: true,
           }
         );
-        console.log(response);
+
         const newAccessToken = response.data.data.accessToken;
-        Cookies.set("accessToken", response.data.data.accessToken, {
+        Cookies.set("accessToken", newAccessToken, {
           path: "/",
           secure: true,
           sameSite: "strict",
           expires: 1 / 48,
         });
 
-        console.log("BERHASIL!!!!");
-
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
-        return axiosInstance(error.config); // Retry original request
+        return axiosInstance(error.config);
       } catch (refreshError) {
-        console.error("Token refresh failed", refreshError);
+        console.error("Token refresh is failed", refreshError);
       }
     }
     return Promise.reject(error);

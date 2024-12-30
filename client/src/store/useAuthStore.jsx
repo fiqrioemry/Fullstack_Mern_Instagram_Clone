@@ -12,7 +12,6 @@ export const useAuthStore = create((set) => ({
   userAuthCheck: async () => {
     try {
       const response = await axiosInstance.get("/api/auth/me");
-
       set({ userData: response.data.data });
     } catch (error) {
       console.log("Failed to get authorization:", error);

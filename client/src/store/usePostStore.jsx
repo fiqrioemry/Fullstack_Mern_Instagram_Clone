@@ -5,16 +5,32 @@ import { axiosInstance } from "@/services";
 export const usePostStore = create((set) => ({
   success: null,
   message: null,
+  followingPosts: null,
   isLoadingPost: false,
-
   createNewPost: async (formData) => {
     try {
       set({ isLoadingPost: true });
       const response = await axiosInstance.post("/api/post/create", formData);
-      console.log(response);
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
+    } finally {
+      set({ isLoadingPost: false });
+    }
+  },
+
+  // get all following post
+  getAllFollowingPosts: async () => {
+    try {
+      set({ isLoadingPost: true });
+      const response = await axiosInstance.get("/api/post/followings");
+      set({
+        followingPosts: response.data.data,
+        message: response.data.message,
+      });
+    } catch (error) {
+      console.log(error);
+      set({ followingPosts: null });
     } finally {
       set({ isLoadingPost: false });
     }
