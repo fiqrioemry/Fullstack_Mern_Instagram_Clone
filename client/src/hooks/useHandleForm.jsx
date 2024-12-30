@@ -10,25 +10,13 @@ export const useHandleForm = (initialFormState) => {
     if (files && files.length > 0) {
       const fileArray = Array.from(files);
 
-      const mediaFiles = fileArray.map((file) => ({
-        original: file,
-        url: URL.createObjectURL(file),
-      }));
-
       setFormData((prev) => ({
         ...prev,
         preview: [
           ...(prev.preview || []),
-          ...mediaFiles.map((file) => file.url),
+          ...fileArray.map((file) => URL.createObjectURL(file)),
         ],
-      }));
-
-      setFormData((prev) => ({
-        ...prev,
-        [name]: [
-          ...(prev[name] || []),
-          ...mediaFiles.map((file) => file.original),
-        ],
+        [name]: [...(prev[name] || []), ...fileArray],
       }));
     } else {
       setFormData((prev) => ({
@@ -39,17 +27,15 @@ export const useHandleForm = (initialFormState) => {
   };
 
   const handleValidate = () => {
-    // Tentukan apakah ini form pendaftaran atau profil berdasarkan jumlah field kosong di initial state
     const isSignUpForm = Object.values(initialFormState).every(
       (value) => !value.trim()
     );
 
-    // Jika form pendaftaran, semua field wajib harus terisi
     if (isSignUpForm) {
       const allFieldsFilled = Object.keys(formData).every((key) => {
-        return formData[key]?.trim(); // Semua field wajib harus diisi
+        return formData[key]?.trim();
       });
-      return allFieldsFilled; // True jika semua terisi
+      return allFieldsFilled;
     }
 
     // Jika form profil, validasi perubahan field
@@ -73,7 +59,7 @@ export const useHandleForm = (initialFormState) => {
       return trimmedInitial !== trimmedCurrent;
     });
 
-    return hasChanges; // True jika ada perubahan
+    return hasChanges;
   };
 
   const handleRemove = () => {

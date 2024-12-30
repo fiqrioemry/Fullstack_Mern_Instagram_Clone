@@ -17,7 +17,11 @@ const SignUp = () => {
         <img
           src="https://techmind.id/wp-content/uploads/2024/06/IG.jpeg"
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          className={`absolute inset-0 h-full w-full object-cover transition-all duration-300 ${
+            isValid
+              ? "brightness-100 grayscale-0"
+              : "dark:brightness-[0.2] dark:grayscale dark"
+          }`}
         />
       </div>
       <div className="flex flex-col gap-4 p-6 md:p-10">

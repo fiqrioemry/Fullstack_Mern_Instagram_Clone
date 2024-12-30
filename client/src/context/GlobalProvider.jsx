@@ -4,6 +4,7 @@ import useHandleModal from "../hooks/useHandleModal";
 import { useLocation, useNavigate } from "react-router-dom";
 import useHandleDarkMode from "../hooks/useHandleDarkMode";
 import useHandleSearch from "../hooks/useHandleSearch";
+import { useEffect } from "react";
 
 const GlobalContext = createContext();
 
@@ -21,6 +22,8 @@ export const GlobalProvider = ({ children }) => {
     handleCloseModal,
     handleCloseAllModals,
   } = useHandleModal();
+
+  useEffect(() => {}, []);
 
   return (
     <GlobalContext.Provider

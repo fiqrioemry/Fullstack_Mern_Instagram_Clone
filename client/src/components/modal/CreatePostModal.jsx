@@ -3,15 +3,16 @@ import { initialPostForm } from "../../config";
 import { Button } from "@/components/ui/button";
 import DiscardPostModal from "./DiscardPostModal";
 import PostImageForm from "../form/PostImageForm";
+import { usePostStore } from "../../store/usePostStore";
 import CarouselMediaPost from "../post/CarouselMediaPost";
 import { useHandleForm } from "../../hooks/useHandleForm";
 import { useProvider } from "../../context/GlobalProvider";
 import { ArrowLeft, ArrowRight, SquarePlus } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import axios from "axios";
 
 const CreatePostModal = () => {
+  const { createNewPost } = usePostStore();
   const [nextInput, setNextInput] = useState(false);
   const { formData, setFormData, handleChange } =
     useHandleForm(initialPostForm);
@@ -40,28 +41,13 @@ const CreatePostModal = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    handleDiscardChanges(); //
-    const dataToSubmit = new FormData();
-    dataToSubmit.append("content", formData.content);
+    handleDiscardChanges();
+    const data = new FormData();
+    data.append("content", formData.content);
     formData.images.forEach((image) => {
-      dataToSubmit.append("images", image);
+      data.append("images", image);
     });
-
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/post/create",
-        dataToSubmit,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log(response); // Log the server response
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
+    createNewPost(data);
   };
   return (
     <>

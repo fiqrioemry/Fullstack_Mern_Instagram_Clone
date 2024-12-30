@@ -43,6 +43,7 @@ const AuthForm = ({
         <Button
           type="submit"
           variant="custom"
+          size="md"
           disabled={!isValid}
           className="w-full"
         >
@@ -53,7 +54,7 @@ const AuthForm = ({
             Or continue with
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" size="md" className="w-full">
           {buttonTitle}
         </Button>
       </div>
