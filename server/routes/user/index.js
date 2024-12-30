@@ -33,8 +33,8 @@ router.get("/:username/followers", isAuthenticate, getUserFollowers);
 router.get("/:username/followings", isAuthenticate, getUserFollowings);
 
 // follow and unfollow
-router.post("/:followingId/follow", isAuthenticate, followNewUser);
-router.delete("/:followingId/unfollow", isAuthenticate, unfollowUser);
+router.post("/follow", isAuthenticate, followNewUser);
+router.delete("/unfollow", isAuthenticate, unfollowUser);
 
 // follow recommendations
 router.get("/recommend/follow/user", isAuthenticate, getFollowRecommendations);

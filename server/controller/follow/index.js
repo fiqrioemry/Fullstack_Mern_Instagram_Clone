@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 
 async function followNewUser(req, res) {
   const { userId } = req.user;
-  const { followingId } = req.params;
+  const { followingId } = req.body;
 
   try {
     if (userId == followingId) {

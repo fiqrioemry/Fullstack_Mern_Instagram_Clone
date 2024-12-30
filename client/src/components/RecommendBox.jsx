@@ -1,7 +1,14 @@
 /* eslint-disable react/prop-types */
 import { Button } from "@/components/ui/button";
+import { useFollowStore } from "../store/useFollowStore";
 
 const RecommendBox = ({ recommend, message = null }) => {
+  const { followNewUser, unfollowUser } = useFollowStore();
+
+  const handleFollow = (e) => {
+    followNewUser(e.target.value);
+  };
+  console.log(recommend);
   return (
     <div className="space-y-2">
       <div className="py-4 text-center">
