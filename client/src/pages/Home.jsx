@@ -21,11 +21,10 @@ const Home = () => {
     usePostStore();
 
   useEffect(() => {
-    getAllFollowings(), getAllFollowingPosts();
+    getAllFollowings(userData.userId), getAllFollowingPosts();
     getFollowRecommendations();
   }, []);
 
-  console.log(followingPosts);
   return (
     <div className="flex">
       <DetailPostModal />

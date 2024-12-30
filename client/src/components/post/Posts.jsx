@@ -16,9 +16,9 @@ const Posts = ({ posts }) => {
         <div className="border-b" key={index}>
           <PostContent user={post.User} />
           <PostImagesDisplay images={post.PostGalleries} />
-          <PostControl />
+          <PostControl like={post.likeCount} />
           {post.commentCount !== 0 && (
-            <Button onClick={() => handleOpenModal("detail")}>
+            <Button onClick={() => handleOpenModal("detail", post.id)}>
               View all {post.commentCount} comments
             </Button>
           )}
@@ -34,18 +34,3 @@ const Posts = ({ posts }) => {
 };
 
 export default Posts;
-
-// {[...Array(20)].map((__, index) => (
-//   <div className="border-b" key={index}>
-//     <PostContent />
-//     <PostImagesDisplay images={images} />
-//     <PostControl />
-//     <Button onClick={() => handleOpenModal("detail")}>
-//       View all 1.275 comments
-//     </Button>
-//     <CommentForm
-//       initialFormConfig={initialCommentConfig}
-//       initialFormState={initialCommentForm}
-//     />
-//   </div>
-// ))}

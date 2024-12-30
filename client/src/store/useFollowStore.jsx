@@ -28,7 +28,6 @@ export const useFollowStore = create((set) => ({
 
   followNewUser: async (followingId) => {
     try {
-      console.log(followingId);
       set({ isFollowLoading: true });
       const response = await axiosInstance.post("/api/user/follow", {
         followingId,
@@ -42,22 +41,20 @@ export const useFollowStore = create((set) => ({
     }
   },
 
-  getAllFollowings: async ({ userId }) => {
+  getAllFollowings: async (userId) => {
     try {
-      const response = await axiosInstance.get("/api/user/followings", {
-        userId,
-      });
+      const response = await axiosInstance.get(
+        `/api/user/${userId}/followings`
+      );
       set({ followings: response.data.data });
     } catch (error) {
       console.log(error);
     }
   },
 
-  getAllFollowers: async ({ userId }) => {
+  getAllFollowers: async (userId) => {
     try {
-      const response = await axiosInstance.get("/api/user/followers", {
-        userId,
-      });
+      const response = await axiosInstance.get(`/api/user/${userId}/followers`);
       set({ followers: response.data.data });
     } catch (error) {
       console.log(error);

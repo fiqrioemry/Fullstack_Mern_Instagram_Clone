@@ -6,12 +6,8 @@ import {
   CarouselContent,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useEffect } from "react";
 
 const PostImagesDisplay = ({ images }) => {
-  useEffect(() => {
-    images.map((image) => console.log("ini adalah imagee : ", image));
-  });
   return (
     <Carousel>
       <CarouselContent className="flex items-center">

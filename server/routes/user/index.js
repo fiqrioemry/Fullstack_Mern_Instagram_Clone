@@ -8,7 +8,6 @@ const {
   followNewUser,
   getUserFollowers,
   getUserFollowings,
-
   getFollowRecommendations,
 } = require("../../controller/follow");
 const express = require("express");
@@ -25,12 +24,12 @@ router.put(
   updateMyProfile
 );
 
-// user home detail
-router.get("/:username", isAuthenticate, getUserHomeDetails);
+// // user home detail
+// router.get("/:username", isAuthenticate, getUserHomeDetails);
 
 // followers and followings
-router.get("/followers", isAuthenticate, getUserFollowers);
-router.get("/followings", isAuthenticate, getUserFollowings);
+router.get("/:userId/followers", isAuthenticate, getUserFollowers);
+router.get("/:userId/followings", isAuthenticate, getUserFollowings);
 
 // follow and unfollow
 router.post("/follow", isAuthenticate, followNewUser);

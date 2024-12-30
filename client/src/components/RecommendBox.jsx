@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
 import { Button } from "@/components/ui/button";
 import { useFollowStore } from "../store/useFollowStore";
+import { useEffect, useState } from "react";
 
-const RecommendBox = ({ followings, recommend, message = null }) => {
-  const { followNewUser, unfollowUser } = useFollowStore();
+const RecommendBox = ({ recommend, message = null }) => {
+  const [followingIds, setFollowingIds] = useState([]);
+  const { followNewUser, unfollowUser, followings } = useFollowStore();
 
-  console.log(followings);
+  console.log(followingIds);
   const handleFollow = (e) => {
     followNewUser(e.target.value);
   };
@@ -13,6 +15,10 @@ const RecommendBox = ({ followings, recommend, message = null }) => {
   const handleUnfollow = (e) => {
     unfollowUser(e.target.value);
   };
+
+  useEffect(() => {
+    setFollowingIds(followings.map((item) => item.id));
+  }, []);
 
   return (
     <div className="space-y-2">
@@ -38,7 +44,7 @@ const RecommendBox = ({ followings, recommend, message = null }) => {
                 variant="custom"
                 size="sm"
               >
-                Follow
+                {followingIds.includes(user.id) ? "unfollow" : "follow"}
               </Button>
             </div>
           </div>

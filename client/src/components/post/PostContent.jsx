@@ -3,7 +3,6 @@ import { Ellipsis } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const PostContent = ({ user, content = null }) => {
-  console.log(user);
   return (
     <div className="flex justify-between px-2 py-4 ">
       <div className="flex space-x-3">

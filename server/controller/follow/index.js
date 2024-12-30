@@ -16,7 +16,7 @@ async function followNewUser(req, res) {
     const user = await User.findByPk(followingId);
 
     if (!user) {
-      return res.status(404).send({ error: "User not found" });
+      return res.status(404).send({ error: "User not found " });
     }
 
     const existingFollow = await Follow.findOne({
@@ -91,7 +91,7 @@ async function getUserFollowers(req, res) {
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "User not found " });
     }
 
     const followers = await user.getFollowers({
@@ -113,13 +113,15 @@ async function getUserFollowers(req, res) {
 }
 
 async function getUserFollowings(req, res) {
-  const { userId } = req.body;
+  const { userId } = req.params;
 
   try {
     const user = await User.findByPk(userId);
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({
+        error: "User not found  ",
+      });
     }
 
     const followings = await user.getFollowings({
@@ -142,12 +144,11 @@ async function getUserFollowings(req, res) {
 
 async function getFollowRecommendations(req, res) {
   const { userId } = req.user;
-
   try {
     const user = await User.findByPk(userId);
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "User not found  " });
     }
 
     const followedUsers = await user.getFollowings({
