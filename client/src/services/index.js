@@ -27,9 +27,13 @@ axiosInstance.interceptors.response.use(
       !error.config.__isRetryRequest
     ) {
       try {
-        const response = await axios.post("/api/auth/refresh", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          "http://localhost:5000/api/auth/refresh",
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(response);
         const newAccessToken = response.data.data.accessToken;
         Cookies.set("accessToken", response.data.data.accessToken, {
           path: "/",
@@ -37,6 +41,8 @@ axiosInstance.interceptors.response.use(
           sameSite: "strict",
           expires: 1 / 48,
         });
+
+        console.log("BERHASIL!!!!");
 
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosInstance(error.config); // Retry original request

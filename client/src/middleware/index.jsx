@@ -7,9 +7,9 @@ const authPath = ["/", "/settings", "/profile", "/explore", "/:username"];
 
 // eslint-disable-next-line react/prop-types
 const AuthRoute = ({ children }) => {
-  const { currentPath, isAuthUser, userData } = useProvider();
+  const { currentPath, isUserAuth, userData } = useProvider();
 
-  if (isAuthUser === null) return null;
+  if (isUserAuth) return null;
 
   if (userData && nonAuthPath.includes(currentPath)) return <Navigate to="/" />;
 
