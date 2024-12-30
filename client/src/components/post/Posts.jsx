@@ -7,7 +7,7 @@ import PostImagesDisplay from "./PostImagesDisplay";
 import { useProvider } from "../../context/GlobalProvider";
 import { initialCommentConfig, initialCommentForm } from "../../config";
 
-const Posts = ({ posts, message }) => {
+const Posts = ({ posts, message, recommend }) => {
   const { handleOpenModal } = useProvider();
 
   return (
@@ -15,9 +15,11 @@ const Posts = ({ posts, message }) => {
       {posts.length === 0 ? (
         <div className="h-60 w-full flex flex-col items-center justify-center">
           <h1 className="text-2xl font-semibold">{message}</h1>
-          <Button variant="custom" size="md">
-            Start Following
-          </Button>
+          <div className="py-6 space-y-6">
+            {recommend.map((user, index) => (
+              <div key={index}>{user.username}</div>
+            ))}
+          </div>
         </div>
       ) : (
         posts.map((post, index) => (

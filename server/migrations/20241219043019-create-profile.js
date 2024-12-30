@@ -12,12 +12,10 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
       },
-      firstname: {
+      fullname: {
         type: Sequelize.STRING,
       },
-      lastname: {
-        type: Sequelize.STRING,
-      },
+
       avatar: {
         type: Sequelize.STRING,
       },

@@ -14,15 +14,22 @@ async function uploadMediaToCloudinary(filePath) {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       resource_type: "auto",
-      folder: "social_media_project",
+      folder: "fullstack_instagram_clone",
+      transformation: [
+        {
+          width: 500,
+          height: 500,
+          crop: "limit",
+          format: "webp",
+        },
+      ],
     });
 
     return result;
   } catch (error) {
-    throw new Error("Error uploading to cloudinary");
+    throw new Error("Error uploading to Cloudinary: " + error.message);
   }
 }
-
 const deleteMediaFromCloudinary = async (imageUrl) => {
   try {
     await cloudinary.uploader.destroy(imageUrl);

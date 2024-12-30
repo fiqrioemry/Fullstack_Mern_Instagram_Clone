@@ -14,8 +14,9 @@ const { Op } = require("sequelize");
 
 // create new post
 async function createNewPost(req, res) {
+  // const { userId } = req.userId;
+  const userId = 1;
   const files = req.files;
-  const { userId } = req.user;
   const { content } = req.body;
   try {
     if (!content || files.length === 0) {

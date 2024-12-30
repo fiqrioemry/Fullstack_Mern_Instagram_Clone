@@ -3,13 +3,16 @@ const {
   userSignUp,
   userSignIn,
   userSignOut,
-  userRefreshToken,
+  userAuthCheck,
+  userAuthRefresh,
 } = require("../../controller/auth");
+const isAuthenticate = require("../../middleware/isAuthenticate");
 const router = express.Router();
 
-router.post("/sign-up", userSignUp);
-router.post("/sign-in", userSignIn);
-router.post("/sign-out", userSignOut);
-router.post("/refresh", userRefreshToken);
+router.post("/signup", userSignUp);
+router.post("/signin", userSignIn);
+router.post("/signout", userSignOut);
+router.get("/refresh", userAuthRefresh);
+router.get("/me", isAuthenticate, userAuthCheck);
 
 module.exports = router;

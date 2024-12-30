@@ -3,8 +3,8 @@ dotenv.config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const cookies = require("cookie-parser");
 const services = require("./routes");
+const cookies = require("cookie-parser");
 
 const CLIENT_HOST = process.env.CLIENT_HOST;
 const SERVER_PORT = process.env.SERVER_PORT;

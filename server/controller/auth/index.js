@@ -1,12 +1,12 @@
-const { User, Profile } = require("../../models");
 const bcrypt = require("bcrypt");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
+const { User, Profile } = require("../../models");
 const randomAvatar = require("../../utils/randomAvatar");
 
 async function userSignUp(req, res) {
   try {
-    const { username, email, password, firstname, lastname } = req.body;
+    const { username, email, password, fullname } = req.body;
 
     const existUser = await User.findOne({
       where: { [Op.or]: [{ email }, { username }] },
@@ -30,8 +30,7 @@ async function userSignUp(req, res) {
     const avatar = randomAvatar();
     await Profile.create({
       userId: newUser.id,
-      firstname,
-      lastname,
+      fullname,
       avatar,
     });
 
@@ -75,19 +74,27 @@ async function userSignIn(req, res) {
         message: "Password is wrong",
       });
 
-    const payload = {
+    const user = {
       userId: userData.id,
       userEmail: userData.email,
       userName: userData.username,
       userAvatar: userData.Profile?.avatar,
     };
-    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN, {
-      expiresIn: "1d",
-    });
+    const accessToken = jwt.sign(
+      { userId: userData.id },
+      process.env.ACCESS_TOKEN,
+      {
+        expiresIn: "30m",
+      }
+    );
 
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN, {
-      expiresIn: "7d",
-    });
+    const refreshToken = jwt.sign(
+      { userId: userData.id },
+      process.env.REFRESH_TOKEN,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -99,7 +106,7 @@ async function userSignIn(req, res) {
     res.status(200).send({
       success: true,
       message: "Login is success",
-      data: { accessToken, payload },
+      data: { accessToken, user },
     });
   } catch (error) {
     return res.status(500).send({
@@ -112,19 +119,89 @@ async function userSignIn(req, res) {
 
 async function userSignOut(req, res) {
   delete req.headers.authorization;
+
   res.clearCookie("refreshToken");
 
   return res.status(200).send({ success: true, message: "Logout is success" });
 }
 
-async function userRefreshToken(req, res) {
+async function userAuthCheck(req, res) {
+  const { userId } = req.user;
   try {
+    const user = await User.findByPk(userId);
+
+    if (!user)
+      return res
+        .status(401)
+        .send({ success: false, message: "Unauthorized Access !!!" });
+
+    const userData = {
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.username,
+      userAvatar: user.Profile?.avatar,
+    };
+
+    res.status(200).send({
+      success: true,
+      data: userData,
+    });
   } catch (error) {
     return res.status(500).send({
       success: false,
-      message: "Refresh token is invalid",
+      message: "Failed to get Authorization",
       error: error.message,
     });
   }
 }
-module.exports = { userSignIn, userSignUp, userSignOut, userRefreshToken };
+
+async function userAuthRefresh(req, res) {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    console.log(refreshToken);
+    if (!refreshToken) {
+      return res.status(401).send({
+        success: false,
+        message: "Session is Expired, Please log in",
+      });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN);
+
+    const userId = decoded.userId;
+
+    const user = await User.findByPk(userId);
+    console.log(user);
+    if (!user) {
+      return res.status(403).send({
+        success: false,
+        message: "Invalid refresh token, please log in",
+      });
+    }
+
+    const accessToken = jwt.sign(
+      { userId: user.id },
+      process.env.ACCESS_TOKEN,
+      { expiresIn: "30m" }
+    );
+
+    res.status(200).send({
+      success: true,
+      data: { accessToken },
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: "Failed to refresh token",
+      error: error.message,
+    });
+  }
+}
+
+module.exports = {
+  userSignIn,
+  userSignUp,
+  userSignOut,
+  userAuthRefresh,
+  userAuthCheck,
+};

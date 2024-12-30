@@ -8,10 +8,12 @@ const {
   followNewUser,
   getUserFollowers,
   getUserFollowings,
+
+  getFollowRecommendations,
 } = require("../../controller/follow");
 const express = require("express");
-const { upload } = require("../../middleware.js/media");
-const isAuthenticate = require("../../middleware.js/isAuthenticate");
+const { upload } = require("../../middleware/media");
+const isAuthenticate = require("../../middleware/isAuthenticate");
 
 const router = express.Router();
 // user profile setting
@@ -33,5 +35,8 @@ router.get("/:username/followings", isAuthenticate, getUserFollowings);
 // follow and unfollow
 router.post("/:followingId/follow", isAuthenticate, followNewUser);
 router.delete("/:followingId/unfollow", isAuthenticate, unfollowUser);
+
+// follow recommendations
+router.get("/recommend/follow/user", isAuthenticate, getFollowRecommendations);
 
 module.exports = router;

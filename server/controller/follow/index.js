@@ -95,7 +95,7 @@ async function getUserFollowers(req, res) {
 
     const followers = await user.getFollowers({
       attributes: ["id", "username"],
-      include: [{ model: Profile, attributes: ["firstname", "lastname"] }],
+      include: [{ model: Profile, attributes: ["fullname"] }],
     });
 
     res.status(200).send({
@@ -123,7 +123,7 @@ async function getUserFollowings(req, res) {
 
     const followings = await user.getFollowings({
       attributes: ["id", "username"],
-      include: [{ model: Profile, attributes: ["firstname", "lastname"] }],
+      include: [{ model: Profile, attributes: ["fullname"] }],
     });
 
     res.status(200).send({
@@ -139,9 +139,50 @@ async function getUserFollowings(req, res) {
   }
 }
 
+async function getFollowRecommendations(req, res) {
+  const { userId } = req.user;
+
+  try {
+    console.log("hello you guys whats up ?");
+    const recommendations = await User.findAll({
+      attributes: ["id", "username"],
+      include: [
+        {
+          model: Profile,
+          attributes: ["fullname"],
+        },
+        {
+          model: Follow,
+          as: "Followers",
+          attributes: [], // Tidak membutuhkan data dari tabel Follow
+          required: false, // LEFT JOIN
+          where: { followerId: userId },
+        },
+      ],
+      where: {
+        id: { [Op.ne]: userId }, // Jangan rekomendasikan diri sendiri
+        "$Followers.followerId$": null, // Hanya pengguna yang belum diikuti
+      },
+    });
+
+    console.log(recommendations);
+    res.status(200).send({
+      success: true,
+      data: recommendations,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: "Failed to get follow recommendations",
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   followNewUser,
   unfollowUser,
   getUserFollowers,
   getUserFollowings,
+  getFollowRecommendations,
 };

@@ -8,9 +8,7 @@ const getUserHomeDetails = async (req, res) => {
     const user = await User.findOne({
       where: { username },
       attributes: ["id", "username"],
-      include: [
-        { model: Profile, attributes: ["firstname", "lastname", "bio"] },
-      ],
+      include: [{ model: Profile, attributes: ["fullname", "bio"] }],
     });
 
     if (!user) {
