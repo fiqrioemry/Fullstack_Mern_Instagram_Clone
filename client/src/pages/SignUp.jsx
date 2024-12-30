@@ -1,16 +1,17 @@
 import AuthForm from "../components/form/AuthForm";
+import { useAuthStore } from "../store/useAuthStore";
 import { useHandleForm } from "../hooks/useHandleForm";
 import { controlSignUpForm, initialSignUpForm } from "../config";
 
 const SignUp = () => {
+  const { userSignUp } = useAuthStore();
   const { formData, handleChange, handleSubmit, handleValidate } =
     useHandleForm(initialSignUpForm);
 
   const isValid = handleValidate();
 
-  const onSubmit = () => {
-    console.log("Form submitted successfully:", formData);
-  };
+  const onSubmit = () => userSignUp(formData);
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="relative hidden bg-muted lg:block">
@@ -20,7 +21,7 @@ const SignUp = () => {
           className={`absolute inset-0 h-full w-full object-cover transition-all duration-300 ${
             isValid
               ? "brightness-100 grayscale-0"
-              : "dark:brightness-[0.2] dark:grayscale dark"
+              : "brightness-[0.2] grayscale dark"
           }`}
         />
       </div>

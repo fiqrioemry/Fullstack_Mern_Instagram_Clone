@@ -1,12 +1,25 @@
 import { create } from "zustand";
-import Cookies from "js-cookies";
+import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { axiosInstance } from "@/services";
+import { Navigate } from "react-router-dom";
 
-export const usePostStore = create((set) => ({
-  isAuthLoading: null,
-  isUserAuth: null,
+export const useAuthStore = create((set) => ({
   userData: null,
+  isUserAuth: true,
+  isAuthLoading: null,
+
+  userAuthCheck: async () => {
+    try {
+      const response = await axiosInstance.get("/api/auth/me");
+      set({ userData: response.data.data });
+    } catch (error) {
+      console.log("Failed to get authorization:", error);
+      set({ userData: null });
+    } finally {
+      set({ isUserAuth: false });
+    }
+  },
 
   userSignUp: async (formData) => {
     try {
@@ -16,7 +29,7 @@ export const usePostStore = create((set) => ({
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isAuthLoadingPost: false });
+      set({ isAuthLoading: false });
     }
   },
 
@@ -41,6 +54,7 @@ export const usePostStore = create((set) => ({
       );
     } finally {
       set({ isAuthLoading: false });
+      <Navigate to="/" />;
     }
   },
 }));

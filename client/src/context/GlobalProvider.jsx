@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import { createContext, useContext } from "react";
 import useHandleModal from "../hooks/useHandleModal";
-import { useLocation, useNavigate } from "react-router-dom";
-import useHandleDarkMode from "../hooks/useHandleDarkMode";
+import { useAuthStore } from "../store/useAuthStore";
 import useHandleSearch from "../hooks/useHandleSearch";
-import { useEffect } from "react";
+import useHandleDarkMode from "../hooks/useHandleDarkMode";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const GlobalContext = createContext();
 
@@ -12,6 +13,7 @@ export const GlobalProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const { isUserAuth, userData, userAuthCheck } = useAuthStore();
 
   useHandleSearch();
   useHandleDarkMode();
@@ -23,7 +25,9 @@ export const GlobalProvider = ({ children }) => {
     handleCloseAllModals,
   } = useHandleModal();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    userAuthCheck();
+  }, [userAuthCheck]);
 
   return (
     <GlobalContext.Provider
@@ -31,6 +35,8 @@ export const GlobalProvider = ({ children }) => {
         navigate,
         currentPath,
         openModal,
+        isUserAuth,
+        userData,
         setOpenModal,
         handleOpenModal,
         handleCloseModal,

@@ -38,7 +38,7 @@ const SignIn = () => {
           className={`absolute inset-0 h-full w-full object-cover transition-all duration-300 ${
             isValid
               ? "brightness-100 grayscale-0"
-              : "dark:brightness-[0.2] dark:grayscale dark"
+              : "brightness-[0.2] grayscale dark"
           }`}
         />
       </div>

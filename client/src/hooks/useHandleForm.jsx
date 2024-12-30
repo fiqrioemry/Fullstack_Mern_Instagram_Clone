@@ -38,7 +38,6 @@ export const useHandleForm = (initialFormState) => {
       return allFieldsFilled;
     }
 
-    // Jika form profil, validasi perubahan field
     const allowedEmptyFields = Object.keys(initialFormState).filter(
       (key) => !initialFormState[key]?.trim()
     );
@@ -49,10 +48,9 @@ export const useHandleForm = (initialFormState) => {
     });
 
     if (hasEmptyRequiredField) {
-      return false; // Tidak valid jika ada field wajib yang kosong
+      return false;
     }
 
-    // Cek perubahan nilai
     const hasChanges = Object.keys(initialFormState).some((key) => {
       const trimmedInitial = initialFormState[key]?.trim() || "";
       const trimmedCurrent = formData[key]?.trim() || "";
