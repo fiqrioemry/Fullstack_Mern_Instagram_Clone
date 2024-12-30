@@ -12,6 +12,7 @@ export const useAuthStore = create((set) => ({
   userAuthCheck: async () => {
     try {
       const response = await axiosInstance.get("/api/auth/me");
+      console.log(response);
       set({ userData: response.data.data });
     } catch (error) {
       console.log("Failed to get authorization:", error);
@@ -26,6 +27,7 @@ export const useAuthStore = create((set) => ({
       set({ isAuthLoading: true });
       const response = await axiosInstance.post("/api/auth/signup", formData);
       toast.success(response.data.message);
+      <Navigate to="/signin" />;
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {

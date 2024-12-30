@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 export const initialSignInForm = {
-  email: "",
+  identifier: "",
   password: "",
 };
 
@@ -34,7 +34,7 @@ export const initialPostForm = {
 
 export const controlSignInForm = [
   {
-    name: "email",
+    name: "identifier",
     type: "email",
     placeholder: "Enter your email ",
     style: "flex items-center capitalize",

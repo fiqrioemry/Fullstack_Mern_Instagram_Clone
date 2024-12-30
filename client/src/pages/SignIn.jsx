@@ -1,16 +1,17 @@
 import AuthForm from "../components/form/AuthForm";
 import { useHandleForm } from "../hooks/useHandleForm";
 import { controlSignInForm, initialSignInForm } from "../config";
+import { useAuthStore } from "../store/useAuthStore";
 
 const SignIn = () => {
+  const { userSignIn, isAuthLoading } = useAuthStore();
   const { formData, handleChange, handleSubmit, handleValidate } =
     useHandleForm(initialSignInForm);
 
   const isValid = handleValidate();
 
-  const onSubmit = () => {
-    console.log("Form submitted successfully:", formData);
-  };
+  const onSubmit = () => userSignIn(formData);
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -19,6 +20,7 @@ const SignIn = () => {
             <AuthForm
               onSubmit={(e) => handleSubmit(e, onSubmit)}
               formData={formData}
+              isLoading={isAuthLoading}
               controlForm={controlSignInForm}
               submitTitle={"Sign-In"}
               buttonTitle={"Sign In with Google"}

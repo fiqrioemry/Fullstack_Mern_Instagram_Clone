@@ -4,7 +4,7 @@ import { useHandleForm } from "../hooks/useHandleForm";
 import { controlSignUpForm, initialSignUpForm } from "../config";
 
 const SignUp = () => {
-  const { userSignUp } = useAuthStore();
+  const { userSignUp, isAuthLoading } = useAuthStore();
   const { formData, handleChange, handleSubmit, handleValidate } =
     useHandleForm(initialSignUpForm);
 
@@ -29,16 +29,17 @@ const SignUp = () => {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
             <AuthForm
-              onSubmit={(e) => handleSubmit(e, onSubmit)}
+              path="/signin"
+              isValid={isValid}
               formData={formData}
-              controlForm={controlSignUpForm}
               submitTitle={"Sign-Up"}
+              footerLink={"Sign in "}
+              isLoading={isAuthLoading}
+              handleChange={handleChange}
+              controlForm={controlSignUpForm}
               buttonTitle={"Sign Up with Google"}
               footerTitle={"Already have an account ? "}
-              footerLink={"Sign in "}
-              path="/signin"
-              handleChange={handleChange}
-              isValid={isValid}
+              onSubmit={(e) => handleSubmit(e, onSubmit)}
             />
           </div>
         </div>

@@ -13,6 +13,7 @@ const AuthForm = ({
   footerTitle,
   footerLink,
   buttonTitle,
+  isLoading,
   path,
   isValid,
   onSubmit,
@@ -47,14 +48,19 @@ const AuthForm = ({
           disabled={!isValid}
           className="w-full"
         >
-          {submitTitle}
+          {isLoading ? "loading" : submitTitle}
         </Button>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">
             Or continue with
           </span>
         </div>
-        <Button variant="outline" size="md" className="w-full">
+        <Button
+          disabled={isLoading}
+          variant="outline"
+          size="md"
+          className="w-full"
+        >
           {buttonTitle}
         </Button>
       </div>

@@ -31,7 +31,6 @@ axiosInstance.interceptors.response.use(
           withCredentials: true,
         });
         const newAccessToken = response.data.data.accessToken;
-
         Cookies.set("accessToken", response.data.data.accessToken, {
           path: "/",
           secure: true,
@@ -43,7 +42,6 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(error.config); // Retry original request
       } catch (refreshError) {
         console.error("Token refresh failed", refreshError);
-        window.location.href = "/signin";
       }
     }
     return Promise.reject(error);

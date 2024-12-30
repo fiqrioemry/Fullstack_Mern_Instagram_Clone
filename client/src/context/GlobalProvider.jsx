@@ -6,6 +6,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import useHandleSearch from "../hooks/useHandleSearch";
 import useHandleDarkMode from "../hooks/useHandleDarkMode";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 const GlobalContext = createContext();
 
@@ -43,6 +44,7 @@ export const GlobalProvider = ({ children }) => {
         handleCloseAllModals,
       }}
     >
+      <Toaster />
       {children}
     </GlobalContext.Provider>
   );
