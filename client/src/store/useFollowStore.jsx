@@ -5,12 +5,10 @@ export const useFollowStore = create((set) => ({
   success: null,
   message: null,
   recommendUsers: [],
-  isFollowLoading: false,
+  isFollowLoading: true,
 
-  // get all following post
   getFollowRecommendations: async () => {
     try {
-      set({ isFollowLoading: true });
       const response = await axiosInstance.get(
         "/api/user/recommend/follow/user"
       );
