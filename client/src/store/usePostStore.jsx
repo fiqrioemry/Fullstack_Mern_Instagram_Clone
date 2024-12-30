@@ -5,7 +5,7 @@ import { axiosInstance } from "@/services";
 export const usePostStore = create((set) => ({
   success: null,
   message: null,
-  followingPosts: null,
+  followingPosts: [],
   isLoadingPost: false,
   createNewPost: async (formData) => {
     try {
@@ -30,7 +30,7 @@ export const usePostStore = create((set) => ({
       });
     } catch (error) {
       console.log(error);
-      set({ followingPosts: null });
+      set({ followingPosts: [] });
     } finally {
       set({ isLoadingPost: false });
     }

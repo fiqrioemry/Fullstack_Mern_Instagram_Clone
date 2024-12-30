@@ -5,8 +5,8 @@ import DetailPostModal from "../components/modal/DetailPostModal";
 import { useFollowStore } from "../store/useFollowStore";
 
 const Home = () => {
-  const { getAllFollowingPosts, message, followingPosts } = usePostStore();
   const { getFollowRecommendations, recommendUsers } = useFollowStore();
+  const { getAllFollowingPosts, message, followingPosts } = usePostStore();
 
   useEffect(() => {
     getAllFollowingPosts();

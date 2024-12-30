@@ -10,6 +10,8 @@ import { initialCommentConfig, initialCommentForm } from "../../config";
 const Posts = ({ posts, message, recommend }) => {
   const { handleOpenModal } = useProvider();
 
+  console.log(recommend);
+
   return (
     <div className="w-full max-w-[30em] py-12 space-y-3">
       {posts.length === 0 ? (

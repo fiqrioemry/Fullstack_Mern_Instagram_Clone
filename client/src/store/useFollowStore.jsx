@@ -4,7 +4,7 @@ import { axiosInstance } from "@/services";
 export const useFollowStore = create((set) => ({
   success: null,
   message: null,
-  recommendUsers: null,
+  recommendUsers: [],
   isFollowLoading: false,
 
   // get all following post
@@ -19,7 +19,7 @@ export const useFollowStore = create((set) => ({
       });
     } catch (error) {
       console.log(error);
-      set({ recommendUsers: null });
+      set({ recommendUsers: [] });
     } finally {
       set({ isFollowLoading: false });
     }
