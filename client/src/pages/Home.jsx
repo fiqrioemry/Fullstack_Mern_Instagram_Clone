@@ -6,8 +6,10 @@ import DetailPostModal from "../components/modal/DetailPostModal";
 import PostsLoadingSkeleton from "../components/skeleton/PostsLoadingSkeleton";
 import RecommendBoxSkeleton from "../components/skeleton/RecommendBoxSkeleton";
 import RecommendBox from "../components/RecommendBox";
+import { useProvider } from "../context/GlobalProvider";
 
 const Home = () => {
+  const { userData } = useProvider();
   const { getFollowRecommendations, isFollowLoading, recommendUsers } =
     useFollowStore();
   const { getAllFollowingPosts, isPostLoading, message, followingPosts } =
@@ -23,11 +25,14 @@ const Home = () => {
       <DetailPostModal />
       <div className="flex-grow">
         <div className="flex justify-center">
-          <div className="w-full max-w-[30rem]">
+          <div className="w-full max-w-[30rem] px-2">
             <div className="md:mt-0 mt-12 md:mb-0 mb-12 md:py-12 py-6">
               {isPostLoading && <PostsLoadingSkeleton />}
-              {!isPostLoading && !followingPosts.length && (
+              {!isPostLoading && followingPosts.length === 0 && (
                 <RecommendBox recommend={recommendUsers} message={message} />
+              )}
+              {!isPostLoading && followingPosts.length !== 0 && (
+                <Posts posts={followingPosts} />
               )}
             </div>
           </div>
@@ -36,23 +41,14 @@ const Home = () => {
       <div className="w-[26rem] h-screen xl:block hidden">
         <div className=" py-6 px-12">
           {isFollowLoading && (
-            <div className="space-y-6">
+            <div className="space-y-6 ">
               <RecommendBoxSkeleton />
               <RecommendBoxSkeleton />
               <RecommendBoxSkeleton />
             </div>
           )}
 
-          {!isFollowLoading && !followingPosts.length && (
-            <div className="space-y-6">
-              <RecommendBox
-                recommend={recommendUsers}
-                message={"Suggested For you"}
-              />
-            </div>
-          )}
-
-          {!isFollowLoading && followingPosts.length && (
+          {!isFollowLoading && followingPosts.length !== 0 && (
             <div className="space-y-6">
               <RecommendBox
                 recommend={recommendUsers}

@@ -20,7 +20,12 @@ const RecommendBox = ({ recommend, message = null }) => {
               </div>
             </div>
             <div>
-              <Button value={user.id} variant="custom" size="sm">
+              <Button
+                onClick={handleFollow}
+                value={user.id}
+                variant="custom"
+                size="sm"
+              >
                 Follow
               </Button>
             </div>
