@@ -10,16 +10,22 @@ import { useProvider } from "../context/GlobalProvider";
 
 const Home = () => {
   const { userData } = useProvider();
-  const { getFollowRecommendations, isFollowLoading, recommendUsers } =
-    useFollowStore();
+  const {
+    followings,
+    recommendUsers,
+    isFollowLoading,
+    getAllFollowings,
+    getFollowRecommendations,
+  } = useFollowStore();
   const { getAllFollowingPosts, isPostLoading, message, followingPosts } =
     usePostStore();
 
   useEffect(() => {
-    getAllFollowingPosts();
+    getAllFollowings(), getAllFollowingPosts();
     getFollowRecommendations();
   }, []);
 
+  console.log(followingPosts);
   return (
     <div className="flex">
       <DetailPostModal />
@@ -29,7 +35,11 @@ const Home = () => {
             <div className="md:mt-0 mt-12 md:mb-0 mb-12 md:py-12 py-6">
               {isPostLoading && <PostsLoadingSkeleton />}
               {!isPostLoading && followingPosts.length === 0 && (
-                <RecommendBox recommend={recommendUsers} message={message} />
+                <RecommendBox
+                  followings={followings}
+                  recommend={recommendUsers}
+                  message={message}
+                />
               )}
               {!isPostLoading && followingPosts.length !== 0 && (
                 <Posts posts={followingPosts} />
@@ -51,8 +61,9 @@ const Home = () => {
           {!isFollowLoading && followingPosts.length !== 0 && (
             <div className="space-y-6">
               <RecommendBox
+                followings={followings}
                 recommend={recommendUsers}
-                message={"Suggested For you"}
+                message="Suggested For you"
               />
             </div>
           )}

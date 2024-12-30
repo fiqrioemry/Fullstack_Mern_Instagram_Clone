@@ -6,17 +6,21 @@ import {
   CarouselContent,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useEffect } from "react";
 
 const PostImagesDisplay = ({ images }) => {
+  useEffect(() => {
+    images.map((image) => console.log("ini adalah imagee : ", image));
+  });
   return (
     <Carousel>
       <CarouselContent className="flex items-center">
-        {images.map((url, index) => (
+        {images.map((image, index) => (
           <CarouselItem key={index}>
             <div className="flex aspect-square">
               <img
-                src={url}
-                alt={`Uploaded ${index + 1}`}
+                src={image.image}
+                alt="post_image"
                 className="w-full h-full"
               />
             </div>

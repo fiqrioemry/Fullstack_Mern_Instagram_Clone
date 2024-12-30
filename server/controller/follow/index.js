@@ -113,10 +113,10 @@ async function getUserFollowers(req, res) {
 }
 
 async function getUserFollowings(req, res) {
-  const { username } = req.params;
+  const { userId } = req.body;
 
   try {
-    const user = await User.findOne({ where: { username } });
+    const user = await User.findByPk(userId);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });

@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 export const useFollowStore = create((set) => ({
   success: null,
   message: null,
+  followings: [],
+  followers: [],
   recommendUsers: [],
   isFollowLoading: true,
 
@@ -24,10 +26,11 @@ export const useFollowStore = create((set) => ({
     }
   },
 
-  followNewUser: async ({ followingId }) => {
+  followNewUser: async (followingId) => {
     try {
+      console.log(followingId);
       set({ isFollowLoading: true });
-      const response = await axiosInstance.get("/api/user/follow", {
+      const response = await axiosInstance.post("/api/user/follow", {
         followingId,
       });
       toast.success(response.data.message);
@@ -39,33 +42,25 @@ export const useFollowStore = create((set) => ({
     }
   },
 
-  getAllFollowings: async () => {
+  getAllFollowings: async ({ userId }) => {
     try {
-      set({ isFollowLoading: true });
-      const response = await axiosInstance.get("/api/user/unfollow", {
-        followingId,
+      const response = await axiosInstance.get("/api/user/followings", {
+        userId,
       });
-      toast.success(response.data.message);
+      set({ followings: response.data.data });
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isFollowLoading: false });
     }
   },
 
-  getAllFollowers: async () => {
+  getAllFollowers: async ({ userId }) => {
     try {
-      set({ isFollowLoading: true });
-      const response = await axiosInstance.get("/api/user/unfollow", {
-        followingId,
+      const response = await axiosInstance.get("/api/user/followers", {
+        userId,
       });
-      toast.success(response.data.message);
+      set({ followers: response.data.data });
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isFollowLoading: false });
     }
   },
 

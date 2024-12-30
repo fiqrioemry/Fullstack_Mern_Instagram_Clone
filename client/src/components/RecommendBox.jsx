@@ -2,13 +2,18 @@
 import { Button } from "@/components/ui/button";
 import { useFollowStore } from "../store/useFollowStore";
 
-const RecommendBox = ({ recommend, message = null }) => {
+const RecommendBox = ({ followings, recommend, message = null }) => {
   const { followNewUser, unfollowUser } = useFollowStore();
 
+  console.log(followings);
   const handleFollow = (e) => {
     followNewUser(e.target.value);
   };
-  console.log(recommend);
+
+  const handleUnfollow = (e) => {
+    unfollowUser(e.target.value);
+  };
+
   return (
     <div className="space-y-2">
       <div className="py-4 text-center">

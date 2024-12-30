@@ -29,8 +29,8 @@ router.put(
 router.get("/:username", isAuthenticate, getUserHomeDetails);
 
 // followers and followings
-router.get("/:username/followers", isAuthenticate, getUserFollowers);
-router.get("/:username/followings", isAuthenticate, getUserFollowings);
+router.get("/followers", isAuthenticate, getUserFollowers);
+router.get("/followings", isAuthenticate, getUserFollowings);
 
 // follow and unfollow
 router.post("/follow", isAuthenticate, followNewUser);

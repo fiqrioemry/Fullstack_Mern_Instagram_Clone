@@ -8,6 +8,7 @@ const {
   PostGallery,
   Comment,
   Like,
+  Profile,
   Reply,
 } = require("../../models");
 const { Op } = require("sequelize");
@@ -253,6 +254,12 @@ const getAllFollowingPosts = async (req, res) => {
         {
           model: User,
           attributes: ["id", "username"],
+          include: [
+            {
+              model: Profile,
+              attributes: ["fullname", "avatar"],
+            },
+          ],
         },
         {
           model: PostGallery,

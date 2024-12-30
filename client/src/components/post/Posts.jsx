@@ -7,36 +7,28 @@ import PostImagesDisplay from "./PostImagesDisplay";
 import { useProvider } from "../../context/GlobalProvider";
 import { initialCommentConfig, initialCommentForm } from "../../config";
 
-const Posts = ({ posts, message, recommend }) => {
+const Posts = ({ posts }) => {
   const { handleOpenModal } = useProvider();
 
   return (
     <div>
-      {posts.length === 0 ? (
-        <div className="h-60 w-full flex flex-col items-center justify-center">
-          <h1 className="text-2xl font-semibold">{message}</h1>
-          <div className="py-6 space-y-6">
-            {recommend.map((user, index) => (
-              <div key={index}>{user.username}</div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        posts.map((post, index) => (
-          <div className="border-b" key={index}>
-            <PostContent />
-            <PostImagesDisplay images={post.images} />
-            <PostControl />
+      {posts.map((post, index) => (
+        <div className="border-b" key={index}>
+          <PostContent user={post.User} />
+          <PostImagesDisplay images={post.PostGalleries} />
+          <PostControl />
+          {post.commentCount !== 0 && (
             <Button onClick={() => handleOpenModal("detail")}>
-              View all 1.275 comments
+              View all {post.commentCount} comments
             </Button>
-            <CommentForm
-              initialFormConfig={initialCommentConfig}
-              initialFormState={initialCommentForm}
-            />
-          </div>
-        ))
-      )}
+          )}
+
+          <CommentForm
+            initialFormConfig={initialCommentConfig}
+            initialFormState={initialCommentForm}
+          />
+        </div>
+      ))}
     </div>
   );
 };
