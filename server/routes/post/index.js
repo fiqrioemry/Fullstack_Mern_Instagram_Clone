@@ -30,9 +30,9 @@ router.put(
 );
 router.delete("/:postId/delete", isAuthenticate, deletePost);
 
-router.get("/", isAuthenticate, getPublicPosts);
+router.get("/public", isAuthenticate, getPublicPosts);
 router.get("/:postId", isAuthenticate, getPostDetail);
-router.get("/following", isAuthenticate, getPostsFromFollowings);
+router.get("/followings", isAuthenticate, getPostsFromFollowings);
 
 router.post("/", isAuthenticate, createPost);
 router.delete("/:postId", isAuthenticate, deletePost);

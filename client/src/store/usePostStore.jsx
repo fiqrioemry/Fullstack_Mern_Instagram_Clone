@@ -5,7 +5,9 @@ import { axiosInstance } from "@/services";
 export const usePostStore = create((set) => ({
   success: null,
   message: null,
-  detailPost: [],
+  post: [],
+  posts: [],
+  comments: [],
   followingPosts: [],
   isPostLoading: true,
   createNewPost: async (formData) => {

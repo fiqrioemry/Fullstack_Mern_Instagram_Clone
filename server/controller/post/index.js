@@ -425,8 +425,6 @@ async function likePost(req, res) {}
 
 async function unlikePost(req, res) {}
 
-async function commentPost(req, res) {}
-
 module.exports = {
   getPostsFromFollowings,
   getPublicPosts,
