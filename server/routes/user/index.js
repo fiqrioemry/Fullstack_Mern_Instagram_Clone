@@ -25,7 +25,7 @@ router.post("/:userId/follow", isAuthenticate, followUser);
 router.get("/:username/posts", isAuthenticate, getUserPosts);
 router.delete("/:userId/follow", isAuthenticate, unfollowUser);
 router.get("/:userId/followers", isAuthenticate, getFollowers);
-router.get("/:userId/following", isAuthenticate, getFollowings);
+router.get("/:userId/followings", isAuthenticate, getFollowings);
 router.get("/recommend", isAuthenticate, getFollowRecommend);
 
 module.exports = router;
