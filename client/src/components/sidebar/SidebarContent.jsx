@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useProvider } from "../../context/GlobalProvider";
+import MoreDropdown from "./MoreDropdown";
 
 // eslint-disable-next-line react/prop-types
 const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
@@ -56,7 +57,7 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
         ))}
       </div>
       <div className="hidden md:block">
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="lg" variant="nav">
               <MenuIcon size={26} />
@@ -76,7 +77,8 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
             </DropdownMenuItem>
             <DropdownMenuItem>Logout</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
+        <MoreDropdown />
       </div>
     </div>
   );

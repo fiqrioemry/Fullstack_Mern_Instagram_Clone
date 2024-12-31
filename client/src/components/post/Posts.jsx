@@ -1,15 +1,13 @@
 /* eslint-disable react/prop-types */
+import { Link, useLocation } from "react-router-dom";
 import PostContent from "./PostContent";
 import PostControl from "./PostControl";
 import CommentForm from "../form/CommentForm";
-import { Button } from "@/components/ui/button";
 import PostImagesDisplay from "./PostImagesDisplay";
-import { useProvider } from "../../context/GlobalProvider";
 import { initialCommentConfig, initialCommentForm } from "../../config";
 
 const Posts = ({ posts }) => {
-  const { handleOpenModal } = useProvider();
-
+  const location = useLocation();
   return (
     <div>
       {posts.map((post, index) => (
@@ -17,10 +15,10 @@ const Posts = ({ posts }) => {
           <PostContent user={post.User} />
           <PostImagesDisplay images={post.PostGalleries} />
           <PostControl like={post.likeCount} />
-          {post.commentCount !== 0 && (
-            <Button onClick={() => handleOpenModal("detail", post.id)}>
+          {post.commentCount === 0 && (
+            <Link to={`/p/${post.id}`} state={{ background: location }}>
               View all {post.commentCount} comments
-            </Button>
+            </Link>
           )}
 
           <CommentForm

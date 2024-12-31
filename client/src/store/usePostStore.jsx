@@ -5,6 +5,7 @@ import { axiosInstance } from "@/services";
 export const usePostStore = create((set) => ({
   success: null,
   message: null,
+  detailPost: [],
   followingPosts: [],
   isPostLoading: true,
   createNewPost: async (formData) => {
@@ -15,6 +16,16 @@ export const usePostStore = create((set) => ({
       toast.error(error.response.data.message);
     } finally {
       set({ isPostLoading: false });
+    }
+  },
+
+  getPostDetail: async (postId) => {
+    try {
+      const response = await axiosInstance.get(`/api/post/${postId}/detail`);
+      set({ detailPost: response.data.data });
+    } catch (error) {
+      console.log(error);
+      set({ detailPost: [] });
     }
   },
 
