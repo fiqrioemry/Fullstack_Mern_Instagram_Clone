@@ -2,13 +2,18 @@ const { User, Profile } = require("../../models");
 const { uploadMediaToCloudinary } = require("../../utils/cloudinary");
 
 // get user profile
-const getUserProfile = async (req, res) => {
+async function getUserProfile(req, res) {
   const { username } = req.params;
   try {
     const user = await User.findOne({
       where: { username },
       attributes: ["id", "username", "email"],
-      include: [{ model: Profile }],
+      include: [
+        {
+          model: Profile,
+          attributes: ["fullname", "gender", "avatar", "bio", "birthday"],
+        },
+      ],
     });
 
     if (!user) {
@@ -27,8 +32,14 @@ const getUserProfile = async (req, res) => {
     return res.status(200).send({
       success: true,
       data: {
-        user: user,
-        profile: user.Profile,
+        userId: user.id,
+        username: user.username,
+        email: user.email,
+        fullname: user.Profile.fullname,
+        avatar: user.Profile.avatar,
+        bio: user.Profile.bio,
+        gender: user.Profile.gender,
+        birthday: user.Profile.birthday,
         posts: postsCount,
         followers: followersCount,
         followings: followingsCount,
@@ -37,16 +48,16 @@ const getUserProfile = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Failed to retrive user home details",
+      message: "Failed to retrive user detail",
       error: error.message,
     });
   }
-};
+}
 
 async function updateUserProfile(req, res) {
   const { userId } = req.user;
 
-  const { firstname, lastname, bio, birthday, gender, avatar } = req.body;
+  const { fullname, bio, birthday, gender, avatar } = req.body;
 
   try {
     const profileData = await Profile.findOne({ where: { userId } });
@@ -65,8 +76,7 @@ async function updateUserProfile(req, res) {
     }
 
     const isDataUpdated =
-      profileData.firstname === firstname &&
-      profileData.lastname === lastname &&
+      profileData.fullname === fullname &&
       profileData.bio === bio &&
       profileData.birthday === birthday &&
       profileData.gender === gender &&
@@ -79,8 +89,7 @@ async function updateUserProfile(req, res) {
       });
     }
 
-    profileData.firstname = firstname;
-    profileData.lastname = lastname;
+    profileData.fullname = fullname;
     profileData.bio = bio;
     profileData.birthday = birthday;
     profileData.gender = gender;
@@ -103,20 +112,144 @@ async function updateUserProfile(req, res) {
 }
 
 async function followUser(req, res) {
-  // Logic for following a user
+  const { userId } = req.user;
+  const { followingId } = req.params;
+
+  try {
+    if (userId == followingId) {
+      return res.status(400).send({
+        success: false,
+        message: "Cannot follow yourself",
+      });
+    }
+
+    const user = await User.findByPk(followingId);
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found " });
+    }
+
+    const existingFollow = await Follow.findOne({
+      where: { followerId: userId, followingId: followingId },
+    });
+
+    if (existingFollow) {
+      return res.status(400).send({
+        success: false,
+        message: "You are already following this user",
+      });
+    }
+
+    await Follow.create({
+      followerId: userId,
+      followingId: followingId,
+    });
+
+    res.status(201).send({
+      success: true,
+      message: "Follow is success",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: "Failed to follow new user",
+      error: error.message,
+    });
+  }
 }
 
 async function unfollowUser(req, res) {
-  // Logic for unfollowing a user
+  const { userId } = req.user;
+  const { followingId } = req.params;
+
+  try {
+    if (userId === followingId) {
+      return res.status(400).send({
+        success: false,
+        message: "Cannot unfollow yourself",
+      });
+    }
+
+    const followRecord = await Follow.findOne({
+      where: { followerId: userId, followingId },
+    });
+
+    if (!followRecord) {
+      return res.status(400).send({
+        success: false,
+        message: "You are not following this user",
+      });
+    }
+    await followRecord.destroy();
+
+    res.status(200).send({
+      success: true,
+      message: "Unfollow is success",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: "Failed to unfollow user",
+      error: error.message,
+    });
+  }
 }
 
-// userController.js
 async function getFollowers(req, res) {
-  // Logic for fetching followers of a user
+  const { userId } = req.params;
+  try {
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found " });
+    }
+
+    const followers = await user.getFollowers({
+      attributes: ["id", "username"],
+      include: [{ model: Profile, attributes: ["fullname"] }],
+    });
+
+    res.status(200).send({
+      success: true,
+      data: followers,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: "Failed to get user followers",
+      error: error.message,
+    });
+  }
 }
 
 async function getFollowings(req, res) {
-  // Logic for fetching users that a user is following
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        error: "User not found  ",
+      });
+    }
+
+    const followings = await user.getFollowings({
+      attributes: ["id", "username"],
+      include: [{ model: Profile, attributes: ["fullname"] }],
+    });
+
+    res.status(200).send({
+      success: true,
+      data: followings,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: "Failed to get user followings",
+      error: error.message,
+    });
+  }
 }
 
 async function getFollowRecommend(req, res) {

@@ -16,7 +16,7 @@ const isAuthenticate = require("../../middleware/isAuthenticate");
 
 router.get("/:username", isAuthenticate, getUserProfile);
 router.put(
-  "/:username",
+  "/",
   upload("image").single("file"),
   isAuthenticate,
   updateUserProfile
