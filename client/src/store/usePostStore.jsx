@@ -5,11 +5,14 @@ import { axiosInstance } from "@/services";
 export const usePostStore = create((set) => ({
   success: null,
   message: null,
-  post: [],
-  posts: [],
-  comments: [],
-  followingPosts: [],
+  post: [], // for detail post
+  posts: [], // for public post
+  followingPosts: [], // for following post
   isPostLoading: true,
+  isPostsLoading: true,
+  isCommentsLoading: true,
+  isFollowingLoading: true,
+
   createNewPost: async (formData) => {
     try {
       const response = await axiosInstance.post("/api/post/create", formData);

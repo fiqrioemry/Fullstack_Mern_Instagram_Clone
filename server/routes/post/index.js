@@ -46,4 +46,8 @@ router.delete("/:postId/like", isAuthenticate, unlikePost);
 router.get("/:postId/comments", isAuthenticate, getComments);
 router.post("/:postId/comments", isAuthenticate, updateComment);
 
+// Bookmark posts
+// router.post("/api/posts/:postId/bookmark", isAuthenticate);
+// router.delete("/api/posts/:postId/bookmark", isAuthenticate);
+
 module.exports = router;
