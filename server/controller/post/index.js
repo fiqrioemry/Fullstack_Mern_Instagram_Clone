@@ -217,7 +217,7 @@ const getAllFollowingPosts = async (req, res) => {
   const { userId } = req.user;
   const { limit } = req.query;
   try {
-    const total = parseInt(limit) || 3;
+    const total = parseInt(limit) || 6;
 
     const user = await User.findByPk(userId, {
       include: {
@@ -364,13 +364,21 @@ async function getPostDetail(req, res) {
   try {
     const post = await Post.findByPk(postId, {
       include: [
-        { model: User, attributes: ["id", "username"] },
+        {
+          model: User,
+          attributes: ["id", "username"],
+          include: [{ model: Profile, attributes: ["avatar"] }],
+        },
         { model: PostGallery, attributes: ["image"] },
         {
           model: Comment,
           attributes: ["id", "content"],
           include: [
-            { model: User, attributes: ["id", "username"] },
+            {
+              model: User,
+              attributes: ["id", "username"],
+              include: [{ model: Profile, attributes: ["avatar"] }],
+            },
             {
               model: Like,
               attributes: ["id"],
@@ -379,7 +387,13 @@ async function getPostDetail(req, res) {
             {
               model: Reply,
               attributes: ["id", "content"],
-              include: [{ model: User, attributes: ["id", "username"] }],
+              include: [
+                {
+                  model: User,
+                  attributes: ["id", "username"],
+                  include: [{ model: Profile, attributes: ["avatar"] }],
+                },
+              ],
             },
           ],
         },

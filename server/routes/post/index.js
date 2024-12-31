@@ -12,6 +12,7 @@ const {
 const { upload } = require("../../middleware/media");
 const { createCommentOrReply } = require("../../controller/comment");
 const isAuthenticate = require("../../middleware/isAuthenticate");
+const { likePost, unlikePost } = require("../../controller/like");
 const router = express.Router();
 
 // post
@@ -41,6 +42,20 @@ router.post(
   createCommentOrReply
 );
 
-router.get("/:userId", isAuthenticate, getUserPosts);
+router.get("/", isAuthenticate, getAllPublicPosts);
+router.get("/:postId", isAuthenticate, getPostDetail);
+router.get("/following", isAuthenticate, getAllFollowingPosts);
+
+router.post("/", isAuthenticate, createNewPost);
+router.put("/:postId", isAuthenticate, updateMyPost);
+router.delete("/:postId", isAuthenticate, deleteMyPost);
+
+// like & unlike a post
+router.post("/:postId/like", isAuthenticate, likePost);
+router.delete("/api/posts/:postId/like", isAuthenticate, unlikePost);
+
+// comment a post
+router.post("/api/posts/:postId/comments", isAuthenticate); // Create a comment on a post
+router.get("/api/posts/:postId/comments", isAuthenticate);
 
 module.exports = router;

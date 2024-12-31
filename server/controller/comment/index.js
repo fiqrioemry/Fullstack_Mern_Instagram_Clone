@@ -44,6 +44,13 @@ async function createCommentOrReply(req, res) {
   }
 }
 
+async function commentPost(req, res) {}
+
+async function getAllComments(req, res) {}
+
+async function commentPost(req, res) {}
+
 module.exports = {
+  commentPost,
   createCommentOrReply,
 };
