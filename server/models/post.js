@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       this.hasMany(models.Comment, { onDelete: "CASCADE" });
       this.hasMany(models.PostGallery, { onDelete: "CASCADE" });
-      this.belongsTo(models.User, { foreignKey: "userId" });
+      this.belongsTo(models.User, { foreignKey: "userId", as: "user" });
     }
   }
   Post.init(

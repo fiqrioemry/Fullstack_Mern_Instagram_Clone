@@ -182,54 +182,14 @@ async function getPublicPosts(req, res) {
 async function getPostDetail(req, res) {
   const { postId } = req.params;
   try {
-    const post = await Post.findByPk(postId, {
-      include: [
-        {
-          model: User,
-          attributes: ["id", "username"],
-          include: [{ model: Profile, attributes: ["avatar"] }],
-        },
-        { model: PostGallery, attributes: ["image"] },
-        {
-          model: Comment,
-          attributes: ["id", "content"],
-          include: [
-            {
-              model: User,
-              attributes: ["id", "username"],
-              include: [{ model: Profile, attributes: ["avatar"] }],
-            },
-            {
-              model: Like,
-              attributes: ["id"],
-              include: [{ model: User, attributes: ["id", "username"] }],
-            },
-            {
-              model: Reply,
-              attributes: ["id", "content"],
-              include: [
-                {
-                  model: User,
-                  attributes: ["id", "username"],
-                  include: [{ model: Profile, attributes: ["avatar"] }],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          model: Like,
-          attributes: ["id"],
-          include: [{ model: User, attributes: ["id", "username"] }],
-        },
-      ],
-    });
+    const post = await Post.findByPk(postId);
 
     if (!post) {
       return res
         .status(404)
-        .json({ success: false, message: "Post not found" });
+        .send({ success: false, message: "Post not found" });
     }
+    const coba = await post.getUser({ attributes: ["id", "username"] });
 
     res.status(200).json({ success: true, data: post });
   } catch (error) {
