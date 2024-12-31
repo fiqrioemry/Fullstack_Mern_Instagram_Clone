@@ -2,7 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { useHandleForm } from "../../hooks/useHandleForm";
 
-const CommentForm = ({ initialFormConfig, initialFormState }) => {
+const CommentForm = ({
+  initialFormConfig,
+  initialFormState,
+  postId = null,
+}) => {
   const { formData, handleChange, handleSubmit, handleValidate } =
     useHandleForm(initialFormState);
 

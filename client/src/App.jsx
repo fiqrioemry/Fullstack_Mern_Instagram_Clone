@@ -6,8 +6,9 @@ import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Settings from "./pages/Settings";
 import Layout from "./components/layout/Layout";
-import { Route, Routes, useLocation, Navigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import DetailPostModal from "./components/modal/DetailPostModal";
+import PostDetails from "./pages/PostDetails";
 
 function App() {
   const location = useLocation();
@@ -15,6 +16,7 @@ function App() {
 
   return (
     <>
+      {/* Routes utama */}
       <Routes location={state.background || location}>
         <Route
           path="/signin"
@@ -45,16 +47,15 @@ function App() {
           <Route path="explore" element={<Explore />} />
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="p/:id" element={<PostDetails />} />
         </Route>
       </Routes>
 
-      {/* Render modal only if background location exists */}
-      {state.background ? (
+      {/* Render modal hanya jika background tersedia */}
+      {state.background && (
         <Routes>
           <Route path="/p/:id" element={<DetailPostModal />} />
         </Routes>
-      ) : (
-        location.pathname.startsWith("/p/") && <Navigate to="/" />
       )}
     </>
   );

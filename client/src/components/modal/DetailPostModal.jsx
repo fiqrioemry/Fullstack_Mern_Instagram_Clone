@@ -5,6 +5,11 @@ import { usePostStore } from "../../store/usePostStore";
 import { useNavigate, useParams } from "react-router-dom";
 import PostImagesDisplay from "../post/PostImagesDisplay";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import PostComments from "../post/PostComments";
+import PostContent from "../post/PostContent";
+import PostControl from "../post/PostControl";
+import CommentForm from "../form/CommentForm";
+import { initialCommentConfig, initialCommentForm } from "../../config";
 
 const DetailPostModal = () => {
   const { id } = useParams();
@@ -12,7 +17,7 @@ const DetailPostModal = () => {
   const navigate = useNavigate();
   const { getPostDetail, detailPost } = usePostStore();
   const isPostModal = window.location.pathname === `/p/${id}`;
-
+  console.log(detailPost);
   useEffect(() => {
     getPostDetail(id);
   }, []);
@@ -57,23 +62,25 @@ const DetailPostModal = () => {
                 </div>
 
                 <div className="w-full md:w-[55%] flex flex-col justify-between">
-                  {/* <div>
+                  <div>
                     <div className="border-b border-muted-foreground/25">
-                      <PostContent />
+                      <PostContent user={detailPost.User} />
                     </div>
                     <div className="h-[180px] space-y-3 overflow-y-scroll no-scrollbar">
-                      <PostContent />
-                      <PostComments />
+                      <PostContent
+                        user={detailPost.User}
+                        content={detailPost.content}
+                      />
+                      <PostComments comments={detailPost.Comments} />
                     </div>
                   </div>
-
                   <div className="px-2">
                     <PostControl />
                     <CommentForm
                       initialFormConfig={initialCommentConfig}
                       initialFormState={initialCommentForm}
                     />
-                  </div> */}
+                  </div>
                 </div>
               </div>
             )}

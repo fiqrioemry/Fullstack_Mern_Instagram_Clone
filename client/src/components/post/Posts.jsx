@@ -8,14 +8,29 @@ import { initialCommentConfig, initialCommentForm } from "../../config";
 
 const Posts = ({ posts }) => {
   const location = useLocation();
+  console.log(posts);
+
   return (
     <div>
       {posts.map((post, index) => (
         <div className="border-b" key={index}>
           <PostContent user={post.User} />
           <PostImagesDisplay images={post.PostGalleries} />
+
           <PostControl like={post.likeCount} />
-          {post.commentCount === 0 && (
+          {post.content && (
+            <div className="text-sm  space-x-2">
+              <Link
+                href={`/dashboard/${post.User.username}`}
+                className="font-semibold"
+              >
+                {post.User.username}
+              </Link>
+              <span>{post.content}</span>
+            </div>
+          )}
+
+          {post.commentCount !== 0 && (
             <Link to={`/p/${post.id}`} state={{ background: location }}>
               View all {post.commentCount} comments
             </Link>
