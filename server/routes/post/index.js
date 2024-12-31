@@ -1,61 +1,49 @@
 const express = require("express");
-
-const {
-  createNewPost,
-  updateMyPost,
-  deleteMyPost,
-  getAllPublicPosts,
-  getAllFollowingPosts,
-  getUserPosts,
-  getPostDetail,
-} = require("../../controller/post");
 const { upload } = require("../../middleware/media");
-const { createCommentOrReply } = require("../../controller/comment");
 const isAuthenticate = require("../../middleware/isAuthenticate");
-const { likePost, unlikePost } = require("../../controller/like");
 const router = express.Router();
 
-// post
-router.get("/explore", isAuthenticate, getAllPublicPosts);
-router.get("/:postId/detail", isAuthenticate, getPostDetail);
+// controller
+const {
+  likePost,
+  createPost,
+  updatePost,
+  deletePost,
+  unlikePost,
+  getPostDetail,
+  getPublicPosts,
+  getPostsFromFollowings,
+} = require("../../controller/post");
+const { updateComment, getComments } = require("../../controller/comment");
 
-// user post
-router.get("/followings", isAuthenticate, getAllFollowingPosts);
 router.post(
-  "/create",
-  upload("image", 100000000).array("images", 10),
-  createNewPost
+  "/",
+  upload("image").array("images", 5),
+  isAuthenticate,
+  createPost
 );
-
 router.put(
-  "/:postId/update",
+  "/:postId",
   isAuthenticate,
-  upload("image", 100000000).array("files", 10),
-  updateMyPost
+  upload("image").array("images", 5),
+  updatePost
 );
-router.delete("/:postId/delete", isAuthenticate, deleteMyPost);
+router.delete("/:postId/delete", isAuthenticate, deletePost);
 
-// comment
-router.post(
-  "/:postId/comment/:commentId",
-  isAuthenticate,
-  createCommentOrReply
-);
-
-router.get("/", isAuthenticate, getAllPublicPosts);
+router.get("/", isAuthenticate, getPublicPosts);
 router.get("/:postId", isAuthenticate, getPostDetail);
-router.get("/following", isAuthenticate, getAllFollowingPosts);
+router.get("/following", isAuthenticate, getPostsFromFollowings);
 
-router.post("/", isAuthenticate, createNewPost);
-router.put("/:postId", isAuthenticate, updateMyPost);
-router.delete("/:postId", isAuthenticate, deleteMyPost);
+router.post("/", isAuthenticate, createPost);
+router.delete("/:postId", isAuthenticate, deletePost);
+router.put("/:postId", isAuthenticate, updatePost);
 
 // like & unlike a post
 router.post("/:postId/like", isAuthenticate, likePost);
-router.delete("/api/posts/:postId/like", isAuthenticate, unlikePost);
+router.delete("/:postId/like", isAuthenticate, unlikePost);
 
 // comment a post
-router.post("/api/posts/:postId/comments", isAuthenticate); // Create a comment on a post
-router.get("/api/posts/:postId/comments", isAuthenticate);
+router.get("/:postId/comments", isAuthenticate, getComments);
+router.post("/:postId/comments", isAuthenticate, updateComment);
 
 module.exports = router;

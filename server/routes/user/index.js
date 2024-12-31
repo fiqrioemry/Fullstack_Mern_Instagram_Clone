@@ -1,33 +1,31 @@
 const {
-  getMyProfile,
-  updateMyProfile,
-  getUserHomeDetails,
-} = require("../../controller/user");
-const {
+  followUser,
   unfollowUser,
-  followNewUser,
-  getUserFollowers,
-  getUserFollowings,
-  getFollowRecommendations,
-} = require("../../controller/follow");
+  getFollowers,
+  getFollowings,
+  getUserProfile,
+  updateUserProfile,
+  getFollowRecommend,
+} = require("../../controller/user");
+const { getUserPosts } = require("../../controller/post");
+
 const express = require("express");
+const router = express.Router();
 const { upload } = require("../../middleware/media");
 const isAuthenticate = require("../../middleware/isAuthenticate");
 
-const router = express.Router();
-
-router.get("/profile", isAuthenticate, getMyProfile);
+router.get("/:username", isAuthenticate, getUserProfile);
 router.put(
-  "/profile",
+  "/:username",
   upload("image").single("file"),
   isAuthenticate,
-  updateMyProfile
+  updateUserProfile
 );
-router.get("/:username/posts", isAuthenticate);
-router.post("/:userId/follow", isAuthenticate, followNewUser);
+router.post("/:userId/follow", isAuthenticate, followUser);
+router.get("/:username/posts", isAuthenticate, getUserPosts);
 router.delete("/:userId/follow", isAuthenticate, unfollowUser);
-router.get("/recommend", isAuthenticate, getFollowRecommendations);
-router.get("/:userId/followers", isAuthenticate, getUserFollowers);
-router.get("/:userId/following", isAuthenticate, getUserFollowings);
+router.get("/:userId/followers", isAuthenticate, getFollowers);
+router.get("/:userId/following", isAuthenticate, getFollowings);
+router.get("/recommend", isAuthenticate, getFollowRecommend);
 
 module.exports = router;

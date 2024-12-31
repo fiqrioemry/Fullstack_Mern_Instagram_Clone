@@ -44,13 +44,37 @@ async function createCommentOrReply(req, res) {
   }
 }
 
-async function commentPost(req, res) {}
+// commentController.js
+async function createComment(req, res) {
+  // Logic to create a comment on a post
+}
 
-async function getAllComments(req, res) {}
+async function getComments(req, res) {
+  // Logic to get all comments for a post
+}
 
-async function commentPost(req, res) {}
+async function updateComment(req, res) {
+  // Logic to update a specific comment
+}
+
+async function deleteComment(req, res) {
+  // Logic to delete a specific comment
+}
+
+// commentController.js
+async function likeComment(req, res) {
+  // Logic to like a specific comment
+}
+
+async function unlikeComment(req, res) {
+  // Logic to unlike a specific comment
+}
 
 module.exports = {
-  commentPost,
-  createCommentOrReply,
+  getComments,
+  likeComment,
+  updateComment,
+  createComment,
+  deleteComment,
+  unlikeComment,
 };
