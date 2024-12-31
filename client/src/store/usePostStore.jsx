@@ -13,9 +13,9 @@ export const usePostStore = create((set) => ({
   isCommentsLoading: true,
   isFollowingLoading: true,
 
-  createNewPost: async (formData) => {
+  createPost: async (formData) => {
     try {
-      const response = await axiosInstance.post("/api/post/create", formData);
+      const response = await axiosInstance.post("/api/post", formData);
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
@@ -24,6 +24,41 @@ export const usePostStore = create((set) => ({
     }
   },
 
+  updatePost: async (formData, postId) => {
+    try {
+      const response = await axiosInstance.put(`/api/post/${postId}`, formData);
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isPostLoading: false });
+    }
+  },
+
+  deletePost: async (formData, postId) => {
+    try {
+      const response = await axiosInstance.delete(`/api/post/${postId}`);
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isPostLoading: false });
+    }
+  },
+
+  getPublicPost: async (limit = 10) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/api/post/public?limit=${limit}`
+      );
+      set({ posts: response.data.data });
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isPostLoading: false });
+    }
+  },
   getPostDetail: async (postId) => {
     try {
       const response = await axiosInstance.get(`/api/post/${postId}/detail`);

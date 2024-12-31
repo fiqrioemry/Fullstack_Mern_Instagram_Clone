@@ -28,10 +28,10 @@ router.put(
   upload("image").array("images", 5),
   updatePost
 );
-router.delete("/:postId/delete", isAuthenticate, deletePost);
+router.delete("/:postId", isAuthenticate, deletePost);
 
-router.get("/public", isAuthenticate, getPublicPosts);
-router.get("/:postId", isAuthenticate, getPostDetail);
+router.get("/public", getPublicPosts);
+router.get("/:postId", getPostDetail);
 router.get("/followings", isAuthenticate, getPostsFromFollowings);
 
 router.post("/", isAuthenticate, createPost);

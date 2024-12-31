@@ -105,7 +105,7 @@ async function getPostsFromFollowings(req, res) {
 async function getPublicPosts(req, res) {
   const { limit } = req.query;
   try {
-    const total = parseInt(limit) || 3;
+    const total = parseInt(limit) || 5;
     const posts = await Post.findAll({
       limit: total,
       order: [["createdAt", "DESC"]],
@@ -115,6 +115,12 @@ async function getPublicPosts(req, res) {
           model: User,
           where: { isPrivate: false },
           attributes: ["id", "username"],
+          include: [
+            {
+              model: Profile,
+              attributes: ["fullname", "avatar"],
+            },
+          ],
         },
         {
           model: PostGallery,
@@ -131,15 +137,30 @@ async function getPublicPosts(req, res) {
 
     const publicPosts = await Promise.all(
       posts.map(async (post) => {
+        // Counting comments and likes
         const [commentCount, likeCount] = await Promise.all([
           Comment.count({ where: { postId: post.id } }),
           Like.count({ where: { entityId: post.id, entityType: "post" } }),
         ]);
 
+        // Extracting and structuring the required data
+        const { id: postId, content, createdAt, User } = post;
+        const { id: userId, username, Profile } = User;
+        const { fullname, avatar } = Profile;
+        const images = post.PostGalleries.map((gallery) => gallery.image);
+
+        // Return structured data
         return {
-          ...post.toJSON(),
+          userId,
+          postId,
+          username,
+          fullname,
+          avatar,
+          content,
+          images,
           commentCount,
           likeCount,
+          createdAt,
         };
       })
     );
