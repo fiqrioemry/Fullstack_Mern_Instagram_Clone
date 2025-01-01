@@ -50,8 +50,6 @@ function App() {
           <Route path="p/:id" element={<PostDetails />} />
         </Route>
       </Routes>
-
-      {/* Render modal hanya jika background tersedia */}
       {state.background && (
         <Routes>
           <Route path="/p/:id" element={<DetailPostModal />} />

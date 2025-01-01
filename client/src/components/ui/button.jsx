@@ -6,10 +6,11 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none  [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none  [&_svg]:shrink-0",
   {
     variants: {
       variant: {
+        normal: "w-full border-muted-foreground/25",
         default: "font-semibold",
         primary: "bg-accent text-foreground hover:bg-foreground/20",
         secondary: "bg-foreground text-background hover:bg-foreground/80",
@@ -22,6 +23,7 @@ const buttonVariants = cva(
           "bg-custom hover:bg-custom/80 text-background dark:text-foreground",
       },
       size: {
+        normal: "h-12 py-4",
         default: "h-6 py-3",
         sm: "h-6 rounded-md px-3 py-3 text-sm",
         md: "h-9 rounded-md px-3 py-3 text-md",
@@ -30,8 +32,8 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: "normal",
+      size: "normal",
     },
   }
 );
