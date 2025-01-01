@@ -7,8 +7,12 @@ import {
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UserPosts from "../components/UserPosts";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
+  const { username } = useParams();
+
   return (
     <div className="flex justify-center h-[200vh]">
       <div className="w-full max-w-4xl py-24 md:py-12 px-2">
@@ -65,31 +69,7 @@ const Profile = () => {
             </TabsList>
 
             <TabsContent value="post">
-              <div className="text-center space-y-3 py-12">
-                <div className="flex items-center justify-center">
-                  <div className="p-4  rounded-full border">
-                    <Camera size={50} />
-                  </div>
-                </div>
-                <div>
-                  <h1 className="text-2xl font-semibold">SHARE PHOTOS</h1>
-                </div>
-                <div className="flex justify-center">
-                  <div className="max-w-96 text-sm">
-                    When you share photos, they will appear on your profile.
-                  </div>
-                </div>
-                <div>
-                  <Button variant="custom" size="md">
-                    Share a photos
-                  </Button>
-                </div>
-              </div>
-              {/* <div className="grid grid-cols-3 gap-2">
-                <div className="h-40 md:h-60 bg-red-500"></div>
-                <div className="h-40 md:h-60 bg-red-500"></div>
-                <div className="h-40 md:h-60 bg-red-500"></div>
-              </div> */}
+              <UserPosts username={username} />
             </TabsContent>
 
             <TabsContent value="saved">
@@ -109,12 +89,6 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-
-              {/* <div className="grid grid-cols-3 gap-2">
-                <div className="h-40 md:h-60 bg-red-500"></div>
-                <div className="h-40 md:h-60 bg-red-500"></div>
-                <div className="h-40 md:h-60 bg-red-500"></div>
-              </div> */}
             </TabsContent>
 
             <TabsContent value="tags">

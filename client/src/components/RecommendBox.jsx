@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "../store/useUserStore";
@@ -8,6 +7,7 @@ import RecommendSkeleton from "./skeleton/RecommendSkeleton";
 const RecommendBox = ({ message }) => {
   const { userData } = useProvider();
   const [followingIds, setFollowingIds] = useState([]);
+  const [loadingIds, setLoadingIds] = useState([]); // Track loading state per user
   const {
     followings,
     followUser,
@@ -16,12 +16,17 @@ const RecommendBox = ({ message }) => {
     getFollowRecommend,
   } = useUserStore();
 
-  const handleFollow = (e) => {
-    followUser(e.target.value);
+  const handleFollow = async (id) => {
+    // Mark user as loading
+    setLoadingIds((prev) => [...prev, id]);
+    await followUser(id);
+    // Remove user from loading state after follow completes
+    setLoadingIds((prev) => prev.filter((loadingId) => loadingId !== id));
   };
 
   useEffect(() => {
-    getFollowings(userData.userId), getFollowRecommend();
+    getFollowings(userData.userId);
+    getFollowRecommend();
   }, []);
 
   useEffect(() => {
@@ -30,8 +35,8 @@ const RecommendBox = ({ message }) => {
     }
   }, [followings]);
 
-  if (recommend.length === 0) return <RecommendSkeleton />;
-  console.log(recommend);
+  if (recommend.length === 0) return null;
+
   return (
     <div className="space-y-4">
       <div>
@@ -53,12 +58,16 @@ const RecommendBox = ({ message }) => {
             </div>
             <div>
               <Button
-                onClick={handleFollow}
-                value={user.userId}
+                onClick={() => handleFollow(user.userId)}
                 variant="custom"
                 size="sm"
+                disabled={loadingIds.includes(user.userId)}
               >
-                {followingIds.includes(user.userId) ? "follow" : "unfollow"}
+                {loadingIds.includes(user.userId)
+                  ? "following"
+                  : followingIds.includes(user.userId)
+                  ? "unfollow"
+                  : "follow"}
               </Button>
             </div>
           </div>

@@ -8,16 +8,16 @@ export const useUserStore = create((set) => ({
   userPosts: [],
   userProfile: [],
   recommend: [],
-  isFollowLoading: true,
-  isProfileLoading: true,
+  isFollowLoading: false,
+  isProfileLoading: false,
   message: null,
 
-  followUser: async (userId) => {
+  followUser: async (followingId) => {
     try {
       set({ isFollowLoading: true });
-      const response = await axiosInstance.post(`/api/user/${userId}/follow`, {
-        userId,
-      });
+      const response = await axiosInstance.post(
+        `/api/user/${followingId}/follow`
+      );
       toast.success(response.data.message);
     } catch (error) {
       console.log(error);
@@ -27,14 +27,11 @@ export const useUserStore = create((set) => ({
     }
   },
 
-  unfollowUser: async (userId) => {
+  unfollowUser: async (followingId) => {
     try {
       set({ isFollowLoading: true });
       const response = await axiosInstance.delete(
-        `/api/user/${userId}/follow`,
-        {
-          userId,
-        }
+        `/api/user/${followingId}/follow`
       );
       toast.success(response.data.message);
     } catch (error) {

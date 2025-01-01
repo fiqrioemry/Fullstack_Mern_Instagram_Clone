@@ -45,7 +45,7 @@ function App() {
         >
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path=":username" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
           <Route path="p/:id" element={<PostDetails />} />
         </Route>

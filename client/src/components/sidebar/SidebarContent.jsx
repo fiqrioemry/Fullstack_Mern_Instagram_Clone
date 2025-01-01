@@ -13,12 +13,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useProvider } from "../../context/GlobalProvider";
 import MoreDropdown from "./MoreDropdown";
+import { useAuthStore } from "../../store/useAuthStore";
 
 // eslint-disable-next-line react/prop-types
 const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
   const navigate = useNavigate();
   const { handleOpenModal } = useProvider();
   const { handleDarkMode, darkMode } = useHandleDarkMode();
+  const { userData } = useAuthStore();
 
   const handleNavigate = (params) => {
     navigate(`/${params}`);
