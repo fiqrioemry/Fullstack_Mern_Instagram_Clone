@@ -10,7 +10,6 @@ function Timestamp({ createdAt, className }) {
       )}
       date={createdAt}
       formatter={(value, unit, suffix, epochMiliseconds, nextFormatter) => {
-        // Example: if its 7 min, return "7m", if its 7 hours, return "7h" like that
         if (unit === "second") {
           return `${value}${unit[0]}`;
         } else if (unit === "minute") {

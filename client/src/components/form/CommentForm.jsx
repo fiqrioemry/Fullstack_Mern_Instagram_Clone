@@ -15,16 +15,16 @@ const CommentForm = ({
     <>
       {initialFormConfig.map((set) => (
         <form onSubmit={handleSubmit} key={set}>
-          <div className="flex items-center">
+          <div className="flex px-2">
             <textarea
               name={set.name}
               type={set.type}
               value={formData[set.name]}
               onChange={handleChange}
               placeholder="Add a comment ..."
-              className="w-full py-2 text-sm bg-background resize-none  focus:outline-none overflow-y-scroll no-scrollbar"
+              className="w-full h-[30px] text-sm bg-background resize-none  focus:outline-none overflow-y-scroll no-scrollbar"
             />
-            <Button disabled={!isValid}>Post</Button>
+            <button>Post</button>
           </div>
         </form>
       ))}
