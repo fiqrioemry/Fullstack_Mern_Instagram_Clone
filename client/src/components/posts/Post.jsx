@@ -1,13 +1,9 @@
 /* eslint-disable react/prop-types */
-
-import Comments from "./Comments";
 import Caption from "./Caption";
+import Comments from "./Comments";
 import Galleries from "./Galleries";
-import CommentForm from "../form/CommentForm";
-import { initialCommentConfig, initialCommentForm } from "../../config";
-import { Bookmark, Heart, MessageCircle } from "lucide-react";
 import Timestamp from "../Timestamp";
-import { Button } from "@/components/ui/button";
+import { Bookmark, Heart, MessageCircle } from "lucide-react";
 
 const Post = ({ post, comments }) => {
   return (
@@ -18,12 +14,12 @@ const Post = ({ post, comments }) => {
         </div>
         <div className="col-span-4 ">
           {/* user avatar */}
-          <div className="py-4 px-2 border-b border-muted-foreground/25">
+          <div className="py-2 px-2 border-b border-muted-foreground/25">
             <Caption user={post} />
           </div>
 
           {/* comment section */}
-          <div className="px-2 py-2 border-b border-muted-foreground/25">
+          <div className="py-2 px-2 border-b border-muted-foreground/25">
             <div className="h-[325px] overflow-y-scroll no-scrollbar">
               <Caption user={post} content={post.content} />
               <Comments comments={comments} />
@@ -32,7 +28,7 @@ const Post = ({ post, comments }) => {
 
           {/* comment control */}
           <div className="py-2 px-2 border-b border-muted-foreground/25">
-            <div className="space-y-2">
+            <div className="h-[70px] space-y-2">
               <div className="flex gap-x-4">
                 <Heart />
                 <MessageCircle />
@@ -46,10 +42,19 @@ const Post = ({ post, comments }) => {
               <Timestamp createdAt={post.createdAt} />
             </div>
           </div>
-          <CommentForm
-            initialFormConfig={initialCommentConfig}
-            initialFormState={initialCommentForm}
-          />
+
+          {/* comment form */}
+          <div className="py-2 px-2 ">
+            <form>
+              <div className="flex items-center">
+                <textarea
+                  placeholder="Add a comment ..."
+                  className="w-full flex items-center text-sm bg-background resize-none  focus:outline-none overflow-y-scroll no-scrollbar"
+                />
+                <button>Post</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

@@ -4,12 +4,13 @@ import Timestamp from "../Timestamp";
 import { Ellipsis, Heart } from "lucide-react";
 import MoreOptions from "../modal/MoreOptions";
 import { ModalContainer } from "../modal/ModalContainer";
+import Caption from "./Caption";
 
 const Comments = ({ comments }) => {
   return (
     <>
       {comments.map((comment) => (
-        <div className="py-2" key={comment.commentId}>
+        <div className="space-y-10" key={comment.commentId}>
           <div className="flex min-h-12 ">
             <div className="flex gap-x-4">
               <UserAvatar user={comment} />
