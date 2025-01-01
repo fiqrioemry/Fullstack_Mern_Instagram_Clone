@@ -4,8 +4,8 @@ import useMount from "../../hooks/useMount";
 import PostSkeleton from "../skeleton/PostSkeleton";
 import { usePostStore } from "../../store/usePostStore";
 import { useNavigate, useParams } from "react-router-dom";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useCommentStore } from "../../store/useCommentStore";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 const DetailPostModal = () => {
   const { id } = useParams();

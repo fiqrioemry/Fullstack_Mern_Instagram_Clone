@@ -1,28 +1,43 @@
 /* eslint-disable react/prop-types */
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { useUserStore } from "../store/useUserStore";
+import { useProvider } from "../context/GlobalProvider";
+import RecommendSkeleton from "./skeleton/RecommendSkeleton";
 
-const RecommendBox = ({ recommend, message = null }) => {
+const RecommendBox = ({ message }) => {
+  const { userData } = useProvider();
   const [followingIds, setFollowingIds] = useState([]);
-  const { followUser, followings } = useUserStore();
+  const {
+    followings,
+    followUser,
+    recommend,
+    getFollowings,
+    getFollowRecommend,
+  } = useUserStore();
 
   const handleFollow = (e) => {
     followUser(e.target.value);
   };
 
-  // const handleUnfollow = (e) => {
-  //   unfollowUser(e.target.value);
-  // };
+  useEffect(() => {
+    getFollowings(userData.userId), getFollowRecommend();
+  }, []);
 
   useEffect(() => {
-    setFollowingIds(followings.map((item) => item.id));
+    if (followings.length !== 0) {
+      setFollowingIds(followings.map((follow) => follow.id));
+    }
   }, [followings]);
 
+  if (recommend.length === 0) return <RecommendSkeleton />;
+  console.log(recommend);
   return (
-    <div className="space-y-2">
-      <div className="py-4 text-center">
-        <h2 className="text-xl font-semibold">{message}</h2>
+    <div className="space-y-4">
+      <div>
+        <h2 className="text-xl">
+          {message ? message : "Follow Recommendation"}
+        </h2>
       </div>
       {recommend.map((user, index) => (
         <div className="bg-secondary px-4 py-2 rounded-md" key={index}>
@@ -43,7 +58,7 @@ const RecommendBox = ({ recommend, message = null }) => {
                 variant="custom"
                 size="sm"
               >
-                {followingIds.includes(user.userId) ? "unfollow" : "follow"}
+                {followingIds.includes(user.userId) ? "follow" : "unfollow"}
               </Button>
             </div>
           </div>

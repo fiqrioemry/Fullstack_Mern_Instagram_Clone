@@ -9,9 +9,7 @@ export const useUserStore = create((set) => ({
   userProfile: [],
   recommend: [],
   isFollowLoading: true,
-  isRecommendLoading: true,
   isProfileLoading: true,
-  isPostsLoading: true,
   message: null,
 
   followUser: async (userId) => {

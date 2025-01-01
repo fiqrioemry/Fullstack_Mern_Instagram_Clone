@@ -9,8 +9,6 @@ export const usePostStore = create((set) => ({
   posts: [],
   followingPosts: [],
   isPostLoading: true,
-  isPostsLoading: true,
-  isFollowingLoading: true,
 
   createPost: async (formData) => {
     try {
@@ -18,8 +16,6 @@ export const usePostStore = create((set) => ({
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
-    } finally {
-      set({ isPostLoading: false });
     }
   },
 
@@ -29,8 +25,6 @@ export const usePostStore = create((set) => ({
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
-    } finally {
-      set({ isPostLoading: false });
     }
   },
 
@@ -40,8 +34,6 @@ export const usePostStore = create((set) => ({
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
-    } finally {
-      set({ isPostsLoading: false });
     }
   },
 
@@ -55,8 +47,6 @@ export const usePostStore = create((set) => ({
     } catch (error) {
       console.log(error);
       set({ posts: [] });
-    } finally {
-      set({ isPostsLoading: false });
     }
   },
 
@@ -66,12 +56,11 @@ export const usePostStore = create((set) => ({
         `/api/post/user/followings?limit=${limit}`
       );
       set({ followingPosts: response.data.data });
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
       set({ followingPosts: [] });
     } finally {
-      set({ isFollowingLoading: false });
+      set({ isPostLoading: false });
     }
   },
 
@@ -82,8 +71,6 @@ export const usePostStore = create((set) => ({
     } catch (error) {
       console.log(error);
       set({ post: [] });
-    } finally {
-      set({ isPostLoading: false });
     }
   },
 
