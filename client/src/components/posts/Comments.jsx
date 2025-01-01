@@ -7,7 +7,7 @@ import { ModalContainer } from "../modal/ModalContainer";
 
 const Comments = ({ comments }) => {
   return (
-    <div>
+    <>
       {comments.map((comment) => (
         <div className="py-2" key={comment.commentId}>
           <div className="flex min-h-12 ">
@@ -31,7 +31,7 @@ const Comments = ({ comments }) => {
           </div>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 export default Comments;

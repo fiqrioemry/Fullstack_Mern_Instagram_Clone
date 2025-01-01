@@ -5,7 +5,7 @@ import { Ellipsis } from "lucide-react";
 import MoreOptions from "../modal/MoreOptions";
 import { ModalContainer } from "../modal/ModalContainer";
 
-const Caption = ({ user, content = null }) => {
+const Caption = ({ user, content }) => {
   return (
     <div className="grid grid-cols-12 gap-x-2">
       <div className="col-span-2 flex justify-center">
@@ -32,13 +32,3 @@ const Caption = ({ user, content = null }) => {
 };
 
 export default Caption;
-{
-  /* <div className="text-sm space-y-2">
-  {content && (
-    <div>
-      <div className="text-justify">{content}</div>
-      <Timestamp createdAt={user.createdAt} />
-    </div>
-  )}
-</div>; */
-}

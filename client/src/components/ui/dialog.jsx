@@ -32,6 +32,8 @@ const dialogVariants = cva(
           "bg-accent sm:rounded-lg rounded-md border max-w-[24rem] overflow-hidden",
         discard:
           "bg-accent sm:rounded-lg rounded-md border max-w-[20rem] md:max-w-[24rem] gap-4 p-6",
+        options:
+          "bg-accent sm:rounded-lg rounded-md border max-w-[20rem] md:max-w-[24rem] gap-4",
         detail: "bg-background md:max-w-[46em] lg:max-w-[56em]",
       },
     },

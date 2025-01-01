@@ -11,10 +11,17 @@ const Post = ({ post, comments }) => {
           <Galleries images={post.images} />
         </div>
         <div className="col-span-4">
-          <Caption user={post} />
-          <div className="overflow-y-scroll no-scrollbar">
-            <Caption user={post} content={post.content} />
-            <Comments comments={comments} />
+          {/* user avatar */}
+          <div className="py-4 px-2 border-b border-muted-foreground/25">
+            <Caption user={post} />
+          </div>
+
+          {/* comment section */}
+          <div className="py-4 px-2 border-b border-muted-foreground/25">
+            <div className=" overflow-y-scroll no-scrollbar">
+              <Caption user={post} content={post.content} />
+              <Comments comments={comments} />
+            </div>
           </div>
         </div>
         <Options />
