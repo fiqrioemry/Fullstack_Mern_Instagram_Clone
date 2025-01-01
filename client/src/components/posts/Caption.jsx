@@ -7,29 +7,38 @@ import { ModalContainer } from "../modal/ModalContainer";
 
 const Caption = ({ user, content = null }) => {
   return (
-    <div className="py-2">
-      <div className="flex min-h-12 ">
-        <div className="flex gap-x-4">
-          <UserAvatar user={user} />
-          <div className="text-sm space-y-2">
-            <div className="font-medium">{user.username}</div>
-            {content && (
-              <div>
-                <div className="text-justify">{content}</div>
-                <Timestamp createdAt={user.createdAt} />
-              </div>
-            )}
+    <div className="grid grid-cols-12 gap-x-2">
+      <div className="col-span-2 flex justify-center">
+        <UserAvatar user={user} />
+      </div>
+      <div className="col-span-9 text-sm space-y-2">
+        <span className="font-medium">{user.username}</span>
+        {content && (
+          <div>
+            <p className="text-justify">{user.content}</p>
+            <Timestamp createdAt={user.createdAt} />
           </div>
-        </div>
-
-        <div>
-          <ModalContainer title={<Ellipsis />} tooltip="more options">
+        )}
+      </div>
+      <div className="col-span-1">
+        {!content && (
+          <ModalContainer title={<Ellipsis />}>
             <MoreOptions />
           </ModalContainer>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default Caption;
+{
+  /* <div className="text-sm space-y-2">
+  {content && (
+    <div>
+      <div className="text-justify">{content}</div>
+      <Timestamp createdAt={user.createdAt} />
+    </div>
+  )}
+</div>; */
+}

@@ -12,7 +12,7 @@ const Post = ({ post, comments }) => {
         </div>
         <div className="col-span-4">
           <Caption user={post} />
-          <div className="h-[180px] space-y-4 overflow-y-scroll no-scrollbar">
+          <div className="overflow-y-scroll no-scrollbar">
             <Caption user={post} content={post.content} />
             <Comments comments={comments} />
           </div>

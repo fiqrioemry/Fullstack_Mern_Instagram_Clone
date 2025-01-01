@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
 import UserAvatar from "../Avatar";
 import Timestamp from "../Timestamp";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, Heart } from "lucide-react";
 import MoreOptions from "../modal/MoreOptions";
 import { ModalContainer } from "../modal/ModalContainer";
 
 const Comments = ({ comments }) => {
-  console.log(comments);
   return (
     <div>
       {comments.map((comment) => (
@@ -22,7 +21,10 @@ const Comments = ({ comments }) => {
             </div>
 
             <div>
-              <ModalContainer title={<Ellipsis />} tooltip="more options">
+              <ModalContainer
+                title={<Heart size={14} />}
+                tooltip="more options"
+              >
                 <MoreOptions />
               </ModalContainer>
             </div>
