@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { cn } from "@/lib/utils";
 import ReactTimeago from "react-timeago";
 

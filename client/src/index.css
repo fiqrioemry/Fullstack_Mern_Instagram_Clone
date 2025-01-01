@@ -142,4 +142,8 @@
   .searchbar_wrapper {
     @apply fixed top-0 bottom-0 left-[75px] w-[325px] h-full bg-background border-r z-10;
   }
+
+  .content_margin {
+    @apply py-2 px-2 border-b border-muted-foreground/25;
+  }
 }

@@ -1,44 +1,31 @@
 /* eslint-disable react/prop-types */
 import { Link, useLocation } from "react-router-dom";
-import PostContent from "./PostContent";
-import PostControl from "./PostControl";
-import CommentForm from "../form/CommentForm";
-import PostImagesDisplay from "./PostImagesDisplay";
-import { initialCommentConfig, initialCommentForm } from "../../config";
+
+import PostControl from "../PostControl";
+import Author from "../Author";
+import Galleries from "../posts/Galleries";
+import CommentForm from "../posts/CommentForm";
+import MiniCaption from "../posts/MiniCaption";
 
 const Posts = ({ posts }) => {
   const location = useLocation();
 
   return (
-    <div>
+    <div className="space-y-6">
       {posts.map((post, index) => (
-        <div className="border-b" key={index}>
-          <PostContent user={post} />
-          <PostImagesDisplay images={post.images} />
-
-          <PostControl like={post.likeCount} />
-          {post.content && (
-            <div className="text-sm  space-x-2">
-              <Link
-                href={`/dashboard/${post.username}`}
-                className="font-semibold"
-              >
-                {post.username}
+        <div className="space-y-2 border-b" key={index}>
+          <Author user={post} />
+          <Galleries images={post.images} />
+          <PostControl post={post} />
+          <MiniCaption post={post} />
+          <div>
+            {post.commentCount !== 0 && (
+              <Link to={`/p/${post.postId}`} state={{ background: location }}>
+                View all {post.commentCount} comments
               </Link>
-              <span>{post.content}</span>
-            </div>
-          )}
-
-          {post.commentCount !== 0 && (
-            <Link to={`/p/${post.postId}`} state={{ background: location }}>
-              View all {post.commentCount} comments
-            </Link>
-          )}
-
-          <CommentForm
-            initialFormConfig={initialCommentConfig}
-            initialFormState={initialCommentForm}
-          />
+            )}
+          </div>
+          <CommentForm />
         </div>
       ))}
     </div>

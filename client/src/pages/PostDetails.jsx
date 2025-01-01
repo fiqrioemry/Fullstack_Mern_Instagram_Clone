@@ -18,7 +18,7 @@ const PostDetails = () => {
   return (
     <div className="flex justify-center">
       <div className="max-w-2xl md:max-w-4xl w-full">
-        <div className="mt-12 md:mt-0  py-6 space-y-6">
+        <div className="mt-12 md:mt-0 py-6 space-y-6">
           <div>
             {isPostLoading ? (
               <PostSkeleton />
