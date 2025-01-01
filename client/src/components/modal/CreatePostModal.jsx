@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import DiscardPostModal from "./DiscardPostModal";
 import PostImageForm from "../form/PostImageForm";
 import { usePostStore } from "../../store/usePostStore";
-import CarouselMediaPost from "../post/CarouselMediaPost";
 import { useHandleForm } from "../../hooks/useHandleForm";
 import { useProvider } from "../../context/GlobalProvider";
 import { ArrowLeft, ArrowRight, SquarePlus } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Galleries from "../posts/Galleries";
 
 const CreatePostModal = () => {
   const { createNewPost } = usePostStore();
@@ -92,7 +92,7 @@ const CreatePostModal = () => {
                   />
                 ) : (
                   <div className="h-full w-full">
-                    <CarouselMediaPost images={formData.preview} />
+                    <Galleries images={formData.preview} />
                   </div>
                 )}
 

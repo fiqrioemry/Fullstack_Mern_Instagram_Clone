@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export function ModalContainer({ children, title }) {
