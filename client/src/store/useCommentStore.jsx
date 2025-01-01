@@ -2,51 +2,37 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "@/services";
 
-export const usePostStore = create((set) => ({
+export const useCommentStore = create((set) => ({
   success: null,
   message: null,
-  post: [], // for detail post
-  posts: [], // for public post
-  followingPosts: [], // for following post
-  isPostLoading: true,
-  isPostsLoading: true,
-  isCommentsLoading: true,
-  isFollowingLoading: true,
+  comments: [],
+  replies: [],
+  isCommentLoading: true,
+  isRepliesLoading: true,
 
-  createNewPost: async (formData) => {
+  getComments: async (postId) => {
     try {
-      const response = await axiosInstance.post("/api/post/create", formData);
+      const response = await axiosInstance.get(`/api/post/${postId}/comments`);
+      set({ comments: response.data.data });
+    } catch (error) {
+      console.log(error);
+      set({ comments: [] });
+    } finally {
+      set({ isCommentLoading: false });
+    }
+  },
+
+  addComment: async (postId, commentData) => {
+    try {
+      const response = await axiosInstance.post(
+        `/api/post/${postId}/comments`,
+        commentData
+      );
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isPostLoading: false });
-    }
-  },
-
-  getPostDetail: async (postId) => {
-    try {
-      const response = await axiosInstance.get(`/api/post/${postId}/detail`);
-      set({ detailPost: response.data.data });
-    } catch (error) {
-      console.log(error);
-      set({ detailPost: [] });
-    }
-  },
-
-  // get all following post
-  getAllFollowingPosts: async () => {
-    try {
-      const response = await axiosInstance.get("/api/post/followings");
-      set({
-        followingPosts: response.data.data,
-        message: response.data.message,
-      });
-    } catch (error) {
-      console.log(error);
-      set({ followingPosts: [] });
-    } finally {
-      set({ isPostLoading: false });
+      set({ isCommentLoading: false });
     }
   },
 }));

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "@/services";
 import toast from "react-hot-toast";
 
-export const useFollowStore = create((set) => ({
+export const useUserStore = create((set) => ({
   followings: [],
   followers: [],
   userPosts: [],
@@ -71,7 +71,6 @@ export const useFollowStore = create((set) => ({
       set({ followings: response.data.data });
     } catch (error) {
       console.error(error);
-      toast.error(error.response?.data?.message || "Failed to load followings");
     } finally {
       set({ isFollowLoading: false });
     }
@@ -126,7 +125,7 @@ export const useFollowStore = create((set) => ({
   getFollowRecommend: async () => {
     try {
       set({ isRecommendLoading: true });
-      const response = await axiosInstance.get(`/api/user/recommend`);
+      const response = await axiosInstance.get(`/api/user/recommend/follow`);
       set({ recommend: response.data.data });
     } catch (error) {
       console.error(error);

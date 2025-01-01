@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import Cookies from "js-cookie";
+import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "@/services";
 import { Navigate } from "react-router-dom";
@@ -14,8 +14,8 @@ export const useAuthStore = create((set) => ({
       const response = await axiosInstance.get("/api/auth/me");
       set({ userData: response.data.data });
     } catch (error) {
-      console.log("Failed to get authorization:", error);
       set({ userData: null });
+      Promise.reject(error);
     } finally {
       set({ isUserAuth: false });
     }

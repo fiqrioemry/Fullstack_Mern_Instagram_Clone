@@ -14,11 +14,7 @@ const PostImagesDisplay = ({ images }) => {
         {images.map((image, index) => (
           <CarouselItem key={index}>
             <div className="flex aspect-square">
-              <img
-                src={image.image}
-                alt="post_image"
-                className="w-full h-full"
-              />
+              <img src={image} alt="post_image" className="w-full h-full" />
             </div>
           </CarouselItem>
         ))}

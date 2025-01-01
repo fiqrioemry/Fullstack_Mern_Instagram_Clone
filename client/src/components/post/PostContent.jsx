@@ -7,7 +7,7 @@ const PostContent = ({ user, content = null }) => {
     <div className="flex justify-between px-2 py-4 ">
       <div className="flex space-x-3">
         <Avatar>
-          <AvatarImage src={user.Profile?.avatar} alt="avatar" />
+          <AvatarImage src={user.avatar} alt="avatar" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="text-sm text-justify space-x-2">

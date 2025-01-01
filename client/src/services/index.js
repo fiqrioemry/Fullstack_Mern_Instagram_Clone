@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosInstance(error.config);
       } catch (refreshError) {
-        console.error("Token refresh is failed", refreshError);
+        return Promise.reject(refreshError);
       }
     }
     return Promise.reject(error);

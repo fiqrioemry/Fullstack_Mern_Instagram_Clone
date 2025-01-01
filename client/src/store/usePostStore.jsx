@@ -5,12 +5,11 @@ import { axiosInstance } from "@/services";
 export const usePostStore = create((set) => ({
   success: null,
   message: null,
-  post: [], // for detail post
-  posts: [], // for public post
-  followingPosts: [], // for following post
+  post: [],
+  posts: [],
+  followingPosts: [],
   isPostLoading: true,
   isPostsLoading: true,
-  isCommentsLoading: true,
   isFollowingLoading: true,
 
   createPost: async (formData) => {
@@ -35,18 +34,18 @@ export const usePostStore = create((set) => ({
     }
   },
 
-  deletePost: async (formData, postId) => {
+  deletePost: async (postId) => {
     try {
       const response = await axiosInstance.delete(`/api/post/${postId}`);
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isPostLoading: false });
+      set({ isPostsLoading: false });
     }
   },
 
-  getPublicPost: async (limit = 10) => {
+  getPublicPosts: async (limit = 10) => {
     try {
       const response = await axiosInstance.delete(
         `/api/post/public?limit=${limit}`
@@ -54,34 +53,55 @@ export const usePostStore = create((set) => ({
       set({ posts: response.data.data });
       toast.success(response.data.message);
     } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isPostLoading: false });
-    }
-  },
-  getPostDetail: async (postId) => {
-    try {
-      const response = await axiosInstance.get(`/api/post/${postId}/detail`);
-      set({ detailPost: response.data.data });
-    } catch (error) {
       console.log(error);
-      set({ detailPost: [] });
+      set({ posts: [] });
+    } finally {
+      set({ isPostsLoading: false });
     }
   },
 
-  // get all following post
-  getAllFollowingPosts: async () => {
+  getFollowingPosts: async (limit = 10) => {
     try {
-      const response = await axiosInstance.get("/api/post/followings");
-      set({
-        followingPosts: response.data.data,
-        message: response.data.message,
-      });
+      const response = await axiosInstance.get(
+        `/api/post/user/followings?limit=${limit}`
+      );
+      set({ followingPosts: response.data.data });
+      console.log(response.data.data);
     } catch (error) {
       console.log(error);
       set({ followingPosts: [] });
     } finally {
+      set({ isFollowingLoading: false });
+    }
+  },
+
+  getPostDetail: async (postId) => {
+    try {
+      const response = await axiosInstance.get(`/api/post/${postId}`);
+      set({ post: response.data.data });
+    } catch (error) {
+      console.log(error);
+      set({ post: [] });
+    } finally {
       set({ isPostLoading: false });
+    }
+  },
+
+  likePost: async (postId) => {
+    try {
+      const response = await axiosInstance.post(`/api/post/${postId}/like`);
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  },
+
+  unlikePost: async (postId) => {
+    try {
+      const response = await axiosInstance.delete(`/api/post/${postId}/like`);
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
     }
   },
 }));
