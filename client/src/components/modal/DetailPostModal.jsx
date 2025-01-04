@@ -18,7 +18,7 @@ const DetailPostModal = () => {
 
   const handleCloseModal = () => {
     setMount(false);
-    navigate("/", { replace: true });
+    navigate(-1);
   };
 
   useEffect(() => {
