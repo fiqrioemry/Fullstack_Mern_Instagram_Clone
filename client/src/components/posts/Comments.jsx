@@ -5,9 +5,7 @@ const Comments = ({ comments }) => {
   return (
     <>
       {comments.map((comment) => (
-        <>
-          <Caption user={comment} />
-        </>
+        <Caption user={comment} key={comment.commentId} />
       ))}
     </>
   );

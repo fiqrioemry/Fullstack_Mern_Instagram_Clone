@@ -1,9 +1,18 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Settings } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useProvider } from "../context/GlobalProvider";
 
 const UserProfile = ({ user }) => {
+  const navigate = useNavigate();
+  const { setMount } = useProvider();
+
+  const handleNavigate = () => {
+    setMount(true);
+    navigate(`/${user.username}/followers/`);
+  };
+
   return (
     <div className="grid grid-cols-3 h-60">
       <div className="flex justify-center col-span-1">
@@ -34,9 +43,9 @@ const UserProfile = ({ user }) => {
             <div>
               <div>{user.posts} Post</div>
             </div>
-            <Link to={`/${user.username}/followers`}>
+            <Button onClick={handleNavigate}>
               <div>{user.followers} Followers</div>
-            </Link>
+            </Button>
             <Link to={`/${user.username}/followings`}>
               <div>{user.followings} Followings</div>
             </Link>

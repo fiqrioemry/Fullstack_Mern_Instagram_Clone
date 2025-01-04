@@ -5,11 +5,11 @@ import AuthRoute from "./middleware";
 import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Settings from "./pages/Settings";
+import NotFound from "./pages/NotFound";
+import PostDetails from "./pages/PostDetails";
 import Layout from "./components/layout/Layout";
 import { Route, Routes, useLocation } from "react-router-dom";
 import DetailPostModal from "./components/modal/DetailPostModal";
-import PostDetails from "./pages/PostDetails";
-import UserFollowers from "./components/modal/UserFollowers";
 
 function App() {
   const location = useLocation();
@@ -35,6 +35,7 @@ function App() {
             </AuthRoute>
           }
         />
+        <Route path="*" element={<NotFound />} />
 
         <Route
           path="/"
@@ -54,7 +55,6 @@ function App() {
       {state.background && (
         <Routes>
           <Route path="/p/:id" element={<DetailPostModal />} />
-          <Route path="/:username/followers" element={<UserFollowers />} />
         </Routes>
       )}
     </>

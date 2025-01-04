@@ -1,32 +1,40 @@
 import Post from "../posts/Post";
 import { useEffect } from "react";
-import useMount from "../../hooks/useMount";
 import PostSkeleton from "../skeleton/PostSkeleton";
 import { usePostStore } from "../../store/usePostStore";
-import { useNavigate, useParams } from "react-router-dom";
+import { useProvider } from "../../context/GlobalProvider";
 import { useCommentStore } from "../../store/useCommentStore";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 const DetailPostModal = () => {
   const { id } = useParams();
-  const mount = useMount();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { mount, setMount } = useProvider();
   const { getPostDetail, post } = usePostStore();
   const { getComments, comments } = useCommentStore();
-  const isPostModal = window.location.pathname === `/p/${id}`;
+  const isPostModal = location.pathname === `/p/${id}`;
+
+  const handleCloseModal = () => {
+    setMount(false);
+    navigate("/");
+  };
 
   useEffect(() => {
     if (id) {
       getPostDetail(id);
       getComments(id);
     }
-  }, [id, getPostDetail, getComments]);
+  }, [id, getPostDetail, mount, getComments]);
 
   if (!mount) return null;
-
   return (
     <>
-      <Dialog open={isPostModal} onOpenChange={(open) => !open && navigate(-1)}>
+      <Dialog
+        open={isPostModal}
+        onOpenChange={(open) => !open && handleCloseModal()}
+      >
         <DialogTitle>
           <DialogContent variant="detail">
             {post.length === 0 ? (

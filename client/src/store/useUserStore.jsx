@@ -46,13 +46,13 @@ export const useUserStore = create((set) => ({
   getFollowers: async (username) => {
     try {
       set({ isUserLoading: true });
+      console.log(username);
       const response = await axiosInstance.get(
         `/api/user/${username}/followers`
       );
       set({ followers: response.data.data });
     } catch (error) {
       console.error(error);
-      toast.error(error.response?.data?.message || "Failed to load followers");
     } finally {
       set({ isUserLoading: false });
     }

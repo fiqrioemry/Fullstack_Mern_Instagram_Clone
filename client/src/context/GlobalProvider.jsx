@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
 import { createContext, useContext } from "react";
 import useHandleModal from "../hooks/useHandleModal";
 import { useAuthStore } from "../store/useAuthStore";
 import useHandleSearch from "../hooks/useHandleSearch";
 import useHandleDarkMode from "../hooks/useHandleDarkMode";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
 
 const GlobalContext = createContext();
 
@@ -14,6 +14,7 @@ export const GlobalProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const [mount, setMount] = useState(false);
   const { isUserAuth, userData, userAuthCheck } = useAuthStore();
 
   useHandleSearch();
@@ -42,6 +43,8 @@ export const GlobalProvider = ({ children }) => {
         handleOpenModal,
         handleCloseModal,
         handleCloseAllModals,
+        mount,
+        setMount,
       }}
     >
       <Toaster />

@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import Posts from "../components/posts/Posts";
 import { usePostStore } from "../store/usePostStore";
 import RecommendBox from "../components/RecommendBox";
-import DetailPostModal from "../components/modal/DetailPostModal";
 import PostsSkeleton from "../components/skeleton/PostsSkeleton";
 import { useProvider } from "../context/GlobalProvider";
 
@@ -17,7 +16,6 @@ const Home = () => {
 
   return (
     <div className="flex">
-      <DetailPostModal />
       <div className="flex-grow">
         <div className="flex justify-center">
           <div className="w-full max-w-[30rem] px-2">
@@ -35,7 +33,7 @@ const Home = () => {
       </div>
       <div className="w-[26rem] h-screen xl:block hidden">
         <div className="py-6 px-12">
-          {followingPosts.length !== 0 && <RecommendBox user={userData} />}
+          {!followingPosts && <RecommendBox user={userData} />}
         </div>
       </div>
     </div>
