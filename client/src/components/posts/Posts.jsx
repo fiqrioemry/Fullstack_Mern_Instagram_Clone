@@ -6,7 +6,6 @@ import PostControl from "../PostControl";
 import Galleries from "../posts/Galleries";
 import CommentForm from "../posts/CommentForm";
 import MiniCaption from "../posts/MiniCaption";
-import DetailPostModal from "../modal/DetailPostModal";
 import { useProvider } from "../../context/GlobalProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -23,7 +22,6 @@ const Posts = ({ posts }) => {
 
   return (
     <div className="space-y-6">
-      <DetailPostModal />
       {posts.map((post, index) => (
         <div className="space-y-2 border-b" key={index}>
           <Author user={post} />

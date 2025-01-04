@@ -54,7 +54,7 @@ function App() {
       </Routes>
       {state.background && (
         <Routes>
-          <Route path="/p/:id" element={<DetailPostModal />} />
+          <Route path="p/:id" element={<DetailPostModal />} />
         </Routes>
       )}
     </>

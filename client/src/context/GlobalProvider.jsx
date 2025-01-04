@@ -16,7 +16,7 @@ export const GlobalProvider = ({ children }) => {
   const currentPath = location.pathname;
   const [mount, setMount] = useState(false);
   const { isUserAuth, userData, userAuthCheck } = useAuthStore();
-
+  console.log(currentPath);
   useHandleSearch();
   useHandleDarkMode();
   const {
@@ -29,6 +29,7 @@ export const GlobalProvider = ({ children }) => {
 
   useEffect(() => {
     userAuthCheck();
+    setMount(false);
   }, [userAuthCheck]);
 
   return (

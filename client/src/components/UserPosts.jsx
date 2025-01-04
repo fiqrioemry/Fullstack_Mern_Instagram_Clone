@@ -4,6 +4,7 @@ import { Camera } from "lucide-react";
 import Galleries from "./posts/Galleries";
 
 const UserPosts = ({ posts }) => {
+  console.log(posts);
   return (
     <div>
       {!posts ? (
@@ -34,9 +35,12 @@ const UserPosts = ({ posts }) => {
       ) : (
         <div className="grid grid-cols-3 gap-2">
           {posts.map((post) => {
-            <div className="h-40 md:h-60">
-              <Galleries images={post.images} />
-            </div>;
+            console.log(post.PostGalleries);
+            return (
+              <div className="h-40 md:h-60" key={post.id}>
+                <Galleries images={post.PostGalleries} />
+              </div>
+            );
           })}
         </div>
       )}

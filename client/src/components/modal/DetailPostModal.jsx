@@ -18,7 +18,7 @@ const DetailPostModal = () => {
 
   const handleCloseModal = () => {
     setMount(false);
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const DetailPostModal = () => {
       >
         <DialogTitle>
           <DialogContent variant="detail">
-            {post.length === 0 ? (
+            {!post ? (
               <PostSkeleton />
             ) : (
               <Post post={post} comments={comments} />
