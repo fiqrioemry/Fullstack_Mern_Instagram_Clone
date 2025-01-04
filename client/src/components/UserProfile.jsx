@@ -41,7 +41,7 @@ const UserProfile = ({ user, data }) => {
 
           <div className="flex items-center gap-x-6">
             <div>{user.posts} Post</div>
-            {data.userName === user.username ? (
+            {data.username === user.username ? (
               <Button onClick={handleNavigate}>
                 <div>{user.followers} Edit Profile</div>
               </Button>

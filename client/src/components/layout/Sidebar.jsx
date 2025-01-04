@@ -1,9 +1,13 @@
-import SidebarContent from "../sidebar/SidebarContent";
+import NavLinks from "../NavLinks";
+import ProfileLink from "../ProfileLink";
+
+import InstagramIcon from "../common/InstagramIcon";
+import InstagramLogo from "../common/InstagramLogo";
+import { useProvider } from "../../context/GlobalProvider";
 import SidebarSearchPanel from "../sidebar/SidebarSearchPanel";
-import useHandleSearch from "../../hooks/useHandleSearch";
 
 const Sidebar = () => {
-  const { openSearch, handleSearch, searchRef, buttonRef } = useHandleSearch();
+  const { openSearch, searchRef } = useProvider();
 
   return (
     <aside className="sidebar_wrapper">
@@ -14,11 +18,21 @@ const Sidebar = () => {
           openSearch ? "w-[75px]" : "w-full"
         } sidebar_content_wrapper `}
       >
-        <SidebarContent
-          openSearch={openSearch}
-          handleSearch={handleSearch}
-          buttonRef={buttonRef}
-        />
+        <div className="px-3">
+          <div className="hidden md:flex items-center h-[6.5rem] px-3">
+            {openSearch ? (
+              <InstagramIcon />
+            ) : (
+              <InstagramLogo size={30} width={105} />
+            )}
+          </div>
+
+          <div className="flex md:block">
+            <NavLinks />
+            <ProfileLink />
+          </div>
+          <div className="hidden md:block"></div>
+        </div>
       </div>
     </aside>
   );

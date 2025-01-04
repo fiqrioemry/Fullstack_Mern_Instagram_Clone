@@ -18,7 +18,7 @@ export const GlobalProvider = ({ children }) => {
   const [background, setBackground] = useState(null);
   const { isUserAuth, userData, userAuthCheck } = useAuthStore();
 
-  useHandleSearch();
+  const { handleSearch, openSearch, buttonRef, searchRef } = useHandleSearch();
   useHandleDarkMode();
   const {
     openModal,
@@ -36,6 +36,10 @@ export const GlobalProvider = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
+        handleSearch,
+        openSearch,
+        buttonRef,
+        searchRef,
         navigate,
         currentPath,
         openModal,
