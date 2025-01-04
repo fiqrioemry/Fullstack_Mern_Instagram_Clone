@@ -76,9 +76,9 @@ async function userSignIn(req, res) {
 
     const user = {
       userId: userData.id,
-      userEmail: userData.email,
-      userName: userData.username,
-      userAvatar: userData.Profile?.avatar,
+      email: userData.email,
+      username: userData.username,
+      avatar: userData.Profile?.avatar,
     };
     const accessToken = jwt.sign(
       { userId: userData.id },
@@ -137,9 +137,9 @@ async function userAuthCheck(req, res) {
 
     const userData = {
       userId: user.id,
-      userEmail: user.email,
-      userName: user.username,
-      userAvatar: user.Profile?.avatar,
+      email: user.email,
+      username: user.username,
+      avatar: user.Profile?.avatar,
     };
 
     res.status(200).send({
@@ -158,7 +158,7 @@ async function userAuthCheck(req, res) {
 async function userAuthRefresh(req, res) {
   try {
     const refreshToken = req.cookies.refreshToken;
-    console.log(refreshToken);
+
     if (!refreshToken) {
       return res.status(401).send({
         success: false,
