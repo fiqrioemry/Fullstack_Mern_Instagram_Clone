@@ -1,34 +1,32 @@
+import NotFound from "./NotFound";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import UserTags from "../components/UserTags";
+import UserSaved from "../components/UserSaved";
 import UserPosts from "../components/UserPosts";
 import UserProfile from "../components/UserProfile";
 import { useUserStore } from "../store/useUserStore";
-import { useNavigate, useParams } from "react-router-dom";
 import UserFollowers from "../components/modal/UserFollowers";
+import { Bookmark, Grid2X2, SquareUserRound } from "lucide-react";
 import ProfileSkeleton from "../components/skeleton/ProfileSkeleton";
-import { Bookmark, Camera, Grid2X2, SquareUserRound } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import NotFound from "./NotFound";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Profile = () => {
-  const navigate = useNavigate();
   const { username } = useParams();
+  const { userData } = useAuthStore();
   const { userProfile, getUserProfile, getUserPosts, userPosts } =
     useUserStore();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const profile = await getUserProfile(username);
-        if (profile) {
-          await getUserPosts(profile.userId);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    getUserProfile(username);
+  }, [username, getUserProfile]);
 
-    fetchData();
-  }, [username, getUserProfile, getUserPosts, navigate]);
+  useEffect(() => {
+    if (userProfile && userProfile.userId) {
+      getUserPosts(userProfile.userId);
+    }
+  }, [userProfile, getUserPosts]);
 
   if (userProfile && userProfile.length === 0) return <NotFound />;
 
@@ -41,7 +39,7 @@ const Profile = () => {
           {!userProfile ? (
             <ProfileSkeleton />
           ) : (
-            <UserProfile user={userProfile} />
+            <UserProfile user={userProfile} data={userData} />
           )}
 
           {/* post */}
@@ -64,40 +62,11 @@ const Profile = () => {
               </TabsContent>
 
               <TabsContent value="saved">
-                <div className="text-center space-y-3 py-12">
-                  <div className="flex items-center justify-center">
-                    <div className="p-4  rounded-full border">
-                      <Bookmark size={50} />
-                    </div>
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-semibold">SAVED</h1>
-                  </div>
-                  <div className="flex justify-center">
-                    <div className="max-w-96 text-sm">
-                      Save photos and videos that you want to see again. No one
-                      is notified, and only you can see what you have saved.
-                    </div>
-                  </div>
-                </div>
+                <UserSaved />
               </TabsContent>
 
               <TabsContent value="tags">
-                <div className="text-center space-y-3 py-12">
-                  <div className="flex items-center justify-center">
-                    <div className="p-4  rounded-full border">
-                      <Camera size={50} />
-                    </div>
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-semibold">PHOTOS OF YOU</h1>
-                  </div>
-                  <div className="flex justify-center">
-                    <div className="max-w-96 text-sm">
-                      When you share photos, they will appear on your profile.
-                    </div>
-                  </div>
-                </div>
+                <UserTags />
               </TabsContent>
             </Tabs>
           </div>

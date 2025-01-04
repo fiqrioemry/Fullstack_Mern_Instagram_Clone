@@ -4,7 +4,7 @@ import { Settings } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useProvider } from "../context/GlobalProvider";
 
-const UserProfile = ({ user }) => {
+const UserProfile = ({ user, data }) => {
   const navigate = useNavigate();
   const { setMount } = useProvider();
 
@@ -41,10 +41,16 @@ const UserProfile = ({ user }) => {
 
           <div className="flex items-center gap-x-6">
             <div>{user.posts} Post</div>
+            {data.userName === user.username ? (
+              <Button onClick={handleNavigate}>
+                <div>{user.followers} Edit Profile</div>
+              </Button>
+            ) : (
+              <Button onClick={handleNavigate}>
+                <div>{user.followers} Followers</div>
+              </Button>
+            )}
 
-            <Button onClick={handleNavigate}>
-              <div>{user.followers} Followers</div>
-            </Button>
             <Link to={`/${user.username}/followings`}>
               <div>{user.followings} Followings</div>
             </Link>

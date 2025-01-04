@@ -15,6 +15,38 @@ import { useProvider } from "../../context/GlobalProvider";
 import MoreDropdown from "./MoreDropdown";
 import { useAuthStore } from "../../store/useAuthStore";
 
+export const sidebarConfiguration = ({
+  handleNavigate,
+  handleOpenModal,
+  handleSearch,
+}) => [
+  {
+    icon: HomeIcon,
+    action: () => handleNavigate(""),
+    title: "home",
+  },
+  {
+    icon: CircleUserRound,
+    action: () => handleNavigate(`/profile`),
+    title: "profile",
+  },
+  {
+    icon: Compass,
+    title: "explore",
+    action: () => handleNavigate("explore"),
+  },
+  {
+    icon: Search,
+    action: () => handleSearch("search"),
+    title: "search",
+  },
+  {
+    icon: SquarePlus,
+    action: () => handleOpenModal("create"),
+    title: "create",
+  },
+];
+
 // eslint-disable-next-line react/prop-types
 const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
   const navigate = useNavigate();
@@ -30,6 +62,7 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
     handleNavigate,
     handleOpenModal,
     handleSearch,
+    userData,
   });
 
   return (
@@ -44,10 +77,10 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
 
       <div className="flex md:block">
         {navigationMenu.map((menu) => (
-          <Button
+          <Link
             size="lg"
             variant="nav"
-            onClick={menu.action}
+            to={`/${userData.userName}`}
             ref={menu.title !== "create" ? buttonRef : null}
             key={menu.title}
           >
@@ -55,7 +88,7 @@ const SidebarContent = ({ openSearch, handleSearch, buttonRef }) => {
             {!openSearch && (
               <span className="hidden xl:block">{menu.title}</span>
             )}
-          </Button>
+          </Link>
         ))}
       </div>
       <div className="hidden md:block">

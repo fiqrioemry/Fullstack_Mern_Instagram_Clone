@@ -98,7 +98,7 @@ export const sidebarConfiguration = ({
   },
   {
     icon: CircleUserRound,
-    action: () => handleNavigate("profile"),
+    action: () => handleNavigate(`/profile`),
     title: "profile",
   },
   {
