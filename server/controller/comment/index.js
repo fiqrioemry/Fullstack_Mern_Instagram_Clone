@@ -1,9 +1,10 @@
-const { Post, Comment } = require("../../models");
+const { User, Profile, Post, Comment } = require("../../models");
 
-async function createCommentOrReply(req, res) {
+// commentController.js
+async function createComment(req, res) {
   const { userId } = req.user;
+  const { content } = req.body;
   const { postId } = req.params;
-  const { commentId, content } = req.body;
   try {
     const post = await Post.findByPk(postId);
 
@@ -13,44 +14,88 @@ async function createCommentOrReply(req, res) {
         message: "Post is not found",
       });
 
-    if (commentId) {
-      const comment = await Comment.findByPk(commentId);
-      if (!comment) {
-        return res.status(404).send({
-          success: false,
-          message: "Comment is not found",
-        });
-      }
-    }
-
     await Comment.create({
       userId,
       postId,
-      parentId: commentId || null,
       content,
     });
-    return res.status(201).send({
-      success: true,
-      message: commentId ? "Reply is created" : "Comment is created",
-    });
+    return res
+      .status(201)
+      .send({ success: true, message: "Comment is created" });
   } catch (error) {
     return res.status(500).send({
       success: false,
-      message: commentId
-        ? "Failed to reply a post"
-        : "Failed to comment a post",
+      message: "Failed to comment a post",
       error: error.message,
     });
   }
 }
 
-// commentController.js
-async function createComment(req, res) {
-  // Logic to create a comment on a post
-}
-
 async function getComments(req, res) {
-  // Logic to get all comments for a post
+  const { postId } = req.params;
+  const { limit } = req.query;
+  const total = parseInt(limit) || 10;
+
+  try {
+    const comments = await Comment.findAll({
+      limit: total,
+      where: { postId },
+      order: [["createdAt", "ASC"]],
+      attributes: ["id", "content", "createdAt"],
+      include: [
+        {
+          model: User,
+          attributes: ["id", "username"],
+          include: [
+            {
+              model: Profile,
+              attributes: ["fullname", "avatar"],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (comments.length === 0)
+      return res
+        .status(200)
+        .send({ success: true, message: "No Comments yet", data: [] });
+
+    const commentResult = await Promise.all(
+      comments.map(async (comment) => {
+        const replyCount = await comment.countReplies();
+        const likeCount = await comment.countLikes();
+
+        const { id: commentId, content, createdAt, User } = comment;
+        const { id: userId, username, Profile } = User;
+        const { fullname, avatar } = Profile;
+
+        return {
+          userId,
+          commentId,
+          content,
+          createdAt,
+          username,
+          fullname,
+          avatar,
+          replyCount,
+          likeCount,
+        };
+      })
+    );
+
+    return res.status(200).send({
+      success: true,
+      data: commentResult,
+    });
+  } catch (error) {
+    // Menangani error
+    return res.status(500).send({
+      success: false,
+      message: "Failed to get comments",
+      error: error.message,
+    });
+  }
 }
 
 async function updateComment(req, res) {

@@ -85,9 +85,10 @@ async function unfollowUser(req, res) {
   }
 }
 
-async function getUserFollowers(req, res) {
+async function getFollowers(req, res) {
   const { username } = req.params;
   try {
+    console.log(req);
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
@@ -112,7 +113,7 @@ async function getUserFollowers(req, res) {
   }
 }
 
-async function getUserFollowings(req, res) {
+async function getFollowings(req, res) {
   const { userId } = req.params;
 
   try {
@@ -145,6 +146,6 @@ async function getUserFollowings(req, res) {
 module.exports = {
   followNewUser,
   unfollowUser,
-  getUserFollowers,
-  getUserFollowings,
+  getFollowers,
+  getFollowings,
 };

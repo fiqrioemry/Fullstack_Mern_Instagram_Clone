@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
           entityType: "reply",
         },
       });
-      this.belongsTo(models.User, { foreignKey: "userId", as: "user" });
+      this.belongsTo(models.User, { foreignKey: "userId" });
       this.belongsTo(models.Comment, {
         foreignKey: "commentId",
         onDelete: "CASCADE",

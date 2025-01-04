@@ -2,6 +2,7 @@ const {
   uploadMediaToCloudinary,
   deleteMediaFromCloudinary,
 } = require("../../utils/cloudinary");
+
 const {
   User,
   Post,
@@ -9,7 +10,6 @@ const {
   Comment,
   Like,
   Profile,
-  Reply,
 } = require("../../models");
 const { Op } = require("sequelize");
 
@@ -17,8 +17,9 @@ const { Op } = require("sequelize");
 async function getPostsFromFollowings(req, res) {
   const { userId } = req.user;
   const { limit } = req.query;
+
   try {
-    const total = parseInt(limit) || 6;
+    const total = parseInt(limit) || 5;
 
     const user = await User.findByPk(userId, {
       include: {
@@ -77,13 +78,27 @@ async function getPostsFromFollowings(req, res) {
 
     const followingPosts = await Promise.all(
       posts.map(async (post) => {
-        const commentCount = await post.countComments();
-        const likeCount = await post.countLikes();
+        const [commentCount, likeCount] = await Promise.all([
+          Comment.count({ where: { postId: post.id } }),
+          Like.count({ where: { entityId: post.id, entityType: "post" } }),
+        ]);
+
+        const { id: postId, content, createdAt, User } = post;
+        const { id: userId, username, Profile } = User;
+        const { fullname, avatar } = Profile;
+        const images = post.PostGalleries.map((gallery) => gallery.image);
 
         return {
-          ...post.toJSON(),
+          userId,
+          postId,
+          username,
+          fullname,
+          avatar,
+          content,
+          images,
           commentCount,
           likeCount,
+          createdAt,
         };
       })
     );
@@ -137,19 +152,16 @@ async function getPublicPosts(req, res) {
 
     const publicPosts = await Promise.all(
       posts.map(async (post) => {
-        // Counting comments and likes
         const [commentCount, likeCount] = await Promise.all([
           Comment.count({ where: { postId: post.id } }),
           Like.count({ where: { entityId: post.id, entityType: "post" } }),
         ]);
 
-        // Extracting and structuring the required data
         const { id: postId, content, createdAt, User } = post;
         const { id: userId, username, Profile } = User;
         const { fullname, avatar } = Profile;
         const images = post.PostGalleries.map((gallery) => gallery.image);
 
-        // Return structured data
         return {
           userId,
           postId,
@@ -182,16 +194,51 @@ async function getPublicPosts(req, res) {
 async function getPostDetail(req, res) {
   const { postId } = req.params;
   try {
-    const post = await Post.findByPk(postId);
+    // Mengambil post berdasarkan postId
+    const post = await Post.findByPk(postId, {
+      include: [
+        {
+          model: User,
+          attributes: ["id", "username"],
+          include: [
+            {
+              model: Profile,
+              attributes: ["fullname", "avatar"], // Mengambil fullname dan avatar
+            },
+          ],
+        },
+        {
+          model: PostGallery,
+          attributes: ["image"], // Mengambil gambar dari gallery
+        },
+      ],
+    });
 
     if (!post) {
       return res
         .status(404)
         .send({ success: false, message: "Post not found" });
     }
-    const coba = await post.getUser({ attributes: ["id", "username"] });
 
-    res.status(200).json({ success: true, data: post });
+    const commentCount = await Comment.count({ where: { postId } });
+    const likeCount = await Like.count({
+      where: { entityId: postId, entityType: "post" },
+    });
+
+    const postDetail = {
+      userId: post.User.id,
+      postId: post.id,
+      username: post.User.username,
+      fullname: post.User.Profile.fullname,
+      avatar: post.User.Profile.avatar,
+      content: post.content,
+      images: post.PostGalleries.map((gallery) => gallery.image),
+      commentCount,
+      likeCount,
+      createdAt: post.createdAt,
+    };
+
+    res.status(200).json({ success: true, data: postDetail });
   } catch (error) {
     return res.status(500).send({
       success: false,
@@ -245,10 +292,12 @@ async function createPost(req, res) {
 async function getUserPosts(req, res) {
   const { userId } = req.params;
   const { limit } = req.query;
+
   try {
-    const total = parseInt(limit) || 3;
+    const total = parseInt(limit) || 10;
+
     const posts = await Post.findAll({
-      where: { userId },
+      where: { userId: userId },
       limit: total,
       order: [["createdAt", "DESC"]],
       attributes: ["id", "content", "createdAt"],
@@ -278,10 +327,17 @@ async function getUserPosts(req, res) {
           Like.count({ where: { entityId: post.id, entityType: "post" } }),
         ]);
 
+        const { id: postId, createdAt } = post;
+
+        const images = post.PostGalleries.map((gallery) => gallery.image);
+
         return {
-          ...post.toJSON(),
-          commentCount,
+          userId,
+          postId,
+          images,
+          createdAt,
           likeCount,
+          commentCount,
         };
       })
     );

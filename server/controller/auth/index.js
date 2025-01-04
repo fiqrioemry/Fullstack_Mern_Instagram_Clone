@@ -171,7 +171,7 @@ async function userAuthRefresh(req, res) {
     const userId = decoded.userId;
 
     const user = await User.findByPk(userId);
-    console.log(user);
+
     if (!user) {
       return res.status(403).send({
         success: false,

@@ -1,7 +1,62 @@
-const { User, Profile } = require("../../models");
+const { Op } = require("sequelize");
+const { User, Profile, Follow } = require("../../models");
 const { uploadMediaToCloudinary } = require("../../utils/cloudinary");
 
-// get user profile
+async function searchUser(req, res) {
+  const { query } = req.query;
+
+  try {
+    if (!query) {
+      return res.status(400).send({
+        success: false,
+        message: "Query parameter 'query' is required",
+      });
+    }
+
+    const users = await User.findAll({
+      where: {
+        [Op.or]: [{ username: { [Op.like]: `%${query}%` } }],
+      },
+      attributes: ["id", "username"],
+      include: [
+        {
+          model: Profile,
+          attributes: ["fullname", "avatar"],
+          where: {
+            fullname: { [Op.like]: `%${query}%` }, // Tambahkan pencarian di Profile
+          },
+          required: false, // Pastikan include tetap bekerja jika fullname tidak cocok
+        },
+      ],
+      limit: 10,
+    });
+
+    if (users.length === 0) {
+      return res.status(404).send({
+        success: false,
+        message: "No users found",
+      });
+    }
+
+    return res.status(200).send({
+      success: true,
+      data: users.map((user) => ({
+        userId: user.id,
+        username: user.username,
+        fullname: user.Profile?.fullname || null,
+        avatar: user.Profile?.avatar || null,
+      })),
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({
+      success: false,
+      message: "Failed to search for users",
+      error: error.message,
+    });
+  }
+}
+
 async function getUserProfile(req, res) {
   const { username } = req.params;
   try {
@@ -114,7 +169,7 @@ async function updateUserProfile(req, res) {
 async function followUser(req, res) {
   const { userId } = req.user;
   const { followingId } = req.params;
-
+  const followId = parseInt(followingId);
   try {
     if (userId == followingId) {
       return res.status(400).send({
@@ -123,14 +178,14 @@ async function followUser(req, res) {
       });
     }
 
-    const user = await User.findByPk(followingId);
+    const user = await User.findByPk(followId);
 
     if (!user) {
       return res.status(404).send({ error: "User not found " });
     }
 
     const existingFollow = await Follow.findOne({
-      where: { followerId: userId, followingId: followingId },
+      where: { followerId: userId, followingId: followId },
     });
 
     if (existingFollow) {
@@ -142,7 +197,7 @@ async function followUser(req, res) {
 
     await Follow.create({
       followerId: userId,
-      followingId: followingId,
+      followingId: followId,
     });
 
     res.status(201).send({
@@ -196,23 +251,36 @@ async function unfollowUser(req, res) {
 }
 
 async function getFollowers(req, res) {
-  const { userId } = req.params;
+  const { username } = req.params;
+
   try {
-    const user = await User.findByPk(userId, {
-      attributes: ["id", "username", "email"],
+    const user = await User.findOne({
+      where: { username },
+      attributes: ["id"],
     });
 
     if (!user) {
-      return res.status(404).send({ message: "User not found " });
+      return res.status(404).send({ message: "User not found" });
     }
 
-    const result = await user.getFollowers({
+    const followers = await user.getFollowers({
       limit: 10,
       attributes: ["id", "username"],
-      include: [{ model: Profile, attributes: ["fullname", "avatar"] }],
+      include: [
+        {
+          model: Profile,
+          attributes: ["fullname", "avatar"],
+        },
+      ],
     });
 
-    const followers = result.map((follower) => ({
+    if (followers.length === 0) {
+      return res
+        .status(200)
+        .send({ message: "No Followers is found", data: [] });
+    }
+
+    const followersData = followers.map((follower) => ({
       userId: follower.id,
       username: follower.username,
       fullname: follower.Profile.fullname,
@@ -221,7 +289,7 @@ async function getFollowers(req, res) {
 
     res.status(200).send({
       success: true,
-      data: followers,
+      data: followersData,
     });
   } catch (error) {
     return res.status(500).send({
@@ -233,11 +301,12 @@ async function getFollowers(req, res) {
 }
 
 async function getFollowings(req, res) {
-  const { userId } = req.params;
+  const { username } = req.params;
 
   try {
-    const user = await User.findByPk(userId, {
-      attributes: ["id", "username", "email"],
+    const user = await User.findOne({
+      where: { username },
+      attributes: ["id"],
     });
 
     if (!user) {
@@ -296,11 +365,15 @@ async function getFollowRecommend(req, res) {
       include: [
         {
           model: Profile,
-          attributes: ["fullname", "avatar"],
+          attributes: ["avatar"],
         },
       ],
     });
-    const data = recommendations.map((item) => item.dataValues);
+    const data = recommendations.map((user) => ({
+      userId: user.id,
+      username: user.username,
+      avatar: user.Profile?.avatar || null,
+    }));
 
     res.status(200).send({
       success: true,
@@ -316,6 +389,7 @@ async function getFollowRecommend(req, res) {
 }
 
 module.exports = {
+  searchUser,
   followUser,
   unfollowUser,
   getFollowers,
