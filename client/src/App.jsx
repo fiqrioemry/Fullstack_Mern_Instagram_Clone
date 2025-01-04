@@ -10,15 +10,16 @@ import PostDetails from "./pages/PostDetails";
 import Layout from "./components/layout/Layout";
 import { Route, Routes, useLocation } from "react-router-dom";
 import DetailPostModal from "./components/modal/DetailPostModal";
+import { useProvider } from "./context/GlobalProvider";
 
 function App() {
   const location = useLocation();
-  const state = location.state || {};
+  const { background } = useProvider();
 
   return (
     <>
       {/* Routes utama */}
-      <Routes location={state.background || location}>
+      <Routes location={background || location}>
         <Route
           path="/signin"
           element={
@@ -52,7 +53,7 @@ function App() {
           <Route path="p/:id" element={<PostDetails />} />
         </Route>
       </Routes>
-      {state.background && (
+      {background && (
         <Routes>
           <Route path="p/:id" element={<DetailPostModal />} />
         </Routes>

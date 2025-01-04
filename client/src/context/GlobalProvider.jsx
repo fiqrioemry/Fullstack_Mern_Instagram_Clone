@@ -15,8 +15,9 @@ export const GlobalProvider = ({ children }) => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [mount, setMount] = useState(false);
+  const [background, setBackground] = useState(null);
   const { isUserAuth, userData, userAuthCheck } = useAuthStore();
-  console.log(currentPath);
+
   useHandleSearch();
   useHandleDarkMode();
   const {
@@ -45,6 +46,8 @@ export const GlobalProvider = ({ children }) => {
         handleCloseModal,
         handleCloseAllModals,
         mount,
+        background,
+        setBackground,
         setMount,
       }}
     >

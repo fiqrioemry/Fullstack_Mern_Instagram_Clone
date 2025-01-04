@@ -20,7 +20,6 @@ const DetailPostModal = () => {
     setMount(false);
     navigate(-1);
   };
-
   useEffect(() => {
     if (id) {
       getPostDetail(id);

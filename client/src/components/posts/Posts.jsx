@@ -12,12 +12,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 const Posts = ({ posts }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { setMount, setBackground } = useProvider();
 
-  const { setMount } = useProvider();
-
-  const handleNavigate = (post) => {
+  const handleNavigate = (postId) => {
     setMount(true);
-    navigate(`/p/${post.postId}`, { state: { background: location } });
+    setBackground(location);
+    navigate(`/p/${postId}`, { state: { background: location } });
   };
 
   return (
@@ -30,7 +30,7 @@ const Posts = ({ posts }) => {
           <MiniCaption post={post} />
           <div>
             {post.commentCount !== 0 && (
-              <Button onClick={() => handleNavigate(post)}>
+              <Button onClick={() => handleNavigate(post.postId)}>
                 View all {post.commentCount} comments
               </Button>
             )}

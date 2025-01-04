@@ -8,10 +8,11 @@ import { useProvider } from "../context/GlobalProvider";
 const UserPosts = ({ posts }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setMount } = useProvider();
+  const { setMount, setBackground } = useProvider();
 
   const handleNavigate = (postId) => {
     setMount(true);
+    setBackground(location);
     navigate(`/p/${postId}`, { state: { background: location } });
   };
 

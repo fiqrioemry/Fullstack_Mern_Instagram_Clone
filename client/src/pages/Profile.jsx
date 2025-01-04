@@ -7,6 +7,7 @@ import UserFollowers from "../components/modal/UserFollowers";
 import ProfileSkeleton from "../components/skeleton/ProfileSkeleton";
 import { Bookmark, Camera, Grid2X2, SquareUserRound } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import NotFound from "./NotFound";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -22,13 +23,14 @@ const Profile = () => {
           await getUserPosts(profile.userId);
         }
       } catch (error) {
-        console.error("Error fetching data", error);
-        navigate("*");
+        console.log(error);
       }
     };
 
     fetchData();
   }, [username, getUserProfile, getUserPosts, navigate]);
+
+  if (userProfile && userProfile.length === 0) return <NotFound />;
 
   return (
     <div className="flex justify-center">
