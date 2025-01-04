@@ -1,18 +1,16 @@
-import { Camera } from "lucide-react";
+/* eslint-disable react/prop-types */
 import { Button } from "./ui/button";
-import { useEffect } from "react";
-import { useUserStore } from "../store/useUserStore";
+import { Camera } from "lucide-react";
 import Galleries from "./posts/Galleries";
 
-const UserPosts = ({ username }) => {
-  const { userPosts, getUserPosts } = useUserStore();
-
-  useEffect(() => {
-    getUserPosts(username);
-  }, []);
+const UserPosts = ({ posts }) => {
   return (
     <div>
-      {userPosts.length === 0 ? (
+      {!posts ? (
+        <div className="h-[50vh[] flex items-center justify-center text-3xl font-semibold">
+          Loading data...
+        </div>
+      ) : posts.length === 0 ? (
         <div className="text-center space-y-3 py-12">
           <div className="flex items-center justify-center">
             <div className="p-4  rounded-full border">
@@ -35,7 +33,7 @@ const UserPosts = ({ username }) => {
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-2">
-          {userPosts.map((post) => {
+          {posts.map((post) => {
             <div className="h-40 md:h-60">
               <Galleries images={post.images} />
             </div>;

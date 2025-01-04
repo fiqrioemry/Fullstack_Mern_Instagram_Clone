@@ -8,7 +8,7 @@ const UserAvatar = ({ user }) => {
     .join("");
   return (
     <>
-      <Avatar className="border rounded-full">
+      <Avatar className="borderborder-muted-foreground/50 rounded-full">
         <AvatarImage src={user.avatar} alt="avatar" />
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>

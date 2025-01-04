@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "../store/useUserStore";
-import { useProvider } from "../context/GlobalProvider";
-import RecommendSkeleton from "./skeleton/RecommendSkeleton";
 
-const RecommendBox = ({ message }) => {
-  const { userData } = useProvider();
+const RecommendBox = ({ user, message }) => {
   const [followingIds, setFollowingIds] = useState([]);
   const [loadingIds, setLoadingIds] = useState([]); // Track loading state per user
   const {
@@ -17,15 +14,13 @@ const RecommendBox = ({ message }) => {
   } = useUserStore();
 
   const handleFollow = async (id) => {
-    // Mark user as loading
     setLoadingIds((prev) => [...prev, id]);
     await followUser(id);
-    // Remove user from loading state after follow completes
     setLoadingIds((prev) => prev.filter((loadingId) => loadingId !== id));
   };
 
   useEffect(() => {
-    getFollowings(userData.userId);
+    getFollowings(user.userId);
     getFollowRecommend();
   }, []);
 

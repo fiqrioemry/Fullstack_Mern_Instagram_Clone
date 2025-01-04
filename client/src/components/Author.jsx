@@ -4,6 +4,7 @@ import Timestamp from "./Timestamp";
 import { Ellipsis } from "lucide-react";
 import MoreOptions from "./modal/MoreOptions";
 import { ModalContainer } from "./modal/ModalContainer";
+import { Link } from "react-router-dom";
 
 const Author = ({ user }) => {
   return (
@@ -12,7 +13,9 @@ const Author = ({ user }) => {
         <div className="flex w-full gap-x-3 ">
           <UserAvatar user={user} />
           <div className="text-sm space-y-2">
-            <div className="font-medium">{user.username}</div>
+            <Link to={`/${user.username}`} className="font-medium">
+              {user.username}
+            </Link>
             <div className="flex items-center gap-x-2">
               <Timestamp createdAt={user.createdAt} />
             </div>

@@ -4,8 +4,10 @@ import { usePostStore } from "../store/usePostStore";
 import RecommendBox from "../components/RecommendBox";
 import DetailPostModal from "../components/modal/DetailPostModal";
 import PostsSkeleton from "../components/skeleton/PostsSkeleton";
+import { useProvider } from "../context/GlobalProvider";
 
 const Home = () => {
+  const { userData } = useProvider();
   const { getFollowingPosts, message, followingPosts, isPostLoading } =
     usePostStore();
 
@@ -33,7 +35,7 @@ const Home = () => {
       </div>
       <div className="w-[26rem] h-screen xl:block hidden">
         <div className="py-6 px-12">
-          {followingPosts.length !== 0 && <RecommendBox />}
+          {followingPosts.length !== 0 && <RecommendBox user={userData} />}
         </div>
       </div>
     </div>
