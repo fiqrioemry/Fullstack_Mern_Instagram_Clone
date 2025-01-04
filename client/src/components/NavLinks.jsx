@@ -25,7 +25,8 @@ const links = [
 ];
 
 function NavLinks() {
-  const { currentPath, handleOpenModal, handleSearch } = useProvider();
+  const { currentPath, handleOpenModal, openSearch, handleSearch } =
+    useProvider();
 
   return (
     <>
@@ -46,14 +47,18 @@ function NavLinks() {
             to={link.href}
             className={buttonVariants({
               variant: "nav",
-              className: cn("navLink", { "hidden md:flex": link.hideOnMobile }),
+              className: cn("hidden lg:flex", {
+                "hidden md:flex": link.hideOnMobile,
+                hidden: openSearch,
+              }),
               size: "lg",
             })}
           >
             <LinkIcon className="w-6" />
             <span
               className={`${cn("hidden lg:block", {
-                "font-extrabold": isActive,
+                "font-bold": isActive,
+                hidden: openSearch,
               })}`}
             >
               {link.name}
