@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/carousel";
 
 const Galleries = ({ images }) => {
-  console.log(images);
   return (
     <Carousel>
       <CarouselContent className="flex items-center">

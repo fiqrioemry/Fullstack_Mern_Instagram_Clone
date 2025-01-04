@@ -78,6 +78,7 @@ export const useUserStore = create((set) => ({
     try {
       const response = await axiosInstance.get(`/api/user/${username}`);
       set({ userProfile: response.data.data });
+      return response.data.data;
     } catch (error) {
       console.error(error);
       set({ userProfile: [] });
@@ -101,9 +102,9 @@ export const useUserStore = create((set) => ({
   },
 
   // Get user's posts
-  getUserPosts: async (username) => {
+  getUserPosts: async (userId) => {
     try {
-      const response = await axiosInstance.get(`/api/user/${username}/posts`);
+      const response = await axiosInstance.get(`/api/user/${userId}/posts`);
       set({ userPosts: response.data.data });
     } catch (error) {
       console.error(error);

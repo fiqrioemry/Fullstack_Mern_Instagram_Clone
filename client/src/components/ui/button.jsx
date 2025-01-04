@@ -10,7 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        normal: "w-full border-muted-foreground/25",
+        normal: " border-muted-foreground/25",
         default: "font-semibold",
         primary: "bg-accent text-foreground hover:bg-foreground/20",
         secondary: "bg-foreground text-background hover:bg-foreground/80",

@@ -22,11 +22,11 @@ const UserProfile = ({ user }) => {
       </div>
       <div className="col-span-2">
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <div className="text-xl font-semibold col-span-1">
               {user.username}
             </div>
-            <div className="flex items-center gap-2 col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2 col-span-3 md:col-span-2">
               <Button variant="custom" size="md">
                 Follow
               </Button>
@@ -39,10 +39,9 @@ const UserProfile = ({ user }) => {
             </div>
           </div>
 
-          <div className="flex gap-x-6">
-            <div>
-              <div>{user.posts} Post</div>
-            </div>
+          <div className="flex items-center gap-x-6">
+            <div>{user.posts} Post</div>
+
             <Button onClick={handleNavigate}>
               <div>{user.followers} Followers</div>
             </Button>

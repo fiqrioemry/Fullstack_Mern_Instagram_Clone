@@ -1,31 +1,40 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import UserPosts from "../components/UserPosts";
 import UserProfile from "../components/UserProfile";
 import { useUserStore } from "../store/useUserStore";
+import { useNavigate, useParams } from "react-router-dom";
 import UserFollowers from "../components/modal/UserFollowers";
 import ProfileSkeleton from "../components/skeleton/ProfileSkeleton";
 import { Bookmark, Camera, Grid2X2, SquareUserRound } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import NotFound from "./NotFound";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { username } = useParams();
   const { userProfile, getUserProfile, getUserPosts, userPosts } =
     useUserStore();
 
   useEffect(() => {
-    getUserProfile(username);
-    getUserPosts(username);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const profile = await getUserProfile(username);
+        if (profile) {
+          await getUserPosts(profile.userId);
+        }
+      } catch (error) {
+        console.error("Error fetching data", error);
+        navigate("*");
+      }
+    };
 
-  if (userProfile && userProfile.length === 0) return <NotFound />;
+    fetchData();
+  }, [username, getUserProfile, getUserPosts, navigate]);
 
   return (
     <div className="flex justify-center">
       <UserFollowers />
-      <div className="max-w-4xl w-full mt-12">
-        <div className="py-12 md:py-8 md:px-0 px-4">
+      <div className="max-w-4xl w-full mt-14 mb-14">
+        <div className="md:px-0 px-4 md:py-0 py-6">
           {/* user profile */}
           {!userProfile ? (
             <ProfileSkeleton />
