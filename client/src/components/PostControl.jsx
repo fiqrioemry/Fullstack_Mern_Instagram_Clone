@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
-import { Bookmark, Heart, MessageCircle } from "lucide-react";
 import Timestamp from "./Timestamp";
+import { Button } from "@/components/ui/button";
+import { Bookmark, Heart, MessageCircle } from "lucide-react";
 
 const PostControl = ({ post }) => {
   return (
@@ -11,7 +12,7 @@ const PostControl = ({ post }) => {
         <Bookmark />
       </div>
       <div className="text-sm">
-        {post.likeCount !== 0 && <button>{post.likeCount} Likes</button>}
+        {post.likeCount !== 0 && <Button>{post.likeCount} Likes</Button>}
       </div>
       <Timestamp createdAt={post.createdAt} />
     </>

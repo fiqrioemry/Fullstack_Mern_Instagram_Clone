@@ -59,20 +59,20 @@ function MenuOptions({ openSearch }) {
         {!showModeToggle ? (
           <>
             <DropdownMenuItem>
-              <Settings size={20} />
-              <p>Settings</p>
+              <Settings />
+              <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Bookmark size={20} />
-              <p>Saved</p>
+              <Bookmark />
+              <span>Saved</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setShowModeToggle(true)}>
-              <Moon size={20} />
-              <p>Switch appearance</p>
+              <Moon />
+              <span>Switch appearance</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <LogOut size={20} />
-              <p>Log out</p>
+              <LogOut />
+              <span>Log out</span>
             </DropdownMenuItem>
           </>
         ) : (

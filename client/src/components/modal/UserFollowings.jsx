@@ -38,10 +38,10 @@ const UserFollowings = () => {
       >
         <DialogContent variant="options" className="max-w-lg">
           <DialogTitle className="text-center content_margin">
-            <h3>Followings</h3>
+            <h4>Followings</h4>
           </DialogTitle>
 
-          <ScrollArea className=" h-[17rem] rounded-md border">
+          <ScrollArea className=" h-[17rem] rounded-md ">
             <div className="py-2 px-5 space-y-4">
               {!followings ? (
                 [...Array(4)].map((__, index) => <FollowSkeleton key={index} />)

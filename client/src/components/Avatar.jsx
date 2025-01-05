@@ -9,12 +9,7 @@ const UserAvatar = ({ user, width = 8, height = 8 }) => {
     .join("");
   return (
     <>
-      <Avatar
-        className={cn(
-          `h-${height} w-${width}`,
-          "border border-muted-foreground/50 rounded-full"
-        )}
-      >
+      <Avatar className={cn(`h-${height} w-${width}`, "border rounded-full")}>
         <AvatarImage src={user.avatar} alt="avatar" />
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>

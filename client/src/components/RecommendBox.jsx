@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "../store/useUserStore";
@@ -40,7 +41,7 @@ const RecommendBox = ({ user, message }) => {
         </h2>
       </div>
       {recommend.map((user, index) => (
-        <div className="bg-secondary px-4 py-2 rounded-md" key={index}>
+        <div className="bg-foreground px-4 py-2 rounded-md" key={index}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="h-14 w-14 rounded-full bg-white">

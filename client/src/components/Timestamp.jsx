@@ -5,10 +5,7 @@ import ReactTimeago from "react-timeago";
 function Timestamp({ createdAt, className }) {
   return (
     <ReactTimeago
-      className={cn(
-        "font-medium text-neutral-500 dark:text-neutral-400 text-xs",
-        className
-      )}
+      className={cn("font-medium text-primary/50 text-xs", className)}
       date={createdAt}
       formatter={(value, unit, suffix, epochMiliseconds, nextFormatter) => {
         if (unit === "second") {

@@ -7,6 +7,7 @@ import PostOptions from "./modal/PostOptions";
 import { ModalContainer } from "./modal/ModalContainer";
 
 const Author = ({ user }) => {
+  console.log(user);
   return (
     <div>
       <div className="flex">
@@ -23,7 +24,7 @@ const Author = ({ user }) => {
         </div>
         <div className="w-4">
           <ModalContainer title={<Ellipsis size={14} />} tooltip="more options">
-            <PostOptions />
+            <PostOptions postId={user.postId} />
           </ModalContainer>
         </div>
       </div>
