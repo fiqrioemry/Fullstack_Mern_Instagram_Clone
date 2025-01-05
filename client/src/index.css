@@ -78,9 +78,9 @@
 
     --border: 0 0% 32.2%;
 
-    --foreground: 240 5.2% 33.9%;
+    --foreground: 0 0% 96.1%;
 
-    --foreground-hover: 240 3.7% 15.9%;
+    --foreground-hover: 0 0% 83.1%;
   }
   .dark {
     --primary: 0 0% 98%;
@@ -93,9 +93,9 @@
 
     --background: 240 10% 3.9%;
 
-    --foreground: 240 5.2% 33.9%;
+    --foreground: 0 0% 14.9%;
 
-    --foreground-hover: 240 3.7% 15.9%;
+    --foreground-hover: 0 0% 25.1%;
 
     --modal: 0 0% 14.9%;
 

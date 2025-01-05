@@ -2,6 +2,7 @@
 import UserAvatar from "../Avatar";
 import Timestamp from "../Timestamp";
 import { Heart } from "lucide-react";
+import { Button } from "../ui/button";
 
 const Caption = ({ user }) => {
   return (
@@ -17,11 +18,11 @@ const Caption = ({ user }) => {
                 <Timestamp createdAt={user.createdAt} />
                 <div>
                   {user.likeCount !== 0 && (
-                    <button>{user.likeCount} Likes</button>
+                    <Button>{user.likeCount} Likes</Button>
                   )}
                 </div>
                 <div>
-                  <button>Reply</button>
+                  <Button>Reply</Button>
                 </div>
               </div>
             </div>

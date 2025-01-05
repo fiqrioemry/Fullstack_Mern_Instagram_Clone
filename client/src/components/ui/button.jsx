@@ -13,7 +13,7 @@ const buttonVariants = cva(
         default: "text-sm text-primary hover:text-primary/50 font-semibold",
         follow:
           "bg-follow hover:bg-follow-hover text-sm text-primary px-4 py-2 h-10 shadow-sm",
-        nav: "bg-background hover:bg-foreground-hover rounded-md px-4 py-2 w-full",
+        nav: "hover:bg-foreground rounded-md px-4 py-2 w-full",
         ghost:
           "bg-foreground hover:bg-foreground-hover text-primary py-2 px-4  text-sm rounded-md",
         delete:

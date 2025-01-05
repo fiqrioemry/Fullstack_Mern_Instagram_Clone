@@ -20,6 +20,7 @@ import { Switch } from "@/components/ui/switch";
 import { useEffect, useRef, useState } from "react";
 import useHandleDarkMode from "../../hooks/useHandleDarkMode";
 
+// eslint-disable-next-line react/prop-types
 function MenuOptions({ openSearch }) {
   const ref = useRef(null);
   const [open, setOpen] = useState(false);
@@ -51,49 +52,43 @@ function MenuOptions({ openSearch }) {
 
       <DropdownMenuContent
         ref={ref}
-        className={cn(
-          "dark:bg-accent w-64 p-0 transition-opacity",
-          !open && "opacity-0"
-        )}
+        className={cn("w-64  transition-opacity", !open && "opacity-0")}
         align="end"
         alignOffset={-40}
       >
         {!showModeToggle ? (
           <>
-            <DropdownMenuItem className="dark:hover:bg-[#3C3C3C] flex items-center gap-x-2 px-4 py-3.5 m-1.5 rounded-lg font-medium cursor-pointer">
+            <DropdownMenuItem>
               <Settings size={20} />
               <p>Settings</p>
             </DropdownMenuItem>
-            <DropdownMenuItem className="dark:hover:bg-[#3C3C3C] flex items-center gap-x-2 px-4 py-3.5 m-1.5 rounded-lg font-medium cursor-pointer">
+            <DropdownMenuItem>
               <Bookmark size={20} />
               <p>Saved</p>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="dark:hover:bg-[#3C3C3C] flex items-center gap-x-2 px-4 py-3.5 m-1.5 rounded-lg font-medium cursor-pointer"
-              onClick={() => setShowModeToggle(true)}
-            >
+            <DropdownMenuItem onClick={() => setShowModeToggle(true)}>
               <Moon size={20} />
               <p>Switch appearance</p>
             </DropdownMenuItem>
-            <DropdownMenuItem className="dark:hover:bg-[#3C3C3C] flex items-center gap-x-2 px-4 py-3.5 m-1.5 rounded-lg font-medium cursor-pointer">
+            <DropdownMenuItem>
               <LogOut size={20} />
               <p>Log out</p>
             </DropdownMenuItem>
           </>
         ) : (
           <>
-            <div className="flex items-center border-b border-gray-200 dark:border-neutral-700 py-3.5 px-2.5">
-              <ChevronLeft size={18} onClick={() => setShowModeToggle(false)} />
+            <DropdownMenuItem onClick={() => setShowModeToggle(false)}>
+              <ChevronLeft />
               <p className="font-bold ml-1">Switch appearance</p>
               {darkMode ? (
                 <Moon size={20} className="ml-auto" />
               ) : (
                 <Sun size={20} className="ml-auto" />
               )}
-            </div>
+            </DropdownMenuItem>
             <Label
               htmlFor="dark-mode"
-              className="dark:hover:bg-[#3C3C3C] flex items-center gap-x-2 px-4 py-3.5 m-1.5 rounded-lg font-medium cursor-pointer"
+              className="hover:bg-foreground-hover flex items-center gap-x-2 px-4 py-2 m-1.5 rounded-lg font-medium cursor-pointer"
             >
               Dark Mode
               <DropdownMenuItem className="ml-auto p-0">

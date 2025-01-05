@@ -1,3 +1,5 @@
+import { Button } from "../ui/button";
+
 const CommentForm = () => {
   return (
     <form>
@@ -6,7 +8,7 @@ const CommentForm = () => {
           placeholder="Add a comment ..."
           className="w-full flex items-center text-sm bg-background resize-none  focus:outline-none overflow-y-scroll no-scrollbar"
         />
-        <button>Post</button>
+        <Button type="submit">Post</Button>
       </div>
     </form>
   );
