@@ -4,20 +4,17 @@ import UserProfile from "../components/UserProfile";
 import { useAuthStore } from "../store/useAuthStore";
 import { useUserStore } from "../store/useUserStore";
 import UserFollowers from "../components/modal/UserFollowers";
+import UserFollowings from "../components/modal/UserFollowings";
+import { Outlet, useParams, useNavigate } from "react-router-dom";
 import { Bookmark, Grid2X2, SquareUserRound } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileSkeleton from "../components/skeleton/ProfileSkeleton";
-import { Outlet, useParams, useLocation, useNavigate } from "react-router-dom";
-import UserFollowings from "../components/modal/UserFollowings";
 
 const Profile = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const { username } = useParams();
   const { userData } = useAuthStore();
   const { userProfile, getUserProfile, getUserPosts } = useUserStore();
-
-  const currentTab = location.pathname.split("/").pop();
 
   useEffect(() => {
     getUserProfile(username);
@@ -50,7 +47,7 @@ const Profile = () => {
 
           {/* post */}
           <div>
-            <Tabs value={currentTab}>
+            <Tabs defaultValue="post">
               <TabsList className="w-full gap-x-20">
                 <TabsTrigger value="post" onClick={() => handleTabChange("")}>
                   <Grid2X2 /> <span>Post</span>

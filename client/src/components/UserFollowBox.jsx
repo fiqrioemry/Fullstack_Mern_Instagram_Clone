@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import UserAvatar from "@/components/Avatar";
 import { Button } from "@/components/ui/button";
 const UserFollowBox = ({ user }) => {
@@ -14,11 +15,11 @@ const UserFollowBox = ({ user }) => {
 
       <div className="max-w-20">
         {user.isFollowedByMe ? (
-          <Button variant="following" size="md">
+          <Button variant="following" size="sm">
             following
           </Button>
         ) : (
-          <Button variant="custom" size="md">
+          <Button variant="custom" size="sm">
             Follow
           </Button>
         )}

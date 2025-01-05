@@ -1,13 +1,11 @@
 import { useEffect } from "react";
-import UserAvatar from "../Avatar";
-import { Button } from "@/components/ui/button";
+import UserFollowBox from "../UserFollowBox";
 import FollowSkeleton from "../skeleton/FollowSkeleton";
 import { useUserStore } from "../../store/useUserStore";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useProvider } from "../../context/GlobalProvider";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import UserFollowBox from "../UserFollowBox";
 
 const UserFollowers = () => {
   const navigate = useNavigate();
@@ -37,16 +35,18 @@ const UserFollowers = () => {
         onOpenChange={(open) => !open && handleCloseModal()}
       >
         <DialogContent variant="options" className="max-w-lg">
-          <DialogTitle className="text-center py-4 border-b border-white/25">
-            <div>followers</div>
+          <DialogTitle className="text-center content_margin">
+            <h3>followers</h3>
           </DialogTitle>
 
-          <ScrollArea className=" h-[17rem] rounded-md border">
+          <ScrollArea className="h-[17rem] rounded-md border">
             <div className="py-2 px-5 space-y-4">
               {!followers ? (
                 [...Array(4)].map((__, index) => <FollowSkeleton key={index} />)
               ) : followers.length === 0 ? (
-                <div className="h-full flex items-center justify-center"></div>
+                <div className="h-[15rem] flex items-center justify-center">
+                  <span>No Followers to show</span>
+                </div>
               ) : (
                 followers.map((user) => (
                   <UserFollowBox user={user} key={user.userId} />

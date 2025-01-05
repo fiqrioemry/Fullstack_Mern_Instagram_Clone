@@ -58,7 +58,9 @@ async function searchUser(req, res) {
 }
 
 async function getUserProfile(req, res) {
+  const { userId } = req.user;
   const { username } = req.params;
+
   try {
     const user = await User.findOne({
       where: { username },
@@ -84,6 +86,9 @@ async function getUserProfile(req, res) {
       user.countPosts(),
     ]);
 
+    // Bandingkan userId untuk menentukan apakah ini profil kita sendiri
+    const isCurrentUser = user.id === userId;
+
     return res.status(200).send({
       success: true,
       data: {
@@ -98,12 +103,13 @@ async function getUserProfile(req, res) {
         posts: postsCount,
         followers: followersCount,
         followings: followingsCount,
+        isCurrentUser,
       },
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Failed to retrive user detail",
+      message: "Failed to retrieve user detail",
       error: error.message,
     });
   }

@@ -13,10 +13,6 @@ const UserProfile = ({ user, data }) => {
     navigate(`/${user.username}/${path}`);
   };
 
-  const handleSetting = () => {
-    navigate(`/settings`);
-  };
-
   return (
     <div className="grid grid-cols-3 h-60">
       <div className="flex justify-center col-span-1">

@@ -36,19 +36,23 @@ const UserFollowings = () => {
         onOpenChange={(open) => !open && handleCloseModal()}
       >
         <DialogContent variant="options" className="max-w-lg">
-          <DialogTitle className="text-center py-4 border-b border-white/25">
-            <div>Followings</div>
+          <DialogTitle className="text-center content_margin">
+            <h3>Followings</h3>
           </DialogTitle>
 
           <ScrollArea className=" h-[17rem] rounded-md border">
             <div className="py-2 px-5 space-y-4">
-              {!followings
-                ? [...Array(4)].map((__, index) => (
-                    <FollowSkeleton key={index} />
-                  ))
-                : followings.map((user) => (
-                    <UserFollowBox user={user} key={user.userId} />
-                  ))}
+              {!followings ? (
+                [...Array(4)].map((__, index) => <FollowSkeleton key={index} />)
+              ) : followings.length === 0 ? (
+                <div className="h-[15rem] flex items-center justify-center">
+                  <span>No Followings to show</span>
+                </div>
+              ) : (
+                followings.map((user) => (
+                  <UserFollowBox user={user} key={user.userId} />
+                ))
+              )}
             </div>
           </ScrollArea>
         </DialogContent>

@@ -138,7 +138,7 @@
     @apply text-2xl uppercase font-semibold;
   }
   h3 {
-    @apply text-xl uppercase font-semibold;
+    @apply text-lg tracking-[2px] uppercase font-semibold;
   }
   h4 {
     @apply text-sm font-semibold;
