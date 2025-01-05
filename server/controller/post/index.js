@@ -121,6 +121,7 @@ async function getPostsFromFollowings(req, res) {
 async function getPublicPosts(req, res) {
   const { limit } = req.query;
   try {
+    console.log(req);
     const total = parseInt(limit) || 5;
     const posts = await Post.findAll({
       limit: total,
@@ -162,6 +163,7 @@ async function getPublicPosts(req, res) {
         const { id: userId, username, Profile } = User;
         const { fullname, avatar } = Profile;
         const images = post.PostGalleries.map((gallery) => gallery.image);
+        const isOwner = req.user.userId === userId;
 
         return {
           userId,
@@ -174,7 +176,7 @@ async function getPublicPosts(req, res) {
           commentCount,
           likeCount,
           createdAt,
-          isOwner: false,
+          isOwner,
         };
       })
     );
@@ -197,7 +199,6 @@ async function getPostDetail(req, res) {
   const { userId } = req.user;
   const { postId } = req.params;
   try {
-    // Mengambil post berdasarkan postId
     const post = await Post.findByPk(postId, {
       include: [
         {
@@ -206,13 +207,13 @@ async function getPostDetail(req, res) {
           include: [
             {
               model: Profile,
-              attributes: ["fullname", "avatar"], // Mengambil fullname dan avatar
+              attributes: ["fullname", "avatar"],
             },
           ],
         },
         {
           model: PostGallery,
-          attributes: ["image"], // Mengambil gambar dari gallery
+          attributes: ["image"],
         },
       ],
     });

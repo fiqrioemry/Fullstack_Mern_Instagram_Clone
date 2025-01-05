@@ -13,16 +13,16 @@ const Caption = ({ user }) => {
           <div className="text-sm space-y-2">
             <div className="font-medium">{user.username}</div>
             <div className="text-justify">{user.content}</div>
-            <div className="text-xs">
+            <div>
               <div className="flex items-center gap-x-3">
                 <Timestamp createdAt={user.createdAt} />
                 <div>
                   {user.likeCount !== 0 && (
-                    <Button>{user.likeCount} Likes</Button>
+                    <Button size="xs">{user.likeCount} Likes</Button>
                   )}
                 </div>
                 <div>
-                  <Button>Reply</Button>
+                  <Button size="xs">Reply</Button>
                 </div>
               </div>
             </div>

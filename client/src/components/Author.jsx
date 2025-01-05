@@ -7,7 +7,6 @@ import PostOptions from "./modal/PostOptions";
 import { ModalContainer } from "./modal/ModalContainer";
 
 const Author = ({ user }) => {
-  console.log(user);
   return (
     <div>
       <div className="flex">

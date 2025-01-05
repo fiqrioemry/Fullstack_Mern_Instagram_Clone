@@ -19,10 +19,12 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useEffect, useRef, useState } from "react";
 import useHandleDarkMode from "../../hooks/useHandleDarkMode";
+import { useAuthStore } from "../../store/useAuthStore";
 
 // eslint-disable-next-line react/prop-types
 function MenuOptions({ openSearch }) {
   const ref = useRef(null);
+  const { userSignOut } = useAuthStore();
   const [open, setOpen] = useState(false);
   const { handleDarkMode, darkMode } = useHandleDarkMode();
   const [showModeToggle, setShowModeToggle] = useState(false);
@@ -70,7 +72,7 @@ function MenuOptions({ openSearch }) {
               <Moon />
               <span>Switch appearance</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={userSignOut}>
               <LogOut />
               <span>Log out</span>
             </DropdownMenuItem>

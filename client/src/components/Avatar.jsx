@@ -7,7 +7,7 @@ const UserAvatar = ({ user, width = 8, height = 8 }) => {
     .split(" ")
     .map((word) => word[0])
     .join("");
-  console.log(user);
+
   return (
     <>
       <Avatar className={cn(`h-${height} w-${width}`, "border rounded-full")}>

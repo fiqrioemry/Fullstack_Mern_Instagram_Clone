@@ -58,4 +58,18 @@ export const useAuthStore = create((set) => ({
       <Navigate to="/" />;
     }
   },
+
+  userSignOut: async () => {
+    try {
+      set({ isAuthLoading: true });
+      const response = await axiosInstance.post("/api/auth/signout");
+      toast.success(response.data.message);
+      Cookies.remove("accessToken");
+      set({ userData: [] });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ isAuthLoading: false });
+    }
+  },
 }));

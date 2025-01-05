@@ -39,18 +39,17 @@ export const usePostStore = create((set) => ({
 
   getPublicPosts: async (limit = 10) => {
     try {
-      const response = await axiosInstance.delete(
+      const response = await axiosInstance.get(
         `/api/post/public?limit=${limit}`
       );
       set({ posts: response.data.data });
-      toast.success(response.data.message);
     } catch (error) {
       console.log(error);
       set({ posts: [] });
     }
   },
 
-  getFollowingPosts: async (limit = 10) => {
+  getFollowingPosts: async (limit = 5) => {
     try {
       const response = await axiosInstance.get(
         `/api/post/user/followings?limit=${limit}`

@@ -10,7 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: " text-primary hover:text-primary/50 font-semibold",
+        default: "text-primary hover:text-primary/50 font-semibold",
         follow: "bg-follow hover:bg-follow-hover text-primary h-10 shadow-sm",
         nav: "hover:bg-foreground-hover rounded-md w-full",
         ghost:
@@ -19,6 +19,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-7 rounded-md py-2 px-4 text-sm",
+        xs: "h-7 rounded-md py-2 px-2 text-xs",
         sm: "h-8 rounded-md py-2 px-4 text-sm",
         md: "h-9 rounded-md px-3 py-5 text-md",
         lg: "h-12 rounded-md px-3 py-5 text-lg",
