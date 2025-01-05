@@ -17,7 +17,7 @@ const UserFollowers = () => {
 
   const handleCloseModal = () => {
     setMount(false);
-    navigate(`/${username}`);
+    navigate(-1);
   };
 
   useEffect(() => {

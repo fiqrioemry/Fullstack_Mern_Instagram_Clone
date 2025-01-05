@@ -3,8 +3,6 @@ import { useEffect } from "react";
 import UserProfile from "../components/UserProfile";
 import { useAuthStore } from "../store/useAuthStore";
 import { useUserStore } from "../store/useUserStore";
-import UserFollowers from "../components/modal/UserFollowers";
-import UserFollowings from "../components/modal/UserFollowings";
 import { Outlet, useParams, useNavigate } from "react-router-dom";
 import { Bookmark, Grid2X2, SquareUserRound } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,7 +13,7 @@ const Profile = () => {
   const { username } = useParams();
   const { userData } = useAuthStore();
   const { userProfile, getUserProfile, getUserPosts } = useUserStore();
-
+  console.log(username);
   useEffect(() => {
     getUserProfile(username);
   }, [username, getUserProfile]);
@@ -34,8 +32,6 @@ const Profile = () => {
 
   return (
     <div className="flex justify-center">
-      <UserFollowers />
-      <UserFollowings />
       <div className="max-w-4xl w-full mt-14 mb-14">
         <div className="md:px-0 px-4 md:py-0 py-6">
           {/* user profile */}

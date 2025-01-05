@@ -14,6 +14,8 @@ import DetailPostModal from "./components/modal/DetailPostModal";
 import UserPosts from "./components/UserPosts";
 import UserTags from "./components/UserTags";
 import UserSaved from "./components/UserSaved";
+import UserFollowers from "./components/modal/UserFollowers";
+import UserFollowings from "./components/modal/UserFollowings";
 
 function App() {
   const location = useLocation();
@@ -63,6 +65,8 @@ function App() {
       </Routes>
       {background && (
         <Routes>
+          <Route path=":username/followers/" element={<UserFollowers />} />
+          <Route path=":username/followings/" element={<UserFollowings />} />
           <Route path="p/:id" element={<DetailPostModal />} />
         </Routes>
       )}

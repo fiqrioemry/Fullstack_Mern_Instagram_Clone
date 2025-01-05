@@ -7,16 +7,15 @@ import { useProvider } from "../context/GlobalProvider";
 import { useUserStore } from "../store/useUserStore";
 
 const UserPosts = () => {
-  const { userData } = useProvider();
-  const { userPosts, userProfile } = useUserStore();
   const navigate = useNavigate();
   const location = useLocation();
-  const { setMount, setBackground } = useProvider();
+  const { userPosts, userProfile } = useUserStore();
+  const { setMount, userData, setBackground } = useProvider();
 
   const handleNavigate = (postId) => {
     setMount(true);
     setBackground(location);
-    navigate(`/p/${postId}`, { state: { background: location } });
+    navigate(`/p/${postId}`);
   };
 
   return (
