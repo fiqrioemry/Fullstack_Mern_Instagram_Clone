@@ -86,7 +86,6 @@ async function getUserProfile(req, res) {
       user.countPosts(),
     ]);
 
-    // Bandingkan userId untuk menentukan apakah ini profil kita sendiri
     const isCurrentUser = user.id === userId;
 
     return res.status(200).send({
@@ -324,11 +323,10 @@ async function getFollowers(req, res) {
 }
 
 async function getFollowings(req, res) {
-  const { userId } = req.user; // ID pengguna saat ini
-  const { username } = req.params; // Username pengguna target
+  const { userId } = req.user;
+  const { username } = req.params;
 
   try {
-    // Fetch ID user berdasarkan username
     const user = await User.findOne({
       where: { username },
       attributes: ["id"],
@@ -338,7 +336,6 @@ async function getFollowings(req, res) {
       return res.status(404).send({ message: "User not found" });
     }
 
-    // Jalankan dua query secara paralel
     const [userFollowings, myFollowings] = await Promise.all([
       user.getFollowings({
         limit: 10,

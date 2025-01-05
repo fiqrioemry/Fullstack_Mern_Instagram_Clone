@@ -76,9 +76,9 @@
 
     --follow-hover: 201 90% 27.5%;
 
-    --border: 0 0% 32.2%;
+    --border: 0 0% 63.9%;
 
-    --foreground: 0 0% 96.1%;
+    --foreground: 0 0% 63.9%;
 
     --foreground-hover: 0 0% 83.1%;
   }
@@ -165,8 +165,9 @@
   h4 {
     @apply text-sm font-semibold;
   }
+
   .navbar {
-    @apply bg-background py-3 px-6 fixed top-0 right-0 left-0 md:hidden border-b border-border z-10;
+    @apply bg-background py-3 px-6 fixed top-0 right-0 left-0 md:hidden border-b z-10;
   }
 
   .sidebar {
@@ -174,11 +175,11 @@
   }
 
   .searchpanel {
-    @apply relative md:absolute py-2 md:py-0 bg-background z-20 h-full border-border border-r overflow-hidden duration-300 transition-all;
+    @apply relative md:absolute py-2 md:py-0 bg-background z-20 h-full border-r overflow-hidden duration-300 transition-all;
   }
 
   .searchbar {
-    @apply fixed top-0 bottom-0 left-[75px] w-[325px] h-full bg-background border-border border-r z-10;
+    @apply fixed top-0 bottom-0 left-[75px] w-[325px] h-full bg-background  border-r z-10;
   }
 
   .post_card {

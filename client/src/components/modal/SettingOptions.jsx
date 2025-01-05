@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import { DialogClose } from "@/components/ui/dialog";
+/* eslint-disable react/prop-types */
 import { Button } from "../ui/button";
+import { DialogClose } from "@/components/ui/dialog";
 
 const SettingOptions = ({ user }) => {
   return (

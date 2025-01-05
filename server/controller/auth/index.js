@@ -128,7 +128,7 @@ async function userSignOut(req, res) {
 async function userAuthCheck(req, res) {
   const { userId } = req.user;
   try {
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId, { include: [{ model: Profile }] });
 
     if (!user)
       return res
@@ -139,7 +139,7 @@ async function userAuthCheck(req, res) {
       userId: user.id,
       email: user.email,
       username: user.username,
-      avatar: user.Profile?.avatar,
+      avatar: user.Profile.avatar,
     };
 
     res.status(200).send({

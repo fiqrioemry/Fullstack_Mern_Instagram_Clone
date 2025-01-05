@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import { Button } from "./ui/button";
-import { Ellipsis, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useProvider } from "../context/GlobalProvider";
 import { ModalContainer } from "./modal/ModalContainer";
 import SettingOptions from "./modal/SettingOptions";
 
-const UserProfile = ({ user, data }) => {
+const UserProfile = ({ user }) => {
   const navigate = useNavigate();
   const { setMount, setBackground } = useProvider();
 
@@ -44,21 +44,18 @@ const UserProfile = ({ user, data }) => {
               </div>
             ) : (
               <div className="flex items-center gap-2 col-span-3 md:col-span-2">
-                <Button variant="custom" size="md" onClick={handleNavigate}>
+                <Button variant="follow" onClick={handleNavigate}>
                   <div>Follow</div>
                 </Button>
-                <Button variant="primary" size="md">
-                  Message
-                </Button>
-                <ModalContainer title={<Ellipsis size={24} />}>
-                  <SettingOptions user={user} />
-                </ModalContainer>
+                <Button variant="follow">Message</Button>
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-x-6 text-md">
-            <div>{user.posts} Post</div>
+          <div className="flex items-center gap-x-4 text-md">
+            <Button className="cursor-default hover:text-primary">
+              {user.posts} Post
+            </Button>
             <Button onClick={() => handleNavigate("/followers/")}>
               {user.followers} Followers
             </Button>
