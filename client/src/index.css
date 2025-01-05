@@ -159,6 +159,24 @@
     @apply fixed top-0 bottom-0 left-[75px] w-[325px] h-full bg-background border-r z-10;
   }
 
+  .post_card {
+    @apply absolute
+    flex
+    items-center
+    justify-center
+    top-0
+    bottom-0
+    right-0
+    left-0
+    opacity-0
+    hover:opacity-100
+    bg-black/50
+    duration-300
+    transition-all
+    z-10
+    cursor-pointer;
+  }
+
   .content_margin {
     @apply py-2 px-2 border-b border-muted-foreground/25;
   }

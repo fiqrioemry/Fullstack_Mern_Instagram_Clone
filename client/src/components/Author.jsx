@@ -2,9 +2,10 @@
 import UserAvatar from "./Avatar";
 import Timestamp from "./Timestamp";
 import { Ellipsis } from "lucide-react";
-import MoreOptions from "./modal/MoreOptions";
+import MoreOptions from "./modal/PostOptions";
 import { ModalContainer } from "./modal/ModalContainer";
 import { Link } from "react-router-dom";
+import PostOptions from "./modal/PostOptions";
 
 const Author = ({ user }) => {
   return (
@@ -23,7 +24,7 @@ const Author = ({ user }) => {
         </div>
         <div className="w-4">
           <ModalContainer title={<Ellipsis size={14} />} tooltip="more options">
-            <MoreOptions />
+            <PostOptions />
           </ModalContainer>
         </div>
       </div>

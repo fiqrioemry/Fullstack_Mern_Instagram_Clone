@@ -55,7 +55,7 @@ const UserPosts = () => {
               key={post.postId}
               className="relative"
             >
-              <div className="absolute flex items-center justify-center top-0 bottom-0 right-0 left-0 opacity-0 hover:opacity-100 bg-black/50 duration-300 transition-all z-10 cursor-pointer">
+              <div className="post_card">
                 <div className="flex items-center gap-x-6">
                   <div className="flex gap-x-2">
                     {post.commentCount}

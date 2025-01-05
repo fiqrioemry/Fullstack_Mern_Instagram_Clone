@@ -4,20 +4,19 @@ import Author from "../Author";
 import { Button } from "../ui/button";
 import PostControl from "../PostControl";
 import Galleries from "../posts/Galleries";
+import { useNavigate } from "react-router-dom";
 import CommentForm from "../posts/CommentForm";
 import MiniCaption from "../posts/MiniCaption";
 import { useProvider } from "../../context/GlobalProvider";
-import { useLocation, useNavigate } from "react-router-dom";
 
 const Posts = ({ posts }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { setMount, setBackground } = useProvider();
 
   const handleNavigate = (postId) => {
     setMount(true);
-    setBackground(location);
-    navigate(`/p/${postId}`, { state: { background: location } });
+    setBackground("/");
+    navigate(`/p/${postId}`);
   };
 
   return (

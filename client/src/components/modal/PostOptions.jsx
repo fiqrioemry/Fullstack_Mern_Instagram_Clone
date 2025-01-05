@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { DialogClose } from "@radix-ui/react-dialog";
 
-const MoreOptions = () => {
+const PostOptions = () => {
   return (
     <div>
       <button className="w-full border-muted-foreground/25 h-12 border-b">
@@ -18,4 +18,4 @@ const MoreOptions = () => {
   );
 };
 
-export default MoreOptions;
+export default PostOptions;

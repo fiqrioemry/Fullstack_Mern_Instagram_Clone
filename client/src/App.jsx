@@ -20,8 +20,7 @@ import UserFollowings from "./components/modal/UserFollowings";
 function App() {
   const location = useLocation();
   const { background } = useProvider();
-  console.log(location);
-  console.log(background);
+
   return (
     <>
       {/* Routes utama */}

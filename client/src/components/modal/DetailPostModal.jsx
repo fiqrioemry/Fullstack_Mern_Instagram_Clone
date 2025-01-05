@@ -11,13 +11,14 @@ const DetailPostModal = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { mount, setMount } = useProvider();
   const { getPostDetail, post } = usePostStore();
   const { getComments, comments } = useCommentStore();
   const isPostModal = location.pathname === `/p/${id}`;
+  const { mount, setMount, setBackground } = useProvider();
 
   const handleCloseModal = () => {
     setMount(false);
+    setBackground(null);
     navigate(-1);
   };
   useEffect(() => {
