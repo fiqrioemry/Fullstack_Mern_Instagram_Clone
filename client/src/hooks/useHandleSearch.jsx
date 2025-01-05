@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 
 const useHandleSearch = () => {
   const searchRef = useRef(null);
-  const buttonRef = useRef(null);
   const [openSearch, setOpenSearch] = useState(false);
 
   const handleSearch = () => {
@@ -13,8 +12,7 @@ const useHandleSearch = () => {
     if (
       openSearch === true &&
       searchRef.current &&
-      !searchRef.current.contains(event.target) &&
-      !buttonRef.current.contains(event.target)
+      !searchRef.current.contains(event.target)
     ) {
       setOpenSearch(false);
     }
@@ -30,13 +28,12 @@ const useHandleSearch = () => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openSearch]);
+
   return {
-    buttonRef,
     searchRef,
     openSearch,
     handleSearch,

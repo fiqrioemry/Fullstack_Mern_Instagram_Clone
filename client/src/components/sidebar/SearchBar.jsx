@@ -3,11 +3,11 @@ import { animateSearch } from "../../config";
 import { Input } from "@/components/ui/input";
 
 // eslint-disable-next-line react/prop-types
-const SidebarSearchPanel = ({ openSearch, searchRef }) => {
+const Searchbar = ({ openSearch, searchRef }) => {
   return (
     <motion.div
       ref={searchRef}
-      className="searchbar_wrapper"
+      className="searchbar"
       initial="close"
       animate={openSearch ? "open" : "close"}
       variants={animateSearch}
@@ -24,4 +24,4 @@ const SidebarSearchPanel = ({ openSearch, searchRef }) => {
   );
 };
 
-export default SidebarSearchPanel;
+export default Searchbar;

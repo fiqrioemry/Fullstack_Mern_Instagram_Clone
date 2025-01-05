@@ -1,6 +1,10 @@
 import { Camera } from "lucide-react";
+import { useUserStore } from "../store/useUserStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 const UserTags = () => {
+  const { userData } = useAuthStore();
+  const { userProfile } = useUserStore();
   return (
     <div className="text-center space-y-3 py-12">
       <div className="flex items-center justify-center">
@@ -8,14 +12,16 @@ const UserTags = () => {
           <Camera size={50} />
         </div>
       </div>
-      <div>
-        <h1 className="text-2xl font-semibold">PHOTOS OF YOU</h1>
-      </div>
-      <div className="flex justify-center">
-        <div className="max-w-96 text-sm">
-          When you share photos, they will appear on your profile.
+      {userData.username === userProfile.username ? (
+        <div className="space-y-6">
+          <h2>PHOTOS OF YOU</h2>
+          <div>When you share photos, they will appear on your profile.</div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <h2>no photos</h2>
+        </div>
+      )}
     </div>
   );
 };

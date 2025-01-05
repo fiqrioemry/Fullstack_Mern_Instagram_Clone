@@ -317,7 +317,7 @@ async function getUserPosts(req, res) {
     if (!posts.length) {
       return res
         .status(200)
-        .send({ success: true, message: "This user has no post" });
+        .send({ success: true, data: [], message: "This user has no post" });
     }
 
     const userPosts = await Promise.all(

@@ -131,15 +131,31 @@
     @apply bg-background text-foreground;
   }
 
-  .sidebar_wrapper {
+  h1 {
+    @apply text-3xl uppercase font-semibold;
+  }
+  h2 {
+    @apply text-2xl uppercase font-semibold;
+  }
+  h3 {
+    @apply text-xl uppercase font-semibold;
+  }
+  h4 {
+    @apply text-sm font-semibold;
+  }
+  .navbar {
+    @apply bg-background py-3 px-6 fixed top-0 right-0 left-0 md:hidden border-b z-10;
+  }
+
+  .sidebar {
     @apply fixed bottom-0 right-0 left-0 w-full md:relative md:w-[75px] xl:w-[245px] z-10 duration-300 transition-all;
   }
 
-  .sidebar_content_wrapper {
+  .searchpanel {
     @apply relative md:absolute py-2 md:py-0 bg-background z-20 h-full border-r overflow-hidden duration-300 transition-all;
   }
 
-  .searchbar_wrapper {
+  .searchbar {
     @apply fixed top-0 bottom-0 left-[75px] w-[325px] h-full bg-background border-r z-10;
   }
 

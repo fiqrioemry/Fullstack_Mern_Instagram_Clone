@@ -46,13 +46,13 @@ export const useUserStore = create((set) => ({
   getFollowers: async (username) => {
     try {
       set({ isUserLoading: true });
-      console.log(username);
       const response = await axiosInstance.get(
         `/api/user/${username}/followers`
       );
       set({ followers: response.data.data });
     } catch (error) {
       console.error(error);
+      set({ followers: null });
     } finally {
       set({ isUserLoading: false });
     }
@@ -68,6 +68,7 @@ export const useUserStore = create((set) => ({
       set({ followings: response.data.data });
     } catch (error) {
       console.error(error);
+      set({ followings: null });
     } finally {
       set({ isUserLoading: false });
     }

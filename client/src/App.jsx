@@ -8,9 +8,12 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import PostDetails from "./pages/PostDetails";
 import Layout from "./components/layout/Layout";
+import { useProvider } from "./context/GlobalProvider";
 import { Route, Routes, useLocation } from "react-router-dom";
 import DetailPostModal from "./components/modal/DetailPostModal";
-import { useProvider } from "./context/GlobalProvider";
+import UserPosts from "./components/UserPosts";
+import UserTags from "./components/UserTags";
+import UserSaved from "./components/UserSaved";
 
 function App() {
   const location = useLocation();
@@ -48,8 +51,13 @@ function App() {
         >
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
-          <Route path=":username/*" element={<Profile />} />
+          <Route path=":username/*" element={<Profile />}>
+            <Route index element={<UserPosts />} />
+            <Route path="tags" element={<UserTags />} />
+            <Route path="saved" element={<UserSaved />} />
+          </Route>
           <Route path="settings" element={<Settings />} />
+          <Route path="explore" element={<Explore />} />
           <Route path="p/:id" element={<PostDetails />} />
         </Route>
       </Routes>

@@ -18,7 +18,9 @@ const buttonVariants = cva(
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        nav: "hover:bg-accent flex md:justify-start gap-x-3 w-full capitalize",
+        nav: "hover:bg-accent flex justify-center md:justify-start gap-x-3 w-full capitalize",
+        following:
+          "bg-zinc-700 hover:bg-zinc-600 text-background dark:text-foreground",
         custom:
           "bg-custom hover:bg-custom/80 text-background dark:text-foreground",
       },

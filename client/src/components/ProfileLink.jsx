@@ -7,7 +7,7 @@ import { useProvider } from "../context/GlobalProvider";
 import { buttonVariants } from "@/components/ui/button";
 
 function ProfileLink() {
-  const { currentPath, userData } = useProvider();
+  const { currentPath, userData, openSearch } = useProvider();
   const path = `/${userData.username}`;
   const isActive = currentPath === path;
 
@@ -20,13 +20,11 @@ function ProfileLink() {
       })}
     >
       <UserAvatar user={userData} />
-      <div
-        className={`${cn("hidden lg:block", {
-          "font-bold": isActive,
-        })}`}
-      >
-        Profile
-      </div>
+      {!openSearch && (
+        <div className={`${cn(isActive && "font-bold", "hidden lg:block")}`}>
+          Profile
+        </div>
+      )}
     </Link>
   );
 }

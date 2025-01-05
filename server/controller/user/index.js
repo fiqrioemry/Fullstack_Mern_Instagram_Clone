@@ -251,9 +251,11 @@ async function unfollowUser(req, res) {
 }
 
 async function getFollowers(req, res) {
-  const { username } = req.params;
+  const { userId } = req.user; // ID pengguna saat ini
+  const { username } = req.params; // Username pengguna target
 
   try {
+    // Ambil ID user berdasarkan username
     const user = await User.findOne({
       where: { username },
       attributes: ["id"],
@@ -263,33 +265,48 @@ async function getFollowers(req, res) {
       return res.status(404).send({ message: "User not found" });
     }
 
-    const followers = await user.getFollowers({
-      limit: 10,
-      attributes: ["id", "username"],
-      include: [
-        {
-          model: Profile,
-          attributes: ["fullname", "avatar"],
+    // Jalankan dua operasi fetching secara paralel
+    const [userFollowers, myFollowings] = await Promise.all([
+      user.getFollowers({
+        limit: 10,
+        attributes: ["id", "username"],
+        include: [
+          {
+            model: Profile,
+            attributes: ["fullname", "avatar"],
+          },
+        ],
+      }),
+      User.findByPk(userId, {
+        include: {
+          model: User,
+          as: "Followings",
+          attributes: ["id"],
         },
-      ],
-    });
+      }),
+    ]);
 
-    if (followers.length === 0) {
+    if (userFollowers.length === 0) {
       return res
         .status(200)
-        .send({ message: "No Followers is found", data: [] });
+        .send({ message: "User has no followers", data: [] });
     }
 
-    const followersData = followers.map((follower) => ({
+    // Ekstrak daftar ID followings kita
+    const myFollowingIds = myFollowings.Followings.map((f) => f.id);
+
+    // Tandai followers yang juga kita ikuti
+    const enrichedFollowers = userFollowers.map((follower) => ({
       userId: follower.id,
       username: follower.username,
       fullname: follower.Profile.fullname,
       avatar: follower.Profile.avatar,
+      isFollowedByMe: myFollowingIds.includes(follower.id), // Periksa apakah kita mengikuti mereka
     }));
 
     res.status(200).send({
       success: true,
-      data: followersData,
+      data: enrichedFollowers,
     });
   } catch (error) {
     return res.status(500).send({
@@ -301,34 +318,53 @@ async function getFollowers(req, res) {
 }
 
 async function getFollowings(req, res) {
-  const { username } = req.params;
+  const { userId } = req.user; // ID pengguna saat ini
+  const { username } = req.params; // Username pengguna target
 
   try {
+    // Fetch ID user berdasarkan username
     const user = await User.findOne({
       where: { username },
       attributes: ["id"],
     });
 
     if (!user) {
-      return res.status(404).send({ message: "User not found " });
+      return res.status(404).send({ message: "User not found" });
     }
 
-    const result = await user.getFollowings({
-      limit: 10,
-      attributes: ["id", "username"],
-      include: [{ model: Profile, attributes: ["fullname", "avatar"] }],
-    });
+    // Jalankan dua query secara paralel
+    const [userFollowings, myFollowings] = await Promise.all([
+      user.getFollowings({
+        limit: 10,
+        attributes: ["id", "username"],
+        include: [{ model: Profile, attributes: ["fullname", "avatar"] }],
+      }),
+      User.findByPk(userId, {
+        include: {
+          model: User,
+          as: "Followings",
+          attributes: ["id"],
+        },
+      }),
+    ]);
 
-    const followings = result.map((following) => ({
+    const followings = userFollowings.map((following) => ({
       userId: following.id,
       username: following.username,
       fullname: following.Profile.fullname,
       avatar: following.Profile.avatar,
     }));
 
+    const myFollowingIds = myFollowings.Followings.map((f) => f.id);
+
+    const enrichedFollowings = followings.map((f) => ({
+      ...f,
+      isFollowedByMe: myFollowingIds.includes(f.userId),
+    }));
+
     res.status(200).send({
       success: true,
-      data: followings,
+      data: enrichedFollowings,
     });
   } catch (error) {
     return res.status(500).send({

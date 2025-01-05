@@ -4,8 +4,11 @@ import { Camera, HeartIcon, MessageCircle } from "lucide-react";
 import Galleries from "./posts/Galleries";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useProvider } from "../context/GlobalProvider";
+import { useUserStore } from "../store/useUserStore";
 
-const UserPosts = ({ posts }) => {
+const UserPosts = () => {
+  const { userData } = useProvider();
+  const { userPosts, userProfile } = useUserStore();
   const navigate = useNavigate();
   const location = useLocation();
   const { setMount, setBackground } = useProvider();
@@ -18,34 +21,36 @@ const UserPosts = ({ posts }) => {
 
   return (
     <div>
-      {!posts ? (
+      {!userPosts ? (
         <div className="h-[50vh] flex items-center justify-center text-3xl font-semibold">
           Loading data...
         </div>
-      ) : posts.length === 0 ? (
+      ) : userPosts.length === 0 ? (
         <div className="text-center space-y-3 py-12">
           <div className="flex items-center justify-center">
             <div className="p-4  rounded-full border">
               <Camera size={50} />
             </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-semibold">SHARE PHOTOS</h1>
-          </div>
-          <div className="flex justify-center">
-            <div className="max-w-96 text-sm">
-              When you share photos, they will appear on your profile.
+          {userProfile.userId === userData.userId ? (
+            <div className="space-y-6">
+              <h2>SHARE PHOTOS</h2>
+              <div className="text-sm">
+                When you share photos, they will appear on your profile.
+              </div>
+              <Button variant="custom" size="md">
+                Share a photos
+              </Button>
             </div>
-          </div>
-          <div>
-            <Button variant="custom" size="md">
-              Share a photos
-            </Button>
-          </div>
+          ) : (
+            <div className="space-y-6">
+              <h2>No Photo yet</h2>
+            </div>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-2">
-          {posts.map((post) => (
+          {userPosts.map((post) => (
             <div
               onClick={() => handleNavigate(post.postId)}
               key={post.postId}

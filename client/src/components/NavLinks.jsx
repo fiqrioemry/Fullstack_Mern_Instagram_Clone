@@ -6,11 +6,7 @@ import { Compass, Heart, Home, PlusSquare, Search } from "lucide-react";
 
 const links = [
   { name: "Home", href: "/", icon: Home },
-  {
-    name: "Search",
-    icon: Search,
-    hideOnMobile: true,
-  },
+  { name: "Search", icon: Search, hideOnMobile: true },
   { name: "Explore", href: "/explore", icon: Compass },
   {
     name: "Notifications",
@@ -18,10 +14,7 @@ const links = [
     icon: Heart,
     hideOnMobile: true,
   },
-  {
-    name: "Create",
-    icon: PlusSquare,
-  },
+  { name: "Create", icon: PlusSquare },
 ];
 
 function NavLinks() {
@@ -31,38 +24,36 @@ function NavLinks() {
   return (
     <>
       {links.map((link) => {
-        const LinkIcon = link.icon;
+        const Icon = link.icon;
         const isActive = currentPath === link.href;
         const handleClick =
           link.name === "Search"
             ? handleSearch
             : link.name === "Create"
-            ? () => handleOpenModal("search")
-            : null;
+            ? () => handleOpenModal("create")
+            : undefined;
 
         return (
           <Link
             key={link.name}
-            onClick={handleClick}
             to={link.href}
+            onClick={handleClick}
             className={buttonVariants({
               variant: "nav",
-              className: cn("hidden lg:flex", {
+              className: cn({
                 "hidden md:flex": link.hideOnMobile,
-                hidden: openSearch,
               }),
               size: "lg",
             })}
           >
-            <LinkIcon className="w-6" />
-            <span
-              className={`${cn("hidden lg:block", {
-                "font-bold": isActive,
-                hidden: openSearch,
-              })}`}
-            >
-              {link.name}
-            </span>
+            <Icon className="w-8" />
+            {!openSearch && (
+              <span
+                className={cn("hidden xl:block", { "font-bold": isActive })}
+              >
+                {link.name}
+              </span>
+            )}
           </Link>
         );
       })}
