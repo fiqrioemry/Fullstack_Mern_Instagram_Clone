@@ -1,24 +1,21 @@
 /* eslint-disable react/prop-types */
 import { Button } from "./ui/button";
 import { Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useProvider } from "../context/GlobalProvider";
-import { useLocation, useNavigate } from "react-router-dom";
-import UserSettings from "./modal/UserSettings";
 
 const UserProfile = ({ user, data }) => {
-  const location = useLocation();
   const navigate = useNavigate();
   const { setMount, setBackground } = useProvider();
 
   const handleNavigate = (path) => {
     setMount(true);
-    setBackground(location);
+    setBackground(`/${user.username}`);
     navigate(`/${user.username}${path}`);
   };
 
   return (
     <div className="grid grid-cols-3 h-60">
-      <UserSettings />
       <div className="flex justify-center col-span-1">
         <div className="h-24 w-24 md:w-36 md:h-36 border rounded-full">
           <img src={user.avatar} alt="user_avatar" />
@@ -33,11 +30,7 @@ const UserProfile = ({ user, data }) => {
 
             {data.username === user.username ? (
               <div className="flex items-center gap-2 col-span-3 md:col-span-2">
-                <Button
-                  variant="primary"
-                  size="md"
-                  onClick={() => handleNavigate("")}
-                >
+                <Button variant="primary" size="md">
                   <div>Edit Profile</div>
                 </Button>
                 <Button variant="primary" size="md">

@@ -20,7 +20,8 @@ import UserFollowings from "./components/modal/UserFollowings";
 function App() {
   const location = useLocation();
   const { background } = useProvider();
-
+  console.log(location);
+  console.log(background);
   return (
     <>
       {/* Routes utama */}
@@ -53,8 +54,9 @@ function App() {
         >
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
-          <Route path=":username/*" element={<Profile />}>
+          <Route path=":username" element={<Profile />}>
             <Route index element={<UserPosts />} />
+            <Route path="*" element={<UserPosts />} />
             <Route path="tags" element={<UserTags />} />
             <Route path="saved" element={<UserSaved />} />
           </Route>

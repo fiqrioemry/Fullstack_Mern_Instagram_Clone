@@ -14,6 +14,7 @@ export const GlobalProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+
   const [mount, setMount] = useState(false);
   const [background, setBackground] = useState(null);
   const { isUserAuth, userData, userAuthCheck } = useAuthStore();

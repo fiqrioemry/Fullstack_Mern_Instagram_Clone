@@ -11,12 +11,13 @@ const UserFollowers = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { username } = useParams();
-  const { mount, setMount } = useProvider();
   const { getFollowers, followers } = useUserStore();
+  const { mount, setMount, setBackground } = useProvider();
   const isModalOpen = location.pathname === `/${username}/followers/`;
 
   const handleCloseModal = () => {
     setMount(false);
+    setBackground(null);
     navigate(-1);
   };
 
@@ -26,7 +27,7 @@ const UserFollowers = () => {
     }
   }, [getFollowers, mount, username]);
 
-  if (!followers || !mount) return null;
+  if (!mount) return null;
 
   return (
     <>

@@ -5,6 +5,9 @@ import { useAuthStore } from "../store/useAuthStore";
 const UserTags = () => {
   const { userData } = useAuthStore();
   const { userProfile } = useUserStore();
+
+  if (!userProfile) return null;
+
   return (
     <div className="text-center space-y-3 py-12">
       <div className="flex items-center justify-center">

@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Button } from "./ui/button";
-import { Camera, HeartIcon, MessageCircle } from "lucide-react";
 import Galleries from "./posts/Galleries";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useProvider } from "../context/GlobalProvider";
 import { useUserStore } from "../store/useUserStore";
+import { useProvider } from "../context/GlobalProvider";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Camera, HeartIcon, MessageCircle } from "lucide-react";
 
 const UserPosts = () => {
   const navigate = useNavigate();
