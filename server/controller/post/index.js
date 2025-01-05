@@ -99,6 +99,7 @@ async function getPostsFromFollowings(req, res) {
           commentCount,
           likeCount,
           createdAt,
+          isOwner: false,
         };
       })
     );
@@ -173,6 +174,7 @@ async function getPublicPosts(req, res) {
           commentCount,
           likeCount,
           createdAt,
+          isOwner: false,
         };
       })
     );
@@ -192,6 +194,7 @@ async function getPublicPosts(req, res) {
 
 // get the detail of post
 async function getPostDetail(req, res) {
+  const { userId } = req.user;
   const { postId } = req.params;
   try {
     // Mengambil post berdasarkan postId
@@ -224,7 +227,7 @@ async function getPostDetail(req, res) {
     const likeCount = await Like.count({
       where: { entityId: postId, entityType: "post" },
     });
-
+    const isOwner = post.User.id === userId;
     const postDetail = {
       userId: post.User.id,
       postId: post.id,
@@ -236,6 +239,7 @@ async function getPostDetail(req, res) {
       commentCount,
       likeCount,
       createdAt: post.createdAt,
+      isOwner,
     };
 
     res.status(200).json({ success: true, data: postDetail });
@@ -320,6 +324,8 @@ async function getUserPosts(req, res) {
         .send({ success: true, data: [], message: "This user has no post" });
     }
 
+    const isOwner = userId === req.user.userId;
+
     const userPosts = await Promise.all(
       posts.map(async (post) => {
         const [commentCount, likeCount] = await Promise.all([
@@ -338,6 +344,7 @@ async function getUserPosts(req, res) {
           createdAt,
           likeCount,
           commentCount,
+          isOwner,
         };
       })
     );
