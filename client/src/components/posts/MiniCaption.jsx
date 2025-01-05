@@ -6,7 +6,7 @@ const MiniCaption = ({ post }) => {
     <div className="text-sm space-x-2">
       {post.content && (
         <>
-          <Link href={`/dashboard/${post.username}`} className="font-semibold">
+          <Link to={`/${post.username}`} className="font-semibold">
             {post.username}
           </Link>
           <span>{post.content}</span>

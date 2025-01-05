@@ -24,7 +24,7 @@ const Author = ({ user }) => {
         </div>
         <div className="w-4">
           <ModalContainer title={<Ellipsis size={14} />} tooltip="more options">
-            <PostOptions postId={user.postId} />
+            <PostOptions user={user} />
           </ModalContainer>
         </div>
       </div>

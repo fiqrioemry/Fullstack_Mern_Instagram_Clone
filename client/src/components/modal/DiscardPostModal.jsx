@@ -20,26 +20,18 @@ const DiscardPostModal = ({ handleDiscardChanges }) => {
     >
       <DialogContent variant="discard">
         <DialogHeader>
-          <DialogTitle>Discard Post ? </DialogTitle>
+          <DialogTitle>
+            <h4>Discard Post </h4>
+          </DialogTitle>
           <DialogDescription>
             If you leave, your edits wont be saved.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-y-3">
-          <Button
-            variant="destructive"
-            size="md"
-            onClick={handleDiscardChanges}
-          >
+          <Button variant="delete" onClick={handleDiscardChanges}>
             Discard
           </Button>
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={() => handleCloseModal("discard")}
-          >
-            Cancel
-          </Button>
+          <Button onClick={() => handleCloseModal("discard")}>Cancel</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

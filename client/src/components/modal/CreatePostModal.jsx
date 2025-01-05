@@ -57,7 +57,7 @@ const CreatePostModal = () => {
             variant="create"
             className={`${nextInput ? "md:max-w-[48rem]" : ""} `}
           >
-            <div className="flex items-center justify-between py-3 px-3 border-b border-muted-foreground">
+            <div className="flex items-center justify-between py-3 px-3 border-b">
               {nextInput === true && (
                 <ArrowLeft
                   className="cursor-pointer"
@@ -86,7 +86,7 @@ const CreatePostModal = () => {
                     title={"Drag & drop media here"}
                     label={"Select from computer"}
                     style={
-                      "bg-custom px-2 py-2 text-secondary rounded-md cursor-pointer"
+                      "bg-follow px-2 py-2 text-primary rounded-md cursor-pointer"
                     }
                     handleChange={handleChange}
                   />
@@ -127,7 +127,7 @@ const CreatePostModal = () => {
                   <div className="text-sm text-end px-2">
                     <span>{formData.content.length}</span>/ 1000 characters
                   </div>
-                  <Button variant="custom" size="md" type="submit">
+                  <Button variant="follow" type="submit">
                     Create Post
                   </Button>
                 </div>

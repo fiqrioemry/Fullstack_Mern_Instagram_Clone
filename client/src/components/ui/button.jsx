@@ -15,7 +15,7 @@ const buttonVariants = cva(
         nav: "hover:bg-foreground-hover rounded-md w-full",
         ghost:
           "bg-foreground hover:bg-foreground-hover text-primary rounded-md",
-        delete: "bg-foreground text-red-500  hover:bg-foreground-hover w-full ",
+        delete: "font-medium text-red-500 hover:text-red-500/50 ",
       },
       size: {
         default: "h-7 rounded-md py-2 px-4 text-sm",

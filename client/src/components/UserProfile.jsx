@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Button } from "./ui/button";
-import { Settings } from "lucide-react";
+import { Ellipsis, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useProvider } from "../context/GlobalProvider";
 import { ModalContainer } from "./modal/ModalContainer";
@@ -30,18 +30,16 @@ const UserProfile = ({ user, data }) => {
               {user.username}
             </div>
 
-            {data.username === user.username ? (
+            {user.isCurrentUser ? (
               <div className="flex items-center gap-2 col-span-3 md:col-span-2">
-                <Button variant="primary" size="md">
+                <Button variant="ghost">
                   <div>Edit Profile</div>
                 </Button>
 
-                <Button variant="primary" size="md">
-                  View Archieve
-                </Button>
+                <Button variant="ghost">View Archieve</Button>
 
                 <ModalContainer title={<Settings size={24} />}>
-                  <SettingOptions />
+                  <SettingOptions user={user} />
                 </ModalContainer>
               </div>
             ) : (
@@ -52,6 +50,9 @@ const UserProfile = ({ user, data }) => {
                 <Button variant="primary" size="md">
                   Message
                 </Button>
+                <ModalContainer title={<Ellipsis size={24} />}>
+                  <SettingOptions user={user} />
+                </ModalContainer>
               </div>
             )}
           </div>
