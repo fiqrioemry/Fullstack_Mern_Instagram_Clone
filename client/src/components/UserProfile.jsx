@@ -3,6 +3,8 @@ import { Button } from "./ui/button";
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useProvider } from "../context/GlobalProvider";
+import { ModalContainer } from "./modal/ModalContainer";
+import SettingOptions from "./modal/SettingOptions";
 
 const UserProfile = ({ user, data }) => {
   const navigate = useNavigate();
@@ -33,12 +35,14 @@ const UserProfile = ({ user, data }) => {
                 <Button variant="primary" size="md">
                   <div>Edit Profile</div>
                 </Button>
+
                 <Button variant="primary" size="md">
                   View Archieve
                 </Button>
-                <Button variant="primary" size="md">
-                  <Settings />
-                </Button>
+
+                <ModalContainer title={<Settings size={24} />}>
+                  <SettingOptions />
+                </ModalContainer>
               </div>
             ) : (
               <div className="flex items-center gap-2 col-span-3 md:col-span-2">

@@ -2,10 +2,9 @@
 import UserAvatar from "./Avatar";
 import Timestamp from "./Timestamp";
 import { Ellipsis } from "lucide-react";
-import MoreOptions from "./modal/PostOptions";
-import { ModalContainer } from "./modal/ModalContainer";
 import { Link } from "react-router-dom";
 import PostOptions from "./modal/PostOptions";
+import { ModalContainer } from "./modal/ModalContainer";
 
 const Author = ({ user }) => {
   return (

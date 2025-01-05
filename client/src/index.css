@@ -69,6 +69,22 @@
     --chart-5: 27 87% 67%;
 
     --radius: 0.5rem;
+
+    --text-primary: 240 5.9% 10%;
+
+    --text-primary-dark: 0 0% 98%;
+
+    --modal: 0 0% 96.1%;
+
+    --modal-dark: 0 0% 14.9%;
+
+    --modal-border: 0 0% 32.2%;
+
+    --modal-border-dark: 0 0% 32.2%;
+
+    --button-follow: 200.4 98% 39.4%;
+
+    --button-follow-hover: 201 90% 27.5%;
   }
   .dark {
     --background: 240 10% 3.9%;
