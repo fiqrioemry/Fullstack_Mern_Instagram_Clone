@@ -1,9 +1,10 @@
-const multer = require("multer");
-const path = require("path");
+const path = require('path');
+const multer = require('multer');
+const fs = require('fs').promises;
 
 // Storage configuration
 const storage = multer.diskStorage({
-  destination: "uploads/",
+  destination: 'uploads/',
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
   },
@@ -20,11 +21,11 @@ function fileFilter(params) {
 
     const extRegex = allowedExtensions[params];
     if (!extRegex) {
-      return cb(new Error("Invalid file type parameter"), false);
+      return cb(new Error('Invalid file type parameter'), false);
     }
 
     const extName = extRegex.test(
-      path.extname(file.originalname).toLowerCase()
+      path.extname(file.originalname).toLowerCase(),
     );
 
     const mimeType = extRegex.test(file.mimetype);
