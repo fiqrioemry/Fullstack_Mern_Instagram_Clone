@@ -15,7 +15,7 @@ const {
 } = require('../../models');
 const { Op } = require('sequelize');
 
-// get all post from user we follow
+// tested
 async function getPostsFromFollowings(req, res) {
   const { userId } = req.user;
   const { limit } = req.query;
@@ -32,9 +32,7 @@ async function getPostsFromFollowings(req, res) {
     });
 
     if (!user) {
-      return res
-        .status(404)
-        .send({ success: false, message: 'User not found' });
+      return res.status(404).send({ message: 'User not found' });
     }
 
     const followingIds = user.Followings.map(
@@ -43,7 +41,6 @@ async function getPostsFromFollowings(req, res) {
 
     if (followingIds.length === 0) {
       return res.status(200).send({
-        success: true,
         message: 'No posts to show, you are not following anyone.',
         data: [],
       });
@@ -57,25 +54,26 @@ async function getPostsFromFollowings(req, res) {
       include: [
         {
           model: User,
+          as: 'user',
           attributes: ['id', 'username'],
           include: [
             {
               model: Profile,
+              as: 'profile',
               attributes: ['fullname', 'avatar'],
             },
           ],
         },
         {
           model: PostGallery,
+          as: 'gallery',
           attributes: ['image'],
         },
       ],
     });
 
     if (!posts.length) {
-      return res
-        .status(404)
-        .send({ success: false, message: 'No posts found' });
+      return res.status(404).send({ message: 'No posts found' });
     }
 
     const followingPosts = await Promise.all(
@@ -85,10 +83,10 @@ async function getPostsFromFollowings(req, res) {
           Like.count({ where: { entityId: post.id, entityType: 'post' } }),
         ]);
 
-        const { id: postId, content, createdAt, User } = post;
-        const { id: userId, username, Profile } = User;
-        const { fullname, avatar } = Profile;
-        const images = post.PostGalleries.map((gallery) => gallery.image);
+        const { id: postId, content, createdAt, user } = post;
+        const { id: userId, username, profile } = user;
+        const { fullname, avatar } = profile;
+        const images = post.gallery.map((gallery) => gallery.image);
 
         return {
           userId,
@@ -112,14 +110,13 @@ async function getPostsFromFollowings(req, res) {
     });
   } catch (error) {
     res.status(500).send({
-      success: false,
       message: 'Failed to retrieve following posts',
       error: error.message,
     });
   }
 }
 
-// get all the post of all users
+// tested
 async function getPublicPosts(req, res) {
   const { limit } = req.query;
   try {
@@ -131,26 +128,27 @@ async function getPublicPosts(req, res) {
       include: [
         {
           model: User,
+          as: 'user',
           where: { isPrivate: false },
           attributes: ['id', 'username'],
           include: [
             {
               model: Profile,
+              as: 'profile',
               attributes: ['fullname', 'avatar'],
             },
           ],
         },
         {
           model: PostGallery,
+          as: 'gallery',
           attributes: ['image'],
         },
       ],
     });
 
     if (!posts.length) {
-      return res
-        .status(404)
-        .send({ success: false, message: 'No public posts found' });
+      return res.status(404).send({ message: 'No public posts found' });
     }
 
     const publicPosts = await Promise.all(
@@ -160,10 +158,10 @@ async function getPublicPosts(req, res) {
           Like.count({ where: { entityId: post.id, entityType: 'post' } }),
         ]);
 
-        const { id: postId, content, createdAt, User } = post;
-        const { id: userId, username, Profile } = User;
-        const { fullname, avatar } = Profile;
-        const images = post.PostGalleries.map((gallery) => gallery.image);
+        const { id: postId, content, createdAt, user } = post;
+        const { id: userId, username, profile } = user;
+        const { fullname, avatar } = profile;
+        const images = post.gallery.map((gallery) => gallery.image);
         const isOwner = req.user.userId === userId;
 
         return {
@@ -183,19 +181,17 @@ async function getPublicPosts(req, res) {
     );
 
     res.status(200).send({
-      success: true,
-      data: publicPosts,
+      publicPosts,
     });
   } catch (error) {
     return res.status(500).send({
-      success: false,
       message: 'Failed to get public posts',
       error: error.message,
     });
   }
 }
 
-// get the detail of post
+// tested
 async function getPostDetail(req, res) {
   const { userId } = req.user;
   const { postId } = req.params;
@@ -204,103 +200,63 @@ async function getPostDetail(req, res) {
       include: [
         {
           model: User,
+          as: 'user',
           attributes: ['id', 'username'],
           include: [
             {
               model: Profile,
+              as: 'profile',
               attributes: ['fullname', 'avatar'],
             },
           ],
         },
         {
           model: PostGallery,
+          as: 'gallery',
           attributes: ['image'],
         },
       ],
     });
 
     if (!post) {
-      return res
-        .status(404)
-        .send({ success: false, message: 'Post not found' });
+      return res.status(404).send({ message: 'Post not found' });
     }
 
     const commentCount = await Comment.count({ where: { postId } });
     const likeCount = await Like.count({
       where: { entityId: postId, entityType: 'post' },
     });
-    const isOwner = post.User.id === userId;
+    const isOwner = post.user.id === userId;
     const postDetail = {
-      userId: post.User.id,
+      userId: post.user.id,
       postId: post.id,
-      username: post.User.username,
-      fullname: post.User.Profile.fullname,
-      avatar: post.User.Profile.avatar,
+      username: post.user.username,
+      fullname: post.user.profile.fullname,
+      avatar: post.user.profile.avatar,
       content: post.content,
-      images: post.PostGalleries.map((gallery) => gallery.image),
+      images: post.gallery.map((gallery) => gallery.image),
       commentCount,
       likeCount,
       createdAt: post.createdAt,
       isOwner,
     };
 
-    res.status(200).json({ success: true, data: postDetail });
+    res.status(200).json({ postDetail });
   } catch (error) {
     return res.status(500).send({
-      success: false,
       message: 'Failed to get post details',
       error: error.message,
     });
   }
 }
 
-// create new post
-async function createPost(req, res) {
-  // const { userId } = req.userId;
-  const userId = 1;
-  const files = req.files;
-  const { content } = req.body;
-  try {
-    if (!content || files.length === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Content or images are missing' });
-    }
-
-    const newPost = await Post.create({ userId, content });
-
-    const uploadPromises = files.map((fileItem) =>
-      uploadMediaToCloudinary(fileItem.path),
-    );
-
-    const results = await Promise.all(uploadPromises);
-
-    const images = results.map((result) => {
-      return {
-        postId: newPost.id,
-        image: result.secure_url,
-      };
-    });
-
-    await PostGallery.bulkCreate(images);
-
-    res.status(201).send({ success: true, message: 'New post is created' });
-  } catch (error) {
-    return res.status(500).send({
-      success: false,
-      message: 'Failed to create new post',
-      error: error.message,
-    });
-  }
-}
-
+// tested
 async function getUserPosts(req, res) {
   const { username } = req.params;
   let { limit } = req.query;
   limit = parseInt(limit) || 5;
 
   try {
-    // 🔹 Cek apakah user dengan username tersebut ada
     const user = await User.findOne({
       where: { username },
       attributes: ['id', 'isPrivate'],
@@ -318,12 +274,12 @@ async function getUserPosts(req, res) {
 
     if (userId !== requestingUserId) {
       const followRecord = await Follow.findOne({
-        where: { followerId: userId, followingId: requestingUserId },
+        where: { followerId: requestingUserId, followingId: userId },
       });
 
       if (!followRecord) {
         return res.status(403).json({
-          message: 'User does not follow you. You cannot see their posts.',
+          message: 'You must follow this user to see their posts.',
           payload: [],
         });
       }
@@ -394,12 +350,47 @@ async function getUserPosts(req, res) {
   }
 }
 
-// update own post
+async function createPost(req, res) {
+  // const { userId } = req.userId;
+  const userId = 1;
+  const files = req.files;
+  const { content } = req.body;
+  try {
+    if (!content || files.length === 0) {
+      return res.status(400).json({ message: 'Content or images are missing' });
+    }
+
+    const newPost = await Post.create({ userId, content });
+
+    const uploadPromises = files.map((fileItem) =>
+      uploadMediaToCloudinary(fileItem.path),
+    );
+
+    const results = await Promise.all(uploadPromises);
+
+    const images = results.map((result) => {
+      return {
+        postId: newPost.id,
+        image: result.secure_url,
+      };
+    });
+
+    await PostGallery.bulkCreate(images);
+
+    res.status(201).send({ success: true, message: 'New post is created' });
+  } catch (error) {
+    return res.status(500).send({
+      message: 'Failed to create new post',
+      error: error.message,
+    });
+  }
+}
+
 async function updatePost(req, res) {
   const { postId } = req.params;
-  const files = req.files; // Gambar atau file baru yang diupload
-  const { userId } = req.user; // ID User yang sedang login
-  const { content } = req.body; // Konten atau caption baru
+  const files = req.files;
+  const { userId } = req.user;
+  const { content } = req.body;
 
   try {
     const post = await Post.findOne({
@@ -409,7 +400,7 @@ async function updatePost(req, res) {
     if (!post) {
       return res
         .status(404)
-        .json({ success: false, message: 'Post not found or unauthorized' });
+        .json({ message: 'Post not found or unauthorized' });
     }
 
     if (content) {
@@ -447,7 +438,6 @@ async function updatePost(req, res) {
     res.status(200).json({ success: true, message: 'Post is updated' });
   } catch (error) {
     return res.status(500).send({
-      success: false,
       message: 'Failed to get user details',
       error: error.message,
     });
@@ -468,7 +458,7 @@ async function deletePost(req, res) {
     if (!post) {
       return res
         .status(404)
-        .send({ success: false, message: 'Post not found or unauthorized' });
+        .send({ message: 'Post not found or unauthorized' });
     }
 
     const images = await PostGallery.findAll({
@@ -490,7 +480,6 @@ async function deletePost(req, res) {
       .json({ success: true, message: 'Post deleted successfully' });
   } catch (error) {
     return res.status(500).send({
-      success: false,
       message: 'Failed to get user details',
       error: error.message,
     });

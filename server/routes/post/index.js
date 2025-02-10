@@ -16,6 +16,7 @@ const {
 } = require('../../controller/post');
 const { createComment, getComments } = require('../../controller/comment');
 
+router.get('/followings', isAuthenticate, getPostsFromFollowings);
 router.post(
   '/',
   upload('image').array('images', 5),
@@ -29,9 +30,8 @@ router.put(
   updatePost,
 );
 router.delete('/:postId', isAuthenticate, deletePost);
-router.get('/public', isAuthenticate, getPublicPosts);
+router.get('/', isAuthenticate, getPublicPosts);
 router.get('/:postId', isAuthenticate, getPostDetail);
-router.get('/user/followings', isAuthenticate, getPostsFromFollowings);
 
 router.post('/', isAuthenticate, createPost);
 router.delete('/:postId', isAuthenticate, deletePost);

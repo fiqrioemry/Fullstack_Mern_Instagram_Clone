@@ -12,7 +12,6 @@ async function searchUser(req, res) {
   try {
     if (!query) {
       return res.status(400).json({
-        success: false,
         message: "Query parameter 'query' is required",
       });
     }
@@ -38,7 +37,6 @@ async function searchUser(req, res) {
 
     if (users.length === 0) {
       return res.status(404).json({
-        success: false,
         message: 'No users found',
       });
     }
@@ -55,7 +53,6 @@ async function searchUser(req, res) {
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      success: false,
       message: 'Failed to search for users',
       error: error.message,
     });
@@ -193,7 +190,6 @@ async function getUserProfile(req, res) {
 
     if (!user) {
       return res.status(404).json({
-        success: false,
         message: 'User not found',
       });
     }
@@ -239,7 +235,6 @@ async function followUser(req, res) {
   try {
     if (userId === followingId) {
       return res.status(400).json({
-        success: false,
         message: 'Cannot follow yourself',
       });
     }
@@ -247,7 +242,6 @@ async function followUser(req, res) {
     const user = await User.findByPk(followingId);
     if (!user) {
       return res.status(404).json({
-        success: false,
         message: 'User not found',
       });
     }
@@ -258,7 +252,6 @@ async function followUser(req, res) {
 
     if (existingFollow) {
       return res.status(409).json({
-        success: false,
         message: 'Already following this user',
       });
     }
@@ -273,7 +266,6 @@ async function followUser(req, res) {
     });
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: 'Failed to follow user',
       error: error.message,
     });
@@ -289,7 +281,6 @@ async function unfollowUser(req, res) {
   try {
     if (userId === followingId) {
       return res.status(400).json({
-        success: false,
         message: 'Cannot unfollow yourself',
       });
     }
@@ -301,7 +292,6 @@ async function unfollowUser(req, res) {
 
     if (!followRecord) {
       return res.status(409).json({
-        success: false,
         message: 'You are not following this user',
       });
     }
@@ -379,9 +369,7 @@ async function getFollowers(req, res) {
       followers,
     });
   } catch (error) {
-    console.error('Error fetching followers:', error);
     return res.status(500).json({
-      success: false,
       message: 'Failed to get user followers',
       error: error.message,
     });
@@ -447,7 +435,6 @@ async function getFollowings(req, res) {
     });
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: 'Failed to get user followings',
       error: error.message,
     });
@@ -496,7 +483,6 @@ async function getFollowRecommend(req, res) {
     });
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: 'Failed to retrieve follow recommendations',
       error: error.message,
     });
