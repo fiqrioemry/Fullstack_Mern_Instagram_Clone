@@ -53,7 +53,7 @@ function multerErrorHandle(err, req, res, next) {
 function upload(params, size) {
   return multer({
     storage: storage,
-    limits: { fileSize: size || 1000000 },
+    limits: { fileSize: size || 5000000 },
     fileFilter: fileFilter(params),
   });
 }

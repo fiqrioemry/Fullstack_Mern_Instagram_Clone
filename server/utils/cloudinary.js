@@ -1,5 +1,5 @@
-const cloudinary = require("cloudinary").v2;
-const dotenv = require("dotenv");
+const cloudinary = require('cloudinary').v2;
+const dotenv = require('dotenv');
 dotenv.config();
 
 //configure with env data
@@ -13,29 +13,30 @@ cloudinary.config({
 async function uploadMediaToCloudinary(filePath) {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
-      resource_type: "auto",
-      folder: "fullstack_instagram_clone",
+      resource_type: 'auto',
+      folder: 'fullstack_instagram_clone',
       transformation: [
         {
           width: 500,
           height: 500,
-          crop: "limit",
-          format: "webp",
+          crop: 'limit',
+          format: 'webp',
         },
       ],
     });
 
     return result;
   } catch (error) {
-    throw new Error("Error uploading to Cloudinary: " + error.message);
+    throw new Error('Error uploading to Cloudinary: ' + error.message);
   }
 }
 const deleteMediaFromCloudinary = async (imageUrl) => {
   try {
-    await cloudinary.uploader.destroy(imageUrl);
+    const publicId = imageUrl.split('/').slice(-1).join('/').split('.').shift();
+    await cloudinary.uploader.destroy(publicId);
   } catch (error) {
     console.log(error);
-    throw new Error("failed to delete assest from cloudinary");
+    throw new Error('failed to delete assest from cloudinary');
   }
 };
 

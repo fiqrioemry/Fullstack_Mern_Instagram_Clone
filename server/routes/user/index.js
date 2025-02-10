@@ -17,17 +17,17 @@ const { upload } = require('../../middleware/media');
 const isAuthenticate = require('../../middleware/isAuthenticate');
 
 router.get('/profile', isAuthenticate, getMyProfile);
-router.get('/:username', isAuthenticate, getUserProfile);
-router.get('/', searchUser);
 router.put(
   '/profile',
   upload('image').single('file'),
   isAuthenticate,
   updateMyProfile,
 );
+router.get('/:username', isAuthenticate, getUserProfile);
+router.get('/', searchUser);
 router.post('/:followingId/follow', isAuthenticate, followUser);
 router.get('/:username/posts', isAuthenticate, getUserPosts);
-router.delete('/:followingId/follow', isAuthenticate, unfollowUser);
+router.delete('/:followingId/unfollow', isAuthenticate, unfollowUser);
 router.get('/:username/followers', isAuthenticate, getFollowers);
 router.get('/:username/followings', isAuthenticate, getFollowings);
 router.get('/recommend/follow', isAuthenticate, getFollowRecommend);

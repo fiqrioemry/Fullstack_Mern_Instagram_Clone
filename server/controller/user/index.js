@@ -1,10 +1,11 @@
+const fs = require('fs').promises;
 const { Op } = require('sequelize');
-const { User, Profile, Follow } = require('../../models');
+const { User, Profile, Follow, sequelize } = require('../../models');
 const {
   uploadMediaToCloudinary,
   deleteMediaFromCloudinary,
 } = require('../../utils/cloudinary');
-
+// tested
 async function searchUser(req, res) {
   const { query } = req.query;
 
@@ -24,6 +25,7 @@ async function searchUser(req, res) {
       include: [
         {
           model: Profile,
+          as: 'profile',
           attributes: ['fullname', 'avatar'],
           where: {
             fullname: { [Op.like]: `%${query}%` }, // Tambahkan pencarian di Profile
@@ -60,6 +62,7 @@ async function searchUser(req, res) {
   }
 }
 
+// tested
 async function getMyProfile(req, res) {
   const { userId } = req.user;
 
@@ -98,13 +101,16 @@ async function getMyProfile(req, res) {
   }
 }
 
+// tested
 async function updateMyProfile(req, res) {
   const { userId } = req.user;
   const file = req.file;
   const { fullname, bio, birthday, gender } = req.body;
 
+  const transaction = await sequelize.transaction();
+
   try {
-    const profile = await Profile.findOne({ where: { userId } });
+    const profile = await Profile.findOne({ where: { userId }, transaction });
 
     if (!profile) {
       if (file && file.path) {
@@ -113,27 +119,28 @@ async function updateMyProfile(req, res) {
       return res.status(404).json({ message: 'Profile not found' });
     }
 
+    let avatar = profile.avatar;
+    let uploadedImage;
+
     const isUpdated =
       profile.bio !== bio ||
       profile.gender !== gender ||
       profile.birthday !== birthday ||
-      profile.fullname !== fullname ||
-      profile.avatar !== avatar;
+      profile.fullname !== fullname;
 
     if (!isUpdated) {
       if (file && file.path) {
         await fs.unlink(file.path);
       }
+      await transaction.rollback();
       return res.status(400).json({
         message: 'No changes detected. Please modify the data before updating.',
       });
     }
 
-    let avatar = profile.avatar;
-
     if (file && file.path) {
       try {
-        const uploadedImage = await uploadMediaToCloudinary(file.path);
+        uploadedImage = await uploadMediaToCloudinary(file.path);
 
         if (profile.avatar) {
           await deleteMediaFromCloudinary(profile.avatar);
@@ -143,7 +150,7 @@ async function updateMyProfile(req, res) {
 
         await fs.unlink(file.path);
       } catch (error) {
-        console.error('Cloudinary upload error:', error);
+        await transaction.rollback();
         return res.status(500).json({ message: 'Failed to upload avatar' });
       }
     }
@@ -154,14 +161,15 @@ async function updateMyProfile(req, res) {
     profile.fullname = fullname;
     profile.avatar = avatar;
 
-    await profile.save();
+    await profile.save({ transaction });
+
+    await transaction.commit();
 
     return res.status(200).json({
       message: 'Profile is updated successfully.',
-      profile,
     });
   } catch (error) {
-    console.error('Update profile error:', error);
+    await transaction.rollback(); // Rollback semua kalo error
     return res.status(500).json({
       message: 'Failed to update profile',
       error: error.message,
@@ -169,6 +177,7 @@ async function updateMyProfile(req, res) {
   }
 }
 
+// tested
 async function getUserProfile(req, res) {
   const { userId } = req.user;
   const { username } = req.params;
@@ -221,6 +230,7 @@ async function getUserProfile(req, res) {
   }
 }
 
+// tested
 async function followUser(req, res) {
   const userId = Number(req.user.userId);
   let { followingId } = req.params;
@@ -270,6 +280,7 @@ async function followUser(req, res) {
   }
 }
 
+// tested
 async function unfollowUser(req, res) {
   const userId = Number(req.user.userId);
   let { followingId } = req.params;
@@ -315,6 +326,7 @@ async function unfollowUser(req, res) {
   }
 }
 
+// tested
 async function getFollowers(req, res) {
   const { userId } = req.user;
   const { username } = req.params;
@@ -376,6 +388,7 @@ async function getFollowers(req, res) {
   }
 }
 
+// tested
 async function getFollowings(req, res) {
   const { userId } = req.user;
   const { username } = req.params;
