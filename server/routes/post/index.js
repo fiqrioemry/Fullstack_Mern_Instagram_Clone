@@ -49,3 +49,5 @@ router.delete('/:postId/like', isAuthenticate, unlikePost);
 router.get('/:postId/comments', isAuthenticate, getComments);
 router.post('/:postId/comments', isAuthenticate, createComment);
 router.delete('/:postId/comments/:commentId', isAuthenticate, deleteComment);
+
+module.exports = router;
