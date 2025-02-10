@@ -1,150 +1,220 @@
-const { User, Profile, Follow } = require("../../models");
-const { Op } = require("sequelize");
+const { User, Profile, Follow, sequelize } = require('../../models');
 
-async function followNewUser(req, res) {
-  const { userId } = req.user;
-  const { followingId } = req.body;
+// tested
+async function followUser(req, res) {
+  const userId = Number(req.user.userId);
+  let { followingId } = req.params;
+  followingId = Number(followingId);
 
   try {
-    if (userId == followingId) {
-      return res.status(400).send({
-        success: false,
-        message: "Cannot follow yourself",
+    if (userId === followingId) {
+      return res.status(400).json({
+        message: 'Cannot follow yourself',
       });
     }
 
     const user = await User.findByPk(followingId);
-
     if (!user) {
-      return res.status(404).send({ error: "User not found " });
+      return res.status(404).json({
+        message: 'User not found',
+      });
     }
 
     const existingFollow = await Follow.findOne({
-      where: { followerId: userId, followingId: followingId },
+      where: { followerId: userId, followingId },
     });
 
     if (existingFollow) {
-      return res.status(400).send({
-        success: false,
-        message: "You are already following this user",
+      return res.status(409).json({
+        message: 'Already following this user',
       });
     }
 
     await Follow.create({
       followerId: userId,
-      followingId: followingId,
+      followingId,
     });
 
-    res.status(201).send({
-      success: true,
-      message: "Follow is success",
+    return res.status(201).json({
+      message: 'Follow is successful',
     });
   } catch (error) {
-    return res.status(500).send({
-      success: false,
-      message: "Failed to follow new user",
+    return res.status(500).json({
+      message: 'Failed to follow user',
       error: error.message,
     });
   }
 }
 
+// tested
 async function unfollowUser(req, res) {
-  const { userId } = req.user;
-  const { followingId } = req.params;
+  const userId = Number(req.user.userId);
+  let { followingId } = req.params;
+  followingId = Number(followingId);
 
   try {
     if (userId === followingId) {
-      return res.status(400).send({
-        success: false,
-        message: "Cannot unfollow yourself",
+      return res.status(400).json({
+        message: 'Cannot unfollow yourself',
       });
     }
 
+    // 🔹 Cek apakah user memang mengikuti user ini
     const followRecord = await Follow.findOne({
       where: { followerId: userId, followingId },
     });
 
     if (!followRecord) {
-      return res.status(400).send({
-        success: false,
-        message: "You are not following this user",
+      return res.status(400).json({
+        message: 'You are not following this user',
       });
     }
-    await followRecord.destroy();
 
-    res.status(200).send({
-      success: true,
-      message: "Unfollow is success",
+    try {
+      await followRecord.destroy();
+    } catch (error) {
+      return res.status(500).json({
+        message: 'Failed to unfollow user',
+        error: error.message,
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Unfollow successful',
     });
   } catch (error) {
-    return res.status(500).send({
-      success: false,
-      message: "Failed to unfollow user",
+    return res.status(500).json({
+      message: 'Failed to process request',
       error: error.message,
     });
   }
 }
-
+// tested
 async function getFollowers(req, res) {
+  const { userId } = req.user;
   const { username } = req.params;
+  const limit = parseInt(req.query.limit) || 5;
+
   try {
-    console.log(req);
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found " });
+      return res.status(404).json({
+        message: 'User not found',
+      });
     }
 
-    const followers = await user.getFollowers({
-      attributes: ["id", "username"],
-      include: [{ model: Profile, attributes: ["fullname"] }],
-    });
+    const [userFollowers, myFollowings] = await Promise.all([
+      user.getFollowers({
+        limit,
+        attributes: ['id', 'username'],
+        include: [
+          { model: Profile, as: 'profile', attributes: ['fullname', 'avatar'] },
+        ],
+      }),
+      User.findByPk(userId, {
+        include: {
+          model: User,
+          as: 'Followings',
+          attributes: ['id'],
+        },
+      }),
+    ]);
 
-    res.status(200).send({
-      success: true,
-      data: followers,
+    if (!userFollowers || userFollowers.length === 0) {
+      return res.status(200).json({
+        message: 'User has no followers',
+        data: [],
+      });
+    }
+
+    const myFollowingIds = myFollowings?.Followings?.map((f) => f.id) || [];
+
+    const followers = userFollowers.map((follower) => ({
+      userId: follower.id,
+      username: follower.username,
+      fullname: follower.profile?.fullname || null,
+      avatar: follower.profile?.avatar || null,
+      isFollowedByMe: myFollowingIds.includes(follower.id),
+    }));
+
+    return res.status(200).json({
+      followers,
     });
   } catch (error) {
-    return res.status(500).send({
-      success: false,
-      message: "Failed to get followers detail",
+    return res.status(500).json({
+      message: 'Failed to get user followers',
       error: error.message,
     });
   }
 }
-
+// tested
 async function getFollowings(req, res) {
-  const { userId } = req.params;
+  const { userId } = req.user;
+  const { username } = req.params;
+  const limit = parseInt(req.query.limit) || 5;
 
   try {
-    const user = await User.findByPk(userId);
+    const user = await User.findOne({
+      where: { username },
+      attributes: ['id'],
+    });
 
     if (!user) {
       return res.status(404).json({
-        error: "User not found  ",
+        message: 'User not found',
       });
     }
 
-    const followings = await user.getFollowings({
-      attributes: ["id", "username"],
-      include: [{ model: Profile, attributes: ["fullname"] }],
-    });
+    const [userFollowings, myFollowings] = await Promise.all([
+      user.getFollowings({
+        limit,
+        attributes: ['id', 'username'],
+        include: [
+          { model: Profile, as: 'profile', attributes: ['fullname', 'avatar'] },
+        ],
+      }),
+      User.findByPk(userId, {
+        include: {
+          model: User,
+          as: 'Followings',
+          attributes: ['id'],
+        },
+      }),
+    ]);
 
-    res.status(200).send({
-      success: true,
-      data: followings,
+    // Jika user tidak memiliki followings, langsung return
+    if (!userFollowings || userFollowings.length === 0) {
+      return res.status(200).json({
+        message: 'User is not following anyone',
+        data: [],
+      });
+    }
+
+    const myFollowingIds = myFollowings?.Followings?.map((f) => f.id) || [];
+
+    // Format response
+    const followings = userFollowings.map((following) => ({
+      userId: following.id,
+      username: following.username,
+      fullname: following.profile?.fullname || null,
+      avatar: following.profile?.avatar || null,
+      isFollowedByMe: myFollowingIds.includes(following.id),
+    }));
+
+    return res.status(200).json({
+      followings,
     });
   } catch (error) {
-    return res.status(500).send({
-      success: false,
-      message: "Failed to get followings detail",
+    return res.status(500).json({
+      message: 'Failed to get user followings',
       error: error.message,
     });
   }
 }
 
 module.exports = {
-  followNewUser,
+  followUser,
   unfollowUser,
   getFollowers,
   getFollowings,

@@ -1,10 +1,6 @@
 const {
-  followUser,
-  unfollowUser,
-  getFollowers,
-  getFollowings,
-  getUserProfile,
   getMyProfile,
+  getUserProfile,
   updateMyProfile,
   getFollowRecommend,
   searchUser,
@@ -15,6 +11,12 @@ const express = require('express');
 const router = express.Router();
 const { upload } = require('../../middleware/media');
 const isAuthenticate = require('../../middleware/isAuthenticate');
+const {
+  followUser,
+  unfollowUser,
+  getFollowers,
+  getFollowings,
+} = require('../../controller/follow');
 
 router.get('/profile', isAuthenticate, getMyProfile);
 router.put(
@@ -23,8 +25,8 @@ router.put(
   isAuthenticate,
   updateMyProfile,
 );
-router.get('/:username', isAuthenticate, getUserProfile);
 router.get('/', searchUser);
+router.get('/:username', isAuthenticate, getUserProfile);
 router.post('/:followingId/follow', isAuthenticate, followUser);
 router.get('/:username/posts', isAuthenticate, getUserPosts);
 router.delete('/:followingId/unfollow', isAuthenticate, unfollowUser);

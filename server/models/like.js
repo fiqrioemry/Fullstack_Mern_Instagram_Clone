@@ -1,57 +1,57 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Like extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The models/index file will call this method automatically.
-     */
     static associate(models) {
-      // Relasi Like ke User
-      this.belongsTo(models.User, { foreignKey: "userId" });
+      // 🔹 Like dikaitkan dengan User yang melakukan like
+      this.belongsTo(models.User, { foreignKey: 'userId' });
 
+      // 🔹 Like bisa dikaitkan dengan Post
       this.belongsTo(models.Post, {
-        foreignKey: "entityId",
+        foreignKey: 'entityId',
         constraints: false,
-        onDelete: "CASCADE",
-        scope: {
-          entityType: "post",
-        },
+        onDelete: 'CASCADE',
+        scope: { entityType: 'post' },
       });
+
+      // 🔹 Like bisa dikaitkan dengan Comment (termasuk reply, karena reply adalah comment)
       this.belongsTo(models.Comment, {
-        foreignKey: "entityId",
+        foreignKey: 'entityId',
         constraints: false,
-        onDelete: "CASCADE",
-        scope: {
-          entityType: "comment",
-        },
+        onDelete: 'CASCADE',
+        scope: { entityType: 'comment' },
       });
-      this.belongsTo(models.Reply, {
-        foreignKey: "entityId",
+
+      // 🔹 Like bisa menghasilkan Notifikasi
+      this.hasOne(models.Notification, {
+        foreignKey: 'entityId',
         constraints: false,
-        onDelete: "CASCADE",
-        scope: {
-          entityType: "reply",
-        },
+        scope: { entityType: 'like' },
+        onDelete: 'CASCADE',
       });
     }
   }
 
   Like.init(
     {
-      userId: DataTypes.INTEGER,
-      entityType: {
-        type: DataTypes.ENUM("post", "comment", "reply"),
+      userId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
-      entityId: { type: DataTypes.INTEGER, allowNull: false },
+      entityType: {
+        type: DataTypes.ENUM('post', 'comment'),
+        allowNull: false,
+      },
+      entityId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
       sequelize,
-      modelName: "Like",
-    }
+      modelName: 'Like',
+    },
   );
 
   return Like;

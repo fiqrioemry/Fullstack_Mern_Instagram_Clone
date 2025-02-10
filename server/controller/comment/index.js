@@ -1,31 +1,82 @@
-const { User, Profile, Post, Comment } = require("../../models");
+const { User, Post, Comment, Notification } = require('../../models');
 
-// commentController.js
+// Fungsi untuk mengekstrak username dari mention (@username)
+function extractMentions(content) {
+  const mentionRegex = /@(\w+)/g; // Regex untuk mencocokkan @username
+  const matches = [...content.matchAll(mentionRegex)];
+  return matches.map((match) => match[1]); // Ambil hanya username
+}
+
 async function createComment(req, res) {
   const { userId } = req.user;
-  const { content } = req.body;
+  const { content, parentId } = req.body;
   const { postId } = req.params;
+
   try {
+    // 1. Cari post berdasarkan ID
     const post = await Post.findByPk(postId);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    if (!post)
-      return res.status(404).send({
-        success: false,
-        message: "Post is not found",
-      });
+    let receiverId = post.userId; // Default pemilik post yang menerima notifikasi
+    let type = 'comment'; // Jenis notifikasi default
 
-    await Comment.create({
+    // 2. Jika ini reply (balasan ke komentar lain)
+    if (parentId) {
+      const parentComment = await Comment.findByPk(parentId);
+      if (!parentComment) {
+        return res.status(404).json({ message: 'Parent comment not found' });
+      }
+
+      receiverId = parentComment.userId; // Pemilik komentar utama yang menerima notifikasi
+      type = 'reply'; // Jenis notifikasi berubah menjadi "reply"
+    }
+
+    // 3. Buat komentar baru
+    const newComment = await Comment.create({
       userId,
       postId,
+      parentId: parentId || null,
       content,
     });
-    return res
-      .status(201)
-      .send({ success: true, message: "Comment is created" });
+
+    // 4. Kirim notifikasi jika user yang mengomentari bukan pemilik post/comment
+    if (receiverId !== userId) {
+      await Notification.create({
+        receiverId, // Penerima notifikasi
+        senderId: userId, // Pengirim notifikasi
+        postId,
+        commentId: newComment.id,
+        type, // "comment" atau "reply"
+      });
+    }
+
+    // 5. **Implementasi Mention dalam Komentar**
+    const mentionedUsernames = extractMentions(content); // Ambil semua username yang disebut
+    if (mentionedUsernames.length > 0) {
+      const mentionedUsers = await User.findAll({
+        where: { username: mentionedUsernames },
+        attributes: ['id', 'username'],
+      });
+
+      // 6. Buat notifikasi mention untuk setiap user yang disebut
+      await Promise.all(
+        mentionedUsers.map((mentionedUser) =>
+          Notification.create({
+            receiverId: mentionedUser.id,
+            senderId: userId,
+            postId,
+            commentId: newComment.id,
+            type: 'mention',
+          }),
+        ),
+      );
+    }
+
+    return res.status(201).json({ message: 'Comment added successfully' });
   } catch (error) {
-    return res.status(500).send({
+    return res.status(500).json({
       success: false,
-      message: "Failed to comment a post",
+      message: 'Failed to add comment',
       error: error.message,
     });
   }
@@ -33,93 +84,75 @@ async function createComment(req, res) {
 
 async function getComments(req, res) {
   const { postId } = req.params;
-  const { limit } = req.query;
-  const total = parseInt(limit) || 10;
 
   try {
     const comments = await Comment.findAll({
-      limit: total,
-      where: { postId },
-      order: [["createdAt", "ASC"]],
-      attributes: ["id", "content", "createdAt"],
+      where: { postId, parentId: null },
+      order: [['createdAt', 'ASC']],
       include: [
         {
+          model: Comment,
+          as: 'replies',
+          include: [
+            {
+              model: Comment,
+              as: 'replies',
+            },
+          ],
+        },
+        {
           model: User,
-          attributes: ["id", "username"],
+          as: 'user',
+          attributes: ['id', 'username'],
           include: [
             {
               model: Profile,
-              attributes: ["fullname", "avatar"],
+              as: 'profile',
+              attributes: ['fullname'],
             },
           ],
         },
       ],
     });
 
-    if (comments.length === 0)
-      return res
-        .status(200)
-        .send({ success: true, message: "No Comments yet", data: [] });
-
-    const commentResult = await Promise.all(
-      comments.map(async (comment) => {
-        const replyCount = await comment.countReplies();
-        const likeCount = await comment.countLikes();
-
-        const { id: commentId, content, createdAt, User } = comment;
-        const { id: userId, username, Profile } = User;
-        const { fullname, avatar } = Profile;
-
-        return {
-          userId,
-          commentId,
-          content,
-          createdAt,
-          username,
-          fullname,
-          avatar,
-          replyCount,
-          likeCount,
-        };
-      })
-    );
-
-    return res.status(200).send({
-      success: true,
-      data: commentResult,
-    });
+    return res.status(200).json({ comments });
   } catch (error) {
-    // Menangani error
-    return res.status(500).send({
+    return res.status(500).json({
       success: false,
-      message: "Failed to get comments",
+      message: 'Failed to get comments',
       error: error.message,
     });
   }
 }
 
-async function updateComment(req, res) {
-  // Logic to update a specific comment
-}
-
 async function deleteComment(req, res) {
-  // Logic to delete a specific comment
-}
+  const { userId } = req.user;
+  const { commentId } = req.params;
 
-// commentController.js
-async function likeComment(req, res) {
-  // Logic to like a specific comment
-}
+  try {
+    const comment = await Comment.findOne({ where: { id: commentId } });
 
-async function unlikeComment(req, res) {
-  // Logic to unlike a specific comment
+    if (!comment) return res.status(404).json({ message: 'Comment not found' });
+
+    if (comment.userId !== userId) {
+      return res
+        .status(403)
+        .json({ message: 'Unauthorized to delete this comment' });
+    }
+
+    await comment.destroy();
+
+    return res.status(200).json({ message: 'Comment is deleted' });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Failed to delete comment',
+      error: error.message,
+    });
+  }
 }
 
 module.exports = {
   getComments,
-  likeComment,
-  updateComment,
   createComment,
   deleteComment,
-  unlikeComment,
 };

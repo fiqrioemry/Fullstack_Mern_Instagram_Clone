@@ -14,7 +14,11 @@ const {
   getPublicPosts,
   getPostsFromFollowings,
 } = require('../../controller/post');
-const { createComment, getComments } = require('../../controller/comment');
+const {
+  createComment,
+  getComments,
+  deleteComment,
+} = require('../../controller/comment');
 
 router.get('/followings', isAuthenticate, getPostsFromFollowings);
 router.post(
@@ -41,12 +45,7 @@ router.put('/:postId', isAuthenticate, updatePost);
 router.post('/:postId/like', isAuthenticate, likePost);
 router.delete('/:postId/like', isAuthenticate, unlikePost);
 
-// comment a post
+// comment management on post
 router.get('/:postId/comments', isAuthenticate, getComments);
 router.post('/:postId/comments', isAuthenticate, createComment);
-
-// Bookmark posts
-// router.post("/api/posts/:postId/bookmark", isAuthenticate);
-// router.delete("/api/posts/:postId/bookmark", isAuthenticate);
-
-module.exports = router;
+router.delete('/:postId/comments/:commentId', isAuthenticate, deleteComment);

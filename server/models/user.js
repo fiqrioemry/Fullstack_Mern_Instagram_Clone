@@ -12,9 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Post, { foreignKey: 'userId', as: 'post' });
       this.hasMany(models.Like);
       this.hasMany(models.Comment);
-      this.hasMany(models.Reply);
 
-      // many to many relation
+      // 🔹 Relasi untuk Follow System
       this.belongsToMany(models.User, {
         through: models.Follow,
         as: 'Followers',
@@ -25,6 +24,15 @@ module.exports = (sequelize, DataTypes) => {
         through: models.Follow,
         as: 'Followings',
         foreignKey: 'followerId',
+      });
+
+      // 🔹 Relasi untuk Bookmark (User bisa menyimpan banyak post)
+      this.hasMany(models.Bookmark, { foreignKey: 'userId', as: 'bookmarks' });
+
+      // 🔹 Relasi untuk Notifikasi
+      this.hasMany(models.Notification, {
+        foreignKey: 'receiverId',
+        as: 'notifications',
       });
     }
   }

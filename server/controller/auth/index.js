@@ -185,6 +185,6 @@ module.exports = {
   userSignIn,
   userSignUp,
   userSignOut,
-  userAuthRefresh,
   userAuthCheck,
+  userAuthRefresh,
 };

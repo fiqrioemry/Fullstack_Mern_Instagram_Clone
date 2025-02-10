@@ -16,17 +16,32 @@ module.exports = (sequelize, DataTypes) => {
           entityType: 'post',
         },
       });
+
       this.hasMany(models.Comment, {
         foreignKey: 'postId',
-        as: 'comment',
+        as: 'comments',
         onDelete: 'CASCADE',
       });
+
       this.hasMany(models.PostGallery, {
         foreignKey: 'postId',
         as: 'gallery',
         onDelete: 'CASCADE',
       });
+
       this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+
+      // 🔹 Relasi untuk Bookmark (Post bisa disimpan oleh banyak user)
+      this.hasMany(models.Bookmark, {
+        foreignKey: 'postId',
+        as: 'bookmarkedBy',
+      });
+
+      // 🔹 Relasi untuk Notifikasi (Jika post mendapat like/comment)
+      this.hasMany(models.Notification, {
+        foreignKey: 'postId',
+        as: 'notifications',
+      });
     }
   }
   Post.init(

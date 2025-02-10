@@ -1,6 +1,6 @@
 // models/Follow.js
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Follow extends Model {
     static associate(models) {}
@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Follow",
-    }
+      modelName: 'Follow',
+    },
   );
   return Follow;
 };
