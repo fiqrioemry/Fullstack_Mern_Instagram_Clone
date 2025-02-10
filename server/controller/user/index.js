@@ -64,14 +64,15 @@ async function getMyProfile(req, res) {
   const { userId } = req.user;
 
   try {
-    const user = await User.findByPk(userId, {
+    const user = await User.findOne({
+      where: { id: userId },
       include: {
         model: Profile,
         as: 'profile',
       },
     });
 
-    if (!user) {
+    if (!user && user.length === 0) {
       return res.status(404).json({
         message: 'User not found',
       });
@@ -417,7 +418,6 @@ async function getFollowings(req, res) {
       });
     }
 
-    // List ID followings kita sendiri
     const myFollowingIds = myFollowings?.Followings?.map((f) => f.id) || [];
 
     // Format response

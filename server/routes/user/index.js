@@ -16,9 +16,9 @@ const router = express.Router();
 const { upload } = require('../../middleware/media');
 const isAuthenticate = require('../../middleware/isAuthenticate');
 
-router.get('/', searchUser);
+router.get('/profile', isAuthenticate, getMyProfile);
 router.get('/:username', isAuthenticate, getUserProfile);
-router.put('/profile', isAuthenticate, getMyProfile);
+router.get('/', searchUser);
 router.put(
   '/profile',
   upload('image').single('file'),

@@ -70,12 +70,6 @@ async function userSignIn(req, res) {
         message: 'Password is wrong',
       });
 
-    const user = {
-      userId: userData.id,
-      email: userData.email,
-      username: userData.username,
-      avatar: userData.profile?.avatar,
-    };
     const accessToken = jwt.sign(
       { userId: userData.id },
       process.env.ACCESS_TOKEN,
@@ -101,7 +95,7 @@ async function userSignIn(req, res) {
 
     res.status(200).json({
       message: 'Login is success',
-      data: { accessToken, user },
+      accessToken,
     });
   } catch (error) {
     return res.status(500).json({
