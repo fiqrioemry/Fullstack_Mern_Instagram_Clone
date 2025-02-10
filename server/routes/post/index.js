@@ -1,6 +1,6 @@
-const express = require("express");
-const { upload } = require("../../middleware/media");
-const isAuthenticate = require("../../middleware/isAuthenticate");
+const express = require('express');
+const { upload } = require('../../middleware/media');
+const isAuthenticate = require('../../middleware/isAuthenticate');
 const router = express.Router();
 
 // controller
@@ -13,38 +13,37 @@ const {
   getPostDetail,
   getPublicPosts,
   getPostsFromFollowings,
-} = require("../../controller/post");
-const { createComment, getComments } = require("../../controller/comment");
+} = require('../../controller/post');
+const { createComment, getComments } = require('../../controller/comment');
 
 router.post(
-  "/",
-  upload("image").array("images", 5),
+  '/',
+  upload('image').array('images', 5),
   isAuthenticate,
-  createPost
+  createPost,
 );
 router.put(
-  "/:postId",
+  '/:postId',
   isAuthenticate,
-  upload("image").array("images", 5),
-  updatePost
+  upload('image').array('images', 5),
+  updatePost,
 );
-router.delete("/:postId", isAuthenticate, deletePost);
+router.delete('/:postId', isAuthenticate, deletePost);
+router.get('/public', isAuthenticate, getPublicPosts);
+router.get('/:postId', isAuthenticate, getPostDetail);
+router.get('/user/followings', isAuthenticate, getPostsFromFollowings);
 
-router.get("/public", isAuthenticate, getPublicPosts);
-router.get("/:postId", isAuthenticate, getPostDetail);
-router.get("/user/followings", isAuthenticate, getPostsFromFollowings);
-
-router.post("/", isAuthenticate, createPost);
-router.delete("/:postId", isAuthenticate, deletePost);
-router.put("/:postId", isAuthenticate, updatePost);
+router.post('/', isAuthenticate, createPost);
+router.delete('/:postId', isAuthenticate, deletePost);
+router.put('/:postId', isAuthenticate, updatePost);
 
 // like & unlike a post
-router.post("/:postId/like", isAuthenticate, likePost);
-router.delete("/:postId/like", isAuthenticate, unlikePost);
+router.post('/:postId/like', isAuthenticate, likePost);
+router.delete('/:postId/like', isAuthenticate, unlikePost);
 
 // comment a post
-router.get("/:postId/comments", isAuthenticate, getComments);
-router.post("/:postId/comments", isAuthenticate, createComment);
+router.get('/:postId/comments', isAuthenticate, getComments);
+router.post('/:postId/comments', isAuthenticate, createComment);
 
 // Bookmark posts
 // router.post("/api/posts/:postId/bookmark", isAuthenticate);

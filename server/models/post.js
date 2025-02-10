@@ -1,5 +1,5 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
     /**
@@ -9,16 +9,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.hasMany(models.Like, {
-        foreignKey: "entityId",
+        foreignKey: 'entityId',
         constraints: false,
-        onDelete: "CASCADE",
+        onDelete: 'CASCADE',
         scope: {
-          entityType: "post",
+          entityType: 'post',
         },
       });
-      this.hasMany(models.Comment, { onDelete: "CASCADE" });
-      this.hasMany(models.PostGallery, { onDelete: "CASCADE" });
-      this.belongsTo(models.User, { foreignKey: "userId" });
+      this.hasMany(models.Comment, {
+        foreignKey: 'postId',
+        as: 'comment',
+        onDelete: 'CASCADE',
+      });
+      this.hasMany(models.PostGallery, {
+        foreignKey: 'postId',
+        as: 'gallery',
+        onDelete: 'CASCADE',
+      });
+      this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
     }
   }
   Post.init(
@@ -28,8 +36,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Post",
-    }
+      modelName: 'Post',
+    },
   );
   return Post;
 };
