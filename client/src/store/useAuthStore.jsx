@@ -1,75 +1,95 @@
-import Cookies from "js-cookie";
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import { axiosInstance } from "@/services";
-import { Navigate } from "react-router-dom";
+import callApi from "../services/callApi";
+import { persist } from "zustand/middleware";
 
-export const useAuthStore = create((set) => ({
-  userData: null,
-  isUserAuth: true,
-  isAuthLoading: null,
+export const useAuthStore = create(
+  persist(
+    (set, get) => ({
+      user: null,
+      isAuthenticate: null,
+      loading: false,
 
-  userAuthCheck: async () => {
-    try {
-      const response = await axiosInstance.get("/api/auth/me");
-      set({ userData: response.data.data });
-    } catch (error) {
-      set({ userData: null });
-      Promise.reject(error);
-    } finally {
-      set({ isUserAuth: false });
+      authCheck: async () => {
+        try {
+          const user = await callApi.authCheck();
+          set({ user, isAuthenticate: true });
+        } catch {
+          set({ user: null, isAuthenticate: false });
+        }
+      },
+
+      signin: async (formData) => {
+        set({ loading: true });
+        try {
+          const message = await callApi.signin(formData);
+          await get().authCheck();
+          toast.success(message);
+        } catch (error) {
+          toast.error(error);
+        } finally {
+          set({ loading: false });
+        }
+      },
+
+      signup: async (formData) => {
+        set({ loading: true });
+        try {
+          const message = await callApi.signup(formData);
+          toast.success(message);
+        } catch (error) {
+          toast.error(error);
+        } finally {
+          set({ loading: false });
+        }
+      },
+      signout: async () => {
+        try {
+          const message = await callApi.signout();
+          set({ user: [], isAuthenticate: false });
+          toast.success(message);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      refreshToken: async () => {
+        try {
+          const token = await callApi.refreshToken();
+          toast.success(token.message);
+          return token;
+        } catch (error) {
+          console.log(error.message);
+        }
+      },
+
+      resetPassword: async (token, formData, navigate) => {
+        try {
+          const data = await callApi.resetPassword(token, formData);
+          toast.success(data.message);
+          navigate("/login");
+        } catch (error) {
+          console.log(error.message);
+        }
+      },
+
+      createStore: async (formData) => {
+        try {
+          const data = await callApi.createStore(formData);
+          toast.success(data.message);
+        } catch (error) {
+          toast.error(error.message);
+        }
+      },
+    }),
+    {
+      name: "auth-store",
+      getStorage: () => localStorage,
+      partialize: (state) => ({
+        user: state.user,
+        isAuthenticate: state.isAuthenticate,
+        loading: state.loading,
+      }),
     }
-  },
-
-  userSignUp: async (formData) => {
-    try {
-      set({ isAuthLoading: true });
-      const response = await axiosInstance.post("/api/auth/signup", formData);
-      toast.success(response.data.message);
-      <Navigate to="/signin" />;
-    } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isAuthLoading: false });
-    }
-  },
-
-  userSignIn: async (formData) => {
-    try {
-      set({ isAuthLoading: true });
-      const response = await axiosInstance.post("/api/auth/signin", formData);
-      toast.success(response.data.message);
-
-      Cookies.set("accessToken", response.data.data.accessToken, {
-        path: "/",
-        secure: true,
-        sameSite: "strict",
-        expires: 1 / 48,
-      });
-
-      set({ userData: response.data.data });
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "Something went wrong, please try again."
-      );
-    } finally {
-      set({ isAuthLoading: false });
-      <Navigate to="/" />;
-    }
-  },
-
-  userSignOut: async () => {
-    try {
-      set({ isAuthLoading: true });
-      const response = await axiosInstance.post("/api/auth/signout");
-      toast.success(response.data.message);
-      Cookies.remove("accessToken");
-      set({ userData: [] });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      set({ isAuthLoading: false });
-    }
-  },
-}));
+  )
+);

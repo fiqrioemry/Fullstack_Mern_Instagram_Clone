@@ -1,128 +1,119 @@
 import { create } from "zustand";
-import { axiosInstance } from "@/services";
 import toast from "react-hot-toast";
+import callApi from "../services/callApi";
 
-export const useUserStore = create((set) => ({
-  followings: null,
-  followers: null,
-  userPosts: null,
-  userProfile: null,
-  recommend: null,
-  isUserLoading: false,
-  message: null,
+export const useUserStore = create((set, get) => ({
+  followings: [],
+  followers: [],
+  posts: [],
+  profile: null,
+  recommended: [],
+  loading: false,
 
-  followUser: async (followingId) => {
+  // 🔹 Get User Profile
+  fetchUserProfile: async (username) => {
+    set({ loading: true });
     try {
-      set({ isUserLoading: true });
-      const response = await axiosInstance.post(
-        `/api/user/${followingId}/follow`
-      );
-
-      toast.success(response.data.message);
+      const profile = await callApi.getUserProfile(username);
+      set({ profile });
     } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
+      toast.error(error.message);
     } finally {
-      set({ isUserLoading: false });
+      set({ loading: false });
     }
   },
 
-  unfollowUser: async (followingId) => {
-    try {
-      set({ isUserLoading: true });
-      const response = await axiosInstance.delete(
-        `/api/user/${followingId}/follow`
-      );
-      toast.success(response.data.message);
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isUserLoading: false });
-    }
-  },
-
-  // Get followers of a user
-  getFollowers: async (username) => {
-    try {
-      set({ isUserLoading: true });
-      const response = await axiosInstance.get(
-        `/api/user/${username}/followers`
-      );
-      set({ followers: response.data.data });
-    } catch (error) {
-      console.error(error);
-      set({ followers: null });
-    } finally {
-      set({ isUserLoading: false });
-    }
-  },
-
-  // Get followings of a user
-  getFollowings: async (username) => {
-    try {
-      set({ isUserLoading: true });
-      const response = await axiosInstance.get(
-        `/api/user/${username}/followings`
-      );
-      set({ followings: response.data.data });
-    } catch (error) {
-      console.error(error);
-      set({ followings: null });
-    } finally {
-      set({ isUserLoading: false });
-    }
-  },
-
-  getUserProfile: async (username) => {
-    try {
-      const response = await axiosInstance.get(`/api/user/${username}`);
-      set({ userProfile: response.data.data });
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-      set({ userProfile: [] });
-    }
-  },
-  // Update user profile
+  // 🔹 Update User Profile
   updateUserProfile: async (formData) => {
+    set({ loading: true });
     try {
-      set({ isUserLoading: true });
-      const response = await axiosInstance.put(`/api/user`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      toast.success(response.data.message);
-      set({ userProfile: response.data.data });
+      const updatedProfile = await callApi.updateUserProfile(formData);
+      set({ profile: updatedProfile });
+      toast.success("Profile updated successfully!");
     } catch (error) {
-      console.error(error);
+      toast.error(error.message);
     } finally {
-      set({ isUserLoading: false });
+      set({ loading: false });
     }
   },
 
-  // Get user's posts
-  getUserPosts: async (userId) => {
+  // 🔹 Get User Posts
+  fetchUserPosts: async (username) => {
+    set({ loading: true });
     try {
-      const response = await axiosInstance.get(`/api/user/${userId}/posts`);
-      set({ userPosts: response.data.data });
+      const posts = await callApi.getUserPosts(username);
+      set({ posts });
     } catch (error) {
-      console.error(error);
-      set({ userPosts: [] });
+      toast.error(error.message);
+    } finally {
+      set({ loading: false });
     }
   },
 
-  // Get follow recommendations
-  getFollowRecommend: async () => {
+  // 🔹 Follow User
+  followUser: async (followingId) => {
+    set({ loading: true });
     try {
-      set({ isRecommendLoading: true });
-      const response = await axiosInstance.get(`/api/user/recommend/follow`);
-      set({ recommend: response.data.data });
+      await callApi.followUser(followingId);
+      await get().fetchFollowings(); // Update followings list
+      toast.success("Followed successfully!");
     } catch (error) {
-      console.error(error);
-      toast.error(
-        error.response?.data?.message || "Failed to load recommendations"
-      );
+      toast.error(error.message);
     } finally {
-      set({ isRecommendLoading: false });
+      set({ loading: false });
+    }
+  },
+
+  // 🔹 Unfollow User
+  unfollowUser: async (followingId) => {
+    set({ loading: true });
+    try {
+      await callApi.unfollowUser(followingId);
+      await get().fetchFollowings(); // Update followings list
+      toast.success("Unfollowed successfully!");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  // 🔹 Get Followers
+  fetchFollowers: async (username) => {
+    set({ loading: true });
+    try {
+      const followers = await callApi.getFollowers(username);
+      set({ followers });
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  // 🔹 Get Followings
+  fetchFollowings: async (username) => {
+    set({ loading: true });
+    try {
+      const followings = await callApi.getFollowings(username);
+      set({ followings });
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  // 🔹 Get Recommended Follow
+  fetchFollowRecommend: async () => {
+    set({ loading: true });
+    try {
+      const recommended = await callApi.getFollowRecommend();
+      set({ recommended });
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      set({ loading: false });
     }
   },
 }));
