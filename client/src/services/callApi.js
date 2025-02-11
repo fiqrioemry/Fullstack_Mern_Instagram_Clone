@@ -7,7 +7,7 @@ const errorHandle = (error) => {
 };
 
 const callApi = {
-  // 🔹 Authentication APIs
+  // 🔹Authentication API route management
   signup: async (formData) => {
     return publicInstance
       .post('/auth/signup', formData)
@@ -50,7 +50,7 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  // 🔹 User APIs
+  // 🔹 User interaction API route management
   searchUser: async () => {
     return authInstance
       .get('/user')
@@ -65,11 +65,16 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  updateUserProfile: async (formData) => {
+  getMyProfile: async () => {
     return authInstance
-      .put('/user/profile', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+      .get(`/user`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  updateMyProfile: async (formData) => {
+    return authInstance
+      .put('/user/profile', formData)
       .then((res) => res.data.message)
       .catch(errorHandle);
   },
@@ -85,13 +90,6 @@ const callApi = {
     return authInstance
       .delete(`/user/${followingId}/follow`)
       .then((res) => res.data.message)
-      .catch(errorHandle);
-  },
-
-  getUserPosts: async (username) => {
-    return authInstance
-      .get(`/user/${username}/posts`)
-      .then((res) => res.data)
       .catch(errorHandle);
   },
 
@@ -112,6 +110,94 @@ const callApi = {
   getFollowRecommend: async () => {
     return authInstance
       .get('/user/recommend/follow')
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  // 🔹 social content API route management :
+  // 🔹 Post API's
+  getUserPosts: async (username) => {
+    return authInstance
+      .get(`/user/${username}/posts`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  createPost: async (formData) => {
+    return authInstance
+      .post('/api/post', formData)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  updatePost: async (postId, formData) => {
+    return authInstance
+      .put(`/api/post/${postId}`, formData)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  deletePost: async (postId) => {
+    return authInstance
+      .delete(`/api/post/${postId}`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  getPostDetail: async (postId) => {
+    return authInstance
+      .get(`/api/post/${postId}`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  getPublicPosts: async () => {
+    return authInstance
+      .get('/api/post')
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  getPostsFromFollowings: async () => {
+    return authInstance
+      .get('/api/post/followings')
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  // 🔹 Like & Unlike API's
+  likePost: async (postId) => {
+    return authInstance
+      .post(`/api/post/${postId}/like`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  unlikePost: async (postId) => {
+    return authInstance
+      .delete(`/api/post/${postId}/like`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  // 🔹 Comment API's
+  getComments: async (postId) => {
+    return authInstance
+      .get(`/api/post/${postId}/comments`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  createComment: async (postId, formData) => {
+    return authInstance
+      .post(`/api/post/${postId}/comments`, formData)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  deleteComment: async (postId, commentId) => {
+    return authInstance
+      .delete(`/api/post/${postId}/comments/${commentId}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },

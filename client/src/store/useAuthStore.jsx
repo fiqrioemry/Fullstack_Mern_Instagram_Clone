@@ -52,35 +52,6 @@ export const useAuthStore = create(
           console.log(error);
         }
       },
-
-      refreshToken: async () => {
-        try {
-          const token = await callApi.refreshToken();
-          toast.success(token.message);
-          return token;
-        } catch (error) {
-          console.log(error.message);
-        }
-      },
-
-      resetPassword: async (token, formData, navigate) => {
-        try {
-          const data = await callApi.resetPassword(token, formData);
-          toast.success(data.message);
-          navigate("/login");
-        } catch (error) {
-          console.log(error.message);
-        }
-      },
-
-      createStore: async (formData) => {
-        try {
-          const data = await callApi.createStore(formData);
-          toast.success(data.message);
-        } catch (error) {
-          toast.error(error.message);
-        }
-      },
     }),
     {
       name: "auth-store",
