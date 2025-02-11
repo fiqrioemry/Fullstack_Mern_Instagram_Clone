@@ -181,7 +181,7 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  createComment: async (postId, formData) => {
+  createComment: async (formData, postId) => {
     return authInstance
       .post(`/api/post/${postId}/comments`, formData)
       .then((res) => res.data)

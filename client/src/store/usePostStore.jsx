@@ -1,16 +1,25 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import { axiosInstance } from "@/services";
 import callApi from "../services/callApi";
 
-export const usePostStore = create((set) => ({
-  success: null,
+export const usePostStore = create((set, get) => ({
   post: [],
   posts: [],
-  message: null,
+  comments: [],
   loading: false,
 
-  // 🔹 Get User Posts
+  getPostDetail: async (postId) => {
+    set({ loading: true });
+    try {
+      const post = await callApi.getPostDetail(postId);
+      set({ post });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
   getUserPosts: async (username) => {
     set({ loading: true });
     try {
@@ -27,6 +36,18 @@ export const usePostStore = create((set) => ({
     set({ loading: true });
     try {
       const posts = await callApi.getPublicPosts();
+      set({ posts });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+  // this one for feed
+  getPostsFromFollowings: async () => {
+    set({ loading: true });
+    try {
+      const posts = await callApi.getPostsFromFollowings();
       set({ posts });
     } catch (error) {
       console.log(error);
@@ -71,57 +92,40 @@ export const usePostStore = create((set) => ({
     }
   },
 
-  getPublicPosts: async (limit = 10) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/post/public?limit=${limit}`
-      );
-      set({ posts: response.data.data });
-    } catch (error) {
-      console.log(error);
-      set({ posts: [] });
-    }
-  },
-
-  getFollowingPosts: async (limit = 5) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/post/user/followings?limit=${limit}`
-      );
-      set({ followingPosts: response.data.data });
-    } catch (error) {
-      console.log(error);
-      set({ followingPosts: [] });
-    } finally {
-      set({ isPostLoading: false });
-    }
-  },
-
-  getPostDetail: async (postId) => {
-    try {
-      const response = await axiosInstance.get(`/api/post/${postId}`);
-      set({ post: response.data.data });
-    } catch (error) {
-      console.log(error);
-      set({ post: [] });
-    }
-  },
-
   likePost: async (postId) => {
     try {
-      const response = await axiosInstance.post(`/api/post/${postId}/like`);
-      toast.success(response.data.message);
+      const message = await callApi.likePost(postId);
+      toast.success(message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log(error);
     }
   },
 
   unlikePost: async (postId) => {
     try {
-      const response = await axiosInstance.delete(`/api/post/${postId}/like`);
-      toast.success(response.data.message);
+      const message = await callApi.unlikePost(postId);
+      toast.success(message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log(error);
+    }
+  },
+
+  getComments: async (postId) => {
+    try {
+      const comments = await callApi.getComments(postId);
+      set({ comments });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  createComment: async (formData, postId) => {
+    try {
+      const message = await callApi.getComments(formData, postId);
+      toast.success(message);
+      await get().getComments(postId);
+    } catch (error) {
+      console.log(error);
     }
   },
 }));
