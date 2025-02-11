@@ -1,39 +1,73 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "@/services";
+import callApi from "../services/callApi";
 
 export const usePostStore = create((set) => ({
   success: null,
-  message: null,
-  post: null,
+  post: [],
   posts: [],
-  followingPosts: [],
-  isPostLoading: true,
+  message: null,
+  loading: false,
+
+  // 🔹 Get User Posts
+  getUserPosts: async (username) => {
+    set({ loading: true });
+    try {
+      const posts = await callApi.getUserPosts(username);
+      set({ posts });
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  getPublicPosts: async () => {
+    set({ loading: true });
+    try {
+      const posts = await callApi.getPublicPosts();
+      set({ posts });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
 
   createPost: async (formData) => {
+    set({ loading: true });
     try {
-      const response = await axiosInstance.post("/api/post", formData);
-      toast.success(response.data.message);
+      const message = await callApi.createPost(formData);
+      toast.success(message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log(error);
+    } finally {
+      set({ loading: false });
     }
   },
 
   updatePost: async (formData, postId) => {
+    set({ loading: true });
     try {
-      const response = await axiosInstance.put(`/api/post/${postId}`, formData);
-      toast.success(response.data.message);
+      const message = await callApi.updatePost(formData, postId);
+      toast.success(message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log(error);
+    } finally {
+      set({ loading: false });
     }
   },
 
   deletePost: async (postId) => {
+    set({ loading: true });
     try {
-      const response = await axiosInstance.delete(`/api/post/${postId}`);
-      toast.success(response.data.message);
+      const message = await callApi.deletePost(postId);
+      toast.success(message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log(error);
+    } finally {
+      set({ loading: false });
     }
   },
 

@@ -3,10 +3,9 @@ import toast from "react-hot-toast";
 import callApi from "../services/callApi";
 
 export const useUserStore = create((set, get) => ({
-  followings: [],
-  followers: [],
-  posts: [],
   profile: [],
+  followers: [],
+  followings: [],
   recommended: [],
   loading: false,
 
@@ -40,19 +39,6 @@ export const useUserStore = create((set, get) => ({
       const message = await callApi.updateMyProfile(formData);
       await get().getMyProfile();
       toast.success(message);
-    } catch (error) {
-      toast.error(error);
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  // 🔹 Get User Posts
-  getUserPosts: async (username) => {
-    set({ loading: true });
-    try {
-      const posts = await callApi.getUserPosts(username);
-      set({ posts });
     } catch (error) {
       toast.error(error);
     } finally {
@@ -107,19 +93,6 @@ export const useUserStore = create((set, get) => ({
     try {
       const followings = await callApi.getFollowings(username);
       set({ followings });
-    } catch (error) {
-      toast.error(error);
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  // 🔹 Get Recommended Follow
-  fetchFollowRecommend: async () => {
-    set({ loading: true });
-    try {
-      const recommended = await callApi.getFollowRecommend();
-      set({ recommended });
     } catch (error) {
       toast.error(error);
     } finally {

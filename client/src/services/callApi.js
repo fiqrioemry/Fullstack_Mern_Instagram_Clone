@@ -107,13 +107,6 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  getFollowRecommend: async () => {
-    return authInstance
-      .get('/user/recommend/follow')
-      .then((res) => res.data)
-      .catch(errorHandle);
-  },
-
   // 🔹 social content API route management :
   // 🔹 Post API's
   getUserPosts: async (username) => {
@@ -130,7 +123,7 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  updatePost: async (postId, formData) => {
+  updatePost: async (formData, postId) => {
     return authInstance
       .put(`/api/post/${postId}`, formData)
       .then((res) => res.data)
