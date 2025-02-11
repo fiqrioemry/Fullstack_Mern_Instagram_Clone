@@ -4,9 +4,11 @@ const { Notification, Chat, Profile, User } = require('../../models');
 const { io, getReceiverSocketId } = require('../../config/socket');
 const { uploadMediaToCloudinary } = require('../../utils/cloudinary');
 const { Op } = require('sequelize');
-const { types } = require('cassandra-driver');
+const redis = require('../../config/redis.js');
+
 async function getAllChat(req, res) {
   try {
+    redis;
     const userId = req.user.userId;
 
     const chats = await Chat.findAll({
@@ -29,15 +31,22 @@ async function getAllChat(req, res) {
       ],
     });
 
-    const chatList = chats.map((chat) => {
-      const chatPartner = chat.user1_id === userId ? chat.user2 : chat.user1;
+    const chatList = await Promise.all(
+      chats.map(async (chat) => {
+        const chatPartner = chat.user1_id === userId ? chat.user2 : chat.user1;
 
-      return {
-        chat_id: chat.id, // 🔹 Gunakan id sebagai chat_id
-        username: chatPartner.username,
-        avatar: chatPartner.profile ? chatPartner.profile.avatar : null,
-      };
-    });
+        // 🔹 Ambil status user dari Redis
+        let status = await redis.get(`user_status:${chatPartner.id}`);
+        if (!status) status = 'offline';
+
+        return {
+          chat_id: chat.id,
+          username: chatPartner.username,
+          avatar: chatPartner.profile ? chatPartner.profile.avatar : null,
+          status,
+        };
+      }),
+    );
 
     res.status(200).json(chatList);
   } catch (error) {
@@ -138,34 +147,66 @@ async function sendMessage(req, res) {
 }
 
 async function getMessages(req, res) {
-  let { chat_id } = req.params; // 🔹 Ambil dari URL params
+  const receiverId = req.params.receiverId; // 🔹 ID penerima dari params
+  const userId = req.user.userId; // 🔹 ID pengguna yang login
 
   try {
-    if (!chat_id) {
-      return res.status(400).json({ message: 'Chat ID is required' });
+    // 🔍 Cek apakah chat antara user ini dan receiver sudah ada di MySQL
+    const chat = await Chat.findOne({
+      where: {
+        [Op.or]: [
+          { user1_id: userId, user2_id: receiverId },
+          { user1_id: receiverId, user2_id: userId },
+        ],
+      },
+      include: [
+        {
+          model: User,
+          as: 'user1',
+          attributes: ['id', 'username'],
+          include: { model: Profile, as: 'profile' },
+        },
+        {
+          model: User,
+          as: 'user2',
+          attributes: ['id', 'username'],
+          include: { model: Profile, as: 'profile' },
+        },
+      ],
+    });
+
+    // 🔹 Jika chat belum ada, kembalikan respons kosong
+    if (!chat) {
+      return res.status(200).json({ message: 'Start a new chat', data: [] });
     }
 
-    // 🔹 Ubah `chat_id` ke UUID sebelum query ke Cassandra
-    try {
-      chat_id = types.Uuid.fromString(chat_id);
-    } catch (error) {
-      return res.status(400).json({ message: 'Invalid Chat ID format' });
-    }
+    // 🔹 Gunakan ID chat dari MySQL sebagai `chat_id`
+    const chat_id = chat.id;
 
+    // 🔄 Query pesan dari Cassandra berdasarkan `chat_id`
     const query = `SELECT * FROM messages WHERE chat_id = ? ORDER BY timestamp DESC`;
     const result = await cassandra.execute(query, [chat_id], { prepare: true });
 
     if (!result || result.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ message: 'No messages found in this chat' });
+      return res.status(404).json({ message: 'No message found in history' });
     }
 
     res.status(200).json(result.rows);
   } catch (error) {
-    console.error(error);
+    console.error('❌ Error fetching messages:', error);
     res.status(500).json({ error: 'Failed to retrieve messages' });
   }
 }
 
-module.exports = { getMessages, sendMessage, getAllChat };
+async function getOnlineUsers(req, res) {
+  try {
+    const { userId } = req.params;
+    let status = await redis.get(`user_status:${userId}`);
+    if (!status) status = 'offline';
+
+    res.status(200).json({ userId, status });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to get user status' });
+  }
+}
+module.exports = { getMessages, sendMessage, getAllChat, getOnlineUsers };
