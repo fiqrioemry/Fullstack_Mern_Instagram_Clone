@@ -1,14 +1,22 @@
 require('dotenv').config();
+const { Sequelize } = require('sequelize');
 
 const { DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_HOST } = process.env;
 
-module.exports = {
-  development: {
-    username: DB_USERNAME,
-    password: DB_PASSWORD,
-    database: DB_DATABASE,
-    host: DB_HOST,
-    dialect: 'mysql',
-    logging: console.log,
-  },
-};
+const sequelize = new Sequelize(DB_DATABASE, DB_USERNAME, DB_PASSWORD, {
+  host: DB_HOST,
+  dialect: 'mysql',
+  logging: false, // 🔹 Matikan log query agar tidak berantakan
+});
+
+// ✅ Coba koneksi ke database dan tampilkan log
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log(`✅ Connected to MySQL on ${DB_HOST}`);
+  })
+  .catch((err) => {
+    console.error('❌ MySQL connection error:', err);
+  });
+
+module.exports = sequelize;

@@ -9,9 +9,10 @@ const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_HOST,
+    origin: process.env.CLIENT_HOST || '*',
     methods: ['GET', 'POST'],
   },
+  transports: ['websocket'],
 });
 
 const userSocketMap = {};

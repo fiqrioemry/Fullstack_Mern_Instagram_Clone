@@ -35,7 +35,6 @@ async function getAllChat(req, res) {
       chats.map(async (chat) => {
         const chatPartner = chat.user1_id === userId ? chat.user2 : chat.user1;
 
-        // 🔹 Ambil status user dari Redis
         let status = await redis.get(`user_status:${chatPartner.id}`);
         if (!status) status = 'offline';
 
@@ -69,7 +68,6 @@ async function sendMessage(req, res) {
     }
 
     if (!chat_id) {
-      // 🔍 Cek apakah chat sudah ada di MySQL
       const existingChat = await Chat.findOne({
         where: {
           [Op.or]: [
@@ -82,7 +80,6 @@ async function sendMessage(req, res) {
       if (existingChat) {
         chat_id = existingChat.id;
       } else {
-        // 🔹 Buat chat baru dan ambil ID-nya
         const newChat = await Chat.create({
           user1_id: sender_id,
           user2_id: receiver_id,
@@ -105,7 +102,6 @@ async function sendMessage(req, res) {
       }
     }
 
-    // 🔄 2. Simpan pesan di Cassandra dengan `chat_id` yang ditemukan
     const query =
       'INSERT INTO messages (chat_id, sender_id, receiver_id, message, media_url, timestamp) VALUES (?, ?, ?, ?, ?, ?)';
     await cassandra.execute(
@@ -114,14 +110,6 @@ async function sendMessage(req, res) {
       { prepare: true },
     );
 
-    await Notification.create({
-      receiverId: receiver_id,
-      senderId: sender_id,
-      type: 'message',
-      isRead: false,
-    });
-
-    // 🔥 Kirim notifikasi real-time jika user sedang online
     const receiverSocketId = getReceiverSocketId(receiver_id);
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('receive_message', {
@@ -139,19 +127,19 @@ async function sendMessage(req, res) {
       });
     }
 
-    res.json({ message: 'Message sent successfully', chat_id });
+    res.status(200).json({ message: 'Message sent successfully', chat_id });
   } catch (error) {
-    console.error('❌ Error sending message:', error);
-    res.status(500).json({ message: 'Failed to send message', error });
+    res
+      .status(500)
+      .json({ message: 'Failed to send message', error: error.message });
   }
 }
 
 async function getMessages(req, res) {
-  const receiverId = req.params.receiverId; // 🔹 ID penerima dari params
-  const userId = req.user.userId; // 🔹 ID pengguna yang login
+  const receiverId = req.params.receiverId;
+  const userId = req.user.userId;
 
   try {
-    // 🔍 Cek apakah chat antara user ini dan receiver sudah ada di MySQL
     const chat = await Chat.findOne({
       where: {
         [Op.or]: [
@@ -175,15 +163,11 @@ async function getMessages(req, res) {
       ],
     });
 
-    // 🔹 Jika chat belum ada, kembalikan respons kosong
     if (!chat) {
       return res.status(200).json({ message: 'Start a new chat', data: [] });
     }
 
-    // 🔹 Gunakan ID chat dari MySQL sebagai `chat_id`
     const chat_id = chat.id;
-
-    // 🔄 Query pesan dari Cassandra berdasarkan `chat_id`
     const query = `SELECT * FROM messages WHERE chat_id = ? ORDER BY timestamp DESC`;
     const result = await cassandra.execute(query, [chat_id], { prepare: true });
 
