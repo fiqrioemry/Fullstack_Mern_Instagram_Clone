@@ -3,11 +3,26 @@ import toast from "react-hot-toast";
 import callApi from "../services/callApi";
 
 export const useUserStore = create((set, get) => ({
+  search: [],
   profile: [],
   followers: [],
   followings: [],
   recommended: [],
+  searching: false,
   loading: false,
+
+  // 🔹 Get User Profile
+  searchUser: async (username) => {
+    set({ searching: true });
+    try {
+      const search = await callApi.searchUser(username);
+      set({ search });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ searching: false });
+    }
+  },
 
   // 🔹 Get User Profile
   getUserProfile: async (username) => {

@@ -1,7 +1,7 @@
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
-import AuthRoute from "./middleware";
+
 import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Settings from "./pages/Settings";
@@ -16,6 +16,7 @@ import UserTags from "./components/UserTags";
 import UserSaved from "./components/UserSaved";
 import UserFollowers from "./components/modal/UserFollowers";
 import UserFollowings from "./components/modal/UserFollowings";
+import { AuthRoute, NonAuthRoute } from "./middleware";
 
 function App() {
   const location = useLocation();
@@ -28,17 +29,17 @@ function App() {
         <Route
           path="/signin"
           element={
-            <AuthRoute>
+            <NonAuthRoute>
               <SignIn />
-            </AuthRoute>
+            </NonAuthRoute>
           }
         />
         <Route
           path="/signup"
           element={
-            <AuthRoute>
+            <NonAuthRoute>
               <SignUp />
-            </AuthRoute>
+            </NonAuthRoute>
           }
         />
         <Route path="*" element={<NotFound />} />

@@ -17,7 +17,7 @@ export const GlobalProvider = ({ children }) => {
 
   const [mount, setMount] = useState(false);
   const [background, setBackground] = useState(null);
-  const { isUserAuth, userData, userAuthCheck } = useAuthStore();
+  const { user, authCheck, isAuthenticate } = useAuthStore();
 
   const { handleSearch, openSearch, searchRef } = useHandleSearch();
   useHandleDarkMode();
@@ -30,9 +30,9 @@ export const GlobalProvider = ({ children }) => {
   } = useHandleModal();
 
   useEffect(() => {
-    userAuthCheck();
+    authCheck();
     setMount(false);
-  }, [userAuthCheck]);
+  }, [authCheck]);
 
   return (
     <GlobalContext.Provider
@@ -43,8 +43,8 @@ export const GlobalProvider = ({ children }) => {
         navigate,
         currentPath,
         openModal,
-        isUserAuth,
-        userData,
+        isAuthenticate,
+        user,
         setOpenModal,
         handleOpenModal,
         handleCloseModal,

@@ -118,42 +118,42 @@ const callApi = {
 
   createPost: async (formData) => {
     return authInstance
-      .post('/api/post', formData)
+      .post('/post', formData)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   updatePost: async (formData, postId) => {
     return authInstance
-      .put(`/api/post/${postId}`, formData)
+      .put(`/post/${postId}`, formData)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   deletePost: async (postId) => {
     return authInstance
-      .delete(`/api/post/${postId}`)
+      .delete(`/post/${postId}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   getPostDetail: async (postId) => {
     return authInstance
-      .get(`/api/post/${postId}`)
+      .get(`/post/${postId}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   getPublicPosts: async () => {
     return authInstance
-      .get('/api/post')
+      .get('/post')
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   getPostsFromFollowings: async () => {
     return authInstance
-      .get('/api/post/followings')
+      .get('/post/followings')
       .then((res) => res.data)
       .catch(errorHandle);
   },
@@ -161,14 +161,14 @@ const callApi = {
   // 🔹 Like & Unlike API's
   likePost: async (postId) => {
     return authInstance
-      .post(`/api/post/${postId}/like`)
+      .post(`/post/${postId}/like`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   unlikePost: async (postId) => {
     return authInstance
-      .delete(`/api/post/${postId}/like`)
+      .delete(`/post/${postId}/like`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
@@ -176,21 +176,21 @@ const callApi = {
   // 🔹 Comment API's
   getComments: async (postId) => {
     return authInstance
-      .get(`/api/post/${postId}/comments`)
+      .get(`/post/${postId}/comments`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   createComment: async (formData, postId) => {
     return authInstance
-      .post(`/api/post/${postId}/comments`, formData)
+      .post(`/post/${postId}/comments`, formData)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   deleteComment: async (postId, commentId) => {
     return authInstance
-      .delete(`/api/post/${postId}/comments/${commentId}`)
+      .delete(`/post/${postId}/comments/${commentId}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },

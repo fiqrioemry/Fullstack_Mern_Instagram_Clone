@@ -121,7 +121,17 @@ export const usePostStore = create((set, get) => ({
 
   createComment: async (formData, postId) => {
     try {
-      const message = await callApi.getComments(formData, postId);
+      const message = await callApi.createComment(formData, postId);
+      toast.success(message);
+      await get().getComments(postId);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  deleteComment: async (formData, postId) => {
+    try {
+      const message = await callApi.deleteComment(formData, postId);
       toast.success(message);
       await get().getComments(postId);
     } catch (error) {
