@@ -4,85 +4,115 @@ import {
   HomeIcon,
   Search,
   SquarePlus,
-} from "lucide-react";
+} from 'lucide-react';
 
-export const initialSignInForm = {
-  identifier: "",
-  password: "",
+// authentication state & control
+export const signInState = {
+  identifier: '',
+  password: '',
 };
 
-export const initialSignUpForm = {
-  username: "",
-  fullname: "",
-  email: "",
-  password: "",
+export const signInControl = [
+  {
+    name: 'identifier',
+    label: 'email / username',
+    type: 'email',
+    placeholder: 'Enter your email / username ',
+    component: 'input',
+  },
+  {
+    name: 'password',
+    label: 'password',
+    type: 'password',
+    placeholder: 'Enter your password ',
+    component: 'input',
+  },
+];
+
+export const signUpState = {
+  username: '',
+  fullname: '',
+  email: '',
+  password: '',
 };
 
-export const initialProfileForm = {
-  avatar:
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmYb6Pn2mA3WBta7vCKwtjxoGyRWQxOgtc6Q&s",
-  fullname: "ahmad fiqri oemry",
-  bio: "im so goood",
-  gender: "male",
+export const profileState = {
+  email: '',
+  username: '',
+  avatar: '',
+  fullname: '',
+  bio: '',
+  birthday: '',
+  gender: '',
+  isPrivate: '',
 };
 
-export const initialPostForm = {
-  content: "",
+export const profileControl = [
+  {
+    name: 'fullname',
+    label: 'fullname',
+    type: 'text',
+    placeholder: 'Enter your name here',
+    component: 'input',
+  },
+  {
+    name: 'bio',
+    label: 'bio',
+    type: 'text',
+    placeholder: 'Enter your bio here',
+    component: 'textarea',
+  },
+  {
+    name: 'birthday',
+    label: 'birthday',
+    type: 'date',
+    placeholder: 'Add your birthday',
+    component: 'input',
+  },
+  {
+    name: 'gender',
+    label: 'gender',
+    type: 'select',
+    placeholder: 'Select your gender',
+    component: 'select',
+    options: ['male', 'female'],
+  },
+];
+
+export const postState = {
+  content: '',
   images: [],
-  preview: [],
 };
 
-export const controlSignInForm = [
+export const postControl = [
   {
-    name: "identifier",
-    type: "email",
-    placeholder: "Enter your email ",
-    style: "flex items-center capitalize",
+    name: 'content',
+    label: 'content',
+    type: 'text',
+    placeholder: 'Write a post',
+    component: 'input',
   },
   {
-    name: "password",
-    type: "password",
-    placeholder: "Enter your password ",
-    style: "flex items-center capitalize",
+    name: 'images',
+    label: 'images',
+    type: '',
+    placeholder: 'Maks. 5 Image and less than 1mb each',
+    component: 'upload',
   },
 ];
 
-export const controlSignUpForm = [
-  {
-    name: "username",
-    type: "text",
-    placeholder: "Enter your username",
-    style: "flex items-center",
-  },
-  {
-    name: "fullname",
-    type: "text",
-    placeholder: "Enter your full name",
-    style: "flex items-center",
-  },
-  {
-    name: "email",
-    type: "email",
-    placeholder: "Enter your email",
-    style: "flex items-center",
-  },
-  {
-    name: "password",
-    type: "password",
-    placeholder: "Enter your password",
-    style: "flex items-center",
-  },
-];
-
-export const initialCommentForm = {
-  comment: "",
+export const commentState = {
+  content: '',
+  parentId: '',
 };
 
-export const initialCommentConfig = [
+export const commentControl = [
   {
-    name: "comment",
-    type: "text",
-    placeholder: "Add a comment ...",
+    name: 'content',
+    label: 'content',
+    type: 'text',
+    placeholder: 'Write a comment',
+    component: 'input',
   },
 ];
 
@@ -93,38 +123,38 @@ export const sidebarConfiguration = ({
 }) => [
   {
     icon: HomeIcon,
-    action: () => handleNavigate(""),
-    title: "home",
+    action: () => handleNavigate(''),
+    title: 'home',
   },
   {
     icon: CircleUserRound,
     action: () => handleNavigate(`/profile`),
-    title: "profile",
+    title: 'profile',
   },
   {
     icon: Compass,
-    title: "explore",
-    action: () => handleNavigate("explore"),
+    title: 'explore',
+    action: () => handleNavigate('explore'),
   },
   {
     icon: Search,
-    action: () => handleSearch("search"),
-    title: "search",
+    action: () => handleSearch('search'),
+    title: 'search',
   },
   {
     icon: SquarePlus,
-    action: () => handleOpenModal("create"),
-    title: "create",
+    action: () => handleOpenModal('create'),
+    title: 'create',
   },
 ];
 
 export const animateSearch = {
   close: {
-    left: "-100%",
-    transition: { duration: 0.5, ease: "easeInOut" },
+    left: '-100%',
+    transition: { duration: 0.5, ease: 'easeInOut' },
   },
   open: {
-    left: "75px",
-    transition: { duration: 0.5, ease: "easeInOut" },
+    left: '75px',
+    transition: { duration: 0.5, ease: 'easeInOut' },
   },
 };
