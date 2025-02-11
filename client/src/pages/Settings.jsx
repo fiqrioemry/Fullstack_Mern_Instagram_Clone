@@ -1,32 +1,24 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useHandleForm } from "../hooks/useHandleForm";
-import { initialProfileForm } from "../config";
+import { useEffect } from "react";
+import { profileControl } from "@/config";
+import { useUserStore } from "@/store/useUserStore";
+import InputForm from "@/components/form/InputForm";
+import { useFormSchema } from "@/hooks/useFormSchema";
+import { useFileUpload } from "@/hooks/useFileUpload";
+import InputButton from "@/components/form/InputButton";
+import UploadButton from "@/components/form/UploadButton";
 
 const Settings = () => {
-  const { formData, handleChange, handleValidate, fileInputRef } =
-    useHandleForm(initialProfileForm);
+  const { updateMyProfile, loading, getMyProfile, profile } = useUserStore();
+  const profileForm = useFormSchema(profile, profileControl, updateMyProfile);
 
-  const isValid = handleValidate();
+  const { singleUpload } = useFileUpload(
+    profileForm.setFieldValue,
+    profileForm.values.avatar
+  );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted with data:", formData);
-  };
-
-  const handlePhotoChange = () => {
-    fileInputRef.current.click();
-  };
+  useEffect(() => {
+    getMyProfile();
+  }, [getMyProfile]);
 
   return (
     <div className="flex">
@@ -40,86 +32,25 @@ const Settings = () => {
               <div className="p-6 flex gap-8 border rounded-lg">
                 <div className="w-28 h-28 rounded-full border">
                   <img
-                    src={formData.avatar}
+                    src={profileForm.values.avatar}
                     alt="Profile Preview"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="space-y-3">
                   <h2 className=" text-xl font-semibold">ahmadfiqri95</h2>
-                  <Button
-                    variant="custom"
-                    size="md"
-                    onClick={handlePhotoChange}
-                  >
-                    Change photo
-                  </Button>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleChange}
-                    name="avatar"
-                    className="hidden"
+                  <UploadButton
+                    title="Change Photo"
+                    inputName={"avatar"}
+                    loading={loading}
+                    action={singleUpload}
                   />
                 </div>
               </div>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label className="px-2 text-lg font-semibold">Fullname</label>
-                <Input
-                  className="bg-background"
-                  name="fullname"
-                  value={formData.fullname}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="px-2 text-lg font-semibold">Bio</label>
-                <Textarea
-                  name="bio"
-                  value={formData.bio}
-                  onChange={handleChange}
-                  className="w-full py-2 text-sm bg-background resize-none focus:outline-none overflow-y-scroll no-scrollbar"
-                  placeholder="Write your bio here ..."
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="px-2 text-lg font-semibold">Gender</label>
-                <Select
-                  name="gender"
-                  value={formData.gender}
-                  onValueChange={(value) =>
-                    handleChange({ target: { name: "gender", value } })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Select gender</SelectLabel>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex justify-end py-3">
-                <Button
-                  type="submit"
-                  disabled={!isValid}
-                  variant="custom"
-                  size="md"
-                >
-                  Save changes
-                </Button>
-              </div>
-            </form>
+            <InputForm>
+              <InputButton loading={loading} formik={profileForm} />
+            </InputForm>
           </div>
         </div>
       </div>

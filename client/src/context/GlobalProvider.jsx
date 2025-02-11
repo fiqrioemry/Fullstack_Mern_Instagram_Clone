@@ -31,7 +31,7 @@ export const GlobalProvider = ({ children }) => {
 
   useEffect(() => {
     authCheck();
-    setMount(false);
+    // setMount(false);
   }, [authCheck]);
 
   return (
@@ -56,7 +56,7 @@ export const GlobalProvider = ({ children }) => {
       }}
     >
       <Toaster />
-      {children}
+      {isAuthenticate === null ? null : children}
     </GlobalContext.Provider>
   );
 };

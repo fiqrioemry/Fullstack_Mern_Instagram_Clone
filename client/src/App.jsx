@@ -9,14 +9,16 @@ import NotFound from "./pages/NotFound";
 import PostDetails from "./pages/PostDetails";
 import Layout from "./components/layout/Layout";
 import { useProvider } from "./context/GlobalProvider";
-import { Route, Routes, useLocation } from "react-router-dom";
 import DetailPostModal from "./components/modal/DetailPostModal";
 import UserPosts from "./components/UserPosts";
 import UserTags from "./components/UserTags";
 import UserSaved from "./components/UserSaved";
 import UserFollowers from "./components/modal/UserFollowers";
 import UserFollowings from "./components/modal/UserFollowings";
+
+// support
 import { AuthRoute, NonAuthRoute } from "./middleware";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
   const location = useLocation();

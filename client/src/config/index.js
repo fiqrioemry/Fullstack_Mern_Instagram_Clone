@@ -29,12 +29,48 @@ export const signInControl = [
   },
 ];
 
+// delete later
+export const initialPostForm = {
+  content: '',
+};
+
 export const signUpState = {
   username: '',
   fullname: '',
   email: '',
   password: '',
 };
+
+export const signUpControl = [
+  {
+    name: 'username',
+    label: 'username',
+    type: 'text',
+    placeholder: 'Enter your username ',
+    component: 'input',
+  },
+  {
+    name: 'fullname',
+    label: 'fullname',
+    type: 'text',
+    placeholder: 'Enter your fullname ',
+    component: 'input',
+  },
+  {
+    name: 'email',
+    label: 'email ',
+    type: 'email',
+    placeholder: 'Enter your email  ',
+    component: 'input',
+  },
+  {
+    name: 'password',
+    label: 'password',
+    type: 'password',
+    placeholder: 'Enter your password ',
+    component: 'input',
+  },
+];
 
 export const profileState = {
   email: '',
