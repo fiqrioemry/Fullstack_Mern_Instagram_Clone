@@ -1,39 +1,29 @@
-import AuthForm from "../components/form/AuthForm";
-import { useHandleForm } from "../hooks/useHandleForm";
-import { controlSignInForm, initialSignInForm } from "../config";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "@/store/useAuthStore";
+import InputForm from "@/components/form/InputForm";
+import { useFormSchema } from "@/hooks/useFormSchema";
+import { signInControl, signInState } from "@/config";
+import InputButton from "@/components/form/InputButton";
 
 const SignIn = () => {
-  const { userSignIn, isAuthLoading } = useAuthStore();
-  const { formData, handleChange, handleSubmit, handleValidate } =
-    useHandleForm(initialSignInForm);
-
-  const isValid = handleValidate();
-
-  const onSubmit = () => userSignIn(formData);
+  const { userSignIn, loading } = useAuthStore();
+  const signInForm = useFormSchema(signInState, signInControl, userSignIn);
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <AuthForm
-              onSubmit={(e) => handleSubmit(e, onSubmit)}
-              formData={formData}
-              isLoading={isAuthLoading}
-              controlForm={controlSignInForm}
-              submitTitle={"Sign-In"}
-              buttonTitle={"Sign In with Google"}
-              footerTitle={"Dont have an account ? "}
-              footerLink={"Sign up "}
-              path="/signup"
-              handleChange={handleChange}
-              isValid={isValid}
-            />
+            <InputForm formik={signInForm} formControl={signInControl}>
+              <InputButton
+                formik={signInForm}
+                title="signin"
+                loading={loading}
+              />
+            </InputForm>
           </div>
         </div>
       </div>
-      <div className="relative hidden bg-muted lg:block">
+      {/* <div className="relative hidden bg-muted lg:block">
         <img
           src="https://techmind.id/wp-content/uploads/2024/06/IG.jpeg"
           alt="Image"
@@ -43,7 +33,7 @@ const SignIn = () => {
               : "brightness-[0.2] grayscale dark"
           }`}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,38 +1,56 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import { axiosInstance } from "@/services";
+import callApi from "../services/callApi";
 
-export const useCommentStore = create((set) => ({
-  success: null,
-  message: null,
-  comments: [],
+export const useCommentStore = create((set, get) => ({
   replies: [],
-  isCommentLoading: true,
-  isRepliesLoading: true,
+  comments: [],
+  loading: true,
 
-  getComments: async (postId) => {
+  likePost: async (postId) => {
     try {
-      const response = await axiosInstance.get(`/api/post/${postId}/comments`);
-      set({ comments: response.data.data });
+      const message = await callApi.likePost(postId);
+      toast.success(message);
     } catch (error) {
       console.log(error);
-      set({ comments: [] });
-    } finally {
-      set({ isCommentLoading: false });
     }
   },
 
-  addComment: async (postId, commentData) => {
+  unlikePost: async (postId) => {
     try {
-      const response = await axiosInstance.post(
-        `/api/post/${postId}/comments`,
-        commentData
-      );
-      toast.success(response.data.message);
+      const message = await callApi.unlikePost(postId);
+      toast.success(message);
     } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isCommentLoading: false });
+      console.log(error);
+    }
+  },
+
+  getComments: async (postId) => {
+    try {
+      const comments = await callApi.getComments(postId);
+      set({ comments });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  createComment: async (formData, postId) => {
+    try {
+      const message = await callApi.createComment(formData, postId);
+      toast.success(message);
+      await get().getComments(postId);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  deleteComment: async (formData, postId) => {
+    try {
+      const message = await callApi.deleteComment(formData, postId);
+      toast.success(message);
+      await get().getComments(postId);
+    } catch (error) {
+      console.log(error);
     }
   },
 }));

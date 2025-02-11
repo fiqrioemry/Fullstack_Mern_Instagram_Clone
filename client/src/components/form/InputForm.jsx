@@ -1,13 +1,10 @@
 /* eslint-disable react/prop-types */
-
-import { useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useProductStore } from "@/store/useProductStore";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { CloudUpload, FilePlus, X } from "lucide-react";
-import InputLabel from "../ui/InputLabel";
+import InputLabel from "./InputLabel";
 
 function InputForm({
   formik,
