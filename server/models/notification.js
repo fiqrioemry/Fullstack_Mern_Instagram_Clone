@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       senderId: {
         type: DataTypes.INTEGER,
-        allowNull: true, // Bisa null jika sistem yang mengirim (contoh: admin)
+        allowNull: true,
       },
       postId: {
         type: DataTypes.INTEGER,
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       type: {
-        type: DataTypes.ENUM('like', 'comment', 'follow', 'mention'),
+        type: DataTypes.ENUM('like', 'comment', 'follow', 'mention', 'message'),
         allowNull: false,
       },
       isRead: {

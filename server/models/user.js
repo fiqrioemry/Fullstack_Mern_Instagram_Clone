@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'receiverId',
         as: 'notifications',
       });
+
+      // 🔹 Relasi ke Chat
+      this.hasMany(models.Chat, { foreignKey: 'user1_id', as: 'chat1' });
+      this.hasMany(models.Chat, { foreignKey: 'user2_id', as: 'chat2' });
     }
   }
   User.init(

@@ -1,13 +1,11 @@
 const cassandra = require('cassandra-driver');
 
-// Konfigurasi koneksi ke Cassandra
 const client = new cassandra.Client({
-  contactPoints: ['127.0.0.1'], // IP Cassandra, pakai 'cassandra' jika pakai Docker dengan network
-  localDataCenter: 'datacenter1', // Default data center
+  contactPoints: ['127.0.0.1'],
+  localDataCenter: 'datacenter1',
   keyspace: 'chat_app',
 });
 
-// Cek koneksi ke Cassandra
 client
   .connect()
   .then(() => console.log('✅ Connected to Cassandra'))

@@ -1,67 +1,85 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert("Posts", [
+    await queryInterface.bulkInsert('Posts', [
       {
         id: 1,
-        userId: 1,
-        content:
-          "Post pertama.sate padang enaknya kalau dimakan pakai kerupuk jangek",
-        createdAt: "2024-12-20 05:17:42",
-        updatedAt: "2024-12-20 05:17:42",
+        userId: 1, // Random 1-5
+        content: 'Enjoying a warm cup of coffee while watching the sunset.',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: 2,
-        userId: 1,
+        userId: 2,
         content:
-          "Post kedua.jadi seorang software engineer itu sangatlah menyenangkan",
-        createdAt: "2024-12-20 05:18:49",
-        updatedAt: "2024-12-20 05:18:49",
+          'Learning JavaScript is fun, especially when building projects.',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: 3,
-        userId: 2,
+        userId: 3,
         content:
-          "Post pertama. user apple, perjalanan menuju bukit tinggi sangatlah jauh namun pemandangannya memuaskan mata",
-        createdAt: "2024-12-20 10:28:51",
-        updatedAt: "2024-12-20 10:28:51",
+          'Hiking through the mountains was an unforgettable experience!',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: 4,
-        userId: 2,
-        content:
-          "Post kedua. pertandingan bola antara indonesia vs arab sangatlah seru karena permainannya sangat sengit",
-        createdAt: "2024-12-20 10:29:42",
-        updatedAt: "2024-12-20 10:29:42",
+        userId: 4,
+        content: 'Reading books is a great way to escape reality for a while.',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: 5,
-        userId: 2,
-        content: "Post ketiga. Makan mie bakso malam hari pasti sangat enak",
-        createdAt: "2024-12-20 10:30:13",
-        updatedAt: "2024-12-20 10:30:13",
+        userId: 5,
+        content: 'Cooking homemade pasta today! Wish me luck!',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: 6,
-        userId: 3,
-        content: "Hari libur naik delman pergi ke kota",
-        createdAt: "2024-12-20 11:02:46",
-        updatedAt: "2024-12-20 11:02:46",
+        userId: 1,
+        content: 'Attending a tech conference this weekend. Super excited!',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: 7,
+        userId: 2,
+        content: 'Just watched an amazing movie! Highly recommend it.',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 8,
         userId: 3,
-        content:
-          "makan soto pekalongan di jawa tengah rasanya manis. kurang pas sama lidah saya yang senang gurih",
-        createdAt: "2024-12-20 11:03:20",
-        updatedAt: "2024-12-20 11:03:20",
+        content: "Trying out a new gym routine. Let's see how long I last!",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 9,
+        userId: 4,
+        content: 'A road trip with friends is always a great idea.',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 10,
+        userId: 5,
+        content: 'Finally finished my project! Time to celebrate!',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("Posts", null, {});
+    await queryInterface.bulkDelete('Posts', null, {});
   },
 };

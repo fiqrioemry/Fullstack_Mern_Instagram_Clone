@@ -1,52 +1,184 @@
-"use strict";
+'use strict';
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert("Likes", [
+  async up(queryInterface, Sequelize) {
+    await queryInterface.bulkInsert('Likes', [
+      // Likes on Posts
       {
         id: 1,
-        userId: 3,
+        userId: 2,
+        entityType: 'post',
         entityId: 1,
-        entityType: "post",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 2,
-        userId: 4,
+        userId: 3,
+        entityType: 'post',
         entityId: 1,
-        entityType: "post",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 3,
-        userId: 3,
-        entityId: 1,
-        entityType: "comment",
+        userId: 4,
+        entityType: 'post',
+        entityId: 2,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 4,
-        userId: 4,
-        entityId: 1,
-        entityType: "comment",
+        userId: 5,
+        entityType: 'post',
+        entityId: 3,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 5,
+        userId: 6,
+        entityType: 'post',
+        entityId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 6,
+        userId: 7,
+        entityType: 'post',
+        entityId: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 7,
+        userId: 8,
+        entityType: 'post',
+        entityId: 6,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 8,
+        userId: 9,
+        entityType: 'post',
+        entityId: 7,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 9,
+        userId: 10,
+        entityType: 'post',
+        entityId: 8,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 10,
+        userId: 1,
+        entityType: 'post',
+        entityId: 9,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+
+      // Likes on Comments
+      {
+        id: 11,
+        userId: 3,
+        entityType: 'comment',
+        entityId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 12,
         userId: 4,
-        entityId: 1,
-        entityType: "reply",
+        entityType: 'comment',
+        entityId: 3,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 13,
+        userId: 5,
+        entityType: 'comment',
+        entityId: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 14,
+        userId: 6,
+        entityType: 'comment',
+        entityId: 7,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 15,
+        userId: 7,
+        entityType: 'comment',
+        entityId: 9,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 16,
+        userId: 8,
+        entityType: 'comment',
+        entityId: 11,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 17,
+        userId: 9,
+        entityType: 'comment',
+        entityId: 13,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 18,
+        userId: 10,
+        entityType: 'comment',
+        entityId: 15,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 19,
+        userId: 1,
+        entityType: 'comment',
+        entityId: 17,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 20,
+        userId: 2,
+        entityType: 'comment',
+        entityId: 19,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 21,
+        userId: 3,
+        entityType: 'comment',
+        entityId: 19,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     ]);
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("Likes", null, {});
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('Likes', null, {});
   },
 };

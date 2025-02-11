@@ -17,6 +17,7 @@ app.use('/api/auth', router.authRoute);
 app.use('/api/user', services.userRoute);
 app.use('/api/post', services.postRoute);
 app.use('/api/chat', services.chatRoute);
+app.use('/api/notifcation', services.notificationRoute);
 
 server.listen(SERVER_PORT, () => {
   console.log(`Server connected on port ${SERVER_PORT}`);
