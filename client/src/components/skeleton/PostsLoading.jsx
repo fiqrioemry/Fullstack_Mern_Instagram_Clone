@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const PostsSkeleton = () => {
+const PostsLoading = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-4">
@@ -14,4 +14,4 @@ const PostsSkeleton = () => {
   );
 };
 
-export default PostsSkeleton;
+export default PostsLoading;

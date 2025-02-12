@@ -17,23 +17,4 @@ export const useRepliestore = create((set, get) => ({
       set({ loading: false });
     }
   },
-
-  createReplies: async (formData, postId, commentId) => {
-    try {
-      const message = await callApi.createReplies(formData, postId, commentId);
-      toast.success(message);
-      await get().getReplies(postId);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  deleteReplies: async (formData, postId) => {
-    try {
-      const message = await callApi.deleteReplies(formData, postId);
-      toast.success(message);
-    } catch (error) {
-      console.log(error);
-    }
-  },
 }));

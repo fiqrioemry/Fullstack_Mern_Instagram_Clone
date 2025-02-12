@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Avatar from "./Avatar";
 import Timestamp from "../Timestamp";
 import { Link } from "react-router-dom";
@@ -6,7 +7,7 @@ const Replies = ({ replies }) => {
   return (
     <div>
       {replies.map((reply) => (
-        <div key={reply.id}>
+        <div key={reply.replyId}>
           <div className="flex space-x-3">
             <Avatar avatar={reply.avatar} />
 

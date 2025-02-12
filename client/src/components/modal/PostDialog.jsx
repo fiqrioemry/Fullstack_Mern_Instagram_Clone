@@ -1,9 +1,8 @@
-import Post from "@/components/post/Post";
 import { useEffect } from "react";
+import Post from "@/components/post/Post";
 import { usePostStore } from "@/store/usePostStore";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { DialogTitle } from "@radix-ui/react-dialog";
 
 const PostDialog = () => {
   const { id } = useParams();

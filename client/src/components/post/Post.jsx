@@ -9,12 +9,12 @@ import PostControl from "./PostControl";
 import { useCommentStore } from "@/store/useCommentStore";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
 
-const Post = ({ post, id }) => {
+const Post = ({ post }) => {
   const { getComments, comments, loading } = useCommentStore();
 
   useEffect(() => {
-    getComments(id);
-  }, [getComments, id]);
+    getComments(post.postId);
+  }, [getComments, post]);
 
   return (
     <div className="border">
@@ -27,8 +27,7 @@ const Post = ({ post, id }) => {
           <div className="border-t">
             <div className="overflow-y-scroll h-[21rem] p-2">
               <Caption post={post} />
-              {loading && <CommentsLoading />}
-              {comments.length !== 0 && <Comments comments={comments} />}
+              {loading ? <CommentsLoading /> : <Comments comments={comments} />}
             </div>
           </div>
           <div className="border-t p-2">

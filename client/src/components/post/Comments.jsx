@@ -16,7 +16,7 @@ const Comments = ({ comments }) => {
   return (
     <div className="space-y-4">
       {comments.map((comment) => (
-        <div key={comment.id}>
+        <div key={comment.postId}>
           <div className="flex space-x-3">
             <Avatar avatar={comment.avatar} />
             <div>
@@ -36,7 +36,7 @@ const Comments = ({ comments }) => {
 
               {comment.replies > 0 && replies.length === 0 && (
                 <button
-                  onClick={() => showReplies(comment.id, comment.commentId)}
+                  onClick={() => showReplies(comment.postId, comment.commentId)}
                   className="flex items-center text-xs space-x-2"
                 >
                   <span> View replies ({comment.replies}) </span>

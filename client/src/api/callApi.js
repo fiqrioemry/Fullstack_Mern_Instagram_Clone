@@ -193,6 +193,7 @@ const callApi = {
   },
 
   getReplies: async (postId, commentId) => {
+    console.log(postId, commentId);
     return authInstance
       .get(`/post/${postId}/comments/${commentId}`)
       .then((res) => res.data)

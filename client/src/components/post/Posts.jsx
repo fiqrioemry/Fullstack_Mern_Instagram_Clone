@@ -15,10 +15,13 @@ const Posts = ({ posts }) => {
           <PostAuthor data={post} />
           <Galleries images={post.images} />
           <PostControl post={post} />
-
           <div>
-            {post.commentCount !== 0 && (
-              <Link to={`/p/${post.postId}`} state={{ background: location }}>
+            {post.comments > 0 && (
+              <Link
+                className="text-xs md:text-sm"
+                to={`/p/${post.postId}`}
+                state={{ background: location }}
+              >
                 View all {post.comments} comments
               </Link>
             )}
