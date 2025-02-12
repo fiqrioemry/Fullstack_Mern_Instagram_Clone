@@ -21,6 +21,7 @@ import { AuthRoute, NonAuthRoute } from "./middleware";
 import Testing from "./pages/Testing";
 import { Route, Routes, useLocation } from "react-router-dom";
 import PostDialog from "./components/PostDialog";
+import PostDetail from "./pages/PostDetail";
 
 function App() {
   const location = useLocation();
@@ -67,7 +68,8 @@ function App() {
           </Route>
           <Route path="settings" element={<Settings />} />
           <Route path="explore" element={<Explore />} />
-          <Route path="p/:id" element={<PostDetails />} />
+          {/* <Route path="p/:id" element={<PostDetails />} /> */}
+          <Route path="/testing/p/:id" element={<PostDetail />} />
         </Route>
       </Routes>
 

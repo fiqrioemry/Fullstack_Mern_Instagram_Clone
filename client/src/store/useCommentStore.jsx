@@ -5,7 +5,7 @@ import callApi from "../api/callApi";
 export const useCommentStore = create((set, get) => ({
   replies: [],
   comments: [],
-  loading: true,
+  loading: false,
 
   likePost: async (postId) => {
     try {
@@ -27,10 +27,13 @@ export const useCommentStore = create((set, get) => ({
 
   getComments: async (postId) => {
     try {
+      set({ loading: true });
       const comments = await callApi.getComments(postId);
       set({ comments });
     } catch (error) {
       console.log(error);
+    } finally {
+      set({ loading: false });
     }
   },
 

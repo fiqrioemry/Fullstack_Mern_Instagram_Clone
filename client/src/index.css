@@ -166,6 +166,10 @@
     @apply text-sm font-semibold;
   }
 
+  h6 {
+    @apply text-xs md:text-sm font-normal;
+  }
+
   .navbar {
     @apply bg-background py-3 px-6 fixed top-0 right-0 left-0 md:hidden border-b z-10;
   }

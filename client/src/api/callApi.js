@@ -171,6 +171,7 @@ const callApi = {
 
   // 🔹 Comment API's
   getComments: async (postId) => {
+    console.log('getting comments');
     return authInstance
       .get(`/post/${postId}/comments`)
       .then((res) => res.data)

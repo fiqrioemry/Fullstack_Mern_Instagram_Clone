@@ -1,32 +1,41 @@
 /* eslint-disable react/prop-types */
-import UserAvatar from "./Avatar";
-import Timestamp from "./Timestamp";
 import { Ellipsis } from "lucide-react";
 import { Link } from "react-router-dom";
-import PostOptions from "./modal/PostOptions";
-import { ModalContainer } from "./modal/ModalContainer";
 
 const Author = ({ user }) => {
   return (
-    <div>
-      <div className="flex">
-        <div className="flex w-full gap-x-3 ">
-          <UserAvatar user={user} />
-          <div className="text-sm space-y-2">
-            <Link to={`/${user.username}`} className="font-medium">
-              {user.username}
-            </Link>
-            <div className="flex items-center gap-x-2">
-              <Timestamp createdAt={user.createdAt} />
-            </div>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center space-x-3">
+        <div className="relative w-9 h-9">
+          <div className="absolute inset-0 rounded-full border">
+            <img
+              src={user.avatar}
+              alt="User Avatar"
+              className="w-full h-full rounded-full flex-shrink-0"
+            />
           </div>
         </div>
-        <div className="w-4">
-          <ModalContainer title={<Ellipsis size={14} />} tooltip="more options">
-            <PostOptions user={user} />
-          </ModalContainer>
+
+        <div>
+          <div className="flex items-center space-x-1">
+            <Link
+              to={`/${user.username}`}
+              className="font-semibold text-gray-900 text-sm"
+            >
+              {user.username}
+            </Link>
+            <button className="text-blue-500 text-sm font-medium">
+              • Follow
+            </button>
+          </div>
         </div>
       </div>
+
+      <button className="text-gray-500 hover:text-gray-700">
+        <span className="text-xl">
+          <Ellipsis />
+        </span>
+      </button>
     </div>
   );
 };
