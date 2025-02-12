@@ -8,7 +8,7 @@ const Home = () => {
 
   useEffect(() => {
     getPostsFromFollowings();
-  }, []);
+  }, [getPostsFromFollowings]);
 
   return (
     <div className="flex">

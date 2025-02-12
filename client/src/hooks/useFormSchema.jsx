@@ -52,6 +52,7 @@ export const useFormSchema = (
     if (Object.keys(state).length) {
       formik.validateForm();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return formik;

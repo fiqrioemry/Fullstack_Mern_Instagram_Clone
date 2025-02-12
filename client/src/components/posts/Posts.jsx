@@ -21,7 +21,7 @@ const Posts = ({ posts }) => {
 
   return (
     <div className="space-y-6">
-      {/* {posts.map((post, index) => (
+      {posts.map((post, index) => (
         <div className="space-y-2 border-b" key={index}>
           <Author user={post} />
           <Galleries images={post.images} />
@@ -36,7 +36,7 @@ const Posts = ({ posts }) => {
           </div>
           <CommentForm />
         </div>
-      ))} */}
+      ))}
     </div>
   );
 };

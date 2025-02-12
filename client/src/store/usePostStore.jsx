@@ -1,12 +1,13 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import callApi from "../services/callApi";
+import callApi from "../api/callApi";
 
 export const usePostStore = create((set) => ({
   post: [],
   posts: [],
   comments: [],
   loading: false,
+  background: null,
 
   getPostDetail: async (postId) => {
     set({ loading: true });

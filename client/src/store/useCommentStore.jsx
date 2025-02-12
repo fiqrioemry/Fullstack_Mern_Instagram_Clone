@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import callApi from "../services/callApi";
+import callApi from "../api/callApi";
 
 export const useCommentStore = create((set, get) => ({
   replies: [],

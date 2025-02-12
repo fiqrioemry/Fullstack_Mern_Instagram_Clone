@@ -5,8 +5,8 @@ import { signInControl, signInState } from "@/config";
 import InputButton from "@/components/form/InputButton";
 
 const SignIn = () => {
-  const { userSignIn, loading } = useAuthStore();
-  const signInForm = useFormSchema(signInState, signInControl, userSignIn);
+  const { signin, loading } = useAuthStore();
+  const signInForm = useFormSchema(signInState, signInControl, signin);
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">

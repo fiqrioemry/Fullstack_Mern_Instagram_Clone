@@ -1,5 +1,4 @@
-import Cookies from 'js-cookie';
-import { authInstance, publicInstance } from './instance';
+import { authInstance, publicInstance } from '.';
 
 const errorHandle = (error) => {
   const errorMessage = error.response?.data?.message || 'Something went wrong';
@@ -7,6 +6,13 @@ const errorHandle = (error) => {
 };
 
 const callApi = {
+  authCheck: async () => {
+    return authInstance
+      .get('/auth/me')
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
   // 🔹Authentication API route management
   signup: async (formData) => {
     return publicInstance
@@ -19,18 +25,15 @@ const callApi = {
     return publicInstance
       .post('/auth/signin', formData)
       .then((res) => {
-        const { accessToken } = res.data;
-        Cookies.set('accessToken', accessToken, { expires: 1 });
-        return res.data.message;
+        return res.data;
       })
       .catch(errorHandle);
   },
 
   signout: async () => {
-    return authInstance
+    return publicInstance
       .post('/auth/signout')
       .then((res) => {
-        Cookies.remove('accessToken');
         return res.data.message;
       })
       .catch(errorHandle);
@@ -38,14 +41,7 @@ const callApi = {
 
   refreshToken: async () => {
     return publicInstance
-      .get('/auth/refresh')
-      .then((res) => res.data.accessToken)
-      .catch(errorHandle);
-  },
-
-  authCheck: async () => {
-    return authInstance
-      .get('/auth/me')
+      .post('/auth/refresh')
       .then((res) => res.data)
       .catch(errorHandle);
   },

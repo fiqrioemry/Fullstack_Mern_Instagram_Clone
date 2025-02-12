@@ -16,11 +16,6 @@ const DetailPostModal = () => {
   const isPostModal = location.pathname === `/p/${id}`;
   const { mount, setMount, setBackground } = useProvider();
 
-  const handleCloseModal = () => {
-    setMount(false);
-    setBackground(null);
-    navigate(-1);
-  };
   useEffect(() => {
     if (id) {
       getPostDetail(id);
@@ -29,6 +24,12 @@ const DetailPostModal = () => {
   }, [id, getPostDetail, mount, getComments]);
 
   if (!mount) return null;
+
+  const handleCloseModal = () => {
+    setMount(false);
+    setBackground(null);
+    navigate(-1);
+  };
   return (
     <>
       <Dialog

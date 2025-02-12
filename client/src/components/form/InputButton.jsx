@@ -2,11 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 
-const InputButton = ({ formik, title, loading, type = "submit", action }) => {
+const InputButton = ({ formik, title, loading, type = "submit" }) => {
   return (
     <Button
       type={type}
-      onClick={action}
       className="w-full"
       disabled={!((formik.isValid && formik.dirty) || loading)}
     >
