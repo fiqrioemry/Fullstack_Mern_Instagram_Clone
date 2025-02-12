@@ -47,7 +47,7 @@ async function userSignIn(req, res) {
   try {
     const { identifier, password } = req.body;
 
-    const userData = await User.findOne({
+    const user = await User.findOne({
       where: { [Op.or]: [{ email: identifier }, { username: identifier }] },
       include: [
         {
@@ -58,48 +58,49 @@ async function userSignIn(req, res) {
       ],
     });
 
-    if (!userData)
+    if (!user) {
       return res.status(404).json({
-        message: 'Username or email is not exist',
+        message: 'Username or email does not exist',
       });
+    }
 
-    const isMatch = await bcrypt.compare(password, userData.password);
-
-    if (!isMatch)
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json({
-        message: 'Password is wrong',
+        message: 'Password is incorrect',
       });
+    }
 
+    // Generate Access Token (Short-lived)
     const accessToken = jwt.sign(
-      { userId: userData.id },
+      { userId: user.id },
       process.env.ACCESS_TOKEN,
-      {
-        expiresIn: '1d',
-      },
+      { expiresIn: '15m' },
     );
 
+    // Generate Refresh Token (Long-lived)
     const refreshToken = jwt.sign(
-      { userId: userData.id },
+      { userId: user.id },
       process.env.REFRESH_TOKEN,
-      {
-        expiresIn: '7d',
-      },
+      { expiresIn: '7d' },
     );
 
+    // Set HTTP-Only Cookie for Refresh Token
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 7 * 1000,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
+    // Send Response with Access Token (Do not store it in Cookie)
     res.status(200).json({
-      message: 'Login is success',
-      accessToken,
+      message: 'Login successful',
+      accessToken, // Frontend should store this in memory (not in Cookie)
     });
   } catch (error) {
     return res.status(500).json({
-      message: 'Login is failed',
+      message: 'Login failed',
       error: error.message,
     });
   }
@@ -115,6 +116,7 @@ async function userSignOut(req, res) {
 
 async function userAuthCheck(req, res) {
   const { userId } = req.user;
+
   try {
     const user = await User.findByPk(userId, {
       include: [{ model: Profile, as: 'profile' }],
@@ -130,9 +132,7 @@ async function userAuthCheck(req, res) {
       avatar: user.profile?.avatar,
     };
 
-    res.status(200).json({
-      payload,
-    });
+    res.status(200).json(payload);
   } catch (error) {
     return res.status(500).json({
       message: 'Failed to get Authorization',
@@ -170,9 +170,7 @@ async function userAuthRefresh(req, res) {
       { expiresIn: '30m' },
     );
 
-    res.status(200).json({
-      accessToken,
-    });
+    res.status(200).json(accessToken);
   } catch (error) {
     return res.status(500).json({
       message: 'Failed to refresh token',

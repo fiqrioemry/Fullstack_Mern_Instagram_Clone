@@ -18,8 +18,10 @@ const {
   createComment,
   getComments,
   deleteComment,
+  getReplies,
 } = require('../../controller/comment');
 
+router.get('/', getPublicPosts);
 router.get('/followings', isAuthenticate, getPostsFromFollowings);
 router.post(
   '/',
@@ -34,12 +36,9 @@ router.put(
   updatePost,
 );
 router.delete('/:postId', isAuthenticate, deletePost);
-router.get('/', isAuthenticate, getPublicPosts);
 router.get('/:postId', isAuthenticate, getPostDetail);
 
-router.post('/', isAuthenticate, createPost);
-router.delete('/:postId', isAuthenticate, deletePost);
-router.put('/:postId', isAuthenticate, updatePost);
+// post management (crud)
 
 // like & unlike a post
 router.post('/:postId/like', isAuthenticate, likePost);
@@ -48,6 +47,7 @@ router.delete('/:postId/like', isAuthenticate, unlikePost);
 // comment management on post
 router.get('/:postId/comments', isAuthenticate, getComments);
 router.post('/:postId/comments', isAuthenticate, createComment);
+router.get('/:postId/comments/:commentId', isAuthenticate, getReplies);
 router.delete('/:postId/comments/:commentId', isAuthenticate, deleteComment);
 
 module.exports = router;

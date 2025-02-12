@@ -1,4 +1,4 @@
-const { User, Post, Comment, Notification } = require('../../models');
+const { User, Post, Profile, Comment, Notification } = require('../../models');
 
 // Fungsi untuk mengekstrak username dari mention (@username)
 function extractMentions(content) {
@@ -72,7 +72,82 @@ async function createComment(req, res) {
       );
     }
 
-    return res.status(201).json({ message: 'Comment added successfully' });
+    return res.status(201).json('Comment added successfully');
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to add comment',
+      error: error.message,
+    });
+  }
+}
+
+async function createReplies(req, res) {
+  const { userId } = req.user;
+  const { content, parentId } = req.body;
+  const { postId, commentId } = req.params;
+
+  try {
+    // 1. Cari post berdasarkan ID
+    const post = await Post.findByPk(postId);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    let receiverId = post.userId; // Default pemilik post yang menerima notifikasi
+    let type = 'comment'; // Jenis notifikasi default
+
+    // 2. Jika ini reply (balasan ke komentar lain)
+    if (parentId) {
+      const parentComment = await Comment.findByPk(parentId);
+      if (!parentComment) {
+        return res.status(404).json({ message: 'Parent comment not found' });
+      }
+
+      receiverId = parentComment.userId; // Pemilik komentar utama yang menerima notifikasi
+      type = 'reply'; // Jenis notifikasi berubah menjadi "reply"
+    }
+
+    // 3. Buat komentar baru
+    const newComment = await Comment.create({
+      userId,
+      postId,
+      parentId: parentId || null,
+      content,
+    });
+
+    // 4. Kirim notifikasi jika user yang mengomentari bukan pemilik post/comment
+    if (receiverId !== userId) {
+      await Notification.create({
+        receiverId, // Penerima notifikasi
+        senderId: userId, // Pengirim notifikasi
+        postId,
+        commentId: newComment.id,
+        type, // "comment" atau "reply"
+      });
+    }
+
+    // 5. **Implementasi Mention dalam Komentar**
+    const mentionedUsernames = extractMentions(content); // Ambil semua username yang disebut
+    if (mentionedUsernames.length > 0) {
+      const mentionedUsers = await User.findAll({
+        where: { username: mentionedUsernames },
+        attributes: ['id', 'username'],
+      });
+
+      // 6. Buat notifikasi mention untuk setiap user yang disebut
+      await Promise.all(
+        mentionedUsers.map((mentionedUser) =>
+          Notification.create({
+            receiverId: mentionedUser.id,
+            senderId: userId,
+            postId,
+            commentId: newComment.id,
+            type: 'mention',
+          }),
+        ),
+      );
+    }
+
+    return res.status(201).json('Comment added successfully');
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -86,7 +161,7 @@ async function getComments(req, res) {
   const { postId } = req.params;
 
   try {
-    const comments = await Comment.findAll({
+    const commentsData = await Comment.findAll({
       where: { postId, parentId: null },
       order: [['createdAt', 'ASC']],
       include: [
@@ -108,18 +183,78 @@ async function getComments(req, res) {
             {
               model: Profile,
               as: 'profile',
-              attributes: ['fullname'],
+              attributes: ['fullname', 'avatar'],
             },
           ],
         },
       ],
     });
 
-    return res.status(200).json({ comments });
+    const comments = commentsData.map((comment) => {
+      return {
+        id: comment.postId,
+        commentId: comment.id,
+        userId: comment.userId,
+        username: comment.user.username,
+        avatar: comment.user.profile.avatar,
+        content: comment.content,
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
+        replies: comment.replies.length,
+      };
+    });
+    return res.status(200).json(comments);
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: 'Failed to get comments',
+      error: error.message,
+    });
+  }
+}
+
+async function getReplies(req, res) {
+  const { postId, commentId } = req.params;
+
+  try {
+    const repliesData = await Comment.findAll({
+      where: { postId, parentId: commentId },
+      order: [['createdAt', 'ASC']],
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'username'],
+          include: [
+            {
+              model: Profile,
+              as: 'profile',
+              attributes: ['fullname', 'avatar'],
+            },
+          ],
+        },
+      ],
+    });
+
+    const replies = repliesData.map((reply) => {
+      return {
+        replyId: reply.id,
+        postId: reply.postId,
+        commentId: reply.parentId,
+        content: reply.content,
+        userId: reply.userId,
+        username: reply.username,
+        avatar: reply.avatar,
+        createdAt: reply.createdAt,
+        updatedAt: reply.updatedAt,
+      };
+    });
+
+    return res.status(200).json(replies);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to get replies',
       error: error.message,
     });
   }
@@ -155,4 +290,5 @@ module.exports = {
   getComments,
   createComment,
   deleteComment,
+  getReplies,
 };

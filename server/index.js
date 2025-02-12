@@ -10,9 +10,17 @@ const CLIENT_HOST = process.env.CLIENT_HOST;
 const SERVER_PORT = process.env.SERVER_PORT;
 
 app.use(cookies());
-app.use(express.json({ limit: '10mb' }));
-app.use(cors({ origin: CLIENT_HOST, credentials: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: CLIENT_HOST,
+    credentials: true,
+    methods: ['POST', 'PUT', 'GET', 'DELETE'],
+  }),
+);
 
+// route configuration
 app.use('/api/auth', router.authRoute);
 app.use('/api/user', services.userRoute);
 app.use('/api/post', services.postRoute);

@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Like extends Model {
     static associate(models) {
       // 🔹 Like dikaitkan dengan User yang melakukan like
-      this.belongsTo(models.User, { foreignKey: 'userId' });
+      this.belongsTo(models.User, { foreignKey: 'userId', as: 'like' });
 
       // 🔹 Like bisa dikaitkan dengan Post
       this.belongsTo(models.Post, {

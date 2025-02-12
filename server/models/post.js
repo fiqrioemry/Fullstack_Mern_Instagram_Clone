@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasMany(models.Like, {
         foreignKey: 'entityId',
+        as: 'like',
         constraints: false,
         onDelete: 'CASCADE',
         scope: {
@@ -19,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasMany(models.Comment, {
         foreignKey: 'postId',
-        as: 'comments',
+        as: 'comment',
         onDelete: 'CASCADE',
       });
 

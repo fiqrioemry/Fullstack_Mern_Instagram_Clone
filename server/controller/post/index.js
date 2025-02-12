@@ -18,14 +18,10 @@ const { Op } = require('sequelize');
 
 // Tested = pass
 async function getPostsFromFollowings(req, res) {
-  // 1. Ambil req params
-  const { userId } = req.user;
-  const { limit } = req.query;
+  const limit = parseInt(req.query.limit) || 5;
+  const userId = req.user.userId;
 
   try {
-    const total = parseInt(limit) || 5; // 2. Default limit 5
-
-    // 3. Cari user (Followings) relasi many-to-many
     const user = await User.findByPk(userId, {
       include: {
         model: User,
@@ -34,30 +30,41 @@ async function getPostsFromFollowings(req, res) {
       },
     });
 
-    // 4.  kirim response 404 jika tidak ada
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json('User not found');
     }
 
-    // 5. Ambil daftar userId dari akun yang diikuti
     const followingIds = user.Followings.map(
       (following) => following.Follow.followingId,
     );
 
-    // 6. Jika user tidak mengikuti siapa pun, kirim response kosong
     if (followingIds.length === 0) {
-      return res.status(200).json({
-        message: 'No posts to show, you are not following anyone.',
-        data: [],
-      });
+      return res
+        .status(400)
+        .json('No posts to show, you are not following anyone.');
     }
 
-    // 7. Ambil semua post dari user yang diikuti
-    const posts = await Post.findAll({
-      limit: total,
+    const postsData = await Post.findAll({
+      limit,
       where: { userId: { [Op.in]: followingIds } },
       order: [['createdAt', 'DESC']],
-      attributes: ['id', 'content', 'createdAt'],
+      attributes: [
+        'id',
+        'content',
+        'createdAt',
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)`,
+          ),
+          'comments',
+        ],
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*) FROM Likes WHERE Likes.entityId = Post.id AND Likes.entityType = 'post')`,
+          ),
+          'likes',
+        ],
+      ],
       include: [
         {
           model: User,
@@ -67,7 +74,7 @@ async function getPostsFromFollowings(req, res) {
             {
               model: Profile,
               as: 'profile',
-              attributes: ['fullname', 'avatar'],
+              attributes: ['avatar'],
             },
           ],
         },
@@ -79,147 +86,52 @@ async function getPostsFromFollowings(req, res) {
       ],
     });
 
-    // 8. Jika tidak ada post ditemukan, kirim response 404
-    if (!posts.length) {
-      return res.status(404).json({ message: 'No posts found' });
+    if (!postsData.length) {
+      return res.status(404).json('Posts not found');
     }
 
-    // 9. Hitung jumlah komentar & like untuk setiap post
-    const followingPosts = await Promise.all(
-      posts.map(async (post) => {
-        const [commentCount, likeCount] = await Promise.all([
-          Comment.count({ where: { postId: post.id } }),
-          Like.count({ where: { entityId: post.id, entityType: 'post' } }),
-        ]);
+    const posts = postsData.map((post) => ({
+      postId: post.id,
+      content: post.content,
+      images: post.gallery?.map((gallery) => gallery.image) || [],
+      createdAt: post.createdAt,
+      userId: post.user.id,
+      fullname: post.user.fullname,
+      avatar: post.user.profile.avatar,
+      likes: post.dataValues.likes,
+      comments: post.dataValues.comments,
+    }));
 
-        const { id: postId, content, createdAt, user } = post;
-        const { id: userId, username, profile } = user;
-        const { fullname, avatar } = profile;
-        const images = post.gallery.map((gallery) => gallery.image);
-
-        return {
-          userId,
-          postId,
-          username,
-          fullname,
-          avatar,
-          content,
-          images,
-          commentCount,
-          likeCount,
-          createdAt,
-          isOwner: userId === req.user?.userId, // 10. Periksa apakah user adalah pemilik post
-        };
-      }),
-    );
-
-    // 11. Kirim response dengan daftar post dari user yang diikuti
-    res.status(200).json({
-      followingPosts,
-    });
+    return res.status(200).json(posts);
   } catch (error) {
-    // 12. Tangani error jika terjadi kesalahan saat mengambil data
-    res.status(500).json({
-      message: 'Failed to retrieve following posts',
-      error: error.message,
-    });
-  }
-}
-
-// Tested = pass
-async function getPublicPosts(req, res) {
-  // 1. Query limit default 5
-  const { limit } = req.query;
-
-  try {
-    const total = parseInt(limit) || 5;
-
-    // 2. Ambil semua post non-private
-    const posts = await Post.findAll({
-      limit: total,
-      order: [['createdAt', 'DESC']],
-      attributes: ['id', 'content', 'createdAt'],
-      include: [
-        {
-          model: User,
-          as: 'user',
-          where: { isPrivate: false }, // public access only
-          attributes: ['id', 'username'],
-          include: [
-            {
-              model: Profile,
-              as: 'profile',
-              attributes: ['fullname', 'avatar'],
-            },
-          ],
-        },
-        {
-          model: PostGallery,
-          as: 'gallery',
-          attributes: ['image'],
-        },
-      ],
-    });
-
-    // 3. Jika tidak ada post, kirim response 404
-    if (!posts.length) {
-      return res.status(404).json({ message: 'No public posts found' });
-    }
-
-    // 4. Hitung jumlah komentar & like tiap post
-    const publicPosts = await Promise.all(
-      posts.map(async (post) => {
-        const [commentCount, likeCount] = await Promise.all([
-          Comment.count({ where: { postId: post.id } }),
-          Like.count({ where: { entityId: post.id, entityType: 'post' } }),
-        ]);
-
-        const { id: postId, content, createdAt, user } = post;
-        const { id: userId, username, profile } = user;
-        const { fullname, avatar } = profile;
-        const images = post.gallery.map((gallery) => gallery.image);
-
-        // 5. cek user sebagai pemilik post
-        const isOwner = req.user?.userId === userId;
-
-        return {
-          userId,
-          postId,
-          username,
-          fullname,
-          avatar,
-          content,
-          images,
-          commentCount,
-          likeCount,
-          createdAt,
-          isOwner,
-        };
-      }),
-    );
-
-    // 6. Kirim response data
-    res.status(200).json({
-      publicPosts,
-    });
-  } catch (error) {
-    // 7. Error handling for debugging
-    return res.status(500).json({
-      message: 'Failed to get public posts',
-      error: error.message,
-    });
+    console.log(error.message);
+    return res.status(500).json('Failed to get user posts');
   }
 }
 
 // Tested = pass
 async function getPostDetail(req, res) {
-  // 1. Ambil userId dari token autentikasi dan postId dari parameter URL
-  const { userId } = req.user;
   const { postId } = req.params;
-
   try {
-    // 2. Cari post berdasarkan ID, include data user, profile, gallery
-    const post = await Post.findByPk(postId, {
+    const postData = await Post.findOne({
+      where: { id: postId },
+      attributes: [
+        'id',
+        'content',
+        'createdAt',
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)`,
+          ),
+          'comments',
+        ],
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*) FROM Likes WHERE Likes.entityId = Post.id AND Likes.entityType = 'post')`,
+          ),
+          'likes',
+        ],
+      ],
       include: [
         {
           model: User,
@@ -229,7 +141,7 @@ async function getPostDetail(req, res) {
             {
               model: Profile,
               as: 'profile',
-              attributes: ['fullname', 'avatar'],
+              attributes: ['avatar'],
             },
           ],
         },
@@ -241,90 +153,129 @@ async function getPostDetail(req, res) {
       ],
     });
 
-    // 3. Jika post tidak ditemukan, kirim response 404
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
+    if (!postData) {
+      return res.status(404).json('Post not found');
     }
 
-    // 4. Hitung jumlah komentar
-    const commentCount = await Comment.count({ where: { postId } });
-
-    // 5. Hitung jumlah like pada post
-    const likeCount = await Like.count({
-      where: { entityId: postId, entityType: 'post' },
-    });
-
-    // 6. Periksa pemilik post atau bkn
-    const isOwner = post.user.id === userId;
-
-    // 7. Format data agar mudah dikelola
-    const postDetail = {
-      userId: post.user.id,
-      postId: post.id,
-      username: post.user.username,
-      fullname: post.user.profile.fullname,
-      avatar: post.user.profile.avatar,
-      content: post.content,
-      images: post.gallery.map((gallery) => gallery.image),
-      commentCount,
-      likeCount,
-      createdAt: post.createdAt,
-      isOwner,
+    const post = {
+      id: postData.id,
+      content: postData.content,
+      images: postData.gallery?.map((gallery) => gallery.image) || [],
+      createdAt: postData.createdAt,
+      userId: postData.user.id,
+      username: postData.user.username,
+      avatar: postData.user.profile.avatar,
+      likes: postData.dataValues.likes,
+      comments: postData.dataValues.comments,
     };
 
-    // 8. Kirim response
-    res.status(200).json({ postDetail });
+    return res.status(200).json(post);
   } catch (error) {
-    //9. Error handling for debugging
-    return res.status(500).json({
-      message: 'Failed to get post details',
-      error: error.message,
+    console.log(error.message);
+    return res.status(500).json('Failed to get post details');
+  }
+}
+
+// Tested = pass
+async function getPublicPosts(req, res) {
+  const limit = parseInt(req.query.limit) || 5;
+
+  try {
+    const postsData = await Post.findAll({
+      limit,
+      order: [['createdAt', 'DESC']],
+      attributes: [
+        'id',
+        'content',
+        'createdAt',
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)`,
+          ),
+          'comments',
+        ],
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*) FROM Likes WHERE Likes.entityId = Post.id AND Likes.entityType = 'post')`,
+          ),
+          'likes',
+        ],
+      ],
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'username'],
+          include: [
+            {
+              model: Profile,
+              as: 'profile',
+              attributes: ['avatar'],
+            },
+          ],
+        },
+        {
+          model: PostGallery,
+          as: 'gallery',
+          attributes: ['image'],
+        },
+      ],
     });
+
+    if (!postsData.length) {
+      return res.status(404).json('Posts not found');
+    }
+
+    const posts = postsData.map((post) => ({
+      postId: post.id,
+      content: post.content,
+      images: post.gallery?.map((gallery) => gallery.image) || [],
+      createdAt: post.createdAt,
+      userId: post.user.id,
+      fullname: post.user.fullname,
+      avatar: post.user.profile.avatar,
+      likes: post.dataValues.likes,
+      comments: post.dataValues.comments,
+    }));
+
+    return res.status(200).json(posts);
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json('Failed to get user posts');
   }
 }
 
 // Tested = pass
 async function getUserPosts(req, res) {
-  // 1. Ambil username dari parameter dan limit dari query string
-  const { username } = req.params;
-  let { limit } = req.query;
-  limit = parseInt(limit) || 5; // Jika tidak ada limit, gunakan default 5
+  const username = req.params.username;
+  const limit = parseInt(req.query.limit) || 5;
 
   try {
-    // 2. Cari user berdasarkan username
     const user = await User.findOne({
       where: { username },
       attributes: ['id', 'isPrivate'],
     });
 
-    // 3. Jika user tidak ditemukan, kirim response 404
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found',
-      });
+      return res.status(404).json('User not found');
     }
 
-    const userId = user.id; // ID pemilik post
-    const requestingUserId = req.user.userId; // ID user yang meminta data
+    const userId = user.id;
+    const requestingUserId = req.user.userId;
 
-    // 4. Jika user lain mencoba mengakses postingan private, cek apakah mereka follow
     if (user.isPrivate && userId !== requestingUserId) {
       const followRecord = await Follow.findOne({
         where: { followerId: requestingUserId, followingId: userId },
       });
 
-      // 5. Jika tidak follow, tolak akses dengan status 403
       if (!followRecord) {
-        return res.status(403).json({
-          message: 'You must follow this user to see their posts.',
-          payload: [],
-        });
+        return res
+          .status(403)
+          .json('You must follow this user to see their posts.');
       }
     }
 
-    // 6. Ambil semua post dari user yang bersangkutan dengan limit dan urutan terbaru
-    const posts = await Post.findAll({
+    const postsData = await Post.findAll({
       where: { userId },
       limit,
       order: [['createdAt', 'DESC']],
@@ -332,14 +283,12 @@ async function getUserPosts(req, res) {
         'id',
         'content',
         'createdAt',
-        // 7. Hitung jumlah komentar pada setiap post
         [
           sequelize.literal(
             `(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)`,
           ),
           'commentCount',
         ],
-        // 8. Hitung jumlah like pada setiap post
         [
           sequelize.literal(
             `(SELECT COUNT(*) FROM Likes WHERE Likes.entityId = Post.id AND Likes.entityType = 'post')`,
@@ -361,36 +310,23 @@ async function getUserPosts(req, res) {
       ],
     });
 
-    // 9. Jika user tidak memiliki post, kembalikan response kosong
-    if (!posts.length) {
-      return res.status(200).json({
-        message: 'This user has no posts',
-        payload: [],
-      });
+    if (!postsData.length) {
+      return res.status(200).json('This user has no posts');
     }
 
-    // 10. Format hasil agar lebih rapi
-    const userPosts = posts.map((post) => ({
+    const posts = postsData.map((post) => ({
       userId,
       postId: post.id,
       images: post.gallery?.map((gallery) => gallery.image) || [],
       createdAt: post.createdAt,
-      likeCount: post.dataValues.likeCount,
-      commentCount: post.dataValues.commentCount,
+      likes: post.dataValues.likeCount,
+      comments: post.dataValues.commentCount,
     }));
 
-    // 11. Kembalikan response dengan daftar post user
-    return res.status(200).json({
-      userPosts,
-    });
+    return res.status(200).json(posts);
   } catch (error) {
-    // 12. Tangani error jika terjadi kesalahan saat mengambil data
-    console.error('Error fetching user posts:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to get user posts',
-      error: error.message,
-    });
+    console.log(error.message);
+    return res.status(500).json('Failed to get user posts');
   }
 }
 
@@ -505,7 +441,7 @@ async function updatePost(req, res) {
 async function deletePost(req, res) {
   const { userId } = req.user;
   const { postId } = req.params;
-  const t = await sequelize.transaction(); // Mulai transaksi
+  const t = await sequelize.transaction();
 
   try {
     // 🔹 1. Cari post yang akan dihapus
@@ -547,9 +483,7 @@ async function deletePost(req, res) {
     // 🔹 7. Commit transaksi jika semuanya berhasil
     await t.commit();
 
-    return res
-      .status(200)
-      .json({ success: true, message: 'Post deleted successfully' });
+    return res.status(200).json({ message: 'Post deleted successfully' });
   } catch (error) {
     // 🔹 8. Rollback transaksi jika terjadi kesalahan
     await t.rollback();
