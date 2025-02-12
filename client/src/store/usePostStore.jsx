@@ -5,7 +5,6 @@ import callApi from "../api/callApi";
 export const usePostStore = create((set) => ({
   post: [],
   posts: [],
-  comments: [],
   loading: false,
   background: null,
 
@@ -44,7 +43,7 @@ export const usePostStore = create((set) => ({
       set({ loading: false });
     }
   },
-  // this one for feed
+
   getPostsFromFollowings: async () => {
     set({ loading: true });
     try {

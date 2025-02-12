@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-import Author from "./Author";
 import Caption from "./Caption";
 import { useEffect } from "react";
 import Comments from "./Comments";
+import PostInput from "./PostInput";
+import Galleries from "./Galleries";
+import PostAuthor from "./PostAuthor";
 import PostControl from "./PostControl";
-import InputComment from "./InputComment";
-import Galleries from "./posts/Galleries";
-import CommentsLoading from "./skeleton/CommentsLoading";
-import { useCommentStore } from "../store/useCommentStore";
+import { useCommentStore } from "@/store/useCommentStore";
+import CommentsLoading from "@/components/skeleton/CommentsLoading";
 
 const Post = ({ post, id }) => {
   const { getComments, comments, loading } = useCommentStore();
@@ -22,8 +22,8 @@ const Post = ({ post, id }) => {
         <div className="col-span-6">
           <Galleries images={post.images} />
         </div>
-        <div className="col-span-4 ">
-          <Author user={post} />
+        <div className="col-span-4">
+          <PostAuthor data={post} />
           <div className="border-t">
             <div className="overflow-y-scroll h-[21rem] p-2">
               <Caption post={post} />
@@ -35,7 +35,7 @@ const Post = ({ post, id }) => {
             <PostControl post={post} />
           </div>
           <div className="border-t p-2">
-            <InputComment />
+            <PostInput />
           </div>
         </div>
       </div>

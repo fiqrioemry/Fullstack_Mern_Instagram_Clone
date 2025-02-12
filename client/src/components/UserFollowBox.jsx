@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import UserAvatar from "@/components/Avatar";
+import Avatar from "@/components/post/Avatar";
 import { Button } from "@/components/ui/button";
 
 const UserFollowBox = ({ user }) => {
   return (
     <div className="flex items-center gap-x-4" key={user.userId}>
       <div className="w-14">
-        <UserAvatar user={user} height={12} width={12} />
+        <Avatar avatar={user.avatar} height={12} width={12} />
       </div>
 
       <div className="w-full text-sm">

@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import callApi from "../api/callApi";
 
 export const useCommentStore = create((set, get) => ({
-  replies: [],
   comments: [],
   loading: false,
 

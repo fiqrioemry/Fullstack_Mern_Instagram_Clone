@@ -191,6 +191,13 @@ const callApi = {
       .then((res) => res.data)
       .catch(errorHandle);
   },
+
+  getReplies: async (postId, commentId) => {
+    return authInstance
+      .get(`/post/${postId}/comments/${commentId}`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
 };
 
 export default callApi;

@@ -1,5 +1,5 @@
 import { Smile } from "lucide-react";
-const InputComment = () => {
+const PostInput = () => {
   return (
     <div className="flex items-center">
       <Smile className="w-6 h-6" />
@@ -13,4 +13,4 @@ const InputComment = () => {
   );
 };
 
-export default InputComment;
+export default PostInput;

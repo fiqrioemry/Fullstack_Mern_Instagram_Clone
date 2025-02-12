@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Posts from "../components/posts/Posts";
+import Posts from "../components/post/Posts";
 import { usePostStore } from "../store/usePostStore";
 import PostsSkeleton from "../components/skeleton/PostsSkeleton";
 

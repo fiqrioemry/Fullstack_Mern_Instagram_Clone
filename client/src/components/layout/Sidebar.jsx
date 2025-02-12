@@ -1,7 +1,6 @@
 import WebLogo from "../WebLogo";
 import { cn } from "@/lib/utils";
 import NavLinks from "../NavLinks";
-import ProfileLink from "../ProfileLink";
 import SearchBar from "../sidebar/SearchBar";
 import { useProvider } from "../../context/GlobalProvider";
 import MenuOptions from "../sidebar/MenuOptions";
@@ -20,7 +19,6 @@ const Sidebar = () => {
 
           <div className="flex md:block">
             <NavLinks />
-            <ProfileLink />
           </div>
 
           <div className="hidden md:block">

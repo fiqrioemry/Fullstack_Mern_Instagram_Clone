@@ -9,7 +9,7 @@ import { useProvider } from "../../context/GlobalProvider";
 import { ArrowLeft, ArrowRight, SquarePlus } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Galleries from "../posts/Galleries";
+import Galleries from "../post/Galleries";
 
 const CreatePostModal = () => {
   const { createNewPost } = usePostStore();

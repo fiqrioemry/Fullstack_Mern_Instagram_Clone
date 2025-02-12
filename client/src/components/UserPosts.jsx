@@ -1,6 +1,5 @@
-/* eslint-disable react/prop-types */
 import { Button } from "./ui/button";
-import Galleries from "./posts/Galleries";
+import Galleries from "./post/Galleries";
 import { useUserStore } from "../store/useUserStore";
 import { useProvider } from "../context/GlobalProvider";
 import { useLocation, useNavigate } from "react-router-dom";

@@ -1,25 +1,22 @@
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
-
 import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import Layout from "./components/layout/Layout";
-import DetailPostModal from "./components/modal/DetailPostModal";
-import UserPosts from "./components/UserPosts";
+import PostDetail from "./pages/PostDetail";
 import UserTags from "./components/UserTags";
+import UserPosts from "./components/UserPosts";
 import UserSaved from "./components/UserSaved";
+import Layout from "./components/layout/Layout";
 import UserFollowers from "./components/modal/UserFollowers";
 import UserFollowings from "./components/modal/UserFollowings";
 
-// support
+//
 import { AuthRoute, NonAuthRoute } from "./middleware";
-import Testing from "./pages/Testing";
 import { Route, Routes, useLocation } from "react-router-dom";
-import PostDialog from "./components/PostDialog";
-import PostDetail from "./pages/PostDetail";
+import PostDialog from "./components/modal/PostDialog";
 
 function App() {
   const location = useLocation();
@@ -57,7 +54,7 @@ function App() {
         >
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
-          <Route path="testing" element={<Testing />} />
+          <Route path="p/:id" element={<PostDetail />} />
           <Route path=":username" element={<Profile />}>
             <Route index element={<UserPosts />} />
             <Route path="*" element={<UserPosts />} />
@@ -65,8 +62,6 @@ function App() {
             <Route path="saved" element={<UserSaved />} />
           </Route>
           <Route path="settings" element={<Settings />} />
-          <Route path="explore" element={<Explore />} />
-          <Route path="p/:id" element={<PostDetail />} />
         </Route>
       </Routes>
 
@@ -74,7 +69,7 @@ function App() {
         <Routes>
           <Route path=":username/followers/" element={<UserFollowers />} />
           <Route path=":username/followings/" element={<UserFollowings />} />
-          <Route path="/testing/p/:postId" element={<PostDialog />} />
+          <Route path="p/:id" element={<PostDialog />} />
         </Routes>
       )}
     </>

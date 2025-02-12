@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import Post from "../components/Post";
+import Post from "@/components/post/Post";
 import { useParams } from "react-router-dom";
-import { usePostStore } from "../store/usePostStore";
-import PostLoading from "../components/skeleton/PostLoading";
+import { usePostStore } from "@/store/usePostStore";
+import PostLoading from "@/components/skeleton/PostLoading";
 
 const PostDetail = () => {
   const { id } = useParams();

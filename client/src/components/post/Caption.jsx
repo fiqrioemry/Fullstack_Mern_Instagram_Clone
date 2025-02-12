@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import Timestamp from "./Timestamp";
+import Timestamp from "../Timestamp";
 import { Link } from "react-router-dom";
 
 const Caption = ({ post }) => {
