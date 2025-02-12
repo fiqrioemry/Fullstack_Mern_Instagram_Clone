@@ -6,9 +6,7 @@ import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import PostDetails from "./pages/PostDetails";
 import Layout from "./components/layout/Layout";
-import { useProvider } from "./context/GlobalProvider";
 import DetailPostModal from "./components/modal/DetailPostModal";
 import UserPosts from "./components/UserPosts";
 import UserTags from "./components/UserTags";
@@ -68,8 +66,7 @@ function App() {
           </Route>
           <Route path="settings" element={<Settings />} />
           <Route path="explore" element={<Explore />} />
-          {/* <Route path="p/:id" element={<PostDetails />} /> */}
-          <Route path="/testing/p/:id" element={<PostDetail />} />
+          <Route path="p/:id" element={<PostDetail />} />
         </Route>
       </Routes>
 

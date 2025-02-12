@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Author = ({ user }) => {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between p-2">
       <div className="flex items-center space-x-3">
         <div className="relative w-9 h-9">
           <div className="absolute inset-0 rounded-full border">

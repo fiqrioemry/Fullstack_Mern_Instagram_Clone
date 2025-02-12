@@ -1,21 +1,25 @@
 /* eslint-disable react/prop-types */
-import Timestamp from "./Timestamp";
-import { Button } from "@/components/ui/button";
-import { Bookmark, Heart, MessageCircle } from "lucide-react";
+
+import { Bookmark, Heart, MessageCircle, Send } from "lucide-react";
 
 const PostControl = ({ post }) => {
   return (
-    <>
-      <div className="flex gap-x-4">
-        <Heart />
-        <MessageCircle />
-        <Bookmark />
+    <div className="py-2">
+      <div className="flex justify-between items-center">
+        <div className="flex space-x-4">
+          <Heart className="w-6 h-6 text-gray-800 cursor-pointer hover:text-gray-600" />
+          <MessageCircle className="w-6 h-6 text-gray-800 cursor-pointer hover:text-gray-600" />
+          <Send className="w-6 h-6 text-gray-800 cursor-pointer hover:text-gray-600" />
+        </div>
+        <Bookmark className="w-6 h-6 text-gray-800 cursor-pointer hover:text-gray-600" />
       </div>
-      <div className="text-sm">
-        {post.likeCount !== 0 && <Button>{post.likeCount} Likes</Button>}
-      </div>
-      <Timestamp createdAt={post.createdAt} />
-    </>
+
+      <p className="mt-2 text-sm font-semibold text-gray-900">
+        {post.likes} Likes
+      </p>
+
+      <p className="text-xs text-gray-500 mt-1">January 28</p>
+    </div>
   );
 };
 
