@@ -5,7 +5,7 @@ const Testing = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <Link to={`/testing/p/50`} state={{ background: location }}>
+      <Link to={`/testing/p/1`} state={{ background: location }}>
         CLICK
       </Link>
     </div>

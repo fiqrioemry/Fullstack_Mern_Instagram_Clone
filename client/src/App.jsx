@@ -18,11 +18,9 @@ import UserFollowings from "./components/modal/UserFollowings";
 
 // support
 import { AuthRoute, NonAuthRoute } from "./middleware";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Testing from "./pages/Testing";
-import TestingDialog from "./components/TestingDialog";
-import TestingDetails from "./components/TestingDetails";
-import { useEffect } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
+import PostDialog from "./components/PostDialog";
 
 function App() {
   const location = useLocation();
@@ -70,7 +68,6 @@ function App() {
           <Route path="settings" element={<Settings />} />
           <Route path="explore" element={<Explore />} />
           <Route path="p/:id" element={<PostDetails />} />
-          <Route path="/testing/p/:id" element={<TestingDetails />} />
         </Route>
       </Routes>
 
@@ -78,7 +75,7 @@ function App() {
         <Routes>
           <Route path=":username/followers/" element={<UserFollowers />} />
           <Route path=":username/followings/" element={<UserFollowings />} />
-          <Route path="/testing/p/:id" element={<TestingDialog />} />
+          <Route path="/testing/p/:postId" element={<PostDialog />} />
         </Routes>
       )}
     </>

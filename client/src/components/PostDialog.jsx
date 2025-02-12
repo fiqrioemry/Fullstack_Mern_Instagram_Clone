@@ -1,24 +1,19 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import Post from "./Post";
 import { useEffect } from "react";
-import { usePostStore } from "../store/usePostStore";
 import PostLoading from "./skeleton/PostLoading";
+import { usePostStore } from "../store/usePostStore";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-const TestingDetailDialog = () => {
+const PostDialog = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { posts, loading, getPostDetail } = usePostStore();
+  const { post, loading, getPostDetail } = usePostStore();
 
   useEffect(() => {
     getPostDetail(postId);
-  }, [location]);
+  }, [getPostDetail, postId]);
 
   useEffect(() => {
     if (location.state?.background) {
@@ -29,10 +24,10 @@ const TestingDetailDialog = () => {
   return (
     <Dialog defaultOpen={true} onOpenChange={(open) => !open && navigate(-1)}>
       <DialogContent variant="detail">
-        {loading ? <PostLoading/> :}
+        {loading ? null : <Post post={post} />}
       </DialogContent>
     </Dialog>
   );
 };
 
-export default TestingDetailDialog;
+export default PostDialog;
