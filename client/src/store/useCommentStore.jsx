@@ -70,9 +70,7 @@ export const useCommentStore = create((set, get) => ({
 
   createComment: async (formData, postId) => {
     try {
-      console.log("postID :", postId);
-      console.log("formData.parentId :", formData.parentId);
-      console.log("formData all:", formData);
+      set({ currentInput: { commentId: null, content: "" } });
       const message = await callApi.createComment(formData, postId);
       toast.success(message);
       await get().getComments(postId);
