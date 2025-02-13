@@ -87,7 +87,7 @@ async function getComments(req, res) {
   try {
     const commentsData = await Comment.findAll({
       where: { postId, parentId: null },
-      order: [['createdAt', 'ASC']],
+      order: [['createdAt', 'DESC']],
       include: [
         {
           model: Comment,
