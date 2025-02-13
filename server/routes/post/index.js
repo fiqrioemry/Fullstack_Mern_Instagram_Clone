@@ -19,6 +19,7 @@ const {
   getComments,
   deleteComment,
   getReplies,
+  createReplies,
 } = require('../../controller/comment');
 
 router.get('/', getPublicPosts);

@@ -158,7 +158,7 @@ async function getPostDetail(req, res) {
     }
 
     const post = {
-      id: postData.id,
+      postId: postData.id,
       content: postData.content,
       images: postData.gallery?.map((gallery) => gallery.image) || [],
       createdAt: postData.createdAt,
@@ -568,6 +568,7 @@ async function likePost(req, res) {
     });
   }
 }
+
 async function unlikePost(req, res) {
   const { userId } = req.user;
   const { entityId, entityType } = req.body;

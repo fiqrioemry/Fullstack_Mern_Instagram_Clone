@@ -28,5 +28,5 @@ app.use('/api/chat', services.chatRoute);
 app.use('/api/notifcation', services.notificationRoute);
 
 server.listen(SERVER_PORT, () => {
-  console.log(`✅connected to server on port ${SERVER_PORT}`);
+  console.log(`✅ Connected to Server on port ${SERVER_PORT}`);
 });
