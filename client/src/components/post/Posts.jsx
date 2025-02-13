@@ -18,7 +18,7 @@ const Posts = ({ post }) => {
     createComment,
     post.postId
   );
-  console.log(commentForm.values);
+
   useEffect(() => {
     commentForm.setValues((prevValues) => ({
       ...prevValues,
