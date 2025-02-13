@@ -26,6 +26,7 @@ const PostInput = ({ postId }) => {
     createComment,
     postId
   );
+  console.log(commentForm.values);
 
   return (
     <div>
