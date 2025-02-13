@@ -15,18 +15,16 @@ const Posts = ({ posts }) => {
           <PostAuthor data={post} />
           <Galleries images={post.images} />
           <PostControl post={post} />
-          <div>
-            {post.comments > 0 && (
-              <Link
-                className="text-xs md:text-sm"
-                to={`/p/${post.postId}`}
-                state={{ background: location }}
-              >
-                View all {post.comments} comments
-              </Link>
-            )}
-          </div>
-          <PostInput />
+          {post.comments > 0 && (
+            <Link
+              className="text-xs md:text-sm"
+              to={`/p/${post.postId}`}
+              state={{ background: location }}
+            >
+              View all {post.comments} comments
+            </Link>
+          )}
+          <PostInput postId={post.postId} />
         </div>
       ))}
     </div>

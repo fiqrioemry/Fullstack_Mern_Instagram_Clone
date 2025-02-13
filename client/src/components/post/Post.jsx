@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import Caption from "./Caption";
 import { useEffect } from "react";
 import Comments from "./Comments";
@@ -10,7 +9,7 @@ import { useCommentStore } from "@/store/useCommentStore";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
 
 const Post = ({ post }) => {
-  const { getComments, comments, loading } = useCommentStore();
+  const { getComments, loadingComment } = useCommentStore();
 
   useEffect(() => {
     getComments(post.postId);
@@ -27,14 +26,14 @@ const Post = ({ post }) => {
           <div className="border-t">
             <div className="overflow-y-scroll h-[21rem] p-2">
               <Caption post={post} />
-              {loading ? <CommentsLoading /> : <Comments comments={comments} />}
+              {loadingComment ? <CommentsLoading /> : <Comments />}
             </div>
           </div>
           <div className="border-t p-2">
             <PostControl post={post} />
           </div>
           <div className="border-t p-2">
-            <PostInput />
+            <PostInput postId={post.postId} />
           </div>
         </div>
       </div>

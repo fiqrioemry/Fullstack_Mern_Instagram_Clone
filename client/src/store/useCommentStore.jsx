@@ -3,8 +3,51 @@ import toast from "react-hot-toast";
 import callApi from "../api/callApi";
 
 export const useCommentStore = create((set, get) => ({
+  replies: {},
   comments: [],
-  loading: false,
+  loadingReply: {},
+  loadingComment: false,
+  activePostId: null,
+  activeInput: { commentId: null, content: "" },
+
+  setInput: (postId, commentId = null, username = "") => {
+    set({
+      activePostId: postId,
+      activeInput: { commentId, content: username ? `@${username} ` : "" },
+    });
+  },
+  getComments: async (postId) => {
+    try {
+      set({ loadingComment: true });
+
+      const comments = await callApi.getComments(postId);
+      set({ comments });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loadingComment: false });
+    }
+  },
+
+  getReplies: async (postId, commentId) => {
+    try {
+      set((state) => ({
+        loadingReply: { ...state.loading, [commentId]: true },
+      }));
+
+      const replies = await callApi.getReplies(postId, commentId);
+
+      set((state) => ({
+        replies: { ...state.replies, [commentId]: replies },
+      }));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set((state) => ({
+        loadingReply: { ...state.loading, [commentId]: false },
+      }));
+    }
+  },
 
   likePost: async (postId) => {
     try {
@@ -21,18 +64,6 @@ export const useCommentStore = create((set, get) => ({
       toast.success(message);
     } catch (error) {
       console.log(error);
-    }
-  },
-
-  getComments: async (postId) => {
-    try {
-      set({ loading: true });
-      const comments = await callApi.getComments(postId);
-      set({ comments });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      set({ loading: false });
     }
   },
 
