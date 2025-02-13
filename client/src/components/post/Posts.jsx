@@ -9,9 +9,9 @@ const Posts = ({ posts }) => {
   const location = useLocation();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       {posts.map((post, index) => (
-        <div className="space-y-2 border-b" key={index}>
+        <div className="border-b" key={index}>
           <PostAuthor data={post} />
           <Galleries images={post.images} />
           <PostControl post={post} />
@@ -21,7 +21,7 @@ const Posts = ({ posts }) => {
               to={`/p/${post.postId}`}
               state={{ background: location }}
             >
-              View all {post.comments} comments
+              view all {post.comments} comments
             </Link>
           )}
           <PostInput postId={post.postId} />

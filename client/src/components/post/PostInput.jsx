@@ -1,30 +1,26 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import { commentControl, commentState } from "@/config";
 import { useCommentStore } from "@/store/useCommentStore";
-import { useMemo } from "react";
 
 const PostInput = ({ postId }) => {
   const inputRef = useRef(null);
-  const { createComment, activePostId, activeInput } = useCommentStore();
+  const { createComment, currentPost, currentInput } = useCommentStore();
 
-  const isActive = useMemo(
-    () => activePostId === postId,
-    [activePostId, postId]
-  );
+  const isActive = useMemo(() => currentPost === postId, [currentPost, postId]);
 
   useEffect(() => {
     if (isActive && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isActive, activeInput.content]);
+  }, [isActive, currentInput.content]);
 
   const commentForm = useFormSchema(
     {
       ...commentState,
-      parentId: activeInput.commentId,
-      content: activeInput.content,
+      parentId: currentInput.commentId,
+      content: currentInput.content,
     },
     commentControl,
     createComment,

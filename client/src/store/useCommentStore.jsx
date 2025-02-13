@@ -7,13 +7,13 @@ export const useCommentStore = create((set, get) => ({
   comments: [],
   loadingReply: {},
   loadingComment: false,
-  activePostId: null,
-  activeInput: { commentId: null, content: "" },
+  currentPost: null,
+  currentInput: { commentId: null, content: "" },
 
   setInput: (postId, commentId = null, username = "") => {
     set({
-      activePostId: postId,
-      activeInput: { commentId, content: username ? `@${username} ` : "" },
+      currentPost: postId,
+      currentInput: { commentId, content: username ? `@${username} ` : "" },
     });
   },
   getComments: async (postId) => {

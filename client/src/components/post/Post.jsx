@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Caption from "./Caption";
 import { useEffect } from "react";
 import Comments from "./Comments";
