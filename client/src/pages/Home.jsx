@@ -19,9 +19,11 @@ const Home = () => {
               {loading || posts.length === 0 ? (
                 <PostsLoading />
               ) : (
-                <>
-                  <Posts posts={posts} />
-                </>
+                <div className="space-y-6">
+                  {posts.map((post) => (
+                    <Posts post={post} key={post.postId} />
+                  ))}
+                </div>
               )}
             </div>
           </div>

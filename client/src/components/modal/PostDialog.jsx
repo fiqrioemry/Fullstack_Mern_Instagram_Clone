@@ -8,11 +8,14 @@ const PostDialog = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { post, loading, getPostDetail } = usePostStore();
-  console.log(post);
+  const post = usePostStore((state) => state.post);
+  const setPost = usePostStore((state) => state.setPost);
+
   useEffect(() => {
-    getPostDetail(id);
-  }, [getPostDetail, id]);
+    if (id) {
+      setPost(parseInt(id));
+    }
+  }, [setPost, id]);
 
   useEffect(() => {
     if (location.state?.background) {
@@ -24,8 +27,7 @@ const PostDialog = () => {
     <Dialog defaultOpen={true} onOpenChange={(open) => !open && navigate(-1)}>
       <DialogTitle>
         <DialogContent variant="detail">
-          {loading && post.length === 0 && null}
-          {post.length !== 0 && <Post post={post} />}
+          {post ? <Post post={post} /> : <p>Loading...</p>}
         </DialogContent>
       </DialogTitle>
     </Dialog>

@@ -3,10 +3,15 @@ import toast from "react-hot-toast";
 import callApi from "../api/callApi";
 
 export const usePostStore = create((set) => ({
-  post: [],
+  post: null,
   posts: [],
   loading: false,
 
+  setPost: (postId) => {
+    set((state) => ({
+      post: state.posts.find((post) => post.postId === postId) || null,
+    }));
+  },
   commentCount: (postId) => {
     set((state) => ({
       posts: state.posts.map((post) =>

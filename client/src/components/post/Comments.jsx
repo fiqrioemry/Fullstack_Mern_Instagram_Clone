@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Avatar from "./Avatar.jsx";
 import Replies from "./Replies.jsx";
 import { Loader } from "lucide-react";
@@ -5,9 +6,8 @@ import { Link } from "react-router-dom";
 import Timestamp from "../Timestamp.jsx";
 import { useCommentStore } from "@/store/useCommentStore.jsx";
 
-const Comments = () => {
-  const { replies, getReplies, setInput, comments, loadingReply } =
-    useCommentStore();
+const Comments = ({ formik }) => {
+  const { replies, getReplies, comments, loadingReply } = useCommentStore();
 
   const showReplies = (postId, commentId) => {
     getReplies(postId, commentId);
@@ -34,14 +34,12 @@ const Comments = () => {
                 {comment.likes > 0 && <span>{comment.likes} likes</span>}
 
                 <button
-                  onClick={() =>
-                    setInput(
-                      comment.postId,
-                      comment.commentId,
-                      comment.username
-                    )
-                  }
-                  className="text-blue-500 text-xs"
+                  className="text-xs text-blue-500"
+                  onClick={() => {
+                    formik.setFieldValue("postId", comment.postId);
+                    formik.setFieldValue("parentId", comment.commentId);
+                    formik.setFieldValue("content", `@${comment.username} `);
+                  }}
                 >
                   Reply
                 </button>
@@ -66,7 +64,7 @@ const Comments = () => {
               )}
 
               {replies[comment.commentId] && (
-                <Replies replies={replies[comment.commentId]} />
+                <Replies replies={replies[comment.commentId]} formik={formik} />
               )}
             </div>
           </div>

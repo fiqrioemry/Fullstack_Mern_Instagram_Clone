@@ -2,10 +2,8 @@
 import Avatar from "./Avatar";
 import Timestamp from "../Timestamp";
 import { Link } from "react-router-dom";
-import { useCommentStore } from "@/store/useCommentStore";
 
-const Replies = ({ replies }) => {
-  const { setInput } = useCommentStore();
+const Replies = ({ replies, formik }) => {
   return (
     <div className="mt-2">
       {replies.map((reply) => (
@@ -25,11 +23,14 @@ const Replies = ({ replies }) => {
               </div>
               <div className="text-xs space-x-2">
                 <Timestamp createdAt={reply.createdAt} />
+
                 <button
-                  onClick={() =>
-                    setInput(reply.postId, reply.commentId, reply.username)
-                  }
-                  className="text-blue-500 text-xs"
+                  className="text-xs text-blue-500"
+                  onClick={() => {
+                    formik.setFieldValue("postId", reply.postId);
+                    formik.setFieldValue("parentId", reply.commentId);
+                    formik.setFieldValue("content", `@${reply.username} `);
+                  }}
                 >
                   Reply
                 </button>

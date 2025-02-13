@@ -138,8 +138,9 @@ export const postControl = [
 ];
 
 export const commentState = {
+  postId: null,
   content: '',
-  parentId: '',
+  parentId: null,
 };
 
 export const commentControl = [

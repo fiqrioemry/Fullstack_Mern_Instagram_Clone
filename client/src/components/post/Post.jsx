@@ -6,15 +6,32 @@ import PostInput from "./PostInput";
 import Galleries from "./Galleries";
 import PostAuthor from "./PostAuthor";
 import PostControl from "./PostControl";
+import { useFormSchema } from "@/hooks/useFormSchema";
+import { commentControl, commentState } from "@/config";
 import { useCommentStore } from "@/store/useCommentStore";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
 
 const Post = ({ post }) => {
-  const { getComments, loadingComment } = useCommentStore();
+  const { createComment, getComments, loadingComment } = useCommentStore();
+  const commentForm = useFormSchema(
+    commentState,
+    commentControl,
+    createComment,
+    post.postId
+  );
 
   useEffect(() => {
-    getComments(post.postId);
-  }, [getComments, post]);
+    commentForm.setValues((prevValues) => ({
+      ...prevValues,
+      postId: post.postId,
+    }));
+  }, [post.postId]);
+
+  useEffect(() => {
+    if (post.postId) {
+      getComments(post.postId);
+    }
+  }, [post.postId]);
 
   return (
     <div className="border">
@@ -27,14 +44,18 @@ const Post = ({ post }) => {
           <div className="border-t">
             <div className="overflow-y-scroll h-[21rem] p-2">
               <Caption post={post} />
-              {loadingComment ? <CommentsLoading /> : <Comments />}
+              {loadingComment ? (
+                <CommentsLoading />
+              ) : (
+                <Comments formik={commentForm} />
+              )}
             </div>
           </div>
           <div className="border-t p-2">
             <PostControl post={post} />
           </div>
           <div className="border-t p-2">
-            <PostInput postId={post.postId} />
+            <PostInput postId={post.postId} formik={commentForm} />
           </div>
         </div>
       </div>

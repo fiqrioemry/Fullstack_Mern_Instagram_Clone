@@ -8,15 +8,6 @@ export const useCommentStore = create((set, get) => ({
   comments: [],
   loadingReply: {},
   loadingComment: false,
-  currentPost: null,
-  currentInput: { commentId: null, content: "" },
-
-  setInput: (postId, commentId = null, username = "") => {
-    set({
-      currentPost: postId,
-      currentInput: { commentId, content: username ? `@${username} ` : "" },
-    });
-  },
 
   getComments: async (postId) => {
     try {
@@ -70,7 +61,6 @@ export const useCommentStore = create((set, get) => ({
 
   createComment: async (formData, postId) => {
     try {
-      set({ currentInput: { commentId: null, content: "" } });
       const message = await callApi.createComment(formData, postId);
       toast.success(message);
       await get().getComments(postId);
