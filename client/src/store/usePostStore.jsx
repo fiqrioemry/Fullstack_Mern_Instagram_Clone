@@ -6,7 +6,14 @@ export const usePostStore = create((set) => ({
   post: [],
   posts: [],
   loading: false,
-  background: null,
+
+  commentCount: (postId) => {
+    set((state) => ({
+      posts: state.posts.map((post) =>
+        post.postId === postId ? { ...post, comments: post.comments + 1 } : post
+      ),
+    }));
+  },
 
   getPostDetail: async (postId) => {
     set({ loading: true });

@@ -49,7 +49,13 @@ const Comments = () => {
 
               {comment.replies > 0 && !replies[comment.commentId] && (
                 <button
-                  onClick={() => showReplies(comment.postId, comment.commentId)}
+                  onClick={() =>
+                    showReplies(
+                      comment.postId,
+                      comment.commentId,
+                      comment.username
+                    )
+                  }
                   className="flex items-center text-xs space-x-2"
                 >
                   <span> View replies ({comment.replies}) </span>

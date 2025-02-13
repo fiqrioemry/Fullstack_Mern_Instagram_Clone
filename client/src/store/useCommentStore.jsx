@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "../api/callApi";
+import { usePostStore } from "./usePostStore";
 
 export const useCommentStore = create((set, get) => ({
   replies: {},
@@ -16,10 +17,10 @@ export const useCommentStore = create((set, get) => ({
       currentInput: { commentId, content: username ? `@${username} ` : "" },
     });
   },
+
   getComments: async (postId) => {
     try {
       set({ loadingComment: true });
-
       const comments = await callApi.getComments(postId);
       set({ comments });
     } catch (error) {
@@ -72,6 +73,8 @@ export const useCommentStore = create((set, get) => ({
       const message = await callApi.createComment(formData, postId);
       toast.success(message);
       await get().getComments(postId);
+      await usePostStore.getState().commentCount(postId);
+      await get().getReplies(postId, formData.parentId);
     } catch (error) {
       console.log(error);
     }

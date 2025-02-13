@@ -38,7 +38,7 @@ export const useFormSchema = (
           resetForm({
             values: {
               ...values,
-              search: values.search, // Agar search tidak terhapus
+              search: values.search,
             },
           });
         }
