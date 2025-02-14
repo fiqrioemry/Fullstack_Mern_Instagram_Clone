@@ -38,7 +38,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       type: {
-        type: DataTypes.ENUM('like', 'comment', 'follow', 'mention', 'message'),
+        type: DataTypes.ENUM(
+          'like',
+          'comment',
+          'follow',
+          'mention',
+          'reply',
+          'message',
+        ),
         allowNull: false,
       },
       isRead: {

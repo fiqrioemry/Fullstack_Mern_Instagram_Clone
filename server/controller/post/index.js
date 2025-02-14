@@ -96,7 +96,7 @@ async function getPostsFromFollowings(req, res) {
       images: post.gallery?.map((gallery) => gallery.image) || [],
       createdAt: post.createdAt,
       userId: post.user.id,
-      fullname: post.user.fullname,
+      username: post.user.username,
       avatar: post.user.profile.avatar,
       likes: post.dataValues.likes,
       comments: post.dataValues.comments,

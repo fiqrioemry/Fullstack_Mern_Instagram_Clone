@@ -1,11 +1,11 @@
 const fs = require('fs').promises;
 const { Op } = require('sequelize');
-const { User, Profile, sequelize } = require('../../models');
+const { User, Profile, Post, sequelize } = require('../../models');
 const {
   uploadMediaToCloudinary,
   deleteMediaFromCloudinary,
 } = require('../../utils/cloudinary');
-// tested
+
 async function searchUser(req, res) {
   const { query } = req.query;
 
@@ -178,7 +178,6 @@ async function updateMyProfile(req, res) {
 async function getUserProfile(req, res) {
   const { userId } = req.user;
   const { username } = req.params;
-
   try {
     const user = await User.findOne({
       where: { username },
@@ -189,9 +188,7 @@ async function getUserProfile(req, res) {
     });
 
     if (!user) {
-      return res.status(404).json({
-        message: 'User not found',
-      });
+      return res.status(404).json('User not found');
     }
 
     const [followingsCount, followersCount, postsCount] = await Promise.all([
@@ -202,7 +199,7 @@ async function getUserProfile(req, res) {
 
     const isCurrentUser = user.id === userId;
 
-    const payload = {
+    const profile = {
       userId: user.id,
       username: user.username,
       fullname: user.profile.fullname,
@@ -215,14 +212,10 @@ async function getUserProfile(req, res) {
       isCurrentUser,
     };
 
-    return res.status(200).json({
-      payload,
-    });
+    return res.status(200).json(profile);
   } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to retrieve user detail',
-      error: error.message,
-    });
+    console.log(error.message);
+    return res.status(500).json('Failed to retrieve user detail');
   }
 }
 

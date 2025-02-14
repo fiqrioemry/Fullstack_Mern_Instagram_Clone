@@ -45,12 +45,10 @@ async function followUser(req, res) {
     });
   }
 }
-
 // tested
 async function unfollowUser(req, res) {
-  const userId = Number(req.user.userId);
-  let { followingId } = req.params;
-  followingId = Number(followingId);
+  const userId = req.user.userId;
+  const followingId = parseInt(req.params.followingId);
 
   try {
     if (userId === followingId) {
@@ -64,29 +62,21 @@ async function unfollowUser(req, res) {
       where: { followerId: userId, followingId },
     });
 
+    const username = followRecord.username;
+
     if (!followRecord) {
-      return res.status(400).json({
-        message: 'You are not following this user',
-      });
+      return res.status(400).json('You are not following this user');
     }
 
-    try {
-      await followRecord.destroy();
-    } catch (error) {
-      return res.status(500).json({
-        message: 'Failed to unfollow user',
-        error: error.message,
-      });
-    }
+    await followRecord.destroy();
 
     return res.status(200).json({
-      message: 'Unfollow successful',
+      message: 'Unfollowing is Success',
+      username,
     });
   } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to process request',
-      error: error.message,
-    });
+    console.log(error.message);
+    return res.status(500).json('Failed to process request');
   }
 }
 // tested
@@ -99,9 +89,7 @@ async function getFollowers(req, res) {
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
-      return res.status(404).json({
-        message: 'User not found',
-      });
+      return res.status(404).json('User not found');
     }
 
     const [userFollowers, myFollowings] = await Promise.all([
@@ -122,10 +110,7 @@ async function getFollowers(req, res) {
     ]);
 
     if (!userFollowers || userFollowers.length === 0) {
-      return res.status(200).json({
-        message: 'User has no followers',
-        data: [],
-      });
+      return res.status(200).json([]);
     }
 
     const myFollowingIds = myFollowings?.Followings?.map((f) => f.id) || [];
@@ -135,19 +120,16 @@ async function getFollowers(req, res) {
       username: follower.username,
       fullname: follower.profile?.fullname || null,
       avatar: follower.profile?.avatar || null,
-      isFollowedByMe: myFollowingIds.includes(follower.id),
+      isFollow: myFollowingIds.includes(follower.id),
     }));
 
-    return res.status(200).json({
-      followers,
-    });
+    return res.status(200).json(followers);
   } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to get user followers',
-      error: error.message,
-    });
+    console.log(error.message);
+    return res.status(500).json('Failed to get user followers');
   }
 }
+
 // tested
 async function getFollowings(req, res) {
   const { userId } = req.user;
@@ -166,7 +148,7 @@ async function getFollowings(req, res) {
       });
     }
 
-    const [userFollowings, myFollowings] = await Promise.all([
+    const [userFollowings] = await Promise.all([
       user.getFollowings({
         limit,
         attributes: ['id', 'username'],
@@ -183,33 +165,21 @@ async function getFollowings(req, res) {
       }),
     ]);
 
-    // Jika user tidak memiliki followings, langsung return
     if (!userFollowings || userFollowings.length === 0) {
-      return res.status(200).json({
-        message: 'User is not following anyone',
-        data: [],
-      });
+      return res.status(200).json([]);
     }
 
-    const myFollowingIds = myFollowings?.Followings?.map((f) => f.id) || [];
-
-    // Format response
     const followings = userFollowings.map((following) => ({
       userId: following.id,
       username: following.username,
-      fullname: following.profile?.fullname || null,
-      avatar: following.profile?.avatar || null,
-      isFollowedByMe: myFollowingIds.includes(following.id),
+      fullname: following.profile?.fullname,
+      avatar: following.profile?.avatar,
     }));
 
-    return res.status(200).json({
-      followings,
-    });
+    return res.status(200).json(followings);
   } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to get user followings',
-      error: error.message,
-    });
+    console.log(error.message);
+    return res.status(500).json('Failed to get user followings');
   }
 }
 

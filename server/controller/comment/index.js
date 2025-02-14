@@ -13,28 +13,20 @@ async function createComment(req, res) {
   const { postId } = req.params;
 
   try {
-    console.log(`Creating comment for postId: ${postId} by userId: ${userId}`);
-
-    // 1. Cek apakah post ada
     const post = await Post.findByPk(postId);
-    if (!post) {
-      console.warn(`Post not found: ${postId}`);
-      return res.status(404).json({ message: 'Post not found' });
-    }
+    if (!post) return res.status(404).json({ message: 'Post not found' });
 
     let receiverId = post.userId;
     let type = 'comment';
 
-    // 2. Jika ini reply (balasan ke komentar lain)
     if (parentId) {
       const parentComment = await Comment.findByPk(parentId);
       if (!parentComment) {
-        console.warn(`Parent comment not found: ${parentId}`);
         return res.status(404).json({ message: 'Parent comment not found' });
       }
 
-      receiverId = parentComment.userId; // Pemilik komentar utama yang menerima notifikasi
-      type = 'reply'; // Jenis notifikasi berubah menjadi "reply"
+      receiverId = parentComment.userId;
+      type = 'reply';
     }
 
     // 3. Buat komentar baru
@@ -45,27 +37,17 @@ async function createComment(req, res) {
       content,
     });
 
-    console.log(`Comment created successfully: ${newComment.id}`);
-
-    // 4. Kirim notifikasi jika user yang mengomentari bukan pemilik post/comment
     if (receiverId !== userId) {
-      try {
-        await Notification.create({
-          receiverId,
-          senderId: userId,
-          postId,
-          commentId: newComment.id,
-          type,
-        });
-        console.log(`Notification sent to receiverId: ${receiverId}`);
-      } catch (error) {
-        console.error(
-          `Failed to send notification to receiverId ${receiverId}: ${error.message}`,
-        );
-      }
+      await Notification.create({
+        receiverId,
+        senderId: userId,
+        postId,
+        commentId: newComment.id,
+        type,
+      });
     }
 
-    // 5. Implementasi Mention dalam Komentar
+    // 5. **Implementasi Mention dalam Komentar**
     const mentionedUsernames = extractMentions(content); // Ambil semua username yang disebut
     if (mentionedUsernames.length > 0) {
       const mentionedUsers = await User.findAll({
@@ -73,36 +55,22 @@ async function createComment(req, res) {
         attributes: ['id', 'username'],
       });
 
-      if (mentionedUsers.length === 0) {
-        console.warn(`No mentioned users found for: ${mentionedUsernames}`);
-      }
-
       // 6. Buat notifikasi mention untuk setiap user yang disebut
       await Promise.all(
-        mentionedUsers.map(async (mentionedUser) => {
-          try {
-            await Notification.create({
-              receiverId: mentionedUser.id,
-              senderId: userId,
-              postId,
-              commentId: newComment.id,
-              type: 'mention',
-            });
-            console.log(
-              `Mention notification sent to ${mentionedUser.username}`,
-            );
-          } catch (error) {
-            console.error(
-              `Failed to send mention notification to ${mentionedUser.username}: ${error.message}`,
-            );
-          }
-        }),
+        mentionedUsers.map((mentionedUser) =>
+          Notification.create({
+            receiverId: mentionedUser.id,
+            senderId: userId,
+            postId,
+            commentId: newComment.id,
+            type: 'mention',
+          }),
+        ),
       );
     }
 
-    return res.status(201).json({ message: 'Comment added successfully' });
+    return res.status(201).json('Comment added successfully');
   } catch (error) {
-    console.error(`Error in createComment: ${error.message}`);
     return res.status(500).json({
       success: false,
       message: 'Failed to add comment',

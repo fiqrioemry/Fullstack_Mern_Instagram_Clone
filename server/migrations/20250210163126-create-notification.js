@@ -46,7 +46,14 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       type: {
-        type: Sequelize.ENUM('like', 'comment', 'follow', 'mention', 'message'),
+        type: Sequelize.ENUM(
+          'like',
+          'comment',
+          'follow',
+          'mention',
+          'reply',
+          'message',
+        ),
         allowNull: false,
       },
       isRead: {
