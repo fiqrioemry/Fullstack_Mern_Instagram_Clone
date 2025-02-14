@@ -150,24 +150,23 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-primary;
+    @apply bg-background text-primary text-sm md:text-base;
   }
 
   h1 {
-    @apply text-3xl uppercase font-semibold;
+    @apply text-3xl capitalize font-semibold;
   }
   h2 {
-    @apply text-2xl uppercase font-semibold;
+    @apply text-2xl capitalize font-semibold;
   }
   h3 {
-    @apply text-lg tracking-[2px] uppercase font-semibold;
+    @apply text-xl capitalize font-semibold;
   }
   h4 {
-    @apply text-sm font-semibold;
+    @apply text-lg capitalize  font-semibold;
   }
-
-  h6 {
-    @apply text-xs md:text-sm font-normal;
+  h5 {
+    @apply text-lg capitalize font-medium;
   }
 
   .navbar {
@@ -206,5 +205,9 @@
 
   .content_margin {
     @apply py-2 px-2 border-b border-border;
+  }
+
+  .hover-btn {
+    @apply font-medium dark:text-gray-100 dark:hover:text-gray-300 text-gray-800 hover:text-gray-600 duration-300;
   }
 }

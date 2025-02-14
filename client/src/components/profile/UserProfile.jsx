@@ -33,25 +33,27 @@ const UserProfile = ({ user }) => {
               </button>
             </div>
           </div>
-          <div className="flex gap-6 mt-2">
+          <div className="flex items-center gap-6 mt-4">
             <span>{user.posts} Posts</span>
             <Link
-              className="text-xs md:text-sm"
+              className="hover-btn"
               to={`/${user.username}/followings`}
               state={{ background: location }}
             >
               Followings
             </Link>
             <Link
-              className="text-xs md:text-sm"
+              className="hover-btn"
               to={`/${user.username}/followers`}
               state={{ background: location }}
             >
               Followers
             </Link>
           </div>
-          <p className="mt-2 font-medium">{user.username}</p>
-          <p className="text-gray-500">{user.fullname}</p>
+          <div>
+            <p className="mt-2 font-medium">{user.username}</p>
+            <p className="text-gray-500">{user.fullname}</p>
+          </div>
         </div>
       </div>
     </div>

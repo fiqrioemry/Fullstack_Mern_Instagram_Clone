@@ -11,7 +11,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "text-primary hover:text-primary/50 font-semibold",
-        follow: "bg-follow hover:bg-follow-hover text-white h-10 ",
+        follow: "bg-follow hover:bg-follow-hover text-white",
+        unfollow: "bg-gray-200 hover:bg-gray-300 text-black ",
         nav: "hover:bg-foreground-hover rounded-md w-full",
         ghost:
           "bg-foreground hover:bg-foreground-hover text-primary rounded-md",

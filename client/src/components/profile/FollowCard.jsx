@@ -16,7 +16,11 @@ const FollowCard = ({ user }) => {
         </div>
       </div>
 
-      <Button variant="follow">Follow</Button>
+      {user.isFollowedByMe ? (
+        <Button variant="follow">Follow</Button>
+      ) : (
+        <Button variant="unfollow">unfollow</Button>
+      )}
     </div>
   );
 };
