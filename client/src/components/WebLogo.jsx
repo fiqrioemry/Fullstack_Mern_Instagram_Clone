@@ -1,11 +1,7 @@
-/* eslint-disable react/prop-types */
-import InstagramIcon from "./common/InstagramIcon";
-import InstagramLogo from "./common/InstagramLogo";
-
-const WebLogo = ({ openSearch }) => {
+const WebLogo = () => {
   return (
     <div className="flex items-center justify-center">
-      {openSearch ? <InstagramIcon /> : <InstagramLogo size={30} width={105} />}
+      <h2>Momento</h2>
     </div>
   );
 };

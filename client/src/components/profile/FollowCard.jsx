@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
-import Avatar from "@/components/post/Avatar";
-import { Button } from "@/components/ui/button";
-import { useUserStore } from "../../store/useUserStore";
 import { Loader } from "lucide-react";
+import { Link } from "react-router-dom";
+import Avatar from "@/components/ui/Avatar";
+import { Button } from "@/components/ui/button";
+import { useUserStore } from "@/store/useUserStore";
 
 const FollowCard = ({ user }) => {
   const { follow, unfollow, loading } = useUserStore();

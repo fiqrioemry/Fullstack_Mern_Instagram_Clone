@@ -3,13 +3,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useFileUpload } from "@/hooks/useFileUpload";
-import { CloudUpload, FilePlus, X } from "lucide-react";
+
 import InputLabel from "./InputLabel";
+import Galleries from "../post/Galleries";
+import { Button } from "../ui/button";
 
 function InputForm({
   formik,
   formStyle,
-  inputStyle,
   formControl,
   disabled = false,
   children,
@@ -25,73 +26,25 @@ function InputForm({
     switch (control.component) {
       case "upload":
         element = (
-          <div className={`min-${inputStyle}`}>
+          <div className="h-96 flex items-center justify-center">
             {Array.isArray(formik.values[control.name]) &&
             formik.values[control.name].length !== 0 ? (
-              <div className="grid_display_5">
-                {formik.values[control.name].map((image, index) => (
-                  <div className="relative" key={index}>
-                    <button
-                      type="button"
-                      name={control.name}
-                      className="remove_preview_btn"
-                      onClick={() => removePreview(control.name, index)}
-                    >
-                      <X size={14} />
-                    </button>
-                    <div
-                      className={`rounded-md overflow-hidden  ${inputStyle}`}
-                    >
-                      {image instanceof File || image instanceof Blob ? (
-                        <img
-                          src={URL.createObjectURL(image)}
-                          className="w-full h-full object-cover"
-                          onLoad={(e) => {
-                            if (e.target.src.startsWith("blob:")) {
-                              URL.revokeObjectURL(e.target.src);
-                            }
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src={image}
-                          alt={`image-${index}`}
-                          className="object-cover"
-                        />
-                      )}
-                    </div>
-                  </div>
-                ))}
-                {/* kalau file tidak melebihi maksimum, kolom tambah ditampilkan */}
-                {formik.values[control.name].length < 5 && (
-                  <div className={inputStyle}>
-                    <label htmlFor={control.label} className="upload_btn">
-                      <FilePlus size={20} />
-                      <input
-                        id={control.label}
-                        multiple
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        name={control.name}
-                        onChange={multiFile}
-                      />
-                    </label>
-                  </div>
-                )}
+              <div>
+                <Galleries images={formik.values[control.name]} />
               </div>
             ) : (
               <label
-                className={`upload_btn ${inputStyle}`}
-                htmlFor={control.label}
+                className=" h-full z-10 flex items-center justify-center default_border border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted transition-all duration-300"
+                htmlFor={control.name}
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, control.name)}
               >
-                <div className="flex_center">
-                  <CloudUpload size={24} />
+                <div className="flex flex-col items-center gap-2">
+                  <span>Drag your photoes here</span>
+                  <Button variant="follow">select from computer</Button>
                 </div>
                 <input
-                  id={control.label}
+                  id={control.name}
                   multiple
                   type="file"
                   accept="image/*"

@@ -1,6 +1,6 @@
 import { Camera } from "lucide-react";
-import { useUserStore } from "../store/useUserStore";
-import { useAuthStore } from "../store/useAuthStore";
+import { useUserStore } from "../../store/useUserStore";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const UserTags = () => {
   const { userData } = useAuthStore();

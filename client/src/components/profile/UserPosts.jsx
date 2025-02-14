@@ -1,7 +1,7 @@
-import { Button } from "./ui/button";
-import Galleries from "./post/Galleries";
-import { useUserStore } from "../store/useUserStore";
-import { useProvider } from "../context/GlobalProvider";
+import { Button } from "../ui/button";
+import Galleries from "../post/Galleries";
+import { useUserStore } from "../../store/useUserStore";
+import { useProvider } from "../../context/GlobalProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Camera, HeartIcon, MessageCircle } from "lucide-react";
 

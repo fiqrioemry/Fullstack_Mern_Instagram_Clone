@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import Avatar from "@/components/post/Avatar";
+import Avatar from "@/components/ui/Avatar";
 import { useAuthStore } from "@/store/useAuthStore";
-
+import { CreateNewPost } from "@/components/create_post/CreateNewPost";
 import { Search, Home, Compass, MessageCircle, Bell } from "lucide-react";
-import { CreateNewPost } from "../create_post/CreateNewPost";
 
 const BottomNavbar = () => {
   const { user } = useAuthStore();

@@ -14,7 +14,23 @@ const Galleries = ({ images }) => {
         {images.map((image, index) => (
           <CarouselItem key={index}>
             <div className="flex aspect-square">
-              <img src={image} alt="post_image" />
+              {image instanceof File || image instanceof Blob ? (
+                <img
+                  src={URL.createObjectURL(image)}
+                  className="w-full h-full object-cover"
+                  onLoad={(e) => {
+                    if (e.target.src.startsWith("blob:")) {
+                      URL.revokeObjectURL(e.target.src);
+                    }
+                  }}
+                />
+              ) : (
+                <img
+                  src={image}
+                  alt={`image-${index}`}
+                  className="object-cover"
+                />
+              )}
             </div>
           </CarouselItem>
         ))}

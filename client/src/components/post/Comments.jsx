@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-import Avatar from "./Avatar.jsx";
 import Replies from "./Replies.jsx";
 import { Loader } from "lucide-react";
 import { Link } from "react-router-dom";
-import Timestamp from "../Timestamp.jsx";
+import Avatar from "@/components/ui/Avatar.jsx";
+import Timestamp from "@/components/ui/Timestamp.jsx";
 import { useCommentStore } from "@/store/useCommentStore.jsx";
 
 const Comments = ({ formik }) => {

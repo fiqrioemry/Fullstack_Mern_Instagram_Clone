@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import Avatar from "./Avatar";
 import { Ellipsis } from "lucide-react";
 import { Link } from "react-router-dom";
+import Avatar from "@/components/ui/Avatar";
 
 const PostAuthor = ({ data }) => {
   return (

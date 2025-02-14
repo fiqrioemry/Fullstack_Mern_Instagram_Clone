@@ -6,7 +6,7 @@ const InputButton = ({ formik, title, loading, type = "submit" }) => {
   return (
     <Button
       type={type}
-      className="w-full"
+      variant="follow"
       disabled={!((formik.isValid && formik.dirty) || loading)}
     >
       {loading ? <Loader className="animate-spin" /> : title}

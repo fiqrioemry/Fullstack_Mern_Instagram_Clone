@@ -6,9 +6,9 @@ import Explore from "./pages/Explore";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import PostDetail from "./pages/PostDetail";
-import UserTags from "./components/UserTags";
-import UserPosts from "./components/UserPosts";
-import UserSaved from "./components/UserSaved";
+import UserTags from "./components/profile/UserTags";
+import UserPosts from "./components/profile/UserPosts";
+import UserSaved from "./components/profile/UserSaved";
 import Layout from "./components/layout/Layout";
 
 //
@@ -17,6 +17,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import PostDialog from "./components/modal/PostDialog";
 import Followings from "./components/profile/Followings";
 import Followers from "./components/profile/Followers";
+import Testing from "./pages/Testing";
 
 function App() {
   const location = useLocation();
@@ -31,6 +32,14 @@ function App() {
           element={
             <NonAuthRoute>
               <SignIn />
+            </NonAuthRoute>
+          }
+        />
+        <Route
+          path="/testing"
+          element={
+            <NonAuthRoute>
+              <Testing />
             </NonAuthRoute>
           }
         />

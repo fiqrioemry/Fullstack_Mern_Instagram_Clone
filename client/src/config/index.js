@@ -116,24 +116,22 @@ export const profileControl = [
 ];
 
 export const postState = {
-  content: '',
   images: [],
+  content: '',
 };
 
 export const postControl = [
   {
-    name: 'content',
-    label: 'content',
-    type: 'text',
-    placeholder: 'Write a post',
-    component: 'input',
-  },
-  {
     name: 'images',
     label: 'images',
-
     placeholder: 'Maks. 5 Image and less than 1mb each',
     component: 'upload',
+  },
+  {
+    name: 'content',
+    type: 'text',
+    placeholder: 'Write a post',
+    component: 'textarea',
   },
 ];
 

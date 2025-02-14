@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import Avatar from "./Avatar";
-import Timestamp from "../Timestamp";
 import { Link } from "react-router-dom";
+import Avatar from "@/components/ui/Avatar";
+import Timestamp from "@/components/ui/Timestamp";
 
 const Replies = ({ replies, formik }) => {
   return (

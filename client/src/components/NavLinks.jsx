@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-
-import { Search, Home, Compass, MessageCircle, Bell, User } from "lucide-react";
-import CreateNewPost from "./modal/CreateNewPost";
-import Avatar from "./post/Avatar";
-import { useAuthStore } from "../store/useAuthStore";
+import Avatar from "@/components/ui/Avatar";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Search, Home, Compass, MessageCircle, Bell } from "lucide-react";
 
 const NavLinks = () => {
   const { user } = useAuthStore();
@@ -45,7 +42,7 @@ const NavLinks = () => {
         <Bell size={24} />
         <span className="hidden lg:block">Notification</span>
       </Link>
-      <CreateNewPost />
+
       <Link
         to="/"
         className="flex items-center py-2 px-4 rounded-lg hover:bg-gray-100 duration-300 space-x-3"
