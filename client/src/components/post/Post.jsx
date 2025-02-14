@@ -27,7 +27,7 @@ const Post = ({ post }) => {
   }, [post.postId]);
 
   return (
-    <div className="border">
+    <div>
       <div className="grid grid-cols-10 ">
         <div className="col-span-6">
           <Galleries images={post.images} />
@@ -35,7 +35,7 @@ const Post = ({ post }) => {
         <div className="col-span-4">
           <PostAuthor data={post} />
           <div className="border-t">
-            <div className="overflow-y-scroll h-[14rem] md:h-[21rem] p-2">
+            <div className="overflow-y-scroll h-[14rem] md:h-[22rem] p-2">
               <Caption post={post} />
               {loadingComment ? (
                 <CommentsLoading />

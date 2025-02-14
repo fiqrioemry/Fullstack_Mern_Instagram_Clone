@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Post from "@/components/post/Post";
 import { usePostStore } from "@/store/usePostStore";
+import PostLoading from "@/components/skeleton/PostLoading";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
@@ -27,7 +28,7 @@ const PostDialog = () => {
     <Dialog defaultOpen={true} onOpenChange={(open) => !open && navigate(-1)}>
       <DialogTitle>
         <DialogContent variant="detail">
-          {post ? <Post post={post} /> : <p>Loading...</p>}
+          {post ? <Post post={post} /> : <PostLoading />}
         </DialogContent>
       </DialogTitle>
     </Dialog>

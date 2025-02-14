@@ -1,11 +1,3 @@
-import {
-  CircleUserRound,
-  Compass,
-  HomeIcon,
-  Search,
-  SquarePlus,
-} from 'lucide-react';
-
 // authentication state & control
 export const signInState = {
   identifier: '',
@@ -148,38 +140,6 @@ export const commentControl = [
     type: 'text',
     placeholder: 'Write a comment',
     component: 'input',
-  },
-];
-
-export const sidebarConfiguration = ({
-  handleNavigate,
-  handleOpenModal,
-  handleSearch,
-}) => [
-  {
-    icon: HomeIcon,
-    action: () => handleNavigate(''),
-    title: 'home',
-  },
-  {
-    icon: CircleUserRound,
-    action: () => handleNavigate(`/profile`),
-    title: 'profile',
-  },
-  {
-    icon: Compass,
-    title: 'explore',
-    action: () => handleNavigate('explore'),
-  },
-  {
-    icon: Search,
-    action: () => handleSearch('search'),
-    title: 'search',
-  },
-  {
-    icon: SquarePlus,
-    action: () => handleOpenModal('create'),
-    title: 'create',
   },
 ];
 

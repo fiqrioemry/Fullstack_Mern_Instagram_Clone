@@ -1,39 +1,43 @@
+import { Link } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/useAuthStore";
 import InputForm from "@/components/form/InputForm";
-import { useFormSchema } from "@/hooks/useFormSchema";
 import { signInControl, signInState } from "@/config";
+import { useFormSchema } from "@/hooks/useFormSchema";
 import InputButton from "@/components/form/InputButton";
-
+import { Card, CardContent } from "@/components/ui/card";
 const SignIn = () => {
   const { signin, loading } = useAuthStore();
   const signInForm = useFormSchema(signInState, signInControl, signin);
 
   return (
-    <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">
-            <InputForm formik={signInForm} formControl={signInControl}>
-              <InputButton
-                formik={signInForm}
-                title="signin"
-                loading={loading}
-              />
-            </InputForm>
+    <div className="h-screen flex items-center justify-center">
+      <Card className="w-96">
+        <CardContent className="p-4">
+          <div className="py-4 text-center">
+            <h3>Momengram</h3>
           </div>
-        </div>
-      </div>
-      {/* <div className="relative hidden bg-muted lg:block">
-        <img
-          src="https://techmind.id/wp-content/uploads/2024/06/IG.jpeg"
-          alt="Image"
-          className={`absolute inset-0 h-full w-full object-cover transition-all duration-300 ${
-            isValid
-              ? "brightness-100 grayscale-0"
-              : "brightness-[0.2] grayscale dark"
-          }`}
-        />
-      </div> */}
+          {/* signin form */}
+          <InputForm formik={signInForm} formControl={signInControl}>
+            <InputButton formik={signInForm} title="signin" loading={loading} />
+          </InputForm>
+
+          {/* another signin options */}
+          <div className="flex items-center justify-center mt-2">
+            <span className="px-2">OR</span>
+          </div>
+          <Button className="w-full h-10 border rounded-md mt-2">
+            <FcGoogle size={24} /> Sign in with Google
+          </Button>
+          <div className="text-center mt-2">
+            Dont have an account ? signup{" "}
+            <Link to="/signup" className="hover-btn">
+              here
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

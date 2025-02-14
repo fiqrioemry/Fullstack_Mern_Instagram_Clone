@@ -64,6 +64,7 @@ function App() {
           <Route path="settings" element={<Settings />} />
           <Route path="message" element={<Messages />} />
           <Route path="notification" element={<Notifications />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
 

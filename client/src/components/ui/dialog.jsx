@@ -29,12 +29,12 @@ const dialogVariants = cva(
     variants: {
       variant: {
         create:
-          "bg-modal md:rounded-xl rounded-md shadow-md max-w-[40rem] overflow-hidden",
+          "bg-modal md:rounded-xl rounded-md shadow-md w-full max-w-[70rem] overflow-hidden",
         discard:
           "bg-modal md:rounded-xl rounded-md shadow-md max-w-[20rem] md:max-w-[24rem] gap-4 p-6",
         options:
           "bg-modal md:rounded-xl rounded-md max-w-[20rem] md:max-w-[24rem] ",
-        detail: "bg-background max-w-80 md:max-w-96 rounded-lg",
+        detail: "w-full bg-background max-w-[40rem] md:max-w-[60rem]",
       },
     },
     defaultVariants: {

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Avatar from "@/components/ui/Avatar";
 import { useAuthStore } from "@/store/useAuthStore";
-import { CreateNewPost } from "@/components/create_post/CreateNewPost";
+import { CreateNewPost } from "@/components/modal/CreateNewPost";
 import { Search, Home, Compass, MessageCircle, Bell } from "lucide-react";
 
 const BottomNavbar = () => {

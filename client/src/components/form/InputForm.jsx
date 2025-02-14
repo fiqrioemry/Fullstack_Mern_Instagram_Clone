@@ -1,63 +1,16 @@
 /* eslint-disable react/prop-types */
+import InputLabel from "./InputLabel";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useFileUpload } from "@/hooks/useFileUpload";
 
-import InputLabel from "./InputLabel";
-import Galleries from "../post/Galleries";
-import { Button } from "../ui/button";
-
-function InputForm({
-  formik,
-  formStyle,
-  formControl,
-  disabled = false,
-  children,
-}) {
-  const { multiFile, removePreview, handleDrop, handleDragOver } =
-    useFileUpload(formik.setFieldValue, formik.values);
-
+function InputForm({ formik, formControl, disabled = false, children }) {
   function renderComponentByType(control) {
     let element = null;
 
     const options = control.options || [];
 
     switch (control.component) {
-      case "upload":
-        element = (
-          <div className="h-96 flex items-center justify-center">
-            {Array.isArray(formik.values[control.name]) &&
-            formik.values[control.name].length !== 0 ? (
-              <div>
-                <Galleries images={formik.values[control.name]} />
-              </div>
-            ) : (
-              <label
-                className=" h-full z-10 flex items-center justify-center default_border border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted transition-all duration-300"
-                htmlFor={control.name}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, control.name)}
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <span>Drag your photoes here</span>
-                  <Button variant="follow">select from computer</Button>
-                </div>
-                <input
-                  id={control.name}
-                  multiple
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  name={control.name}
-                  onChange={multiFile}
-                />
-              </label>
-            )}
-          </div>
-        );
-        break;
-
       case "input":
         element = (
           <div>
@@ -283,7 +236,7 @@ function InputForm({
   }
 
   return (
-    <form onSubmit={formik.handleSubmit} className={`space-y-4 ${formStyle}`}>
+    <form onSubmit={formik.handleSubmit} className="space-y-4">
       {formControl.map((control) => (
         <div key={control.name}>{renderComponentByType(control)}</div>
       ))}
