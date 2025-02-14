@@ -58,7 +58,7 @@ export function CreateNewPost() {
         <Button variant="follow" onClick={() => setIsOpen(true)}>
           <PlusSquare /> <span className="hidden md:block">Create</span>
         </Button>
-        <DialogContent className="w-[900px]">
+        <DialogContent>
           {formPost.values.images.length === 0 && (
             <div className="flex justify-center py-2 border-b">
               <h3>Create New Post</h3>
@@ -82,7 +82,7 @@ export function CreateNewPost() {
           )}
 
           {formPost.values.images.length === 0 && (
-            <div className="h-[17rem] relative">
+            <div className="h-[17rem] w-[20rem] relative">
               <Input
                 multiple
                 type="file"
@@ -110,43 +110,46 @@ export function CreateNewPost() {
           )}
 
           {step === 1 && formPost.values.images.length > 0 && (
-            <div className="h-[17rem]">
+            <div className="h-[17rem] w-[24rem]">
               <Galleries images={formPost.values.images} />
             </div>
           )}
 
           {step === 2 && formPost.values.images.length > 0 && (
-            <div className="flex">
-              <div className="h-[17rem] w-1/2">
+            <div className="w-full block md:flex h-auto md:h-[20rem] overflow-y-scroll">
+              <div className="w-full md:w-1/2">
                 <Galleries images={formPost.values.images} />
               </div>
-
-              <Textarea
-                placeholder="Write a caption..."
-                className="w-1/2 mb-2"
-              />
+              <div className="h-[20rem] w-full md:w-1/2 mb-2">
+                <Textarea placeholder="Write a caption..." />
+              </div>
             </div>
           )}
         </DialogContent>
       </Dialog>
 
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <DialogContent className="sm:w-[425px]">
-          <div className="text-center mt-4">
-            <h4>Unsaved Changes</h4>
-            <p className="text-gray-600">
-              You have unsaved changes. Are you sure you want to discard them?
+        <DialogContent className="sm:w-[400px] p-6">
+          <div className="text-center">
+            <h4 className="text-lg font-semibold">Discard post?</h4>
+            <p className="text-gray-600 mt-2 text-sm">
+              If you leave, your edits won&apos;t be saved.
             </p>
           </div>
-          <div className="flex justify-end gap-2 p-2">
+          <div className="flex flex-col gap-2 mt-4">
             <Button
               variant="destructive"
+              className="w-full text-red-600 font-semibold"
               onClick={() => handleConfirmation(true)}
             >
-              Yes, discard changes
+              Discard
             </Button>
-            <Button variant="outline" onClick={() => handleConfirmation(false)}>
-              No, keep changes
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => handleConfirmation(false)}
+            >
+              Cancel
             </Button>
           </div>
         </DialogContent>
