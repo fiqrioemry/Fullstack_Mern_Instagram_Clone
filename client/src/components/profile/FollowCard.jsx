@@ -41,7 +41,7 @@ const FollowCard = ({ user }) => {
           {loading[user.userId] ? (
             <Loader className="animate-spin" />
           ) : (
-            "Unfollow"
+            "following"
           )}
         </Button>
       )}

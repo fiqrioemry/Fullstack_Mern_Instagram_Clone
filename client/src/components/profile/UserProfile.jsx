@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const UserProfile = ({ user }) => {
   const location = useLocation();
-
+  console.log(user);
   return (
     <div className="flex flex-col items-center py-10">
       <div className="flex items-center gap-8">
@@ -38,14 +38,14 @@ const UserProfile = ({ user }) => {
               to={`/${user.username}/followings`}
               state={{ background: location }}
             >
-              Followings
+              {user.followings} Followings
             </Link>
             <Link
               className="hover-btn"
               to={`/${user.username}/followers`}
               state={{ background: location }}
             >
-              Followers
+              {user.followers} Followers
             </Link>
           </div>
           <div>

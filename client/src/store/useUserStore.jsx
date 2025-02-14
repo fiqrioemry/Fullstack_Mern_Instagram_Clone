@@ -62,14 +62,17 @@ export const useUserStore = create((set, get) => ({
     }
   },
 
-  // 🔹 Follow User
   follow: async (followingId) => {
     set((state) => ({
       loading: { ...state.loading, [followingId]: true },
     }));
+
     try {
-      const { message, followings } = await callApi.follow(followingId);
-      await get().getFollowings(followings.username);
+      const { message } = await callApi.follow(followingId);
+
+      // ✅ Setelah follow berhasil, update daftar followers dari user yang baru difollow
+      await get().getFollowers(get().profile.username);
+
       toast.success(message);
     } catch (error) {
       toast.error(error);
@@ -87,8 +90,11 @@ export const useUserStore = create((set, get) => ({
     }));
 
     try {
-      const { message, username } = await callApi.unfollow(followingId);
-      await get().getFollowings(username);
+      const { message } = await callApi.unfollow(followingId);
+
+      // ✅ Setelah unfollow berhasil, update daftar followers
+      await get().getFollowers(get().profile.username);
+
       toast.success(message);
     } catch (error) {
       toast.error(error);
@@ -98,7 +104,6 @@ export const useUserStore = create((set, get) => ({
       }));
     }
   },
-
   // 🔹 Get Followers
   getFollowers: async (username) => {
     set((state) => ({
