@@ -75,16 +75,16 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  followUser: async (followingId) => {
+  follow: async (followingId) => {
     return authInstance
       .post(`/user/${followingId}/follow`)
       .then((res) => res.data.message)
       .catch(errorHandle);
   },
 
-  unfollowUser: async (followingId) => {
+  unfollow: async (followingId) => {
     return authInstance
-      .delete(`/user/${followingId}/follow`)
+      .put(`/user/${followingId}/follow`)
       .then((res) => res.data.message)
       .catch(errorHandle);
   },

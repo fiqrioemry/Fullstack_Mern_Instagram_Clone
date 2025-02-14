@@ -3,12 +3,9 @@ import toast from "react-hot-toast";
 import callApi from "../api/callApi";
 
 export const useUserStore = create((set, get) => ({
-  search: [],
   profile: [],
   followers: [],
   followings: [],
-  recommended: [],
-  searching: false,
   loading: {},
 
   // 🔹 Get User Profile
@@ -66,12 +63,12 @@ export const useUserStore = create((set, get) => ({
   },
 
   // 🔹 Follow User
-  followUser: async (followingId) => {
+  follow: async (followingId) => {
     set((state) => ({
       loading: { ...state.loading, [followingId]: true },
     }));
     try {
-      const { message, followings } = await callApi.unfollowUser(followingId);
+      const { message, followings } = await callApi.follow(followingId);
       await get().getFollowings(followings.username);
       toast.success(message);
     } catch (error) {
@@ -84,13 +81,14 @@ export const useUserStore = create((set, get) => ({
   },
 
   // 🔹 Unfollow User
-  unfollowUser: async (followingId) => {
+  unfollow: async (followingId) => {
     set((state) => ({
       loading: { ...state.loading, [followingId]: true },
     }));
+
     try {
-      const { message, followings } = await callApi.unfollowUser(followingId);
-      await get().getFollowings(followings.username);
+      const { message, username } = await callApi.unfollow(followingId);
+      await get().getFollowings(username);
       toast.success(message);
     } catch (error) {
       toast.error(error);

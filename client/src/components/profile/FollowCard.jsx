@@ -30,14 +30,18 @@ const FollowCard = ({ user }) => {
 
       {user.isFollow ? (
         <Button onClick={() => handleFollow(user.userId)} variant="follow">
-          {loading.user.userId ? "Follow" : <Loader className="animate-spin" />}
+          {loading[user.userId] ? (
+            <Loader className="animate-spin" />
+          ) : (
+            "Follow"
+          )}
         </Button>
       ) : (
         <Button onClick={() => handleUnfollow(user.userId)} variant="unfollow">
-          {loading.user.userId ? (
-            "unollow"
-          ) : (
+          {loading[user.userId] ? (
             <Loader className="animate-spin" />
+          ) : (
+            "Unfollow"
           )}
         </Button>
       )}

@@ -25,8 +25,6 @@ const Followings = () => {
     }
   }, [location]);
 
-  console.log(followings);
-
   return (
     <Dialog defaultOpen={true} onOpenChange={(open) => !open && navigate(-1)}>
       <DialogTitle>
@@ -40,7 +38,7 @@ const Followings = () => {
             </div>
 
             <ScrollArea className="h-80 overflow-y-auto">
-              {loading ? (
+              {loading.username ? (
                 <FollowLoading />
               ) : followings.length !== 0 ? (
                 followings.map((user, index) => (
