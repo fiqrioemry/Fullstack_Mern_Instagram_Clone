@@ -44,6 +44,7 @@ export const useAuthStore = create((set, get) => ({
       set({ loading: false });
     }
   },
+
   signout: async () => {
     try {
       const message = await callApi.signout();

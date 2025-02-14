@@ -3,21 +3,20 @@ import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
+import Messages from "./pages/Messages";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import PostDetail from "./pages/PostDetail";
+import Layout from "./components/layout/Layout";
+import Notifications from "./pages/Notifications";
 import UserTags from "./components/profile/UserTags";
 import UserPosts from "./components/profile/UserPosts";
 import UserSaved from "./components/profile/UserSaved";
-import Layout from "./components/layout/Layout";
-
-//
-import { AuthRoute, NonAuthRoute } from "./middleware";
-import { Route, Routes, useLocation } from "react-router-dom";
 import PostDialog from "./components/modal/PostDialog";
-import Followings from "./components/profile/Followings";
 import Followers from "./components/profile/Followers";
-import Testing from "./pages/Testing";
+import { AuthRoute, NonAuthRoute } from "./middleware";
+import Followings from "./components/profile/Followings";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
   const location = useLocation();
@@ -25,7 +24,6 @@ function App() {
 
   return (
     <>
-      {/* Routes utama */}
       <Routes location={background || location}>
         <Route
           path="/signin"
@@ -35,14 +33,7 @@ function App() {
             </NonAuthRoute>
           }
         />
-        <Route
-          path="/testing"
-          element={
-            <NonAuthRoute>
-              <Testing />
-            </NonAuthRoute>
-          }
-        />
+
         <Route
           path="/signup"
           element={
@@ -71,6 +62,8 @@ function App() {
             <Route path="saved" element={<UserSaved />} />
           </Route>
           <Route path="settings" element={<Settings />} />
+          <Route path="message" element={<Messages />} />
+          <Route path="notification" element={<Notifications />} />
         </Route>
       </Routes>
 

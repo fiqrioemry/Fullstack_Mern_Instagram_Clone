@@ -35,10 +35,10 @@ const BottomNavbar = () => {
           className="flex items-center p-4 rounded-lg hover:bg-gray-100 duration-300 space-x-3"
         >
           <MessageCircle size={24} />
-          <span className="hidden lg:block">Message</span>
+          <span className="hidden lg:block">Messages</span>
         </Link>
         <Link
-          to="/message"
+          to="/notification"
           className="flex items-center p-4 rounded-lg hover:bg-gray-100 duration-300 space-x-3"
         >
           <Bell size={24} />
@@ -47,7 +47,7 @@ const BottomNavbar = () => {
 
         <CreateNewPost />
         <Link
-          to="/"
+          to={`/${user.username}`}
           className="flex items-center p-2 rounded-lg hover:bg-gray-100 duration-300 space-x-3"
         >
           <Avatar avatar={user.avatar} />

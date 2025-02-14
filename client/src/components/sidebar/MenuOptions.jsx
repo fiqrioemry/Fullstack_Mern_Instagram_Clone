@@ -1,32 +1,32 @@
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
-import {
-  Bookmark,
-  ChevronLeft,
-  LogOut,
   Menu,
   Moon,
-  Settings,
   Sun,
+  LogOut,
+  Bookmark,
+  Settings,
+  ChevronLeft,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import useTheme from "@/hooks/useTheme";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
-import useHandleDarkMode from "../../hooks/useHandleDarkMode";
-import { useAuthStore } from "../../store/useAuthStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 // eslint-disable-next-line react/prop-types
 function MenuOptions({ openSearch }) {
   const ref = useRef(null);
-  const { userSignOut } = useAuthStore();
+  const { signout } = useAuthStore();
   const [open, setOpen] = useState(false);
-  const { handleDarkMode, darkMode } = useHandleDarkMode();
+  const { handleDarkMode, darkMode } = useTheme();
   const [showModeToggle, setShowModeToggle] = useState(false);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function MenuOptions({ openSearch }) {
               <Moon />
               <span>Switch appearance</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={userSignOut}>
+            <DropdownMenuItem onClick={signout}>
               <LogOut />
               <span>Log out</span>
             </DropdownMenuItem>

@@ -1,17 +1,19 @@
 import Galleries from "../post/Galleries";
+import Avatar from "@/components/ui/Avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { postControl, postState } from "@/config";
+import { useAuthStore } from "@/store/useAuthStore";
 import { Textarea } from "@/components/ui/textarea";
 import { usePostStore } from "@/store/usePostStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { useState, useCallback, useMemo } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ArrowLeft, ArrowRight, PlusSquare } from "lucide-react";
 
 export function CreateNewPost() {
+  const { user } = useAuthStore();
   const [step, setStep] = useState(1);
   const { createPost } = usePostStore();
   const [isOpen, setIsOpen] = useState(false);
@@ -55,9 +57,9 @@ export function CreateNewPost() {
         open={isOpen}
         onOpenChange={(open) => (!open ? handleCloseDialog() : setIsOpen(open))}
       >
-        <Button variant="follow" onClick={() => setIsOpen(true)}>
+        <button onClick={() => setIsOpen(true)}>
           <PlusSquare /> <span className="hidden md:block">Create</span>
-        </Button>
+        </button>
         <DialogContent>
           {formPost.values.images.length === 0 && (
             <div className="flex justify-center py-2 border-b">
@@ -121,6 +123,7 @@ export function CreateNewPost() {
                 <Galleries images={formPost.values.images} />
               </div>
               <div className="h-[20rem] w-full md:w-1/2 mb-2">
+                <Avatar avatar={user.avatar} />
                 <Textarea placeholder="Write a caption..." />
               </div>
             </div>
@@ -156,19 +159,4 @@ export function CreateNewPost() {
       </Dialog>
     </>
   );
-}
-{
-  /* <Button
-type="button"
-variant="destructive"
-onClick={handleCancel}
->
-Cancel
-</Button>
-<InputButton
-type="button"
-formPost={formPost}
-action={handleSave}
-title="save changes"
-/> */
 }
