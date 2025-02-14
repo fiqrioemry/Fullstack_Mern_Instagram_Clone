@@ -28,8 +28,8 @@ router.put(
 router.get('/', searchUser);
 router.get('/:username', isAuthenticate, getUserProfile);
 router.post('/:followingId/follow', isAuthenticate, followUser);
+router.put('/:followingId/follow', isAuthenticate, unfollowUser);
 router.get('/:username/posts', isAuthenticate, getUserPosts);
-router.delete('/:followingId/unfollow', isAuthenticate, unfollowUser);
 router.get('/:username/followers', isAuthenticate, getFollowers);
 router.get('/:username/followings', isAuthenticate, getFollowings);
 router.get('/recommend/follow', isAuthenticate, getFollowRecommend);

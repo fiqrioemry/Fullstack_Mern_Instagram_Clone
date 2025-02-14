@@ -1,10 +1,9 @@
-const { User, Profile, Follow, sequelize } = require('../../models');
+const { User, Profile, Follow } = require('../../models');
 
 // tested
 async function followUser(req, res) {
-  const userId = Number(req.user.userId);
-  let { followingId } = req.params;
-  followingId = Number(followingId);
+  const userId = req.user.userId;
+  const followingId = parseInt(req.params.followingId);
 
   try {
     if (userId === followingId) {
@@ -25,14 +24,16 @@ async function followUser(req, res) {
     });
 
     if (existingFollow) {
-      return res.status(409).json({
-        message: 'Already following this user',
+      await existingFollow.update({ status: 'active' });
+      return res.status(200).json({
+        message: 'Follow is successful',
       });
     }
 
     await Follow.create({
       followerId: userId,
       followingId,
+      status: 'active',
     });
 
     return res.status(201).json({
@@ -45,44 +46,59 @@ async function followUser(req, res) {
     });
   }
 }
+
 // tested
 async function unfollowUser(req, res) {
   const userId = req.user.userId;
   const followingId = parseInt(req.params.followingId);
-
+  console.log('MASUK MASUK MASUK MASUK');
+  console.log(followingId);
+  console.log(userId);
+  console.log('MASUK MASUK MASUK MASUK');
   try {
     if (userId === followingId) {
       return res.status(400).json({
         message: 'Cannot unfollow yourself',
       });
     }
+    const user = await User.findByPk(userId);
 
-    // 🔹 Cek apakah user memang mengikuti user ini
     const followRecord = await Follow.findOne({
       where: { followerId: userId, followingId },
     });
 
-    const username = followRecord.username;
+    console.log('MASUK MASUK MASUK MASUK');
+    console.log(followRecord);
+    console.log('MASUK MASUK MASUK MASUK');
+    console.log('MASUK MASUK MASUK MASUK');
+    console.log('MASUK MASUK MASUK MASUK');
+    console.log('MASUK MASUK MASUK MASUK');
 
-    if (!followRecord) {
-      return res.status(400).json('You are not following this user');
+    if (!followRecord || followRecord.status === 'inactive') {
+      return res.status(400).json({
+        message: 'You are not following this user',
+      });
     }
 
-    await followRecord.destroy();
+    await followRecord.update({ status: 'inactive' });
 
     return res.status(200).json({
-      message: 'Unfollowing is Success',
-      username,
+      message: 'Unfollowing is successful',
+      username: user.username,
     });
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json('Failed to process request');
+    return res.status(500).json({
+      message: 'Failed to process request',
+      error: error.message,
+    });
   }
 }
+
 // tested
 async function getFollowers(req, res) {
-  const { userId } = req.user;
-  const { username } = req.params;
+  const userId = req.user.userId;
+  const username = req.params.username;
   const limit = parseInt(req.query.limit) || 5;
 
   try {
@@ -92,30 +108,37 @@ async function getFollowers(req, res) {
       return res.status(404).json('User not found');
     }
 
-    const [userFollowers, myFollowings] = await Promise.all([
-      user.getFollowers({
-        limit,
-        attributes: ['id', 'username'],
-        include: [
-          { model: Profile, as: 'profile', attributes: ['fullname', 'avatar'] },
-        ],
-      }),
-      User.findByPk(userId, {
-        include: {
+    const userFollowers = await Follow.findAll({
+      where: { followingId: user.id, status: 'active' },
+      limit,
+      include: [
+        {
           model: User,
-          as: 'Followings',
-          attributes: ['id'],
+          as: 'follower',
+          attributes: ['id', 'username'],
+          include: [
+            {
+              model: Profile,
+              as: 'profile',
+              attributes: ['fullname', 'avatar'],
+            },
+          ],
         },
-      }),
-    ]);
+      ],
+    });
 
     if (!userFollowers || userFollowers.length === 0) {
       return res.status(200).json([]);
     }
 
-    const myFollowingIds = myFollowings?.Followings?.map((f) => f.id) || [];
+    const myFollowings = await Follow.findAll({
+      where: { followerId: userId, status: 'active' },
+      attributes: ['followingId'],
+    });
 
-    const followers = userFollowers.map((follower) => ({
+    const myFollowingIds = myFollowings.map((f) => f.followingId);
+
+    const followers = userFollowers.map(({ follower }) => ({
       userId: follower.id,
       username: follower.username,
       fullname: follower.profile?.fullname || null,
@@ -132,8 +155,8 @@ async function getFollowers(req, res) {
 
 // tested
 async function getFollowings(req, res) {
-  const { userId } = req.user;
-  const { username } = req.params;
+  const userId = req.user.userId;
+  const username = req.params.username;
   const limit = parseInt(req.query.limit) || 5;
 
   try {
