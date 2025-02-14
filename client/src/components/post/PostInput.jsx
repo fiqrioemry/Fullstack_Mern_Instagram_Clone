@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-
 import { useEffect, useRef } from "react";
 
 const PostInput = ({ postId, formik }) => {
@@ -9,7 +8,7 @@ const PostInput = ({ postId, formik }) => {
     if (formik.values.postId === postId && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [formik.values.content]);
+  }, [formik.values.postId, formik.values.parentId]);
 
   return (
     <div>
@@ -25,7 +24,7 @@ const PostInput = ({ postId, formik }) => {
         />
         <button
           className="text-blue-500 font-medium disabled:text-gray-500"
-          disabled={!formik.dirty}
+          disabled={formik.values.content === "" || !formik.values.content}
         >
           Post
         </button>

@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 
-import FollowSkeleton from "../skeleton/FollowSkeleton";
 import { useUserStore } from "../../store/useUserStore";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 import { useProvider } from "../../context/GlobalProvider";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";

@@ -10,13 +10,13 @@ import UserTags from "./components/UserTags";
 import UserPosts from "./components/UserPosts";
 import UserSaved from "./components/UserSaved";
 import Layout from "./components/layout/Layout";
-import UserFollowers from "./components/modal/UserFollowers";
-import UserFollowings from "./components/modal/UserFollowings";
 
 //
 import { AuthRoute, NonAuthRoute } from "./middleware";
 import { Route, Routes, useLocation } from "react-router-dom";
 import PostDialog from "./components/modal/PostDialog";
+import Followings from "./components/profile/Followings";
+import Followers from "./components/profile/Followers";
 
 function App() {
   const location = useLocation();
@@ -67,8 +67,8 @@ function App() {
 
       {background && (
         <Routes>
-          <Route path=":username/followers/" element={<UserFollowers />} />
-          <Route path=":username/followings/" element={<UserFollowings />} />
+          <Route path=":username/followings" element={<Followings />} />
+          <Route path=":username/followers" element={<Followers />} />
           <Route path="p/:id" element={<PostDialog />} />
         </Routes>
       )}

@@ -72,9 +72,9 @@
 
     --modal: 0 0% 96.1%;
 
-    --follow: 200.4 98% 39.4%;
+    --follow: 217, 91%, 60%;
 
-    --follow-hover: 201 90% 27.5%;
+    --follow-hover: 217, 91%, 53%;
 
     --border: 0 0% 63.9%;
 
@@ -85,9 +85,9 @@
   .dark {
     --primary: 0 0% 98%;
 
-    --follow: 200.4 98% 39.4%;
+    --follow: 217, 91%, 60%;
 
-    --follow-hover: 201 90% 27.5%;
+    --follow-hover: 217, 91%, 53%;
 
     --border: 0 0% 32.2%;
 

@@ -21,13 +21,6 @@ const Post = ({ post }) => {
   );
 
   useEffect(() => {
-    commentForm.setValues((prevValues) => ({
-      ...prevValues,
-      postId: post.postId,
-    }));
-  }, [post.postId]);
-
-  useEffect(() => {
     if (post.postId) {
       getComments(post.postId);
     }
@@ -42,7 +35,7 @@ const Post = ({ post }) => {
         <div className="col-span-4">
           <PostAuthor data={post} />
           <div className="border-t">
-            <div className="overflow-y-scroll h-[21rem] p-2">
+            <div className="overflow-y-scroll h-[14rem] md:h-[21rem] p-2">
               <Caption post={post} />
               {loadingComment ? (
                 <CommentsLoading />
@@ -52,7 +45,7 @@ const Post = ({ post }) => {
             </div>
           </div>
           <div className="border-t p-2">
-            <PostControl post={post} />
+            <PostControl post={post} formik={commentForm} />
           </div>
           <div className="border-t p-2">
             <PostInput postId={post.postId} formik={commentForm} />

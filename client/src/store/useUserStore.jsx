@@ -9,7 +9,7 @@ export const useUserStore = create((set, get) => ({
   followings: [],
   recommended: [],
   searching: false,
-  loading: false,
+  loading: true,
 
   // 🔹 Get User Profile
   searchUser: async (username) => {

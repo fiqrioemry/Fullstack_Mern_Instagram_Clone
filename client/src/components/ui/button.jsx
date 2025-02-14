@@ -11,14 +11,14 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "text-primary hover:text-primary/50 font-semibold",
-        follow: "bg-follow hover:bg-follow-hover text-primary h-10 shadow-sm",
+        follow: "bg-follow hover:bg-follow-hover text-white h-10 ",
         nav: "hover:bg-foreground-hover rounded-md w-full",
         ghost:
           "bg-foreground hover:bg-foreground-hover text-primary rounded-md",
         delete: "font-medium text-red-500 hover:text-red-500/50 ",
       },
       size: {
-        default: "h-7 rounded-md py-2 px-4 text-sm",
+        default: "h-7 rounded-md py-1 px-4 text-sm",
         xs: "h-7 rounded-md py-2 px-2 text-xs",
         sm: "h-8 rounded-md py-2 px-4 text-sm",
         md: "h-9 rounded-md px-3 py-5 text-md",

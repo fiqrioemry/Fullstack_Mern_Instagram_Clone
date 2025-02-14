@@ -34,7 +34,7 @@ const dialogVariants = cva(
           "bg-modal md:rounded-xl rounded-md shadow-md max-w-[20rem] md:max-w-[24rem] gap-4 p-6",
         options:
           "bg-modal md:rounded-xl rounded-md max-w-[20rem] md:max-w-[24rem] ",
-        detail: "bg-background md:max-w-[46em] lg:max-w-[56em]",
+        detail: "bg-background max-w-80 md:max-w-96 rounded-lg",
       },
     },
     defaultVariants: {

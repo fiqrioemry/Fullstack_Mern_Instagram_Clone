@@ -5,7 +5,7 @@ import callApi from "../api/callApi";
 export const usePostStore = create((set) => ({
   post: null,
   posts: [],
-  loading: false,
+  loading: true,
 
   setPost: (postId) => {
     set((state) => ({

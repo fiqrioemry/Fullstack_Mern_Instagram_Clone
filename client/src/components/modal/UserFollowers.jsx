@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import UserFollowBox from "../UserFollowBox";
-import FollowSkeleton from "../skeleton/FollowSkeleton";
+
 import { useUserStore } from "../../store/useUserStore";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useProvider } from "../../context/GlobalProvider";
@@ -40,7 +40,7 @@ const UserFollowers = () => {
             <h4>followers</h4>
           </DialogTitle>
 
-          <ScrollArea className="h-[17rem] rounded-md">
+          {/* <ScrollArea className="h-[17rem] rounded-md">
             <div className="py-2 px-5 space-y-4">
               {!followers ? (
                 [...Array(4)].map((__, index) => <FollowSkeleton key={index} />)
@@ -54,7 +54,7 @@ const UserFollowers = () => {
                 ))
               )}
             </div>
-          </ScrollArea>
+          </ScrollArea> */}
         </DialogContent>
       </Dialog>
     </>

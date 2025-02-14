@@ -7,7 +7,7 @@ const Replies = ({ replies, formik }) => {
   return (
     <div className="mt-2">
       {replies.map((reply) => (
-        <div key={reply.replyId}>
+        <div key={reply.replyId} className="py-1.5">
           <div className="flex space-x-3">
             <Avatar avatar={reply.avatar} />
 

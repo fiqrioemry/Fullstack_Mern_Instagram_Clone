@@ -1,5 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
-const ProfileSkeleton = () => {
+
+const ProfileLoading = () => {
   return (
     <div className="flex h-60">
       <div className="w-40 md:w-60 flex justify-center">
@@ -22,4 +23,4 @@ const ProfileSkeleton = () => {
   );
 };
 
-export default ProfileSkeleton;
+export default ProfileLoading;
