@@ -20,7 +20,11 @@ const Profile = () => {
       <div className="max-w-4xl w-full mt-14 mb-14">
         <div className="md:px-0 px-4 md:py-0 py-6">
           {/* user profile */}
-          {loading ? <ProfileLoading /> : <UserProfile user={profile} />}
+          {loading.username ? (
+            <ProfileLoading />
+          ) : (
+            <UserProfile user={profile} />
+          )}
 
           {/* <div>
             <Tabs

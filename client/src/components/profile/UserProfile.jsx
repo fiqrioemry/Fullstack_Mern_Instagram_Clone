@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { Settings } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 
 const UserProfile = ({ user }) => {
@@ -17,7 +16,6 @@ const UserProfile = ({ user }) => {
           />
         </div>
 
-        {/* User Info */}
         <div>
           <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
             <h3>{user.username}</h3>

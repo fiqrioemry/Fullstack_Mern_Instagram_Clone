@@ -2,8 +2,20 @@
 import { Link } from "react-router-dom";
 import Avatar from "@/components/post/Avatar";
 import { Button } from "@/components/ui/button";
+import { useUserStore } from "../../store/useUserStore";
+import { Loader } from "lucide-react";
 
 const FollowCard = ({ user }) => {
+  const { follow, unfollow, loading } = useUserStore();
+
+  const handleFollow = (userId) => {
+    follow(userId);
+  };
+
+  const handleUnfollow = (userId) => {
+    unfollow(userId);
+  };
+
   return (
     <div className="flex items-center justify-between p-3 hover:bg-gray-100">
       <div className="flex items-center gap-3">
@@ -16,10 +28,18 @@ const FollowCard = ({ user }) => {
         </div>
       </div>
 
-      {user.isFollowedByMe ? (
-        <Button variant="follow">Follow</Button>
+      {user.isFollow ? (
+        <Button onClick={() => handleFollow(user.userId)} variant="follow">
+          {loading.user.userId ? "Follow" : <Loader className="animate-spin" />}
+        </Button>
       ) : (
-        <Button variant="unfollow">unfollow</Button>
+        <Button onClick={() => handleUnfollow(user.userId)} variant="unfollow">
+          {loading.user.userId ? (
+            "unollow"
+          ) : (
+            <Loader className="animate-spin" />
+          )}
+        </Button>
       )}
     </div>
   );
