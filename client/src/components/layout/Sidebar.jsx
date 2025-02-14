@@ -9,7 +9,7 @@ const Sidebar = () => {
   const { openSearch, searchRef } = useProvider();
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar bg-red-500">
       <SearchBar openSearch={openSearch} searchRef={searchRef} />
       <div className={cn(openSearch ? "w-[75px]" : "w-full", "searchpanel")}>
         <div className="px-3">
@@ -17,9 +17,7 @@ const Sidebar = () => {
             <WebLogo openSearch={openSearch} />
           </div>
 
-          <div className="flex md:block">
-            <NavLinks />
-          </div>
+          <NavLinks />
 
           <div className="hidden md:block">
             <MenuOptions openSearch={openSearch} />

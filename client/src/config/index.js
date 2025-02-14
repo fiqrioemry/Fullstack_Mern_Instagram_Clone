@@ -131,7 +131,7 @@ export const postControl = [
   {
     name: 'images',
     label: 'images',
-    type: '',
+
     placeholder: 'Maks. 5 Image and less than 1mb each',
     component: 'upload',
   },

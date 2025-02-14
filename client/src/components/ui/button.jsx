@@ -14,9 +14,15 @@ const buttonVariants = cva(
         follow: "bg-follow hover:bg-follow-hover text-white",
         unfollow: "bg-gray-200 hover:bg-gray-300 text-black ",
         nav: "hover:bg-foreground-hover rounded-md w-full",
-        ghost:
-          "bg-foreground hover:bg-foreground-hover text-primary rounded-md",
-        delete: "font-medium text-red-500 hover:text-red-500/50 ",
+        cancel:
+          "text-gray-600 border border-gray-400 hover:bg-gray-100 transition ",
+        edit: "text-blue-600 border border-blue-600 hover:bg-blue-100 transition ",
+        delete:
+          "text-white bg-red-500 border border-red-500 hover:bg-red-600 transition ",
+        save: "text-white bg-green-500 border border-green-500 hover:bg-green-600 transition ",
+
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default: "h-7 rounded-md py-1 px-4 text-sm",

@@ -52,8 +52,8 @@ const CreatePostModal = () => {
   return (
     <>
       <Dialog open={openModal.create} onOpenChange={handleClosePost}>
-        {/* <DialogTitle>
-          <DialogContent
+        <DialogTitle>
+          {/* <DialogContent
             variant="create"
             className={`${nextInput ? "md:max-w-[48rem]" : ""} `}
           >
@@ -133,8 +133,8 @@ const CreatePostModal = () => {
                 </div>
               </div>
             </form>
-          </DialogContent>
-        </DialogTitle> */}
+          </DialogContent> */}
+        </DialogTitle>
       </Dialog>
       <DiscardPostModal handleDiscardChanges={handleDiscardChanges} />
     </>
