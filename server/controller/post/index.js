@@ -16,139 +16,81 @@ const {
 } = require('../../models');
 const { Op } = require('sequelize');
 
-// Tested = pass
 async function getPostsFromFollowings(req, res) {
-  const limit = parseInt(req.query.limit) || 5;
   const userId = req.user.userId;
+  const limit = parseInt(req.query.limit) || 5;
 
   try {
-    const user = await User.findByPk(userId, {
-      include: {
-        model: User,
-        as: 'Followings',
-        attributes: ['id'],
-      },
+    const followingsData = await Follow.findAll({
+      where: { followerId: userId, status: 'active' },
+      attributes: ['followingId'],
     });
 
-    if (!user) {
-      return res.status(404).json('User not found');
-    }
-
-    const followingIds = user.Followings.map(
-      (following) => following.Follow.followingId,
-    );
+    const followingIds = followingsData.map((follow) => follow.followingId);
 
     if (followingIds.length === 0) {
-      return res
-        .status(400)
-        .json('No posts to show, you are not following anyone.');
+      return res.status(200).json({
+        posts: [],
+        message: 'No post to show, you not following anyone',
+      });
     }
 
-    const postsData = await Post.findAll({
+    const postsData = await Post.findAndCountAll({
       limit,
       where: { userId: { [Op.in]: followingIds } },
-      order: [['createdAt', 'DESC']],
-      attributes: [
-        'id',
-        'content',
-        'createdAt',
-        [
-          sequelize.literal(
-            `(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)`,
-          ),
-          'comments',
-        ],
-        [
-          sequelize.literal(
-            `(SELECT COUNT(*) FROM Likes WHERE Likes.entityId = Post.id AND Likes.entityType = 'post')`,
-          ),
-          'likes',
-        ],
-      ],
       include: [
+        { model: Like, as: 'likes', attributes: ['id'] },
+        { model: Comment, as: 'comments', attributes: ['id'] },
+        { model: PostGallery, as: 'gallery', attributes: ['image'] },
         {
           model: User,
           as: 'user',
           attributes: ['id', 'username'],
-          include: [
-            {
-              model: Profile,
-              as: 'profile',
-              attributes: ['avatar'],
-            },
-          ],
-        },
-        {
-          model: PostGallery,
-          as: 'gallery',
-          attributes: ['image'],
+          include: [{ model: Profile, as: 'profile', attributes: ['avatar'] }],
         },
       ],
+      distinct: true,
+      order: [['createdAt', 'ASC']],
     });
 
-    if (!postsData.length) {
-      return res.status(404).json('Posts not found');
+    if (postsData.count === 0) {
+      return res.status(200).json({ posts: [], message: 'User has no post' });
     }
 
-    const posts = postsData.map((post) => ({
-      postId: post.id,
-      content: post.content,
-      images: post.gallery?.map((gallery) => gallery.image) || [],
-      createdAt: post.createdAt,
+    const totalPosts = postsData.count;
+    const posts = postsData.rows.map((post) => ({
       userId: post.user.id,
+      postId: post.id,
       username: post.user.username,
-      avatar: post.user.profile.avatar,
-      likes: post.dataValues.likes,
-      comments: post.dataValues.comments,
+      content: post.content,
+      avatar: post.user.profile?.avatar,
+      images: post.gallery?.map((g) => g.image) || [],
+      createdAt: post.createdAt,
+      likes: post.likes.length,
+      comments: post.comments.length,
     }));
 
-    return res.status(200).json(posts);
+    return res.status(200).json({ totalPosts, posts });
   } catch (error) {
-    console.log(error.message);
-    return res.status(500).json('Failed to get user posts');
+    console.error(error.message);
+    return res.status(500).json('Failed to get posts from followings');
   }
 }
 
-// Tested = pass
 async function getPostDetail(req, res) {
-  const { postId } = req.params;
+  const postId = req.params.postId;
   try {
     const postData = await Post.findOne({
       where: { id: postId },
-      attributes: [
-        'id',
-        'content',
-        'createdAt',
-        [
-          sequelize.literal(
-            `(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)`,
-          ),
-          'comments',
-        ],
-        [
-          sequelize.literal(
-            `(SELECT COUNT(*) FROM Likes WHERE Likes.entityId = Post.id AND Likes.entityType = 'post')`,
-          ),
-          'likes',
-        ],
-      ],
       include: [
+        { model: Like, as: 'likes', attributes: ['id'] },
+        { model: Comment, as: 'comments', attributes: ['id'] },
+        { model: PostGallery, as: 'gallery', attributes: ['image'] },
         {
           model: User,
           as: 'user',
           attributes: ['id', 'username'],
-          include: [
-            {
-              model: Profile,
-              as: 'profile',
-              attributes: ['avatar'],
-            },
-          ],
-        },
-        {
-          model: PostGallery,
-          as: 'gallery',
-          attributes: ['image'],
+          include: [{ model: Profile, as: 'profile', attributes: ['avatar'] }],
         },
       ],
     });
@@ -157,96 +99,76 @@ async function getPostDetail(req, res) {
       return res.status(404).json('Post not found');
     }
 
+    const [comments, likes] = await Promise.all([
+      postData.countComments(),
+      postData.countLikes(),
+    ]);
+
     const post = {
-      postId: postData.id,
-      content: postData.content,
-      images: postData.gallery?.map((gallery) => gallery.image) || [],
-      createdAt: postData.createdAt,
       userId: postData.user.id,
+      postId: postData.id,
       username: postData.user.username,
-      avatar: postData.user.profile.avatar,
-      likes: postData.dataValues.likes,
-      comments: postData.dataValues.comments,
+      content: postData.content,
+      avatar: postData.user.profile?.avatar,
+      images: postData.gallery?.map((g) => g.image) || [],
+      createdAt: postData.createdAt,
+      likes: likes,
+      comments: comments,
     };
 
     return res.status(200).json(post);
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json('Failed to get post details');
-  }
-}
-
-// Tested = pass
-async function getPublicPosts(req, res) {
-  const limit = parseInt(req.query.limit) || 5;
-
-  try {
-    const postsData = await Post.findAll({
-      limit,
-      order: [['createdAt', 'DESC']],
-      attributes: [
-        'id',
-        'content',
-        'createdAt',
-        [
-          sequelize.literal(
-            `(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)`,
-          ),
-          'comments',
-        ],
-        [
-          sequelize.literal(
-            `(SELECT COUNT(*) FROM Likes WHERE Likes.entityId = Post.id AND Likes.entityType = 'post')`,
-          ),
-          'likes',
-        ],
-      ],
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['id', 'username'],
-          include: [
-            {
-              model: Profile,
-              as: 'profile',
-              attributes: ['avatar'],
-            },
-          ],
-        },
-        {
-          model: PostGallery,
-          as: 'gallery',
-          attributes: ['image'],
-        },
-      ],
-    });
-
-    if (!postsData.length) {
-      return res.status(404).json('Posts not found');
-    }
-
-    const posts = postsData.map((post) => ({
-      postId: post.id,
-      content: post.content,
-      images: post.gallery?.map((gallery) => gallery.image) || [],
-      createdAt: post.createdAt,
-      userId: post.user.id,
-      fullname: post.user.fullname,
-      avatar: post.user.profile.avatar,
-      likes: post.dataValues.likes,
-      comments: post.dataValues.comments,
-    }));
-
-    return res.status(200).json(posts);
   } catch (error) {
     console.log(error.message);
     return res.status(500).json('Failed to get user posts');
   }
 }
 
-// Tested = pass
+async function getPublicPosts(req, res) {
+  const limit = parseInt(req.query.limit) || 5;
+  try {
+    const postsData = await Post.findAndCountAll({
+      limit,
+      include: [
+        { model: Like, as: 'likes', attributes: ['id'] },
+        { model: Comment, as: 'comments', attributes: ['id'] },
+        { model: PostGallery, as: 'gallery', attributes: ['image'] },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'username'],
+          include: [{ model: Profile, as: 'profile', attributes: ['avatar'] }],
+        },
+      ],
+      distinct: true,
+      order: [['createdAt', 'ASC']],
+    });
+
+    if (postsData.count === 0) {
+      return res.status(200).json({ posts: [], message: 'User has no post' });
+    }
+
+    const totalPosts = postsData.count;
+    const posts = postsData.rows.map((post) => ({
+      userId: post.user.id,
+      postId: post.id,
+      username: post.user.username,
+      content: post.content,
+      avatar: post.user.profile?.avatar,
+      images: post.gallery?.map((g) => g.image) || [],
+      createdAt: post.createdAt,
+      likes: post.likes.length,
+      comments: post.comments.length,
+    }));
+
+    return res.status(200).json({ totalPosts, posts });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json('Failed to get user posts');
+  }
+}
+
 async function getUserPosts(req, res) {
+  const userId = req.user?.userId;
   const username = req.params.username;
   const limit = parseInt(req.query.limit) || 5;
 
@@ -257,80 +179,64 @@ async function getUserPosts(req, res) {
     });
 
     if (!user) {
-      return res.status(404).json('User not found');
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    const userId = user.id;
-    const requestingUserId = req.user.userId;
-
-    if (user.isPrivate && userId !== requestingUserId) {
+    if (user.isPrivate && userId !== user.id) {
       const followRecord = await Follow.findOne({
-        where: { followerId: requestingUserId, followingId: userId },
+        where: { followerId: userId, followingId: user.id },
       });
 
       if (!followRecord) {
-        return res
-          .status(403)
-          .json('You must follow this user to see their posts.');
+        return res.status(200).json({
+          posts: [],
+          message: 'Account is private, follow to see posts',
+        });
       }
     }
 
-    const postsData = await Post.findAll({
-      where: { userId },
+    const postsData = await Post.findAndCountAll({
+      where: { userId: user.id },
       limit,
-      order: [['createdAt', 'DESC']],
-      attributes: [
-        'id',
-        'content',
-        'createdAt',
-        [
-          sequelize.literal(
-            `(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)`,
-          ),
-          'commentCount',
-        ],
-        [
-          sequelize.literal(
-            `(SELECT COUNT(*) FROM Likes WHERE Likes.entityId = Post.id AND Likes.entityType = 'post')`,
-          ),
-          'likeCount',
-        ],
-      ],
+
       include: [
         {
           model: User,
           as: 'user',
           attributes: ['id', 'username'],
+          include: [{ model: Profile, as: 'profile', attributes: ['avatar'] }],
         },
-        {
-          model: PostGallery,
-          as: 'gallery',
-          attributes: ['image'],
-        },
+        { model: PostGallery, as: 'gallery', attributes: ['image'] },
+        { model: Like, as: 'likes', attributes: ['id'] },
+        { model: Comment, as: 'comments', attributes: ['id'] },
       ],
+      order: [['createdAt', 'DESC']],
     });
 
-    if (!postsData.length) {
-      return res.status(200).json('This user has no posts');
+    if (postsData.count === 0) {
+      return res.status(200).json({ posts: [], message: 'User has no post' });
     }
 
-    const posts = postsData.map((post) => ({
-      userId,
+    const totalPosts = postsData.count;
+    const posts = postsData.rows.map((post) => ({
+      userId: post.user.id,
       postId: post.id,
-      images: post.gallery?.map((gallery) => gallery.image) || [],
+      username: post.user.username,
+      content: post.content,
+      avatar: post.user.profile?.avatar,
+      images: post.gallery?.map((g) => g.image) || [],
       createdAt: post.createdAt,
-      likes: post.dataValues.likeCount,
-      comments: post.dataValues.commentCount,
+      likes: post.likes.length,
+      comments: post.comments.length, // Perbaikan dari `posts.comments.length`
     }));
 
-    return res.status(200).json(posts);
+    return res.status(200).json({ totalPosts, posts });
   } catch (error) {
-    console.log(error.message);
-    return res.status(500).json('Failed to get user posts');
+    console.error(error);
+    return res.status(500).json({ message: 'Failed to get user posts' });
   }
 }
 
-// Tested = pass
 async function createPost(req, res) {
   const files = req.files;
   const { userId } = req.user;
@@ -368,7 +274,6 @@ async function createPost(req, res) {
   }
 }
 
-// Tested = pass
 async function updatePost(req, res) {
   const { postId } = req.params;
   const { userId } = req.user;
@@ -437,7 +342,7 @@ async function updatePost(req, res) {
     });
   }
 }
-// tested
+
 async function deletePost(req, res) {
   const { userId } = req.user;
   const { postId } = req.params;

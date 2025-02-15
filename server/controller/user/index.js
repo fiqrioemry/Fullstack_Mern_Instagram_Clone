@@ -98,7 +98,6 @@ async function getMyProfile(req, res) {
   }
 }
 
-// tested
 async function updateMyProfile(req, res) {
   const { userId } = req.user;
   const file = req.file;
@@ -174,7 +173,6 @@ async function updateMyProfile(req, res) {
   }
 }
 
-// tested
 async function getUserProfile(req, res) {
   const { userId } = req.user;
   const { username } = req.params;

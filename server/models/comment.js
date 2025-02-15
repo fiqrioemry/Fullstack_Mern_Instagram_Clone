@@ -30,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
         },
       });
 
-      // 🔹 Relasi untuk Notifikasi (Jika ada user yang mention atau reply)
       this.hasMany(models.Notification, {
         foreignKey: 'commentId',
         as: 'notifications',

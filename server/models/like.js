@@ -4,10 +4,8 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Like extends Model {
     static associate(models) {
-      // 🔹 Like dikaitkan dengan User yang melakukan like
-      this.belongsTo(models.User, { foreignKey: 'userId', as: 'like' });
+      this.belongsTo(models.User, { foreignKey: 'userId', as: 'likes' });
 
-      // 🔹 Like bisa dikaitkan dengan Post
       this.belongsTo(models.Post, {
         foreignKey: 'entityId',
         constraints: false,
@@ -15,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         scope: { entityType: 'post' },
       });
 
-      // 🔹 Like bisa dikaitkan dengan Comment (termasuk reply, karena reply adalah comment)
       this.belongsTo(models.Comment, {
         foreignKey: 'entityId',
         constraints: false,
@@ -23,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         scope: { entityType: 'comment' },
       });
 
-      // 🔹 Like bisa menghasilkan Notifikasi
       this.hasOne(models.Notification, {
         foreignKey: 'entityId',
         constraints: false,

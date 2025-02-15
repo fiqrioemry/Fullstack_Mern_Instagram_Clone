@@ -59,11 +59,11 @@ async function createComment(req, res) {
       await Promise.all(
         mentionedUsers.map((mentionedUser) =>
           Notification.create({
-            receiverId: mentionedUser.id,
-            senderId: userId,
             postId,
-            commentId: newComment.id,
             type: 'mention',
+            senderId: userId,
+            receiverId: mentionedUser.id,
+            commentId: newComment.id,
           }),
         ),
       );
@@ -71,11 +71,8 @@ async function createComment(req, res) {
 
     return res.status(201).json('Comment added successfully');
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to add comment',
-      error: error.message,
-    });
+    console.log(error.message);
+    return res.status(500).json('Failed to add comment');
   }
 }
 
@@ -159,7 +156,6 @@ async function deleteComment(req, res) {
 }
 
 async function getReplies(req, res) {
-  console.log(req.params);
   const { postId, commentId } = req.params;
 
   try {

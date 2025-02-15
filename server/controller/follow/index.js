@@ -50,7 +50,7 @@ async function followUser(req, res) {
 async function unfollowUser(req, res) {
   const userId = req.user.userId;
   const followingId = parseInt(req.params.followingId);
-  console.log(followingId);
+
   try {
     if (userId === followingId) {
       return res.status(400).json({ message: 'Cannot unfollow yourself' });
@@ -128,7 +128,7 @@ async function getFollowers(req, res) {
       username: follower.username,
       fullname: follower.profile?.fullname || null,
       avatar: follower.profile?.avatar || null,
-      isFollow: myFollowingIds.includes(follower.id), // ✅ Pastikan ini diperbarui
+      isFollow: myFollowingIds.includes(follower.id),
     }));
 
     return res.status(200).json(followers);
