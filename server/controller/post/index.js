@@ -149,7 +149,7 @@ async function getPublicPosts(req, res) {
         },
       ],
       distinct: true,
-      order: [['createdAt', 'ASC']],
+      order: [['createdAt', 'DESC']],
     });
 
     if (postsData.count === 0) {
@@ -414,25 +414,75 @@ async function deletePost(req, res) {
   }
 }
 
-async function likePost(req, res) {
-  const { userId } = req.user;
-  const { entityId, entityType } = req.body;
+async function toggleLikePost(req, res) {
+  const userId = req.user.userId;
+  const postId = req.params.postId;
   const t = await sequelize.transaction();
 
   try {
-    // 1. Validasi tipe entity yang bisa di-like
-    const validTypes = ['post', 'comment'];
-    if (!validTypes.includes(entityType)) {
-      await t.rollback();
-      return res.status(400).json({ message: 'Invalid entity type' });
-    }
-
-    const existingLike = await Like.findOne({
-      where: { userId, entityId, entityType },
-      paranoid: false,
-      transaction: t,
+    const like = await Like.findOne({
+      where: { userId, entityId: postId, entityType: 'post' },
+      transaction: t, // Tambahkan transaksi agar aman
     });
 
+    if (like) {
+      // Hapus like (unlike)
+      await like.destroy({ transaction: t });
+
+      // Hapus notifikasi jika ada
+      await Notification.destroy({
+        where: {
+          senderId: userId,
+          receiverId: like.entityId, // Harus post.userId
+          entityId: postId,
+          type: 'like',
+        },
+        transaction: t,
+      });
+
+      await t.commit();
+      return res
+        .status(200)
+        .json({ message: 'Unlike successful', isLiked: false });
+    }
+
+    // Cek apakah post valid
+    const post = await Post.findByPk(postId, { transaction: t });
+    if (!post) {
+      await t.rollback();
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Tambahkan like baru
+    await Like.create(
+      { userId, entityId: postId, entityType: 'post' },
+      { transaction: t },
+    );
+
+    // Buat notifikasi hanya jika user yang like ≠ pemilik post
+    if (post.userId !== userId) {
+      await Notification.create(
+        {
+          receiverId: post.userId, // Pemilik post yang akan menerima notifikasi
+          senderId: userId, // User yang melakukan like
+          entityId: postId,
+          type: 'like',
+        },
+        { transaction: t },
+      );
+    }
+
+    await t.commit();
+    return res.status(200).json({ message: 'Like successful', isLiked: true });
+  } catch (error) {
+    await t.rollback();
+    console.log(error.message);
+    return res.status(500).json({ message: 'Failed to toggle like' });
+  }
+}
+
+async function likePost(req, res) {
+  try {
     if (existingLike) {
       if (existingLike.deletedAt) {
         await existingLike.update({ deletedAt: null }, { transaction: t });
@@ -479,13 +529,7 @@ async function likePost(req, res) {
 
     await t.commit();
     return res.status(201).json({ message: 'You liked this entity' });
-  } catch (error) {
-    await t.rollback();
-    return res.status(500).json({
-      message: 'Failed to like',
-      error: error.message,
-    });
-  }
+  } catch (error) {}
 }
 
 async function unlikePost(req, res) {
