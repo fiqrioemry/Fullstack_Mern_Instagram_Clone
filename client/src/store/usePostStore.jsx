@@ -5,6 +5,7 @@ import callApi from "../api/callApi";
 export const usePostStore = create((set) => ({
   post: null,
   posts: [],
+  totalPosts: 0,
   loading: true,
 
   setPost: (postId) => {
@@ -12,6 +13,7 @@ export const usePostStore = create((set) => ({
       post: state.posts.find((post) => post.postId === postId) || null,
     }));
   },
+
   commentCount: (postId) => {
     set((state) => ({
       posts: state.posts.map((post) =>
@@ -20,20 +22,29 @@ export const usePostStore = create((set) => ({
     }));
   },
 
-  getPostDetail: async (postId) => {
-    set({ loading: true });
+  getPublicPosts: async (limit) => {
+    console.log(limit);
     try {
-      const post = await callApi.getPostDetail(postId);
-      set({ post });
+      const { posts, totalPosts } = await callApi.getPublicPosts(limit);
+      set({ posts, totalPosts });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       set({ loading: false });
     }
   },
+  getPostDetail: async (postId) => {
+    try {
+      const post = await callApi.getPostDetail(postId);
+      set({ post });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      set({ loading: true });
+    }
+  },
 
   getUserPosts: async (username) => {
-    set({ loading: true });
     try {
       const posts = await callApi.getUserPosts(username);
       set({ posts });
@@ -44,61 +55,12 @@ export const usePostStore = create((set) => ({
     }
   },
 
-  getPublicPosts: async () => {
-    set({ loading: true });
+  getPostsFromFollowings: async (limit) => {
     try {
-      const posts = await callApi.getPublicPosts();
-      set({ posts });
+      const { posts, totalPosts } = await callApi.getPostsFromFollowings(limit);
+      set({ posts, totalPosts });
     } catch (error) {
-      console.log(error);
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  getPostsFromFollowings: async () => {
-    set({ loading: true });
-    try {
-      const posts = await callApi.getPostsFromFollowings();
-      set({ posts });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  createPost: async (formData) => {
-    set({ loading: true });
-    try {
-      const message = await callApi.createPost(formData);
-      toast.success(message);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  updatePost: async (formData, postId) => {
-    set({ loading: true });
-    try {
-      const message = await callApi.updatePost(formData, postId);
-      toast.success(message);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  deletePost: async (postId) => {
-    set({ loading: true });
-    try {
-      const message = await callApi.deletePost(postId);
-      toast.success(message);
-    } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       set({ loading: false });
     }

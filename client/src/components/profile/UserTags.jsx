@@ -1,12 +1,12 @@
 import { Camera } from "lucide-react";
-import { useUserStore } from "../../store/useUserStore";
-import { useAuthStore } from "../../store/useAuthStore";
+import { useUserStore } from "@/store/useUserStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const UserTags = () => {
-  const { userData } = useAuthStore();
-  const { userProfile } = useUserStore();
+  const { user } = useAuthStore();
+  const { profile } = useUserStore();
 
-  if (!userProfile) return null;
+  if (!profile) return null;
 
   return (
     <div className="text-center space-y-3 py-12">
@@ -15,7 +15,7 @@ const UserTags = () => {
           <Camera size={50} />
         </div>
       </div>
-      {userData.username === userProfile.username ? (
+      {user.username === profile.username ? (
         <div className="space-y-6">
           <h2>PHOTOS OF YOU</h2>
           <div>When you share photos, they will appear on your profile.</div>

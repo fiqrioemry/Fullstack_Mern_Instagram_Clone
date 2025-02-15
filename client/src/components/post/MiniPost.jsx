@@ -1,29 +1,34 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
-import Galleries from "./Galleries";
+import { Link, useLocation } from "react-router-dom";
 import { HeartIcon, MessageCircle } from "lucide-react";
 
 const MiniPost = ({ post }) => {
+  const location = useLocation();
+
   return (
-    <Link
-      className="relative"
-      to={`p/${post.postId}`}
-      state={{ background: location }}
-    >
-      <div className="post_card">
+    <div className="relative">
+      <Link
+        to={`/p/${post.postId}`}
+        state={{ background: location }}
+        className="post_card"
+      >
         <div className="flex items-center gap-x-6">
-          <div className="flex gap-x-2">
+          <div className="flex gap-x-2 text-white">
             {post.likes}
             <HeartIcon />
           </div>
-          <div className="flex gap-x-2">
+          <div className="flex gap-x-2 text-white">
             {post.comments}
             <MessageCircle />
           </div>
         </div>
-      </div>
-      <Galleries images={post.images} />
-    </Link>
+      </Link>
+      <img
+        className="w-full h-full object-cover"
+        src={post.images[0]}
+        alt="image"
+      />
+    </div>
   );
 };
 

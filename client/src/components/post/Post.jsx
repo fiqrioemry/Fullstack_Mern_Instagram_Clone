@@ -19,7 +19,7 @@ const Post = ({ post }) => {
     createComment,
     post.postId
   );
-
+  console.log(post);
   useEffect(() => {
     if (post.postId) {
       getComments(post.postId);

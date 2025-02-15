@@ -140,9 +140,9 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  getPublicPosts: async () => {
+  getPublicPosts: async (limit) => {
     return authInstance
-      .get('/post')
+      .get(`/post?limit=${limit}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },

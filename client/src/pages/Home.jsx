@@ -1,14 +1,20 @@
-import { useEffect } from "react";
+import NotFound from "./NotFound";
+import { useEffect, useState } from "react";
 import Posts from "@/components/post/Posts";
 import { usePostStore } from "@/store/usePostStore";
 import PostsLoading from "@/components/skeleton/PostsLoading";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 const Home = () => {
-  const { getPostsFromFollowings, posts, loading } = usePostStore();
+  const [limit, setLimit] = useState(5);
+  const { getPublicPosts, posts, loading } = usePostStore();
 
   useEffect(() => {
-    getPostsFromFollowings();
-  }, [getPostsFromFollowings]);
+    console.log(limit);
+    getPublicPosts(limit);
+  }, [limit]);
+
+  useInfiniteScroll(loading, setLimit);
 
   return (
     <div className="flex">
@@ -16,13 +22,16 @@ const Home = () => {
         <div className="flex justify-center">
           <div className="w-full max-w-[30rem] px-2">
             <div className="md:mt-0 mt-12 md:mb-0 mb-12 py-6">
-              {loading || posts.length === 0 ? (
+              {loading && posts.length === 0 ? (
                 <PostsLoading />
               ) : (
                 <div className="space-y-6">
-                  {posts.map((post) => (
-                    <Posts post={post} key={post.postId} />
-                  ))}
+                  {posts.length > 0 ? (
+                    posts.map((post) => <Posts post={post} key={post.postId} />)
+                  ) : (
+                    <NotFound />
+                  )}
+                  {loading && <PostsLoading />}
                 </div>
               )}
             </div>
