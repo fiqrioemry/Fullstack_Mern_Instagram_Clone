@@ -73,4 +73,13 @@ export const usePostStore = create((set) => ({
       set({ loading: false });
     }
   },
+
+  likePost: async (postId) => {
+    try {
+      const message = await callApi.likePost(postId);
+      toast.success(message);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 }));

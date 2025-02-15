@@ -41,25 +41,6 @@ export const useCommentStore = create((set, get) => ({
     }
   },
 
-  likePost: async (postId) => {
-    try {
-      console.log(postId);
-      const message = await callApi.likePost(postId);
-      toast.success(message);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  unlikePost: async (postId) => {
-    try {
-      const message = await callApi.unlikePost(postId);
-      toast.success(message);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
   createComment: async (formData, postId) => {
     try {
       const message = await callApi.createComment(formData, postId);

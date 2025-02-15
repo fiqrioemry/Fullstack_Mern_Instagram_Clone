@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
-import { cn } from "@/lib/utils";
-import { useCommentStore } from "@/store/useCommentStore";
+
 import { Bookmark, Heart, MessageCircle, Send } from "lucide-react";
+import { useFormSchema } from "../../hooks/useFormSchema";
+import { usePostStore } from "../../store/usePostStore";
 
 const PostControl = ({ post, formik }) => {
-  const { likePost } = useCommentStore();
-
-  const handleLike = () => likePost(post.postId);
+  const { likePost } = usePostStore();
+  const likeState = { entityId: post.postId, entityType: "post" };
+  const likeForm = useFormSchema(likeState, [], likePost);
   const handleComment = () => formik.setFieldValue("postId", post.postId);
 
   return (
@@ -14,11 +15,10 @@ const PostControl = ({ post, formik }) => {
       <div className="flex justify-between items-center">
         <div className="flex space-x-4">
           <Heart
-            onClick={handleLike}
-            className={cn(
-              post.isLiked ? "bg-red-500 text-red-500" : "bg-transparent",
-              "w-6 h-6  cursor-pointer bg-red-500 hover:text-gray-600"
-            )}
+            onClick={likeForm.handleSubmit}
+            className="w-6 h-6 cursor-pointer hover:text-gray-600"
+            fill={post.isLiked ? "red" : "transparent"}
+            stroke={post.isLiked ? "red" : "currentColor"}
             aria-label="Like Post"
           />
           <MessageCircle

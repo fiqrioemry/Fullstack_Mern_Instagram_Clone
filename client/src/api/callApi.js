@@ -154,7 +154,6 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  // 🔹 Like & Unlike API's
   likePost: async (postId) => {
     return authInstance
       .post(`/post/${postId}/like`)
@@ -162,9 +161,9 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  unlikePost: async (postId) => {
+  likeComment: async (commentId) => {
     return authInstance
-      .delete(`/post/${postId}/like`)
+      .put(`/post/${commentId}/like`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
