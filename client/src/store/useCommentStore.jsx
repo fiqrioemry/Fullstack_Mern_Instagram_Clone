@@ -62,4 +62,13 @@ export const useCommentStore = create((set, get) => ({
       console.log(error);
     }
   },
+
+  likeComment: async (commentId) => {
+    try {
+      const message = await callApi.likePost(commentId);
+      toast.success(message);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 }));

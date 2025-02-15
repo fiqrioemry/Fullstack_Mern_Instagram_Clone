@@ -2,7 +2,7 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "../api/callApi";
 
-export const usePostStore = create((set) => ({
+export const usePostStore = create((set, get) => ({
   post: null,
   posts: [],
   totalPosts: 0,
@@ -27,7 +27,6 @@ export const usePostStore = create((set) => ({
     set({ loading: true });
     try {
       const { posts, totalPosts } = await callApi.getPublicPosts(limit);
-      console.log(posts);
       set({ posts, totalPosts });
     } catch (error) {
       console.error(error);
@@ -78,8 +77,34 @@ export const usePostStore = create((set) => ({
     try {
       const message = await callApi.likePost(postId);
       toast.success(message);
+      get().setLike(postId);
     } catch (error) {
       console.log(error);
     }
+  },
+
+  setLike: (postId) => {
+    set((state) => ({
+      post:
+        state.post?.postId === postId
+          ? {
+              ...state.post,
+              isLiked: !state.post.isLiked,
+              likes: state.post.isLiked
+                ? state.post.likes - 1
+                : state.post.likes + 1,
+            }
+          : state.post,
+
+      posts: state.posts.map((post) =>
+        post.postId === postId
+          ? {
+              ...post,
+              isLiked: !post.isLiked,
+              likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+            }
+          : post
+      ),
+    }));
   },
 }));
