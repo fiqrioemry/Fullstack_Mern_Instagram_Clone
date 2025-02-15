@@ -422,148 +422,54 @@ async function toggleLikePost(req, res) {
   try {
     const like = await Like.findOne({
       where: { userId, entityId: postId, entityType: 'post' },
-      transaction: t, // Tambahkan transaksi agar aman
+      transaction: t,
     });
 
     if (like) {
-      // Hapus like (unlike)
       await like.destroy({ transaction: t });
 
-      // Hapus notifikasi jika ada
       await Notification.destroy({
         where: {
           senderId: userId,
-          receiverId: like.entityId, // Harus post.userId
-          entityId: postId,
+          receiverId: like.entityId,
+          postId: postId,
           type: 'like',
         },
         transaction: t,
       });
 
       await t.commit();
-      return res
-        .status(200)
-        .json({ message: 'Unlike successful', isLiked: false });
+      return res.status(200).json('You unliked the Post');
     }
 
-    // Cek apakah post valid
     const post = await Post.findByPk(postId, { transaction: t });
     if (!post) {
       await t.rollback();
-      return res.status(404).json({ message: 'Post not found' });
+      return res.status(404).json('Post not found');
     }
 
-    // Tambahkan like baru
     await Like.create(
       { userId, entityId: postId, entityType: 'post' },
       { transaction: t },
     );
 
-    // Buat notifikasi hanya jika user yang like ≠ pemilik post
     if (post.userId !== userId) {
       await Notification.create(
         {
-          receiverId: post.userId, // Pemilik post yang akan menerima notifikasi
-          senderId: userId, // User yang melakukan like
-          entityId: postId,
+          receiverId: post.userId,
+          senderId: userId,
+          postId: postId,
           type: 'like',
         },
         { transaction: t },
       );
     }
-
     await t.commit();
-    return res.status(200).json({ message: 'Like successful', isLiked: true });
+    return res.status(200).json('You Liked the post');
   } catch (error) {
     await t.rollback();
     console.log(error.message);
-    return res.status(500).json({ message: 'Failed to toggle like' });
-  }
-}
-
-async function likePost(req, res) {
-  try {
-    if (existingLike) {
-      if (existingLike.deletedAt) {
-        await existingLike.update({ deletedAt: null }, { transaction: t });
-        await t.commit();
-        return res.status(200).json({ message: 'Like restored' });
-      }
-      await t.rollback();
-      return res.status(400).json({ message: 'Already liked' });
-    }
-
-    // 3. Tentukan pemilik entity yang menerima notifikasi
-    let receiverId = null;
-    if (entityType === 'post') {
-      const post = await Post.findByPk(entityId);
-      if (!post) {
-        await t.rollback();
-        return res.status(404).json({ message: 'Post not found' });
-      }
-      receiverId = post.userId; // Pemilik post
-    } else if (entityType === 'comment') {
-      const comment = await Comment.findByPk(entityId);
-      if (!comment) {
-        await t.rollback();
-        return res.status(404).json({ message: 'Comment not found' });
-      }
-      receiverId = comment.userId; // Pemilik komentar
-    }
-
-    // 4. Buat like baru
-    await Like.create({ userId, entityId, entityType }, { transaction: t });
-
-    // 5. Buat notifikasi jika yang melakukan like bukan pemilik post/komentar
-    if (receiverId && receiverId !== userId) {
-      await Notification.create(
-        {
-          receiverId, // Penerima notifikasi (pemilik post/komentar)
-          senderId: userId, // Pengirim notifikasi (user yang melakukan like)
-          entityId,
-          type: 'like',
-        },
-        { transaction: t },
-      );
-    }
-
-    await t.commit();
-    return res.status(201).json({ message: 'You liked this entity' });
-  } catch (error) {}
-}
-
-async function unlikePost(req, res) {
-  const { userId } = req.user;
-  const { entityId, entityType } = req.body;
-  const t = await sequelize.transaction();
-
-  try {
-    const validTypes = ['post', 'comment']; // 🔹 Hanya "post" & "comment"
-    if (!validTypes.includes(entityType)) {
-      await t.rollback();
-      return res.status(400).json({ message: 'Invalid entity type' });
-    }
-
-    const existingLike = await Like.findOne({
-      where: { userId, entityId, entityType },
-      transaction: t,
-    });
-
-    if (!existingLike) {
-      await t.rollback();
-      return res.status(404).json({ message: 'Like not found' });
-    }
-
-    await existingLike.destroy({ transaction: t });
-
-    await t.commit();
-    return res.status(200).json({ message: 'You unliked this entity' });
-  } catch (error) {
-    await t.rollback();
-    return res.status(500).json({
-      message: 'Failed to unlike',
-      error: error.message,
-    });
+    return res.status(500).json('Failed to toggle like');
   }
 }
 
@@ -575,6 +481,5 @@ module.exports = {
   createPost,
   updatePost,
   deletePost,
-  unlikePost,
-  likePost,
+  toggleLikePost,
 };

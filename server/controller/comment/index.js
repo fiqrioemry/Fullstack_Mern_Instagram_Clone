@@ -1,10 +1,16 @@
-const { User, Post, Profile, Comment, Notification } = require('../../models');
+const {
+  User,
+  Post,
+  Profile,
+  Comment,
+  Notification,
+  Like,
+} = require('../../models');
 
-// Fungsi untuk mengekstrak username dari mention (@username)
 function extractMentions(content) {
-  const mentionRegex = /@(\w+)/g; // Regex untuk mencocokkan @username
+  const mentionRegex = /@(\w+)/g;
   const matches = [...content.matchAll(mentionRegex)];
-  return matches.map((match) => match[1]); // Ambil hanya username
+  return matches.map((match) => match[1]);
 }
 
 async function createComment(req, res) {
@@ -29,7 +35,6 @@ async function createComment(req, res) {
       type = 'reply';
     }
 
-    // 3. Buat komentar baru
     const newComment = await Comment.create({
       userId,
       postId,
@@ -47,15 +52,13 @@ async function createComment(req, res) {
       });
     }
 
-    // 5. **Implementasi Mention dalam Komentar**
-    const mentionedUsernames = extractMentions(content); // Ambil semua username yang disebut
+    const mentionedUsernames = extractMentions(content);
     if (mentionedUsernames.length > 0) {
       const mentionedUsers = await User.findAll({
         where: { username: mentionedUsernames },
         attributes: ['id', 'username'],
       });
 
-      // 6. Buat notifikasi mention untuk setiap user yang disebut
       await Promise.all(
         mentionedUsers.map((mentionedUser) =>
           Notification.create({
@@ -77,11 +80,15 @@ async function createComment(req, res) {
 }
 
 async function getComments(req, res) {
-  const { postId } = req.params;
+  const userId = req.user.userId;
+  const postId = req.params.postId;
+  const limit = parseInt(req.query.limit) || 10;
 
   try {
-    const commentsData = await Comment.findAll({
+    const commentsData = await Comment.findAndCountAll({
       where: { postId, parentId: null },
+      limit,
+      distinct: true,
       order: [['createdAt', 'DESC']],
       include: [
         {
@@ -91,9 +98,11 @@ async function getComments(req, res) {
             {
               model: Comment,
               as: 'replies',
+              attributes: ['id'],
             },
           ],
         },
+        { model: Like, as: 'likes', attributes: ['id', 'userId'] },
         {
           model: User,
           as: 'user',
@@ -109,7 +118,14 @@ async function getComments(req, res) {
       ],
     });
 
-    const comments = commentsData.map((comment) => {
+    if (commentsData.count === 0) {
+      return res
+        .status(200)
+        .json({ comments: [], message: 'User has no comment' });
+    }
+
+    const totalComments = commentsData.count;
+    const comments = commentsData.rows.map((comment) => {
       return {
         postId: comment.postId,
         commentId: comment.id,
@@ -119,39 +135,15 @@ async function getComments(req, res) {
         content: comment.content,
         createdAt: comment.createdAt,
         updatedAt: comment.updatedAt,
+        likes: comment.likes.length,
+        isLiked: comment.likes.some((like) => like.userId === userId),
         replies: comment.replies.length,
       };
     });
-    return res.status(200).json(comments);
+    return res.status(200).json({ comments, totalComments });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json('Failed to get comments');
-  }
-}
-
-async function deleteComment(req, res) {
-  const { userId } = req.user;
-  const { commentId } = req.params;
-
-  try {
-    const comment = await Comment.findOne({ where: { id: commentId } });
-
-    if (!comment) return res.status(404).json({ message: 'Comment not found' });
-
-    if (comment.userId !== userId) {
-      return res
-        .status(403)
-        .json({ message: 'Unauthorized to delete this comment' });
-    }
-
-    await comment.destroy();
-
-    return res.status(200).json({ message: 'Comment is deleted' });
-  } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to delete comment',
-      error: error.message,
-    });
   }
 }
 
@@ -202,9 +194,158 @@ async function getReplies(req, res) {
   }
 }
 
+async function toggleLikeComment(req, res) {
+  const userId = req.user.userId;
+  const commentId = req.params.commentId;
+  const t = await sequelize.transaction();
+
+  try {
+    const like = await Like.findOne({
+      where: { userId, entityId: commentId, entityType: 'comment' },
+      transaction: t,
+    });
+
+    if (like) {
+      await like.destroy({ transaction: t });
+
+      await Notification.destroy({
+        where: {
+          senderId: userId,
+          receiverId: like.entityId,
+          commentId: commentId,
+          type: 'like',
+        },
+        transaction: t,
+      });
+
+      await t.commit();
+      return res
+        .status(200)
+        .json({ message: 'You unliked the comment', isLiked: false });
+    }
+
+    const post = await Comment.findByPk(commentId, { transaction: t });
+    if (!post) {
+      await t.rollback();
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+
+    await Like.create(
+      { userId, entityId: commentId, entityType: 'comment' },
+      { transaction: t },
+    );
+
+    if (post.userId !== userId) {
+      await Notification.create(
+        {
+          receiverId: post.userId,
+          senderId: userId,
+          commentId: commentId,
+          type: 'like',
+        },
+        { transaction: t },
+      );
+    }
+    await t.commit();
+    return res.status(200).json('You Liked the comment');
+  } catch (error) {
+    await t.rollback();
+    console.log(error.message);
+    return res.status(500).json('Failed to toggle like');
+  }
+}
+
+async function toggleLikeReply(req, res) {
+  const userId = req.user.userId;
+  const commentId = req.params.commentId;
+  const t = await sequelize.transaction();
+
+  try {
+    const like = await Like.findOne({
+      where: { userId, entityId: commentId, entityType: 'comment' },
+      transaction: t,
+    });
+
+    if (like) {
+      await like.destroy({ transaction: t });
+
+      await Notification.destroy({
+        where: {
+          senderId: userId,
+          receiverId: like.entityId,
+          commentId: commentId,
+          type: 'like',
+        },
+        transaction: t,
+      });
+
+      await t.commit();
+      return res
+        .status(200)
+        .json({ message: 'You unliked the comment', isLiked: false });
+    }
+
+    const post = await Comment.findByPk(commentId, { transaction: t });
+    if (!post) {
+      await t.rollback();
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+
+    await Like.create(
+      { userId, entityId: commentId, entityType: 'comment' },
+      { transaction: t },
+    );
+
+    if (post.userId !== userId) {
+      await Notification.create(
+        {
+          receiverId: post.userId,
+          senderId: userId,
+          commentId: commentId,
+          type: 'like',
+        },
+        { transaction: t },
+      );
+    }
+    await t.commit();
+    return res.status(200).json('You liked the comment');
+  } catch (error) {
+    await t.rollback();
+    console.log(error.message);
+    return res.status(500).json('Failed to toggle like');
+  }
+}
+
+async function deleteComment(req, res) {
+  const { userId } = req.user;
+  const { commentId } = req.params;
+
+  try {
+    const comment = await Comment.findOne({ where: { id: commentId } });
+
+    if (!comment) return res.status(404).json({ message: 'Comment not found' });
+
+    if (comment.userId !== userId) {
+      return res
+        .status(403)
+        .json({ message: 'Unauthorized to delete this comment' });
+    }
+
+    await comment.destroy();
+
+    return res.status(200).json({ message: 'Comment is deleted' });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Failed to delete comment',
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   getComments,
   createComment,
+  toggleLikeComment,
   deleteComment,
   getReplies,
 };

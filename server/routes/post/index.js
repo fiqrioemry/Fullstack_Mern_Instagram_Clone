@@ -5,19 +5,19 @@ const router = express.Router();
 
 // controller
 const {
-  likePost,
   createPost,
   updatePost,
   deletePost,
-  unlikePost,
   getPostDetail,
   getPublicPosts,
+  toggleLikePost,
   getPostsFromFollowings,
 } = require('../../controller/post');
 const {
   createComment,
   getComments,
   deleteComment,
+  toggleLikeComment,
   getReplies,
 } = require('../../controller/comment');
 
@@ -41,8 +41,8 @@ router.get('/:postId', isAuthenticate, getPostDetail);
 // post management (crud)
 
 // like & unlike a post
-router.post('/:postId/like', isAuthenticate, likePost);
-router.delete('/:postId/like', isAuthenticate, unlikePost);
+router.post('/:postId/like', isAuthenticate, toggleLikePost);
+router.post('/:commentId/like', isAuthenticate, toggleLikeComment);
 
 // comment management on post
 router.get('/:postId/comments', isAuthenticate, getComments);

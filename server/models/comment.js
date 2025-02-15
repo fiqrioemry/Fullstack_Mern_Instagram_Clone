@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasMany(models.Like, {
         foreignKey: 'entityId',
+        as: 'likes',
         constraints: false,
         onDelete: 'CASCADE',
         scope: {
