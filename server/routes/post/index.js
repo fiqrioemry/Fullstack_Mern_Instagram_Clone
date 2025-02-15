@@ -19,10 +19,9 @@ const {
   getComments,
   deleteComment,
   getReplies,
-  createReplies,
 } = require('../../controller/comment');
 
-router.get('/', getPublicPosts);
+router.get('/', isAuthenticate, getPublicPosts);
 router.get('/followings', isAuthenticate, getPostsFromFollowings);
 router.post(
   '/',

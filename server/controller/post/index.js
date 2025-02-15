@@ -68,6 +68,7 @@ async function getPostsFromFollowings(req, res) {
       createdAt: post.createdAt,
       likes: post.likes.length,
       comments: post.comments.length,
+      isLiked: post.likes.some((like) => like.userId === userId),
     }));
 
     return res.status(200).json({ totalPosts, posts });
@@ -79,11 +80,12 @@ async function getPostsFromFollowings(req, res) {
 
 async function getPostDetail(req, res) {
   const postId = req.params.postId;
+  const userId = req.user.userId;
   try {
     const postData = await Post.findOne({
       where: { id: postId },
       include: [
-        { model: Like, as: 'likes', attributes: ['id'] },
+        { model: Like, as: 'likes', attributes: ['id', 'userId'] },
         { model: Comment, as: 'comments', attributes: ['id'] },
         { model: PostGallery, as: 'gallery', attributes: ['image'] },
         {
@@ -113,6 +115,7 @@ async function getPostDetail(req, res) {
       images: postData.gallery?.map((g) => g.image) || [],
       createdAt: postData.createdAt,
       likes: likes,
+      isLiked: postData.likes.some((like) => like.userId === userId),
       comments: comments,
     };
 
@@ -124,6 +127,7 @@ async function getPostDetail(req, res) {
 }
 
 async function getPublicPosts(req, res) {
+  const userId = req.user.userId;
   const limit = parseInt(req.query.limit) || 5;
   try {
     const postsData = await Post.findAndCountAll({
@@ -158,6 +162,7 @@ async function getPublicPosts(req, res) {
       createdAt: post.createdAt,
       likes: post.likes.length,
       comments: post.comments.length,
+      isLiked: post.likes.some((like) => like.userId === userId),
     }));
 
     return res.status(200).json({ totalPosts, posts });
