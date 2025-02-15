@@ -31,6 +31,7 @@ async function getPostsFromFollowings(req, res) {
     if (followingIds.length === 0) {
       return res.status(200).json({
         posts: [],
+        totalPosts: 0,
         message: 'No post to show, you not following anyone',
       });
     }
@@ -39,7 +40,7 @@ async function getPostsFromFollowings(req, res) {
       limit,
       where: { userId: { [Op.in]: followingIds } },
       include: [
-        { model: Like, as: 'likes', attributes: ['id'] },
+        { model: Like, as: 'likes', attributes: ['id', 'userId'] },
         { model: Comment, as: 'comments', attributes: ['id'] },
         { model: PostGallery, as: 'gallery', attributes: ['image'] },
         {
@@ -54,7 +55,11 @@ async function getPostsFromFollowings(req, res) {
     });
 
     if (postsData.count === 0) {
-      return res.status(200).json({ posts: [], message: 'User has no post' });
+      return res.status(200).json({
+        posts: [],
+        totalPosts: 0,
+        message: 'No Post to show, try to follow more user',
+      });
     }
 
     const totalPosts = postsData.count;
@@ -133,7 +138,7 @@ async function getPublicPosts(req, res) {
     const postsData = await Post.findAndCountAll({
       limit,
       include: [
-        { model: Like, as: 'likes', attributes: ['id'] },
+        { model: Like, as: 'likes', attributes: ['id', 'userId'] },
         { model: Comment, as: 'comments', attributes: ['id'] },
         { model: PostGallery, as: 'gallery', attributes: ['image'] },
         {
@@ -195,6 +200,7 @@ async function getUserPosts(req, res) {
       if (!followRecord) {
         return res.status(200).json({
           posts: [],
+          totalPosts: 0,
           message: 'Account is private, follow to see posts',
         });
       }
@@ -219,7 +225,11 @@ async function getUserPosts(req, res) {
     });
 
     if (postsData.count === 0) {
-      return res.status(200).json({ posts: [], message: 'User has no post' });
+      return res.status(200).json({
+        posts: [],
+        totalPosts: 0,
+        message: 'User has no post',
+      });
     }
 
     const totalPosts = postsData.count;
@@ -232,7 +242,7 @@ async function getUserPosts(req, res) {
       images: post.gallery?.map((g) => g.image) || [],
       createdAt: post.createdAt,
       likes: post.likes.length,
-      comments: post.comments.length, // Perbaikan dari `posts.comments.length`
+      comments: post.comments.length,
     }));
 
     return res.status(200).json({ totalPosts, posts });
@@ -417,7 +427,6 @@ async function likePost(req, res) {
       return res.status(400).json({ message: 'Invalid entity type' });
     }
 
-    // 2. Cek apakah user sudah melakukan like sebelumnya
     const existingLike = await Like.findOne({
       where: { userId, entityId, entityType },
       paranoid: false,
