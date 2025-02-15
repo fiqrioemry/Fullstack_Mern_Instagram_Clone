@@ -7,7 +7,7 @@ import { Search, Home, Compass, MessageCircle, Bell } from "lucide-react";
 
 const NavMenu = () => {
   const { user } = useAuthStore();
-  const { handleSearch, openSearch } = useProvider();
+  const { handleSearch, openSearch, searchRef } = useProvider();
 
   return (
     <nav className="space-y-4">
@@ -28,6 +28,7 @@ const NavMenu = () => {
         </span>
       </Link>
       <button
+        ref={searchRef}
         onClick={handleSearch}
         className="flex items-center hover:bg-gray-100 w-full rounded-md"
       >
@@ -61,7 +62,7 @@ const NavMenu = () => {
         </span>
       </Link>
       <Link
-        to="/"
+        to="/message"
         className="inline-flex items-center hover:bg-gray-100 w-full rounded-md"
       >
         <div className="flex justify-center w-20 p-4">
@@ -78,7 +79,7 @@ const NavMenu = () => {
         </span>
       </Link>
       <Link
-        to="/"
+        to="/notification"
         className="inline-flex items-center hover:bg-gray-100 w-full rounded-md"
       >
         <div className="flex items-center justify-center w-20 p-4">

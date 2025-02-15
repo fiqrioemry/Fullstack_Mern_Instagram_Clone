@@ -21,11 +21,6 @@ export const signInControl = [
   },
 ];
 
-// delete later
-export const initialPostForm = {
-  content: '',
-};
-
 export const signUpState = {
   username: '',
   fullname: '',

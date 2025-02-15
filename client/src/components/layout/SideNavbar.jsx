@@ -1,16 +1,16 @@
 import { cn } from "@/lib/utils";
+import Searchbar from "../sidebar/SearchBar";
 import NavMenu from "@/components/sidebar/NavMenu";
 import { useProvider } from "@/context/GlobalProvider";
 import MenuOptions from "@/components/sidebar/MenuOptions";
 import { Instagram } from "lucide-react";
-
-// <div className={cn(openSearch ? "w-[75px]" : "w-full", "searchpanel")}>
 
 const SideNavbar = () => {
   const { openSearch, searchRef } = useProvider();
 
   return (
     <aside className="w-72 md:relative md:block hidden">
+      <Searchbar openSearch={openSearch} searchRef={searchRef} />
       <div
         className={cn(
           openSearch ? "w-20" : "w-full",
@@ -51,6 +51,3 @@ const SideNavbar = () => {
 };
 
 export default SideNavbar;
-{
-  /* <SearchBar openSearch={openSearch} searchRef={searchRef} /> */
-}

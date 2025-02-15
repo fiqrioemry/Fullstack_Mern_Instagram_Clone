@@ -1,16 +1,15 @@
-import { motion } from "framer-motion";
-import { animateSearch } from "../../config";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 
 // eslint-disable-next-line react/prop-types
 const Searchbar = ({ openSearch, searchRef }) => {
   return (
-    <motion.div
+    <div
       ref={searchRef}
-      className="searchbar"
-      initial="close"
-      animate={openSearch ? "open" : "close"}
-      variants={animateSearch}
+      className={cn(
+        openSearch ? "left-0" : "left-20",
+        "absolute top-0 bottom-0 w-80 h-full bg-background border-r z-10"
+      )}
     >
       <div className="px-3">
         <div className="flex py-10">
@@ -20,7 +19,7 @@ const Searchbar = ({ openSearch, searchRef }) => {
           <Input />
         </form>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
