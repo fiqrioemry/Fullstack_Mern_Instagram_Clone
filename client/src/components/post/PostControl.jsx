@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { cn } from "@/lib/utils";
 import { useCommentStore } from "@/store/useCommentStore";
 import { Bookmark, Heart, MessageCircle, Send } from "lucide-react";
 
@@ -14,7 +15,10 @@ const PostControl = ({ post, formik }) => {
         <div className="flex space-x-4">
           <Heart
             onClick={handleLike}
-            className="w-6 h-6 text-gray-800 cursor-pointer hover:text-gray-600"
+            className={cn(
+              post.isLiked ? "bg-red-500 text-red-500" : "bg-transparent",
+              "w-6 h-6  cursor-pointer bg-red-500 hover:text-gray-600"
+            )}
             aria-label="Like Post"
           />
           <MessageCircle
