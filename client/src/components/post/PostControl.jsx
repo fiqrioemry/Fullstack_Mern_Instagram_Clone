@@ -1,13 +1,11 @@
 /* eslint-disable react/prop-types */
 
-import { Bookmark, Heart, MessageCircle, Send } from "lucide-react";
-import { useFormSchema } from "../../hooks/useFormSchema";
-import { usePostStore } from "../../store/usePostStore";
+import { usePostStore } from "@/store/usePostStore";
+import { Bookmark, Heart, MessageCircle } from "lucide-react";
 
 const PostControl = ({ post, formik }) => {
   const { likePost } = usePostStore();
-  const likeState = { entityId: post.postId, entityType: "post" };
-  const likeForm = useFormSchema(likeState, [], likePost);
+  const handleLikePost = () => likePost(post.postId);
   const handleComment = () => formik.setFieldValue("postId", post.postId);
 
   return (
@@ -15,7 +13,7 @@ const PostControl = ({ post, formik }) => {
       <div className="flex justify-between items-center">
         <div className="flex space-x-4">
           <Heart
-            onClick={likeForm.handleSubmit}
+            onClick={handleLikePost}
             className="w-6 h-6 cursor-pointer hover:text-gray-600"
             fill={post.isLiked ? "red" : "transparent"}
             stroke={post.isLiked ? "red" : "currentColor"}
@@ -25,10 +23,6 @@ const PostControl = ({ post, formik }) => {
             onClick={handleComment}
             className="w-6 h-6 text-gray-800 cursor-pointer hover:text-gray-600"
             aria-label="Comment on Post"
-          />
-          <Send
-            className="w-6 h-6 text-gray-800 cursor-pointer hover:text-gray-600"
-            aria-label="Share Post"
           />
         </div>
         <Bookmark

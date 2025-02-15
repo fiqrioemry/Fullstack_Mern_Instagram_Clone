@@ -1,19 +1,18 @@
-import NotFound from "./NotFound";
-import { useEffect, useState } from "react";
 import Posts from "@/components/post/Posts";
 import { usePostStore } from "@/store/usePostStore";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import PostsLoading from "@/components/skeleton/PostsLoading";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import NoPostToShow from "../components/post/NoPostToShow";
 
 const Home = () => {
-  const [limit, setLimit] = useState(5);
   const { getPostsFromFollowings, posts, loading, totalPosts } = usePostStore();
-
-  useEffect(() => {
-    getPostsFromFollowings(limit);
-  }, [getPostsFromFollowings, limit]);
-
-  useInfiniteScroll(loading, setLimit, posts.length, totalPosts);
+  const { triggerRef } = useInfiniteScroll({
+    initialLimit: 3,
+    increment: 3,
+    fetchData: getPostsFromFollowings,
+    totalItems: totalPosts,
+    currentItems: posts.length,
+  });
 
   return (
     <div className="flex">
@@ -28,18 +27,23 @@ const Home = () => {
                   {posts.length > 0 ? (
                     posts.map((post) => <Posts post={post} key={post.postId} />)
                   ) : (
-                    <NotFound />
+                    <NoPostToShow />
                   )}
                   {loading && <PostsLoading />}
+                  <div ref={triggerRef} className="h-10"></div>
+                  {posts.length >= totalPosts && posts.length > 0 && (
+                    <div className="text-center text-gray-500 mt-4">
+                      <p>You have reached the end</p>
+                      <p>No more post to show</p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           </div>
         </div>
       </div>
-      <div className="w-[26rem] xl:block hidden">
-        <div className="py-6 px-12"></div>
-      </div>
+      <div className="w-[26rem] xl:block hidden"></div>
     </div>
   );
 };

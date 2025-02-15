@@ -1,16 +1,18 @@
 /* eslint-disable react/prop-types */
-import { Settings } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
 
-const UserProfile = ({ user }) => {
+import { Link, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
+
+const UserProfile = ({ profile }) => {
   const location = useLocation();
-  console.log(user);
+  const { user } = useAuthStore();
+
   return (
     <div className="flex flex-col items-center py-10">
       <div className="flex items-center gap-8">
         <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-gray-300">
           <img
-            src={user.avatar}
+            src={profile.avatar}
             alt="Profile"
             className="w-full h-full object-cover"
           />
@@ -18,7 +20,7 @@ const UserProfile = ({ user }) => {
 
         <div>
           <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-            <h3>{user.username}</h3>
+            <h3>{profile.username}</h3>
             <div className="flex items-center gap-4">
               <button className="px-4 py-1 border rounded-md text-sm">
                 Edit profile
@@ -26,31 +28,28 @@ const UserProfile = ({ user }) => {
               <button className="px-4 py-1 border rounded-md text-sm">
                 View archive
               </button>
-              <button className="text-lg">
-                <Settings />
-              </button>
             </div>
           </div>
           <div className="flex items-center gap-6 mt-4">
-            <span>{user.posts} Posts</span>
+            <span>{profile.posts} Posts</span>
             <Link
               className="hover-btn"
-              to={`/${user.username}/followings`}
+              to={`/${profile.username}/followings`}
               state={{ background: location }}
             >
-              {user.followings} Followings
+              {profile.followings} Followings
             </Link>
             <Link
               className="hover-btn"
-              to={`/${user.username}/followers`}
+              to={`/${profile.username}/followers`}
               state={{ background: location }}
             >
-              {user.followers} Followers
+              {profile.followers} Followers
             </Link>
           </div>
           <div>
-            <p className="mt-2 font-medium">{user.username}</p>
-            <p className="text-gray-500">{user.fullname}</p>
+            <p className="mt-2 font-medium">{profile.username}</p>
+            <p className="text-gray-500">{profile.fullname}</p>
           </div>
         </div>
       </div>

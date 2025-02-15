@@ -1,9 +1,13 @@
 /* eslint-disable react/prop-types */
+import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import Avatar from "@/components/ui/Avatar";
 import Timestamp from "@/components/ui/Timestamp";
+import { useCommentStore } from "@/store/useCommentStore";
 
-const Replies = ({ replies, formik }) => {
+const Replies = ({ replies, formik, parentId }) => {
+  const { likeReply } = useCommentStore();
+
   return (
     <div className="mt-2">
       {replies.map((reply) => (
@@ -21,8 +25,23 @@ const Replies = ({ replies, formik }) => {
                 </Link>
                 <span className="text-sm">{reply.content}</span>
               </div>
-              <div className="text-xs space-x-2">
+
+              <div className="text-xs flex items-center space-x-2">
                 <Timestamp createdAt={reply.createdAt} />
+                {reply.likes > 0 && <span>{reply.likes} likes</span>}
+
+                <button
+                  className="flex items-center space-x-1"
+                  onClick={() => likeReply(reply.commentId, parentId)}
+                >
+                  <Heart
+                    className={`w-4 h-4 cursor-pointer transition ${
+                      reply.isLiked
+                        ? "text-red-500 fill-red-500"
+                        : "text-gray-500 hover:text-gray-800"
+                    }`}
+                  />
+                </button>
 
                 <button
                   className="text-xs text-blue-500"

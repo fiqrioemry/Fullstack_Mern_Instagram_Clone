@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
 import Replies from "./Replies.jsx";
-import { Loader } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Loader, Heart } from "lucide-react";
 import Avatar from "@/components/ui/Avatar.jsx";
 import Timestamp from "@/components/ui/Timestamp.jsx";
 import { useCommentStore } from "@/store/useCommentStore.jsx";
 
 const Comments = ({ formik }) => {
-  const { replies, getReplies, comments, loadingReply } = useCommentStore();
+  const { replies, getReplies, comments, loadingReply, likeComment } =
+    useCommentStore();
 
   const showReplies = (postId, commentId) => {
     getReplies(postId, commentId);
@@ -29,10 +30,25 @@ const Comments = ({ formik }) => {
                 </Link>
                 <span className="text-sm">{comment.content}</span>
               </div>
-              <div className="text-xs space-x-2">
+
+              <div className="text-xs flex items-center space-x-2">
                 <Timestamp createdAt={comment.createdAt} />
                 {comment.likes > 0 && <span>{comment.likes} likes</span>}
 
+                <button
+                  className="flex items-center space-x-1"
+                  onClick={() => likeComment(comment.commentId)}
+                >
+                  <Heart
+                    className={`w-4 h-4 cursor-pointer transition ${
+                      comment.isLiked
+                        ? "text-red-500 fill-red-500"
+                        : "text-gray-500 hover:text-gray-800"
+                    }`}
+                  />
+                </button>
+
+                {/* Tombol Reply */}
                 <button
                   className="text-xs text-blue-500"
                   onClick={() => {
@@ -64,7 +80,11 @@ const Comments = ({ formik }) => {
               )}
 
               {replies[comment.commentId] && (
-                <Replies replies={replies[comment.commentId]} formik={formik} />
+                <Replies
+                  formik={formik}
+                  parentId={comment.commentId}
+                  replies={replies[comment.commentId].replies}
+                />
               )}
             </div>
           </div>

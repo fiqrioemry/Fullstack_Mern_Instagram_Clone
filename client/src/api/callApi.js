@@ -147,23 +147,23 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  getPostsFromFollowings: async () => {
+  getPostsFromFollowings: async (limit) => {
     return authInstance
-      .get('/post/followings')
+      .get(`/post/followings?limit=${limit}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   likePost: async (postId) => {
     return authInstance
-      .post(`/post/${postId}/like`)
+      .post(`/post/${postId}/like/post`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   likeComment: async (commentId) => {
     return authInstance
-      .put(`/post/${commentId}/like`)
+      .post(`/post/${commentId}/like/comment`)
       .then((res) => res.data)
       .catch(errorHandle);
   },

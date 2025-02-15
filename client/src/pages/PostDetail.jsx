@@ -1,9 +1,9 @@
 import { useEffect } from "react";
+import NotFound from "./NotFound";
 import Post from "@/components/post/Post";
 import { useParams } from "react-router-dom";
 import { usePostStore } from "@/store/usePostStore";
 import PostLoading from "@/components/skeleton/PostLoading";
-import NotFound from "./NotFound";
 
 const PostDetail = () => {
   const { id } = useParams();

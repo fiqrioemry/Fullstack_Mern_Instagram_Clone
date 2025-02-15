@@ -42,7 +42,7 @@ export const usePostStore = create((set, get) => ({
     } catch (error) {
       console.error(error);
     } finally {
-      set({ loading: true });
+      set({ loading: false });
     }
   },
 

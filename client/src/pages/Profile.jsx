@@ -23,7 +23,7 @@ const Profile = () => {
           {loading.username ? (
             <ProfileLoading />
           ) : (
-            <UserProfile user={profile} />
+            <UserProfile profile={profile} />
           )}
 
           <div>

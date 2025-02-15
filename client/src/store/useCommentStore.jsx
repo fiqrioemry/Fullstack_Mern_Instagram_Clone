@@ -7,13 +7,15 @@ export const useCommentStore = create((set, get) => ({
   replies: {},
   comments: [],
   loadingReply: {},
+  totalReplies: 0,
+  totalComments: 0,
   loadingComment: false,
 
   getComments: async (postId) => {
     try {
       set({ loadingComment: true });
-      const comments = await callApi.getComments(postId);
-      set({ comments });
+      const { comments, totalComments } = await callApi.getComments(postId);
+      set({ comments, totalComments });
     } catch (error) {
       console.log(error);
     } finally {
@@ -65,10 +67,69 @@ export const useCommentStore = create((set, get) => ({
 
   likeComment: async (commentId) => {
     try {
-      const message = await callApi.likePost(commentId);
+      const message = await callApi.likeComment(commentId);
       toast.success(message);
+      get().setLikeComment(commentId);
     } catch (error) {
       console.log(error);
     }
+  },
+
+  likeReply: async (commentId, parentId) => {
+    try {
+      const message = await callApi.likeComment(commentId);
+      toast.success(message);
+      get().setLikeReply(commentId, parentId);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  setLikeReply: (commentId, parentId) => {
+    set((state) => {
+      const parentReplies = state.replies[parentId]?.replies || [];
+      return {
+        replies: {
+          ...state.replies,
+          [parentId]: {
+            ...state.replies[parentId],
+            replies: parentReplies.map((reply) =>
+              reply.commentId === commentId
+                ? {
+                    ...reply,
+                    isLiked: !reply.isLiked,
+                    likes: reply.isLiked ? reply.likes - 1 : reply.likes + 1,
+                  }
+                : reply
+            ),
+          },
+        },
+      };
+    });
+  },
+
+  setLikeComment: (commentId) => {
+    set((state) => ({
+      comment:
+        state.comment?.commentId === commentId
+          ? {
+              ...state.comment,
+              isLiked: !state.comment.isLiked,
+              likes: state.comment.isLiked
+                ? state.comment.likes - 1
+                : state.comment.likes + 1,
+            }
+          : state.comment,
+
+      comments: state.comments.map((comment) =>
+        comment.commentId === commentId
+          ? {
+              ...comment,
+              isLiked: !comment.isLiked,
+              likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1,
+            }
+          : comment
+      ),
+    }));
   },
 }));
