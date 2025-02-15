@@ -45,11 +45,23 @@ function MenuOptions({ openSearch }) {
 
   return (
     <DropdownMenu open={open}>
-      <DropdownMenuTrigger asChild>
-        <Button onClick={() => setOpen(!open)} variant="nav" size="lg">
-          <Menu />
-          {!openSearch && <div className="hidden lg:block">More</div>}
-        </Button>
+      <DropdownMenuTrigger asChild className="flex justify-start">
+        <button
+          onClick={() => setOpen(!open)}
+          className="flex items-center hover:bg-gray-100 w-full rounded-md"
+        >
+          <div className="flex justify-center w-20 p-4">
+            <Menu size={24} />
+          </div>
+          <span
+            className={cn(
+              openSearch ? "opacity-0" : "opacity-100",
+              " duration-300 transition-all ease-in"
+            )}
+          >
+            More
+          </span>
+        </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent

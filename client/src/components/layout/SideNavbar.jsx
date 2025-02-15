@@ -1,19 +1,40 @@
 import { cn } from "@/lib/utils";
 import NavMenu from "@/components/sidebar/NavMenu";
-import SearchBar from "@/components/sidebar/SearchBar";
 import { useProvider } from "@/context/GlobalProvider";
 import MenuOptions from "@/components/sidebar/MenuOptions";
+import { Instagram } from "lucide-react";
+
+// <div className={cn(openSearch ? "w-[75px]" : "w-full", "searchpanel")}>
 
 const SideNavbar = () => {
   const { openSearch, searchRef } = useProvider();
 
   return (
-    <aside className="hidden bg-red-500 md:relative bottom-0 right-0 left-0 max-w-[245px] z-10">
-      <SearchBar openSearch={openSearch} searchRef={searchRef} />
-      <div className={cn(openSearch ? "w-[75px]" : "w-full", "searchpanel")}>
-        <div className="px-3">
-          <div className="md:flex justify-center hidden h-[6.5rem]">
-            <h3>Momengram</h3>
+    <aside className="w-72 md:relative md:block hidden">
+      <div
+        className={cn(
+          openSearch ? "w-20" : "w-full",
+          "absolute top-0 left-0 bottom-0 border-r duration-300 transition-all ease-in z-30"
+        )}
+      >
+        <div className="space-y-4 p-2">
+          <div className="h-24 flex items-center">
+            <div
+              className={cn(
+                openSearch ? "opacity-100" : "opacity-0",
+                " duration-300 transition-all ease-in w-24 flex justify-center"
+              )}
+            >
+              <Instagram />
+            </div>
+            <h3
+              className={cn(
+                openSearch ? "opacity-0" : "opacity-100",
+                " duration-300 transition-all ease-in"
+              )}
+            >
+              Momengram
+            </h3>
           </div>
 
           <div>
@@ -30,3 +51,6 @@ const SideNavbar = () => {
 };
 
 export default SideNavbar;
+{
+  /* <SearchBar openSearch={openSearch} searchRef={searchRef} /> */
+}
