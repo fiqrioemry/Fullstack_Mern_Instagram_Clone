@@ -23,6 +23,7 @@ const Posts = ({ post }) => {
       <PostAuthor data={post} />
       <Galleries images={post.images} />
       <PostControl post={post} formik={commentForm} />
+      <p>{post.content}</p>
       {post.comments > 0 && (
         <Link
           className="text-xs md:text-sm"

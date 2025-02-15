@@ -23,7 +23,7 @@ export const usePostStore = create((set) => ({
   },
 
   getPublicPosts: async (limit) => {
-    console.log(limit);
+    set({ loading: true });
     try {
       const { posts, totalPosts } = await callApi.getPublicPosts(limit);
       set({ posts, totalPosts });
@@ -33,6 +33,7 @@ export const usePostStore = create((set) => ({
       set({ loading: false });
     }
   },
+
   getPostDetail: async (postId) => {
     try {
       const post = await callApi.getPostDetail(postId);
@@ -46,8 +47,9 @@ export const usePostStore = create((set) => ({
 
   getUserPosts: async (username) => {
     try {
-      const posts = await callApi.getUserPosts(username);
-      set({ posts });
+      set({ loading: true });
+      const { posts, totalPosts } = await callApi.getUserPosts(username);
+      set({ posts, totalPosts });
     } catch (error) {
       toast.error(error);
     } finally {
@@ -56,8 +58,10 @@ export const usePostStore = create((set) => ({
   },
 
   getPostsFromFollowings: async (limit) => {
+    set({ loading: true });
     try {
       const { posts, totalPosts } = await callApi.getPostsFromFollowings(limit);
+
       set({ posts, totalPosts });
     } catch (error) {
       console.error(error);

@@ -1,20 +1,19 @@
-import NotFound from "./NotFound";
 import { useEffect, useState } from "react";
 import Posts from "@/components/post/Posts";
 import { usePostStore } from "@/store/usePostStore";
 import PostsLoading from "@/components/skeleton/PostsLoading";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import NotFound from "./NotFound";
 
 const Home = () => {
   const [limit, setLimit] = useState(5);
-  const { getPublicPosts, posts, loading } = usePostStore();
+  const { getPublicPosts, posts, loading, totalPosts } = usePostStore();
 
   useEffect(() => {
-    console.log(limit);
     getPublicPosts(limit);
-  }, [limit]);
+  }, [getPublicPosts, limit]);
 
-  useInfiniteScroll(loading, setLimit);
+  useInfiniteScroll(loading, setLimit, posts.length, totalPosts);
 
   return (
     <div className="flex">

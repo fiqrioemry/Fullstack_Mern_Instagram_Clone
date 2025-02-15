@@ -5,15 +5,15 @@ import { usePostStore } from "@/store/usePostStore";
 import PostsLoading from "@/components/skeleton/PostsLoading";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
-const Explore = () => {
+const Home = () => {
   const [limit, setLimit] = useState(5);
-  const { getPostsFromFollowings, posts, loading } = usePostStore();
+  const { getPostsFromFollowings, posts, loading, totalPosts } = usePostStore();
 
   useEffect(() => {
     getPostsFromFollowings(limit);
-  }, [limit]);
+  }, [getPostsFromFollowings, limit]);
 
-  useInfiniteScroll(loading, setLimit);
+  useInfiniteScroll(loading, setLimit, posts.length, totalPosts);
 
   return (
     <div className="flex">
@@ -21,11 +21,11 @@ const Explore = () => {
         <div className="flex justify-center">
           <div className="w-full max-w-[30rem] px-2">
             <div className="md:mt-0 mt-12 md:mb-0 mb-12 py-6">
-              {loading && limit === 5 ? (
+              {loading && posts.length === 0 ? (
                 <PostsLoading />
               ) : (
                 <div className="space-y-6">
-                  {posts && posts.length > 0 ? (
+                  {posts.length > 0 ? (
                     posts.map((post) => <Posts post={post} key={post.postId} />)
                   ) : (
                     <NotFound />
@@ -44,4 +44,4 @@ const Explore = () => {
   );
 };
 
-export default Explore;
+export default Home;

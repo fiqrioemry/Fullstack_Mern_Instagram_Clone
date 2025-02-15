@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useUserStore } from "@/store/useUserStore";
+import { Bookmark, Grid2X2, Tags } from "lucide-react";
 import UserProfile from "@/components/profile/UserProfile";
-import { Bookmark, Grid2X2, UserCheck2Icon } from "lucide-react";
 import ProfileLoading from "@/components/skeleton/ProfileLoading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Outlet, useParams, useLocation, Link } from "react-router-dom";
@@ -41,7 +41,7 @@ const Profile = () => {
                 </Link>
                 <Link to="tags">
                   <TabsTrigger value="tags">
-                    <UserCheck2Icon /> <span>tags</span>
+                    <Tags /> <span>tags</span>
                   </TabsTrigger>
                 </Link>
               </TabsList>
