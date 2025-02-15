@@ -26,33 +26,22 @@ const Profile = () => {
             <UserProfile user={profile} />
           )}
 
-          {/* <div>
-            <Tabs
-              defaultValue={activeTab} // Menggunakan tab aktif yang tervalidasi
-            >
-              <TabsList className="w-full gap-x-20">
-                <TabsTrigger value="post" onClick={() => handleTabChange("")}>
+          <div>
+            <Tabs defaultValue="post">
+              <TabsList className="w-full">
+                <TabsTrigger value="post">
                   <Grid2X2 /> <span>Post</span>
                 </TabsTrigger>
-                {username === userData.username && (
-                  <TabsTrigger
-                    value="saved"
-                    onClick={() => handleTabChange("saved")}
-                  >
-                    <Bookmark /> <span>Saved</span>
-                  </TabsTrigger>
-                )}
-
-                <TabsTrigger
-                  value="tags"
-                  onClick={() => handleTabChange("tags")}
-                >
-                  <SquareUserRound /> <span>Tagged</span>
+                <TabsTrigger value="post">
+                  <Grid2X2 /> <span>Post</span>
+                </TabsTrigger>
+                <TabsTrigger value="post">
+                  <Grid2X2 /> <span>Post</span>
                 </TabsTrigger>
               </TabsList>
             </Tabs>
             <Outlet />
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

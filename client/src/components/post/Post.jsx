@@ -24,7 +24,7 @@ const Post = ({ post }) => {
     if (post.postId) {
       getComments(post.postId);
     }
-  }, [post.postId]);
+  }, [getComments, post.postId]);
 
   return (
     <div>

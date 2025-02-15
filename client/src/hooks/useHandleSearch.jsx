@@ -9,11 +9,7 @@ const useHandleSearch = () => {
   };
 
   const handleClickOutside = (event) => {
-    if (
-      openSearch === true &&
-      searchRef.current &&
-      !searchRef.current.contains(event.target)
-    ) {
+    if (searchRef.current && !searchRef.current.contains(event.target)) {
       setOpenSearch(false);
     }
   };

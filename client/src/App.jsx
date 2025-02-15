@@ -57,7 +57,6 @@ function App() {
           <Route path="p/:id" element={<PostDetail />} />
           <Route path=":username" element={<Profile />}>
             <Route index element={<UserPosts />} />
-            <Route path="*" element={<UserPosts />} />
             <Route path="tags" element={<UserTags />} />
             <Route path="saved" element={<UserSaved />} />
           </Route>

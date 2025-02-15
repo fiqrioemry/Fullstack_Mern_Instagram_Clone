@@ -137,14 +137,3 @@ export const commentControl = [
     component: 'input',
   },
 ];
-
-export const animateSearch = {
-  close: {
-    left: '-100%',
-    transition: { duration: 0.5, ease: 'easeInOut' },
-  },
-  open: {
-    left: '75px',
-    transition: { duration: 0.5, ease: 'easeInOut' },
-  },
-};
