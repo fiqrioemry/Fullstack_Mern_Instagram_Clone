@@ -1,7 +1,7 @@
 import { authInstance, publicInstance } from '.';
 
 const errorHandle = (error) => {
-  const errorMessage = error.response?.data?.message || 'Something went wrong';
+  const errorMessage = error.response?.data || 'Something went wrong';
   return Promise.reject(new Error(errorMessage));
 };
 
@@ -75,7 +75,7 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  follow: async (followingId) => {
+  toggleFollow: async (followingId) => {
     return authInstance
       .post(`/user/${followingId}/follow`)
       .then((res) => res.data)

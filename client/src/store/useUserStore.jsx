@@ -3,67 +3,28 @@ import toast from "react-hot-toast";
 import callApi from "../api/callApi";
 
 export const useUserStore = create((set, get) => ({
-  profile: [],
+  profile: null,
   followers: [],
   followings: [],
   loading: true,
+  error: null,
 
-  // 🔹 Get User Profile
-  searchUser: async (username) => {
-    set({ searching: true });
-    try {
-      const search = await callApi.searchUser(username);
-      set({ search });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      set({ searching: false });
-    }
-  },
-
-  // 🔹 Get User Profile
   getUserProfile: async (username) => {
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
       const profile = await callApi.getUserProfile(username);
       set({ profile });
     } catch (error) {
-      toast.error(error);
-    } finally {
-      set({ loading: false });
-    }
-  },
-  getMyProfile: async () => {
-    set({ loading: true });
-    try {
-      const profile = await callApi.getMyProfile();
-      set({ profile });
-    } catch (error) {
-      toast.error(error);
+      console.log(error);
+      set({ error });
     } finally {
       set({ loading: false });
     }
   },
 
-  updateMyProfile: async (formData) => {
-    set({ loading: true });
-    try {
-      const message = await callApi.updateMyProfile(formData);
-      await get().getMyProfile();
-      toast.success(message);
-    } catch (error) {
-      toast.error(error);
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  setProfile: () => {
+  setProfile: (updateData) => {
     set((state) => ({
-      profile: {
-        ...state.profile,
-        isFollowing: !state.profile.isFollowing,
-      },
+      profile: { ...state.profile, ...updateData },
     }));
   },
 
@@ -87,10 +48,11 @@ export const useUserStore = create((set, get) => ({
     }));
   },
 
-  follow: async (followingId) => {
+  toggleFollow: async (followingId) => {
     try {
-      const message = await callApi.follow(followingId);
-      get().setProfile();
+      const message = await callApi.toggleFollow(followingId);
+      await get().getFollowings(get().profile.username);
+      await get().getUserProfile(get().profile.username);
       get().setFollowings(followingId);
       get().setFollowers(followingId);
       toast.success(message);

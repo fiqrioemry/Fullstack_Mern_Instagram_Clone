@@ -11,6 +11,7 @@ import { useFileUpload } from "@/hooks/useFileUpload";
 import { useState, useCallback, useMemo } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ArrowLeft, ArrowRight, PlusSquare } from "lucide-react";
+import ConfirmationBox from "./ConfirmationBox";
 
 export function CreateNewPost() {
   const { user } = useAuthStore();
@@ -131,32 +132,16 @@ export function CreateNewPost() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <DialogContent className="sm:w-[400px] p-6">
-          <div className="text-center">
-            <h4 className="text-lg font-semibold">Discard post?</h4>
-            <p className="text-gray-600 mt-2 text-sm">
-              If you leave, your edits won&apos;t be saved.
-            </p>
-          </div>
-          <div className="flex flex-col gap-2 mt-4">
-            <Button
-              variant="destructive"
-              className="w-full text-red-600 font-semibold"
-              onClick={() => handleConfirmation(true)}
-            >
-              Discard
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => handleConfirmation(false)}
-            >
-              Cancel
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationBox
+        open={showConfirmation}
+        cancelLabel="Cancel"
+        title="Discard post?"
+        confirmLabel="Discard"
+        confirmVariant="delete"
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={() => handleConfirmation(true)}
+        message="If you leave, your edits won't be saved."
+      />
     </>
   );
 }

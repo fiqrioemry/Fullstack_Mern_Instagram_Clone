@@ -15,8 +15,7 @@ const buttonVariants = cva(
         cancel:
           "text-gray-600 border border-gray-400 hover:bg-gray-100 transition ",
         edit: "text-blue-600 border border-blue-600 hover:bg-blue-100 transition ",
-        delete:
-          "text-white bg-red-500 border border-red-500 hover:bg-red-600 transition ",
+        delete: "text-red-500 hover:text-red-700 font-medium w-full ",
         save: "text-white bg-green-500 border border-green-500 hover:bg-green-600 transition ",
 
         ghost: "hover:bg-accent hover:text-accent-foreground",

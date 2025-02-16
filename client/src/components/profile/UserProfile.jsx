@@ -26,15 +26,20 @@ const UserProfile = ({ profile }) => {
 
             <div>
               <div className="flex flex-col md:flex-row items-center gap-4">
-                <h3>{profile.username}</h3>
-                <div className="flex items-center gap-4">
+                <div className="flex justify-center md:justify-start w-full md:w-1/3">
+                  <h3>{profile.username}</h3>
+                </div>
+                <div className="flex items-center gap-4 w-full md:w-2/3">
                   <Button
+                    className="w-full"
                     onClick={() => handleFollow(profile.userId)}
                     variant={profile.isFollowing ? "following" : "follow"}
                   >
                     {profile.isFollowing ? "Following" : "Follow"}
                   </Button>
-                  <Button variant="following">Message</Button>
+                  <Button className="w-full" variant="following">
+                    Message
+                  </Button>
                 </div>
               </div>
               <div className="flex justify-center md:justify-start items-center gap-6 mt-4">

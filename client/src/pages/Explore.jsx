@@ -1,8 +1,11 @@
+import { Link } from "react-router-dom";
 import Posts from "@/components/post/Posts";
+import { Button } from "@/components/ui/button";
 import { usePostStore } from "@/store/usePostStore";
+import AuthorCard from "@/components/profile/AuthorCard";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import NoPostToShow from "@/components/post/NoPostToShow";
 import PostsLoading from "@/components/skeleton/PostsLoading";
-import NoPostToShow from "../components/post/NoPostToShow";
 
 const Home = () => {
   const { getPostsFromFollowings, posts, loading, totalPosts } = usePostStore();
@@ -32,9 +35,16 @@ const Home = () => {
                   {loading && <PostsLoading />}
                   <div ref={triggerRef} className="h-10"></div>
                   {posts.length >= totalPosts && posts.length > 0 && (
-                    <div className="text-center text-gray-500 mt-4">
-                      <p>You have reached the end</p>
-                      <p>No more post to show</p>
+                    <div>
+                      <div className="text-center text-gray-500 mt-4">
+                        <p>You have reached the end</p>
+                        <p>No more post to show</p>
+                      </div>
+                      <Link to="/">
+                        <Button className="following">
+                          Discover People to Follow
+                        </Button>
+                      </Link>
                     </div>
                   )}
                 </div>
@@ -43,7 +53,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="w-[26rem] xl:block hidden"></div>
+      <AuthorCard />
     </div>
   );
 };

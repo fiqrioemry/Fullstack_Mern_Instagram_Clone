@@ -3,6 +3,7 @@ import Posts from "@/components/post/Posts";
 import { usePostStore } from "@/store/usePostStore";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import PostsLoading from "@/components/skeleton/PostsLoading";
+import AuthorCard from "../components/profile/AuthorCard";
 
 const Home = () => {
   const { getPublicPosts, posts, loading, totalPosts } = usePostStore();
@@ -43,7 +44,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="w-[26rem] xl:block hidden"></div>
+      <AuthorCard />
     </div>
   );
 };

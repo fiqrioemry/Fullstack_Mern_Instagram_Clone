@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { Ellipsis } from "lucide-react";
 import { Link } from "react-router-dom";
 import Avatar from "@/components/ui/Avatar";
+import PostOptions from "../modal/PostOptions";
 
 const PostAuthor = ({ data }) => {
   return (
@@ -23,7 +23,7 @@ const PostAuthor = ({ data }) => {
 
       <button className="text-gray-500 hover:text-gray-700">
         <span className="text-xl">
-          <Ellipsis />
+          <PostOptions />
         </span>
       </button>
     </div>

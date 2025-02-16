@@ -7,6 +7,7 @@ export const usePostStore = create((set, get) => ({
   posts: [],
   totalPosts: 0,
   loading: true,
+  error: null,
   message: "",
 
   setPost: (postId) => {
@@ -24,12 +25,13 @@ export const usePostStore = create((set, get) => ({
   },
 
   getPublicPosts: async (limit) => {
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
       const { posts, totalPosts } = await callApi.getPublicPosts(limit);
       set({ posts, totalPosts });
     } catch (error) {
-      console.error(error);
+      console.log(error);
+      set({ error });
     } finally {
       set({ loading: false });
     }

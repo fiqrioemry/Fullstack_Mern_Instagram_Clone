@@ -11,7 +11,7 @@ const UserProfile = ({ profile }) => {
     <div className="py-10">
       <div className="flex justify-center">
         <div className="flex flex-col items-center max-w-2xl">
-          <div className="flex  md:items-start items-center md:flex-row flex-col  md:gap-8 gap-2">
+          <div className="flex md:items-start items-center md:flex-row flex-col md:gap-8 gap-2">
             <div className="w-32 h-32 rounded-full overflow-hidden border-2 flex-shrink-0">
               <Image url={profile.avatar} />
             </div>
