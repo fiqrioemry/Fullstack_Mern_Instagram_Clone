@@ -19,7 +19,7 @@ const Home = () => {
     <div className="flex">
       <div className="flex-grow">
         <div className="flex justify-center">
-          <div className="w-full max-w-[30rem] px-2">
+          <div className="w-full max-w-[30rem] p-2">
             <div className="md:mt-0 mt-12 md:mb-0 mb-12 py-6">
               {loading && posts.length === 0 ? (
                 <PostsLoading />
@@ -33,7 +33,7 @@ const Home = () => {
                   {loading && <PostsLoading />}
                   <div ref={triggerRef} className="h-10"></div>
                   {posts.length >= totalPosts && (
-                    <div className="text-center text-gray-500 mt-4">
+                    <div className="text-center text-muted-foreground">
                       <p>You have reached the end</p>
                       <p>No more post to show</p>
                     </div>

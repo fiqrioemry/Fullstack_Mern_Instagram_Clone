@@ -27,14 +27,19 @@ const Post = ({ post }) => {
   }, [getComments, post.postId]);
 
   return (
-    <div className="grid grid-cols-10">
+    <div className="grid grid-cols-10 h-full">
+      {/* Galeri Foto */}
       <div className="col-span-6">
         <Galleries images={post.images} />
       </div>
-      <div className="col-span-4">
+
+      {/* Bagian kanan (Penulis, Caption, Komentar, dll.) */}
+      <div className="col-span-4 flex flex-col h-full">
         <PostAuthor data={post} />
-        <div className="border-t">
-          <div className="overflow-y-scroll h-[14rem] md:h-[22rem] p-2">
+
+        {/* Bagian Caption & Komentar harus bisa memenuhi ruang yang tersedia */}
+        <div className="border-t border-muted-foreground/60 flex-grow overflow-hidden">
+          <div className="overflow-y-auto scrollbar-hide h-60 md:h-72 lg:h-96 p-2">
             <Caption post={post} />
             {loadingComment ? (
               <CommentsLoading />
@@ -43,10 +48,14 @@ const Post = ({ post }) => {
             )}
           </div>
         </div>
-        <div className="border-t p-2">
+
+        {/* Bagian Kontrol Post */}
+        <div className="border-t border-muted-foreground/60 p-2">
           <PostControl post={post} formik={commentForm} />
         </div>
-        <div className="border-t p-2">
+
+        {/* Bagian Input Komentar */}
+        <div className="border-t border-muted-foreground/60 p-2">
           <PostInput postId={post.postId} formik={commentForm} />
         </div>
       </div>

@@ -84,7 +84,7 @@ async function getPostsFromFollowings(req, res) {
       likes: post.likes.length,
       comments: post.comments.length,
       isLiked: post.likes.some((like) => like.userId === userId),
-      isFollowing: user.Followings.some((follow) => follow.id === post.user.id),
+      isFollow: user.Followings.some((follow) => follow.id === post.user.id),
     }));
 
     return res.status(200).json({ totalPosts, posts });
@@ -122,6 +122,16 @@ async function getPostDetail(req, res) {
       postData.countLikes(),
     ]);
 
+    const user = await User.findByPk(userId, {
+      include: [
+        {
+          model: User,
+          as: 'Followings',
+          attributes: ['id'],
+        },
+      ],
+    });
+
     const post = {
       userId: postData.user.id,
       postId: postData.id,
@@ -130,9 +140,10 @@ async function getPostDetail(req, res) {
       avatar: postData.user.profile?.avatar,
       images: postData.gallery?.map((g) => g.image) || [],
       createdAt: postData.createdAt,
-      likes: likes,
       isLiked: postData.likes.some((like) => like.userId === userId),
+      isFollow: user.Followings.some((follow) => follow.id === post.user.id),
       comments: comments,
+      likes: likes,
     };
 
     return res.status(200).json(post);
@@ -189,7 +200,7 @@ async function getPublicPosts(req, res) {
       likes: post.likes.length,
       comments: post.comments.length,
       isLiked: post.likes.some((like) => like.userId === userId),
-      isFollowing: user.Followings.some((follow) => follow.id === post.user.id),
+      isFollow: user.Followings.some((follow) => follow.id === post.user.id),
     }));
 
     return res.status(200).json({ totalPosts, posts });

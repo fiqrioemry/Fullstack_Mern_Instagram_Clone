@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mail, UserPlus, Linkedin, Globe, Github } from "lucide-react";
-import MessageDialog from "../post/MessageDialog";
+import MessageDialog from "@/components/modal/MessageDialog";
+import { UserPlus, Linkedin, Globe, Github } from "lucide-react";
 
 export default function AuthorCard() {
   return (

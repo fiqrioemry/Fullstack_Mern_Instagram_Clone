@@ -19,18 +19,18 @@ const Posts = ({ post }) => {
   );
 
   return (
-    <div className="border-b">
+    <div className="border-b border-muted-foreground/50 py-2">
       <PostAuthor data={post} />
       <Galleries images={post.images} />
       <PostControl post={post} formik={commentForm} />
-      <p>{post.content}</p>
+      <div className="text-foreground">{post.content}</div>
       {post.comments > 0 && (
         <Link
-          className="text-xs md:text-sm"
           to={`/p/${post.postId}`}
           state={{ background: location }}
+          className="text-xs md:text-sm text-muted-foreground"
         >
-          view all {post.comments} comments
+          View all {post.comments} comments
         </Link>
       )}
       <PostInput postId={post.postId} formik={commentForm} />

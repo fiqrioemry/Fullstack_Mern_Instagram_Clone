@@ -11,25 +11,23 @@ const PostInput = ({ postId, formik }) => {
   }, [formik.values.postId, formik.values.parentId]);
 
   return (
-    <div>
-      <form onSubmit={formik.handleSubmit} className="flex items-center">
-        <input
-          ref={inputRef}
-          type="text"
-          name="content"
-          placeholder="Add a comment..."
-          value={formik.values.content}
-          onChange={formik.handleChange}
-          className="flex-1 text-sm focus:outline-none"
-        />
-        <button
-          className="text-blue-500 font-medium disabled:text-gray-500"
-          disabled={formik.values.content === "" || !formik.values.content}
-        >
-          Post
-        </button>
-      </form>
-    </div>
+    <form onSubmit={formik.handleSubmit} className="flex items-center">
+      <input
+        ref={inputRef}
+        type="text"
+        name="content"
+        className="input-primary"
+        placeholder="Add a comment..."
+        value={formik.values.content}
+        onChange={formik.handleChange}
+      />
+      <button
+        className="btn-accent"
+        disabled={formik.values.content === "" || !formik.values.content}
+      >
+        Post
+      </button>
+    </form>
   );
 };
 

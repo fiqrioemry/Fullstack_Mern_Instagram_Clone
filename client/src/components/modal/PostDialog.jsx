@@ -27,7 +27,7 @@ const PostDialog = () => {
   return (
     <Dialog defaultOpen={true} onOpenChange={(open) => !open && navigate(-1)}>
       <DialogTitle>
-        <DialogContent variant="detail">
+        <DialogContent className="max-w-4xl md:max-w-5xl border-none p-0">
           {post ? <Post post={post} /> : <PostLoading />}
         </DialogContent>
       </DialogTitle>

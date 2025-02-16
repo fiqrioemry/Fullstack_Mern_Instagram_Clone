@@ -38,8 +38,10 @@ export const usePostStore = create((set, get) => ({
   },
 
   getPostDetail: async (postId) => {
+    set({ loading: true });
     try {
       const post = await callApi.getPostDetail(postId);
+
       set({ post });
     } catch (error) {
       console.error(error);

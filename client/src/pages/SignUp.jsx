@@ -5,38 +5,37 @@ import { useAuthStore } from "@/store/useAuthStore";
 import InputForm from "@/components/form/InputForm";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import InputButton from "@/components/form/InputButton";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { signUpControl, signUpState } from "@/config";
+import { CardFooter } from "../components/ui/card";
 
 const SignUp = () => {
   const { signup, loading } = useAuthStore();
   const SignUpForm = useFormSchema(signUpState, signUpControl, signup);
 
   return (
-    <div className="h-screen flex items-center justify-center">
-      <Card className="w-96">
-        <CardContent className="p-4">
-          <div className="py-4 text-center">
-            <h3>Memegram</h3>
-          </div>
-          {/* signup form */}
+    <div className="h-screen flex-center">
+      <Card>
+        <CardContent>
+          <CardHeader>
+            <h3 className="text-center">Momengram</h3>
+          </CardHeader>
+
           <InputForm formik={SignUpForm} formControl={signUpControl}>
             <InputButton formik={SignUpForm} title="signup" loading={loading} />
           </InputForm>
 
-          <div className="flex items-center justify-center mt-2">
-            <span className="px-2">OR</span>
-          </div>
-          {/* signup with google */}
-          <Button className="w-full h-10 border rounded-md mt-2">
+          <div className="flex-center py-2">OR</div>
+
+          <Button className="w-full">
             <FcGoogle size={24} /> Sign up with Google
           </Button>
-          <div className="text-center mt-2">
-            Already have an account ? signin{" "}
-            <Link to="/signin" className="hover-btn">
+          <CardFooter className="mt-2 space-x-2">
+            <span> Already have an account ? signin</span>
+            <Link to="/signin" className="btn-primary">
               here
             </Link>
-          </div>
+          </CardFooter>
         </CardContent>
       </Card>
     </div>

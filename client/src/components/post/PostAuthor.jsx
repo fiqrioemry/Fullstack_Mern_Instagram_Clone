@@ -1,31 +1,26 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import Avatar from "@/components/ui/Avatar";
-import PostOptions from "../modal/PostOptions";
+import PostOptions from "@/components/modal/PostOptions";
 
 const PostAuthor = ({ data }) => {
   return (
-    <div className="flex items-center justify-between p-2">
-      <div className="flex items-center space-x-3">
-        <Avatar avatar={data.avatar} />
-        <div className="flex items-center space-x-1">
-          <Link
-            to={`/${data.username}`}
-            className="font-semibold text-gray-900 text-sm"
-          >
-            {data.username}
-          </Link>
-          <button className="text-blue-500 text-sm font-medium">
-            • Follow
-          </button>
+    <div className="p-2 mt-2 mb-2">
+      <div className="flex-between">
+        <div className="flex items-center gap-2">
+          <Avatar avatar={data.avatar} />
+          <div className="flex items-center gap-2">
+            <Link className="btn-secondary" to={`/${data.username}`}>
+              {data.username}
+            </Link>
+            {!data.isFollow && <button className="btn-accent"> Follow</button>}
+          </div>
         </div>
-      </div>
 
-      <button className="text-gray-500 hover:text-gray-700">
-        <span className="text-xl">
-          <PostOptions />
-        </span>
-      </button>
+        <button className="btn-secondary">
+          <PostOptions data={data} />
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 
+import { formatDateToISO } from "../../lib/utils";
 import { usePostStore } from "@/store/usePostStore";
 import { Bookmark, Heart, MessageCircle } from "lucide-react";
 
@@ -7,34 +8,36 @@ const PostControl = ({ post, formik }) => {
   const { likePost } = usePostStore();
   const handleLikePost = () => likePost(post.postId);
   const handleComment = () => formik.setFieldValue("postId", post.postId);
-
+  console.log(post.createdAt);
   return (
-    <div className="py-0 md:py-2 mt-1">
-      <div className="flex justify-between items-center">
-        <div className="flex space-x-4">
+    <div className="mt-2 py-2 space-y-1">
+      <div className="flex-between">
+        <div className="flex gap-4">
           <Heart
             onClick={handleLikePost}
-            className="w-6 h-6 cursor-pointer hover:text-gray-600"
+            className="btn-secondary"
             fill={post.isLiked ? "red" : "transparent"}
             stroke={post.isLiked ? "red" : "currentColor"}
             aria-label="Like Post"
           />
           <MessageCircle
             onClick={handleComment}
-            className="w-6 h-6 text-gray-800 cursor-pointer hover:text-gray-600"
+            className="btn-secondary"
             aria-label="Comment on Post"
           />
         </div>
-        <Bookmark
-          className="w-6 h-6 text-gray-800 cursor-pointer hover:text-gray-600"
-          aria-label="Save Post"
-        />
+        <Bookmark className="btn-secondary" aria-label="Save Post" />
       </div>
-      {post.likes > 0 && (
-        <p className="mt-2 text-sm font-semibold text-gray-900">
-          {post.likes} likes
-        </p>
-      )}
+      <div>
+        {post.likes > 0 && (
+          <span className="text-foreground font-medium">
+            {post.likes} likes
+          </span>
+        )}
+      </div>
+      <div className="text-sm md:text-md">
+        {formatDateToISO(post.createdAt)}
+      </div>
     </div>
   );
 };
