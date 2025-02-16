@@ -1,15 +1,20 @@
-const { User, Profile, Follow } = require('../../models');
+const {
+  User,
+  Profile,
+  Follow,
+  Notification,
+  sequelize,
+} = require('../../models');
 
 // tested
 async function followUser(req, res) {
   const userId = req.user.userId;
+  const t = await sequelize.transaction();
   const followingId = parseInt(req.params.followingId);
 
   try {
     if (userId === followingId) {
-      return res.status(400).json({
-        message: 'Cannot follow yourself',
-      });
+      return res.status(400).json('Cannot follow yourself');
     }
 
     const user = await User.findByPk(followingId);
@@ -19,66 +24,50 @@ async function followUser(req, res) {
       });
     }
 
-    const existingFollow = await Follow.findOne({
+    const following = await Follow.findOne({
       where: { followerId: userId, followingId },
     });
 
-    if (existingFollow) {
-      await existingFollow.update({ status: 'active' });
-      return res.status(200).json({
-        message: 'Follow is successful',
+    if (following) {
+      await following.destroy({ transaction: t });
+
+      await Notification.destroy({
+        where: {
+          senderId: userId,
+          receiverId: followingId,
+          type: 'follow',
+        },
+        transaction: t,
       });
+      await t.commit();
+      return res.status(200).json('You unfollowing this user');
     }
 
-    await Follow.create({
-      followerId: userId,
-      followingId,
-      status: 'active',
-    });
+    await Follow.create(
+      {
+        followerId: userId,
+        followingId,
+      },
+      { transaction: t },
+    );
+    await Notification.create(
+      {
+        senderId: userId,
+        receiverId: followingId,
+        type: 'follow',
+      },
+      { transaction: t },
+    );
 
-    return res.status(201).json({
-      message: 'Follow is successful',
-    });
+    await t.commit();
+    return res.status(201).json('You Following this user');
   } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to follow user',
-      error: error.message,
-    });
-  }
-}
-
-async function unfollowUser(req, res) {
-  const userId = req.user.userId;
-  const followingId = parseInt(req.params.followingId);
-
-  try {
-    if (userId === followingId) {
-      return res.status(400).json({ message: 'Cannot unfollow yourself' });
-    }
-
-    const followRecord = await Follow.findOne({
-      where: { followerId: userId, followingId: 1 },
-    });
-
-    if (!followRecord || followRecord.status === 'inactive') {
-      return res
-        .status(400)
-        .json({ message: 'You are not following this user' });
-    }
-    console.log(followRecord);
-    await followRecord.update({ status: 'inactive' });
-
-    return res.status(200).json({
-      message: 'Unfollowing is successful',
-      followingId,
-    });
-  } catch (error) {
+    await t.rollback();
     console.log(error.message);
-    return res
-      .status(500)
-      .json({ message: 'Failed to process request', error: error.message });
+    return res.status(500).json('Failed to follow user');
   }
 }
+
 async function getFollowers(req, res) {
   const userId = req.user.userId;
   const username = req.params.username;
@@ -91,7 +80,6 @@ async function getFollowers(req, res) {
       return res.status(404).json('User not found');
     }
 
-    // Ambil daftar user yang mem-follow user ini
     const userFollowers = await Follow.findAll({
       where: { followingId: user.id, status: 'active' },
       limit,
@@ -150,7 +138,6 @@ async function getFollowings(req, res) {
       return res.status(404).json('User not found');
     }
 
-    // Ambil daftar user yang diikuti oleh user ini
     const userFollowings = await Follow.findAll({
       where: { followerId: user.id, status: 'active' },
       limit,
@@ -174,7 +161,6 @@ async function getFollowings(req, res) {
       return res.status(200).json([]);
     }
 
-    // Ambil daftar user yang diikuti oleh user yang sedang login
     const myFollowings = await Follow.findAll({
       where: { followerId: userId, status: 'active' },
       attributes: ['followingId'],
@@ -199,7 +185,6 @@ async function getFollowings(req, res) {
 
 module.exports = {
   followUser,
-  unfollowUser,
   getFollowers,
   getFollowings,
 };

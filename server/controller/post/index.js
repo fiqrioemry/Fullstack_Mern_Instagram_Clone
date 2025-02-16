@@ -62,6 +62,16 @@ async function getPostsFromFollowings(req, res) {
       });
     }
 
+    const user = await User.findByPk(userId, {
+      include: [
+        {
+          model: User,
+          as: 'Followings',
+          attributes: ['id'],
+        },
+      ],
+    });
+
     const totalPosts = postsData.count;
     const posts = postsData.rows.map((post) => ({
       userId: post.user.id,
@@ -74,6 +84,7 @@ async function getPostsFromFollowings(req, res) {
       likes: post.likes.length,
       comments: post.comments.length,
       isLiked: post.likes.some((like) => like.userId === userId),
+      isFollowing: user.Followings.some((follow) => follow.id === post.user.id),
     }));
 
     return res.status(200).json({ totalPosts, posts });
@@ -156,6 +167,16 @@ async function getPublicPosts(req, res) {
       return res.status(200).json({ posts: [], message: 'User has no post' });
     }
 
+    const user = await User.findByPk(userId, {
+      include: [
+        {
+          model: User,
+          as: 'Followings',
+          attributes: ['id'],
+        },
+      ],
+    });
+
     const totalPosts = postsData.count;
     const posts = postsData.rows.map((post) => ({
       userId: post.user.id,
@@ -168,6 +189,7 @@ async function getPublicPosts(req, res) {
       likes: post.likes.length,
       comments: post.comments.length,
       isLiked: post.likes.some((like) => like.userId === userId),
+      isFollowing: user.Followings.some((follow) => follow.id === post.user.id),
     }));
 
     return res.status(200).json({ totalPosts, posts });
@@ -418,8 +440,13 @@ async function toggleLikePost(req, res) {
   const userId = req.user.userId;
   const postId = req.params.postId;
   const t = await sequelize.transaction();
-
   try {
+    const post = await Post.findByPk(postId, { transaction: t });
+    if (!post) {
+      await t.rollback();
+      return res.status(404).json('Post not found');
+    }
+
     const like = await Like.findOne({
       where: { userId, entityId: postId, entityType: 'post' },
       transaction: t,
@@ -431,7 +458,7 @@ async function toggleLikePost(req, res) {
       await Notification.destroy({
         where: {
           senderId: userId,
-          receiverId: like.entityId,
+          receiverId: post.userId,
           postId: postId,
           type: 'like',
         },
@@ -440,12 +467,6 @@ async function toggleLikePost(req, res) {
 
       await t.commit();
       return res.status(200).json('You unliked the Post');
-    }
-
-    const post = await Post.findByPk(postId, { transaction: t });
-    if (!post) {
-      await t.rollback();
-      return res.status(404).json('Post not found');
     }
 
     await Like.create(
@@ -465,7 +486,7 @@ async function toggleLikePost(req, res) {
       );
     }
     await t.commit();
-    return res.status(200).json('You Liked the post');
+    return res.status(201).json('You Liked the post');
   } catch (error) {
     await t.rollback();
     console.log(error.message);

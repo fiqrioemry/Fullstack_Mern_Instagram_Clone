@@ -176,13 +176,21 @@ async function updateMyProfile(req, res) {
 async function getUserProfile(req, res) {
   const { userId } = req.user;
   const { username } = req.params;
+
   try {
     const user = await User.findOne({
       where: { username },
-      include: {
-        model: Profile,
-        as: 'profile',
-      },
+      include: [
+        {
+          model: Profile,
+          as: 'profile',
+        },
+        {
+          model: User,
+          as: 'Followers',
+          attributes: ['id'],
+        },
+      ],
     });
 
     if (!user) {
@@ -195,7 +203,7 @@ async function getUserProfile(req, res) {
       user.countPosts(),
     ]);
 
-    const isCurrentUser = user.id === userId;
+    const isMyProfile = user.id === userId;
 
     const profile = {
       userId: user.id,
@@ -207,13 +215,14 @@ async function getUserProfile(req, res) {
       posts: postsCount,
       followers: followersCount,
       followings: followingsCount,
-      isCurrentUser,
+      isMyProfile: isMyProfile,
+      isFollowing: user.Followers.some((follow) => follow.id === userId),
     };
 
     return res.status(200).json(profile);
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json('Failed to retrieve user detail');
+    return res.status(500).json('Failed to retrieve user profile');
   }
 }
 

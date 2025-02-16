@@ -200,7 +200,7 @@ module.exports = {
         id: 26,
         postId: 14,
         image:
-          'hhttps://res.cloudinary.com/dnlrzhdcs/image/upload/v1739549459/fullstack_instagram_clone/14.2_nvmbt6.webp',
+          'https://res.cloudinary.com/dnlrzhdcs/image/upload/v1739549459/fullstack_instagram_clone/14.2_nvmbt6.webp',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

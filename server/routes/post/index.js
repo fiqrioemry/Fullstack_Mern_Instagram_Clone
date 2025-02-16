@@ -41,8 +41,8 @@ router.get('/:postId', isAuthenticate, getPostDetail);
 // post management (crud)
 
 // like & unlike a post
-router.post('/:postId/like', isAuthenticate, toggleLikePost);
-router.post('/:commentId/like', isAuthenticate, toggleLikeComment);
+router.post('/:postId/like/post', isAuthenticate, toggleLikePost);
+router.post('/:commentId/like/comment', isAuthenticate, toggleLikeComment);
 
 // comment management on post
 router.get('/:postId/comments', isAuthenticate, getComments);

@@ -13,7 +13,6 @@ const { upload } = require('../../middleware/media');
 const isAuthenticate = require('../../middleware/isAuthenticate');
 const {
   followUser,
-  unfollowUser,
   getFollowers,
   getFollowings,
 } = require('../../controller/follow');
@@ -28,7 +27,6 @@ router.put(
 router.get('/', searchUser);
 router.get('/:username', isAuthenticate, getUserProfile);
 router.post('/:followingId/follow', isAuthenticate, followUser);
-router.put('/:followingId/follow', isAuthenticate, unfollowUser);
 router.get('/:username/posts', isAuthenticate, getUserPosts);
 router.get('/:username/followers', isAuthenticate, getFollowers);
 router.get('/:username/followings', isAuthenticate, getFollowings);

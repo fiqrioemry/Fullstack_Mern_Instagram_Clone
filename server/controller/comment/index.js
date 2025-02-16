@@ -5,6 +5,7 @@ const {
   Comment,
   Notification,
   Like,
+  sequelize,
 } = require('../../models');
 
 function extractMentions(content) {
@@ -94,13 +95,7 @@ async function getComments(req, res) {
         {
           model: Comment,
           as: 'replies',
-          include: [
-            {
-              model: Comment,
-              as: 'replies',
-              attributes: ['id'],
-            },
-          ],
+          attributes: ['id'],
         },
         { model: Like, as: 'likes', attributes: ['id', 'userId'] },
         {
@@ -148,13 +143,16 @@ async function getComments(req, res) {
 }
 
 async function getReplies(req, res) {
+  const userId = req.user.userId;
   const { postId, commentId } = req.params;
+  const limit = parseInt(req.query.limit) || 5;
 
   try {
-    const repliesData = await Comment.findAll({
+    const repliesData = await Comment.findAndCountAll({
       where: { postId, parentId: commentId },
-      order: [['createdAt', 'ASC']],
+      limit,
       include: [
+        { model: Like, as: 'likes', attributes: ['id', 'userId'] },
         {
           model: User,
           as: 'user',
@@ -168,23 +166,32 @@ async function getReplies(req, res) {
           ],
         },
       ],
+      distinct: true,
+      order: [['createdAt', 'DESC']],
     });
 
-    const replies = repliesData.map((reply) => {
+    if (repliesData.count === 0) {
+      return res
+        .status(200)
+        .json({ replies: [], message: 'Comments has no replies' });
+    }
+
+    const totalReplies = repliesData.count;
+    const replies = repliesData.rows.map((reply) => {
       return {
         postId: reply.postId,
-        commentId: reply.parentId,
-        replyId: reply.id,
-        content: reply.content,
+        commentId: reply.id,
         userId: reply.userId,
         username: reply.user.username,
         avatar: reply.user.profile.avatar,
+        content: reply.content,
         createdAt: reply.createdAt,
         updatedAt: reply.updatedAt,
+        likes: reply.likes.length,
+        isLiked: reply.likes.some((like) => like.userId === userId),
       };
     });
-
-    return res.status(200).json(replies);
+    return res.status(200).json({ replies, totalReplies });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -200,6 +207,13 @@ async function toggleLikeComment(req, res) {
   const t = await sequelize.transaction();
 
   try {
+    const comment = await Comment.findByPk(commentId, { transaction: t });
+
+    if (!comment) {
+      await t.rollback();
+      return res.status(404).json('Comment not found');
+    }
+
     const like = await Like.findOne({
       where: { userId, entityId: commentId, entityType: 'comment' },
       transaction: t,
@@ -211,7 +225,7 @@ async function toggleLikeComment(req, res) {
       await Notification.destroy({
         where: {
           senderId: userId,
-          receiverId: like.entityId,
+          receiverId: comment.userId,
           commentId: commentId,
           type: 'like',
         },
@@ -219,15 +233,7 @@ async function toggleLikeComment(req, res) {
       });
 
       await t.commit();
-      return res
-        .status(200)
-        .json({ message: 'You unliked the comment', isLiked: false });
-    }
-
-    const post = await Comment.findByPk(commentId, { transaction: t });
-    if (!post) {
-      await t.rollback();
-      return res.status(404).json({ message: 'Comment not found' });
+      return res.status(200).json('You unliked the comment');
     }
 
     await Like.create(
@@ -235,84 +241,24 @@ async function toggleLikeComment(req, res) {
       { transaction: t },
     );
 
-    if (post.userId !== userId) {
+    if (comment.userId !== userId) {
       await Notification.create(
         {
-          receiverId: post.userId,
+          receiverId: comment.userId,
           senderId: userId,
-          commentId: commentId,
+          comment: commentId,
           type: 'like',
         },
         { transaction: t },
       );
     }
+
     await t.commit();
     return res.status(200).json('You Liked the comment');
   } catch (error) {
     await t.rollback();
     console.log(error.message);
-    return res.status(500).json('Failed to toggle like');
-  }
-}
-
-async function toggleLikeReply(req, res) {
-  const userId = req.user.userId;
-  const commentId = req.params.commentId;
-  const t = await sequelize.transaction();
-
-  try {
-    const like = await Like.findOne({
-      where: { userId, entityId: commentId, entityType: 'comment' },
-      transaction: t,
-    });
-
-    if (like) {
-      await like.destroy({ transaction: t });
-
-      await Notification.destroy({
-        where: {
-          senderId: userId,
-          receiverId: like.entityId,
-          commentId: commentId,
-          type: 'like',
-        },
-        transaction: t,
-      });
-
-      await t.commit();
-      return res
-        .status(200)
-        .json({ message: 'You unliked the comment', isLiked: false });
-    }
-
-    const post = await Comment.findByPk(commentId, { transaction: t });
-    if (!post) {
-      await t.rollback();
-      return res.status(404).json({ message: 'Comment not found' });
-    }
-
-    await Like.create(
-      { userId, entityId: commentId, entityType: 'comment' },
-      { transaction: t },
-    );
-
-    if (post.userId !== userId) {
-      await Notification.create(
-        {
-          receiverId: post.userId,
-          senderId: userId,
-          commentId: commentId,
-          type: 'like',
-        },
-        { transaction: t },
-      );
-    }
-    await t.commit();
-    return res.status(200).json('You liked the comment');
-  } catch (error) {
-    await t.rollback();
-    console.log(error.message);
-    return res.status(500).json('Failed to toggle like');
+    return res.status(500).json({ message: 'Failed to toggle like' });
   }
 }
 
@@ -345,7 +291,7 @@ async function deleteComment(req, res) {
 module.exports = {
   getComments,
   createComment,
-  toggleLikeComment,
   deleteComment,
+  toggleLikeComment,
   getReplies,
 };
