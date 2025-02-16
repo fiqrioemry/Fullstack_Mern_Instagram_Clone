@@ -17,10 +17,7 @@ const Replies = ({ replies, formik, parentId }) => {
 
             <div>
               <div className="space-x-1">
-                <Link
-                  to={`/${reply.username}`}
-                  className="font-semibold text-sm"
-                >
+                <Link to={`/${reply.username}`} className="btn-secondary">
                   {reply.username}
                 </Link>
                 <span className="text-sm">{reply.content}</span>
@@ -38,13 +35,13 @@ const Replies = ({ replies, formik, parentId }) => {
                     className={`w-4 h-4 cursor-pointer transition ${
                       reply.isLiked
                         ? "text-red-500 fill-red-500"
-                        : "text-gray-500 hover:text-gray-800"
+                        : "text-muted-foreground hover:text-muted-foreground/60"
                     }`}
                   />
                 </button>
 
                 <button
-                  className="text-xs text-blue-500"
+                  className="text-xs btn-secondary"
                   onClick={() => {
                     formik.setFieldValue("postId", reply.postId);
                     formik.setFieldValue("parentId", reply.commentId);

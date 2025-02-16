@@ -41,7 +41,6 @@ export const usePostStore = create((set, get) => ({
     set({ loading: true });
     try {
       const post = await callApi.getPostDetail(postId);
-
       set({ post });
     } catch (error) {
       console.error(error);

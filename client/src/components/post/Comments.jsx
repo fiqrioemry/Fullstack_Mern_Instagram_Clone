@@ -22,35 +22,32 @@ const Comments = ({ formik }) => {
             <Avatar avatar={comment.avatar} />
             <div>
               <div className="space-x-1">
-                <Link
-                  to={`/${comment.username}`}
-                  className="font-semibold text-sm"
-                >
+                <Link to={`/${comment.username}`} className="btn-secondary">
                   {comment.username}
                 </Link>
                 <span className="text-sm">{comment.content}</span>
               </div>
 
-              <div className="text-xs flex items-center space-x-2">
+              <div className="text-xs flex items-center space-x-2 text-muted-foreground">
                 <Timestamp createdAt={comment.createdAt} />
                 {comment.likes > 0 && <span>{comment.likes} likes</span>}
 
                 <button
-                  className="flex items-center space-x-1"
+                  className="flex items-center space-x-1 "
                   onClick={() => likeComment(comment.commentId)}
                 >
                   <Heart
                     className={`w-4 h-4 cursor-pointer transition ${
                       comment.isLiked
                         ? "text-red-500 fill-red-500"
-                        : "text-gray-500 hover:text-gray-800"
+                        : "text-muted-foreground hover:text-muted-foreground/60"
                     }`}
                   />
                 </button>
 
                 {/* Tombol Reply */}
                 <button
-                  className="text-xs text-blue-500"
+                  className="text-xs btn-secondary"
                   onClick={() => {
                     formik.setFieldValue("postId", comment.postId);
                     formik.setFieldValue("parentId", comment.commentId);
@@ -70,7 +67,7 @@ const Comments = ({ formik }) => {
                       comment.username
                     )
                   }
-                  className="flex items-center text-xs space-x-2"
+                  className="flex items-center text-xs space-x-2 text-muted-foreground"
                 >
                   <span> View replies ({comment.replies}) </span>
                   {loadingReply[comment.commentId] && (
