@@ -2,12 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
-import { useUserStore } from "../../store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 
 const UserProfile = ({ profile }) => {
   const location = useLocation();
   const { follow } = useUserStore();
 
+  const handleFollow = (followingId) => {
+    follow(followingId);
+  };
   return (
     <div className="py-10">
       <div className="flex justify-center">
@@ -26,7 +29,7 @@ const UserProfile = ({ profile }) => {
                 <h3>{profile.username}</h3>
                 <div className="flex items-center gap-4">
                   <Button
-                    onClick={follow}
+                    onClick={() => handleFollow(profile.userId)}
                     variant={profile.isFollowing ? "following" : "follow"}
                   >
                     {profile.isFollowing ? "Following" : "Follow"}

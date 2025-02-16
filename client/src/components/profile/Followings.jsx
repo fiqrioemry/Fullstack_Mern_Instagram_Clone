@@ -28,7 +28,7 @@ const Followings = () => {
   return (
     <Dialog defaultOpen={true} onOpenChange={(open) => !open && navigate(-1)}>
       <DialogTitle>
-        <DialogContent variant="detail">
+        <DialogContent className="sm:w-[400px] p-0" variant="detail">
           <div>
             <div className="flex justify-center items-center p-4 border-b relative">
               <h4>Followings</h4>
@@ -42,7 +42,7 @@ const Followings = () => {
                 <FollowLoading />
               ) : followings.length !== 0 ? (
                 followings.map((user, index) => (
-                  <FollowCard user={user} key={index} />
+                  <FollowCard data={user} key={index} />
                 ))
               ) : (
                 <NoFollowings />

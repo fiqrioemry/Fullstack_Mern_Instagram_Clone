@@ -6,7 +6,7 @@ export const useUserStore = create((set, get) => ({
   profile: [],
   followers: [],
   followings: [],
-  loading: true,
+  loading: {},
 
   // 🔹 Get User Profile
   searchUser: async (username) => {
@@ -23,14 +23,18 @@ export const useUserStore = create((set, get) => ({
 
   // 🔹 Get User Profile
   getUserProfile: async (username) => {
-    set({ loading: true });
+    set((state) => ({
+      loading: { ...state.loading, [username]: true },
+    }));
     try {
       const profile = await callApi.getUserProfile(username);
       set({ profile });
     } catch (error) {
       toast.error(error);
     } finally {
-      set({ loading: false });
+      set((state) => ({
+        loading: { ...state.loading, [username]: false },
+      }));
     }
   },
   getMyProfile: async () => {
@@ -58,68 +62,53 @@ export const useUserStore = create((set, get) => ({
     }
   },
 
-  setProfile: () => {
-    set((state) => ({
-      profile: {
-        ...state.profile,
-        isFollowing: !state.profile.isFollowing,
-      },
-    }));
-  },
-
-  setFollowers: (followingId) => {
-    set((state) => ({
-      followers: state.followers.map((follow) =>
-        follow.userId === followingId
-          ? { ...follow, isFollow: !follow.isFollow }
-          : follow
-      ),
-    }));
-  },
-
-  setFollowings: (followingId) => {
-    set((state) => ({
-      followings: state.followings.map((following) =>
-        following.userId === followingId
-          ? { ...following, isFollow: !following.isFollow }
-          : following
-      ),
-    }));
-  },
-
   follow: async (followingId) => {
+    set((state) => ({
+      loading: { ...state.loading, [followingId]: true },
+    }));
     try {
-      const message = await callApi.follow(followingId);
-      get().setProfile();
-      get().setFollowings(followingId);
-      get().setFollowers(followingId);
+      const { message } = await callApi.follow(followingId);
+      await get().getFollowers(get().profile.username);
+      await get().getUserProfile(get().profile.username);
       toast.success(message);
     } catch (error) {
       toast.error(error);
+    } finally {
+      set((state) => ({
+        loading: { ...state.loading, [followingId]: false },
+      }));
     }
   },
 
   getFollowers: async (username) => {
-    set({ loading: true });
+    set((state) => ({
+      loading: { ...state.loading, [username]: true },
+    }));
     try {
       const followers = await callApi.getFollowers(username);
       set({ followers });
     } catch (error) {
       toast.error(error.message);
     } finally {
-      set({ loading: false });
+      set((state) => ({
+        loading: { ...state.loading, [username]: false },
+      }));
     }
   },
 
   getFollowings: async (username) => {
-    set({ loading: true });
+    set((state) => ({
+      loading: { ...state.loading, [username]: true },
+    }));
     try {
       const followings = await callApi.getFollowings(username);
       set({ followings });
     } catch (error) {
       toast.error(error);
     } finally {
-      set({ loading: false });
+      set((state) => ({
+        loading: { ...state.loading, [username]: false },
+      }));
     }
   },
 }));

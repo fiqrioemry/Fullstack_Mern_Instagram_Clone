@@ -78,14 +78,7 @@ const callApi = {
   follow: async (followingId) => {
     return authInstance
       .post(`/user/${followingId}/follow`)
-      .then((res) => res.data.message)
-      .catch(errorHandle);
-  },
-
-  unfollow: async (followingId) => {
-    return authInstance
-      .put(`/user/${followingId}/follow`)
-      .then((res) => res.data.message)
+      .then((res) => res.data)
       .catch(errorHandle);
   },
 

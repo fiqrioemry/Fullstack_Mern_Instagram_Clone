@@ -5,6 +5,7 @@ import UserProfile from "@/components/profile/UserProfile";
 import ProfileLoading from "@/components/skeleton/ProfileLoading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Outlet, useParams, useLocation, Link } from "react-router-dom";
+import MyProfile from "../components/profile/MyProfile";
 
 const Profile = () => {
   const location = useLocation();
@@ -20,8 +21,10 @@ const Profile = () => {
       <div className="max-w-4xl w-full mt-14 mb-14">
         <div className="md:px-0 px-4 md:py-0 py-6">
           {/* user profile */}
-          {loading.username ? (
+          {loading ? (
             <ProfileLoading />
+          ) : profile.isMyProfile ? (
+            <MyProfile profile={profile} />
           ) : (
             <UserProfile profile={profile} />
           )}
