@@ -69,10 +69,7 @@ export const useUserStore = create((set, get) => ({
 
     try {
       const { message } = await callApi.follow(followingId);
-
-      // ✅ Setelah follow berhasil, update daftar followers dari user yang baru difollow
       await get().getFollowers(get().profile.username);
-
       toast.success(message);
     } catch (error) {
       toast.error(error);

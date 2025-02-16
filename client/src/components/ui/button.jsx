@@ -11,8 +11,6 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "text-primary hover:text-primary/50 font-semibold",
-        follow: "bg-follow hover:bg-follow-hover text-white",
-        unfollow: "bg-gray-200 hover:bg-gray-300 text-black ",
         nav: "hover:bg-foreground-hover rounded-md w-full",
         cancel:
           "text-gray-600 border border-gray-400 hover:bg-gray-100 transition ",
@@ -23,6 +21,13 @@ const buttonVariants = cva(
 
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+
+        // my style
+        follow:
+          "bg-blue-500 hover:bg-blue-700 text-gray-200 duration-300 font-medium",
+
+        following:
+          "bg-gray-200 hover:bg-gray-300 text-gray-800 duration-300 dark:bg-gray-600 dark:hover:bg-gray-800 dark:text-gray-200 font-medium ",
       },
       size: {
         default: "h-10 rounded-md py-1 px-4 text-sm min-w-24",
