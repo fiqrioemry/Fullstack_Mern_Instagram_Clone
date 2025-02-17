@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "@/api/callApi";
+import { usePostStore } from "./usePostStore";
 
 export const useUserStore = create((set, get) => ({
   users: [],
@@ -67,10 +68,8 @@ export const useUserStore = create((set, get) => ({
   toggleFollow: async (followingId) => {
     try {
       const message = await callApi.toggleFollow(followingId);
-      await get().getFollowings(get().profile.username);
-      await get().getUserProfile(get().profile.username);
-      get().setFollowings(followingId);
-      get().setFollowers(followingId);
+
+      usePostStore.getState().updatePostsFollowStatus(followingId);
       toast.success(message);
     } catch (error) {
       toast.error(error);
