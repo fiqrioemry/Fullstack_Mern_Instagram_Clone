@@ -12,6 +12,7 @@ import { useFileUpload } from "@/hooks/useFileUpload";
 import { useState, useCallback, useMemo } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
+// eslint-disable-next-line react/prop-types
 export function CreateNewPost({ isOpen, setIsOpen }) {
   const { user } = useAuthStore();
   const [step, setStep] = useState(1);

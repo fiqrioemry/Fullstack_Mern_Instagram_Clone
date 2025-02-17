@@ -13,18 +13,17 @@ const searchState = {
 };
 
 const NavSearch = forwardRef(({ openSearch }, ref) => {
-  const { users, searchUser } = useUserStore();
+  const { users, searchUser, searching } = useUserStore();
   const searchForm = useFormSchema(searchState);
 
-  // 🔥 Debouncing: Fetch users after user stops typing for 300ms
   useEffect(() => {
-    if (!searchForm.values.username.trim()) return; // Jika kosong, jangan fetch
+    if (!searchForm.values.username.trim()) return;
 
     const delayDebounce = setTimeout(() => {
       searchUser(searchForm.values.username);
     }, 300);
 
-    return () => clearTimeout(delayDebounce); //
+    return () => clearTimeout(delayDebounce);
   }, [searchForm.values.username, searchUser]);
 
   return (

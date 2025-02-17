@@ -8,18 +8,19 @@ export const useUserStore = create((set, get) => ({
   followers: [],
   followings: [],
   loading: true,
+  searching: false,
   error: null,
 
   searchUser: async (username) => {
-    set({ loading: true });
+    set({ searching: true });
     try {
-      console.log(username);
       const users = await callApi.searchUser(username);
       set({ users });
     } catch (error) {
       console.log(error);
+      set({ user: [] });
     } finally {
-      set({ loading: false });
+      set({ searching: false });
     }
   },
 
