@@ -30,20 +30,19 @@ export const usePostStore = create((set, get) => ({
       const { posts, totalPosts } = await callApi.getPublicPosts(limit);
       set({ posts, totalPosts });
     } catch (error) {
-      console.log(error);
-      set({ error });
+      set({ error: error.message });
     } finally {
       set({ loading: false });
     }
   },
 
   getPostDetail: async (postId) => {
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
       const post = await callApi.getPostDetail(postId);
       set({ post });
     } catch (error) {
-      console.error(error.message);
+      set({ error: error.message });
     } finally {
       set({ loading: false });
     }
@@ -51,26 +50,26 @@ export const usePostStore = create((set, get) => ({
 
   getUserPosts: async (username) => {
     try {
-      set({ loading: true });
+      set({ loading: true, error: null });
       const { posts, totalPosts, message } = await callApi.getUserPosts(
         username
       );
       set({ posts, totalPosts, message });
     } catch (error) {
-      console.log(error.message);
+      set({ error: error.message });
     } finally {
       set({ loading: false });
     }
   },
 
   getPostsFromFollowings: async (limit) => {
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
       const { posts, totalPosts, message } =
         await callApi.getPostsFromFollowings(limit);
       set({ posts, totalPosts, message });
     } catch (error) {
-      console.error(error.message);
+      set({ error: error.message });
     } finally {
       set({ loading: false });
     }
