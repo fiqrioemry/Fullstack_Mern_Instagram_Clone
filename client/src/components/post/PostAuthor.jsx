@@ -2,8 +2,11 @@
 import { Link } from "react-router-dom";
 import Avatar from "@/components/ui/Avatar";
 import PostOptions from "@/components/modal/PostOptions";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const PostAuthor = ({ data }) => {
+  const { user } = useAuthStore();
+
   return (
     <div className="p-2 mt-2 mb-2 ">
       <div className="flex-between">
@@ -13,7 +16,11 @@ const PostAuthor = ({ data }) => {
             <Link className="btn-secondary" to={`/${data.username}`}>
               {data.username}
             </Link>
-            {!data.isFollow && <button className="btn-accent"> Follow</button>}
+
+            {!data.isFollow ||
+              (data.username === user.username && (
+                <button className="btn-accent"> Follow</button>
+              ))}
           </div>
         </div>
 

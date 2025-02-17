@@ -16,7 +16,7 @@ const PostInput = ({ postId, formik }) => {
         ref={inputRef}
         type="text"
         name="content"
-        className="input-primary px-0"
+        className="input-primary text-sm px-0"
         placeholder="Add a comment..."
         value={formik.values.content}
         onChange={formik.handleChange}

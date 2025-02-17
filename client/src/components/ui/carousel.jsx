@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
 import * as React from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import useEmblaCarousel from "embla-carousel-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const CarouselContext = React.createContext(null);
 
@@ -171,7 +170,7 @@ const CarouselPrevious = React.forwardRef(
         variant={variant}
         size={size}
         className={cn(
-          "absolute  h-8 w-8 bg-gray-200/50 rounded-full",
+          "absolute  h-8 w-8 bg-gray-200/50 border-none rounded-full",
           orientation === "horizontal"
             ? "-left-0 top-1/2 -translate-y-1/2"
             : "-top-0 left-1/2 -translate-x-1/2 rotate-90",
@@ -199,7 +198,7 @@ const CarouselNext = React.forwardRef(
         variant={variant}
         size={size}
         className={cn(
-          "absolute h-8 w-8 bg-gray-200/50 rounded-full",
+          "absolute h-8 w-8 bg-gray-200/50 border-none rounded-full",
           orientation === "horizontal"
             ? "-right-0 top-1/2 -translate-y-1/2"
             : "-bottom-0 left-1/2 -translate-x-1/2 rotate-90",

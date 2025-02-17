@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 
 const PageLoading = () => {
+  // eslint-disable-next-line no-unused-vars
   const [darkMode, setDarkMode] = useState(
     () => JSON.parse(localStorage.getItem("darkMode")) || false
   );
