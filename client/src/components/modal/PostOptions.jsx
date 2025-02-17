@@ -16,6 +16,7 @@ const PostOptions = ({ data }) => {
   const { toggleFollow } = useUserStore();
   const { deletePost } = usePostStore();
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleClose = () => {
@@ -23,7 +24,8 @@ const PostOptions = ({ data }) => {
   };
 
   const handleDelete = () => {
-    deletePost(data.postId);
+    setSelectedPost(data.postId);
+    setShowConfirmation(true);
   };
   const handleUnfollow = () => {
     setSelectedUser(data.userId);
@@ -32,6 +34,11 @@ const PostOptions = ({ data }) => {
 
   const handleFollow = () => {
     toggleFollow(data.userId);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedPost) deletePost(data.postId);
+    setShowConfirmation(false);
   };
 
   const handleConfirmUnfollow = () => {
@@ -85,7 +92,11 @@ const PostOptions = ({ data }) => {
         cancelLabel="Cancel"
         open={showConfirmation}
         confirmVariant="delete"
-        onConfirm={handleConfirmUnfollow}
+        onConfirm={
+          user.userId === data.userId
+            ? handleConfirmDelete
+            : handleConfirmUnfollow
+        }
         title={
           user.userId === data.userId
             ? "Delete Post"

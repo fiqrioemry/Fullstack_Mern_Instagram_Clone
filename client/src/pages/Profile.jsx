@@ -12,7 +12,7 @@ import { Outlet, useParams, useLocation, Link } from "react-router-dom";
 const Profile = () => {
   const location = useLocation();
   const { username } = useParams();
-  const { profile, getUserProfile, loading, error } = useUserStore();
+  const { profile, getUserProfile, loading } = useUserStore();
 
   useEffect(() => {
     getUserProfile(username);
@@ -20,7 +20,7 @@ const Profile = () => {
 
   if (loading) return <ProfileLoading />;
 
-  if (error) return <NotFound />;
+  if (profile && profile.length === 0) return <NotFound />;
 
   return (
     <div className="flex justify-center">

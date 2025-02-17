@@ -8,7 +8,7 @@ export const useUserStore = create((set, get) => ({
   profile: null,
   followers: [],
   followings: [],
-  loading: false,
+  loading: true,
   searching: false,
   searchTerm: "",
 
@@ -27,13 +27,12 @@ export const useUserStore = create((set, get) => ({
   },
 
   getUserProfile: async (username) => {
-    set({ loading: true, error: null });
     try {
       const profile = await callApi.getUserProfile(username);
       set({ profile });
     } catch (error) {
-      console.log(error);
-      set({ error });
+      set({ profile: [] });
+      console.log(error.message);
     } finally {
       set({ loading: false });
     }

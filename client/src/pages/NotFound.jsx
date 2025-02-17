@@ -10,7 +10,7 @@ const NotFound = () => {
             <p>The link you followed may be broken or have been removed.</p>
             <p>
               <span>Go back to </span>
-              <Link to="/" className="hover-btn">
+              <Link to="/" className="btn-secondary">
                 Memegram
               </Link>
             </p>

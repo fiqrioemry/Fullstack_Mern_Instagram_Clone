@@ -43,12 +43,12 @@ export const usePostStore = create((set, get) => ({
   },
 
   getPostDetail: async (postId) => {
-    set({ loading: true, error: null });
     try {
       const post = await callApi.getPostDetail(postId);
       set({ post });
     } catch (error) {
-      set({ post: [], error: error.message });
+      set({ post: [] });
+      console.log(error.message);
     } finally {
       set({ loading: false });
     }
