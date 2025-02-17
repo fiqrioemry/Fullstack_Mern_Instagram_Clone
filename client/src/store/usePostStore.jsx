@@ -16,6 +16,12 @@ export const usePostStore = create((set, get) => ({
     }));
   },
 
+  setPosts: (postId) => {
+    set((state) => ({
+      posts: state.posts.find((post) => post.postId === postId) || null,
+    }));
+  },
+
   commentCount: (postId) => {
     set((state) => ({
       posts: state.posts.map((post) =>
@@ -42,7 +48,7 @@ export const usePostStore = create((set, get) => ({
       const post = await callApi.getPostDetail(postId);
       set({ post });
     } catch (error) {
-      set({ error: error.message });
+      set({ post: [], error: error.message });
     } finally {
       set({ loading: false });
     }
@@ -82,6 +88,19 @@ export const usePostStore = create((set, get) => ({
       get().setLike(postId);
     } catch (error) {
       console.log(error.message);
+    }
+  },
+
+  deletePost: async (postId) => {
+    try {
+      set({ loading: true, error: null });
+      const message = await callApi.deletePost(postId);
+      get().setPosts(postId);
+      toast.success(message);
+    } catch (error) {
+      set({ error: error.message });
+    } finally {
+      set({ loading: false });
     }
   },
 

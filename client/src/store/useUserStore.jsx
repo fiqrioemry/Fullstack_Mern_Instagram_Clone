@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import callApi from "../api/callApi";
+import callApi from "@/api/callApi";
 
 export const useUserStore = create((set, get) => ({
   users: [],

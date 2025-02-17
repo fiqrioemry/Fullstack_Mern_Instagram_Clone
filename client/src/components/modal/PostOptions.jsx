@@ -2,7 +2,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Ellipsis } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ConfirmationBox from "./ConfirmationBox";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -10,6 +10,7 @@ import { usePostStore } from "@/store/usePostStore";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 
 const PostOptions = ({ data }) => {
+  const location = useLocation().pathname;
   const { user } = useAuthStore();
   const [open, setOpen] = useState(false);
   const { toggleFollow } = useUserStore();
@@ -22,7 +23,7 @@ const PostOptions = ({ data }) => {
   };
 
   const handleDelete = () => {
-    deletePost(false);
+    deletePost(data.postId);
   };
   const handleUnfollow = () => {
     setSelectedUser(data.userId);
@@ -61,14 +62,18 @@ const PostOptions = ({ data }) => {
               className="btn btn-delete border-b border-muted-foreground rounded-none py-4"
               onClick={data.isFollow ? handleUnfollow : handleFollow}
             >
-              {data.isFollow ? "following" : "follow"}
+              {data.isFollow ? "unfollow" : "follow"}
             </button>
           )}
           <Link
-            to={`p/${data.postId}`}
+            to={
+              location === `/p/${data.postId}`
+                ? `/${data.username}`
+                : `/p/${data.postId}`
+            }
             className="btn btn-secondary border-b border-muted-foreground  rounded-none py-4"
           >
-            go to post
+            {location === `/p/${data.postId}` ? "go to profile" : "go to post"}
           </Link>
           <button className="btn btn-secondary py-4" onClick={handleClose}>
             close
