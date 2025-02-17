@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "../api/callApi";
+import { useProvider } from "../context/GlobalProvider";
 
 export const usePostStore = create((set, get) => ({
   post: null,
