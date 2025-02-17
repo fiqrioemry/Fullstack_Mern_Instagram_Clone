@@ -1,9 +1,9 @@
 import NotFound from "./NotFound";
 import Posts from "@/components/post/Posts";
 import { usePostStore } from "@/store/usePostStore";
+import AuthorCard from "@/components/profile/AuthorCard";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import PostsLoading from "@/components/skeleton/PostsLoading";
-import AuthorCard from "../components/profile/AuthorCard";
 
 const Home = () => {
   const { getPublicPosts, posts, loading, totalPosts } = usePostStore();

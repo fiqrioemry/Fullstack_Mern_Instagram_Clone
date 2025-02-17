@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { createContext, useContext } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
+import PageLoading from "../components/skeleton/PageLoading";
 
 const GlobalContext = createContext();
 
@@ -21,7 +22,7 @@ export const GlobalProvider = ({ children }) => {
       }}
     >
       <Toaster />
-      {isAuthenticate === null ? null : children}
+      {isAuthenticate === null ? <PageLoading /> : children}
     </GlobalContext.Provider>
   );
 };
