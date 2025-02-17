@@ -32,7 +32,7 @@ const SignUp = () => {
           </Button>
           <CardFooter className="mt-2 space-x-2">
             <span> Already have an account ? signin</span>
-            <Link to="/signin" className="btn-primary">
+            <Link to="/signin" className="btn-secondary">
               here
             </Link>
           </CardFooter>

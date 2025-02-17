@@ -1,15 +1,22 @@
 /* eslint-disable react/prop-types */
+import { useCallback } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "@/components/ui/Avatar";
-import PostOptions from "@/components/modal/PostOptions";
+import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import PostOptions from "@/components/modal/PostOptions";
 
 const PostAuthor = ({ data }) => {
   const { user } = useAuthStore();
+  const { toggleFollow } = useUserStore();
+
+  const handleFollow = useCallback(() => {
+    toggleFollow(data.userId);
+  }, [toggleFollow, data.userId]);
 
   return (
-    <div className="p-2 mt-2 mb-2 ">
-      <div className="flex-between">
+    <div className="p-2 mt-2 mb-2">
+      <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
           <Avatar avatar={data.avatar} />
           <div className="flex items-center gap-2">
@@ -17,16 +24,15 @@ const PostAuthor = ({ data }) => {
               {data.username}
             </Link>
 
-            {!data.isFollow ||
-              (data.username === user.username && (
-                <button className="btn-accent"> Follow</button>
-              ))}
+            {data.userId !== user.userId && !data.isFollow && (
+              <button onClick={handleFollow} className="btn-accent">
+                Follow
+              </button>
+            )}
           </div>
         </div>
 
-        <button className="btn-secondary">
-          <PostOptions data={data} />
-        </button>
+        <PostOptions data={data} />
       </div>
     </div>
   );

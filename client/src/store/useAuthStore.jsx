@@ -27,7 +27,7 @@ export const useAuthStore = create((set, get) => ({
       toast.success(message);
       await get().authCheck();
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     } finally {
       set({ loading: false });
     }
@@ -37,9 +37,10 @@ export const useAuthStore = create((set, get) => ({
     set({ loading: true });
     try {
       const message = await callApi.signup(formData);
+
       toast.success(message);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     } finally {
       set({ loading: false });
     }

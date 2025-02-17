@@ -34,8 +34,8 @@ const Profile = () => {
         <div>
           <Tabs defaultValue={location.pathname}>
             <TabsList className="w-full">
-              <Link to="">
-                <TabsTrigger value="">
+              <Link to={`/${profile.username}`}>
+                <TabsTrigger value={`/${profile.username}`}>
                   <Grid2X2 /> <span>Post</span>
                 </TabsTrigger>
               </Link>

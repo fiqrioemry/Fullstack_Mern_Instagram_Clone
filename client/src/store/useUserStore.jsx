@@ -69,12 +69,15 @@ export const useUserStore = create((set, get) => ({
     try {
       const message = await callApi.toggleFollow(followingId);
 
-      await get().getFollowings(get().profile.username);
-      await get().getUserProfile(get().profile.username);
       get().setFollowings(followingId);
       get().setFollowers(followingId);
 
       usePostStore.getState().updatePostsFollowStatus(followingId);
+
+      if (window.location.pathname === "/") {
+        usePostStore.getState().removePostsByUserId(followingId);
+      }
+
       toast.success(message);
     } catch (error) {
       toast.error(error);

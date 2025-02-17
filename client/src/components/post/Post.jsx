@@ -27,7 +27,7 @@ const Post = ({ post }) => {
   }, [getComments, post.postId]);
 
   return (
-    <div className="grid grid-cols-10">
+    <div className="grid grid-cols-10 h-[34rem]">
       {/* Galeri Foto */}
       <div className="col-span-5 lg:col-span-6 border-r border-muted-foreground/60">
         <div className="h-full flex items-center bg-secondary">
@@ -40,8 +40,8 @@ const Post = ({ post }) => {
         <PostAuthor data={post} />
 
         {/* Bagian Caption & Komentar harus bisa memenuhi ruang yang tersedia */}
-        <div className="border-t border-muted-foreground/60 flex-grow overflow-hidden">
-          <div className="overflow-y-scroll h-96  p-2 ">
+        <div className="border-t border-muted-foreground/60 overflow-hidden">
+          <div className="overflow-y-scroll h-80 p-2 ">
             <Caption post={post} />
             {loadingComment ? (
               <CommentsLoading />

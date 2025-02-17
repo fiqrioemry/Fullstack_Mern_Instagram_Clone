@@ -1,7 +1,8 @@
 import { authInstance, publicInstance } from '.';
 
 const errorHandle = (error) => {
-  const errorMessage = error.response?.data || 'Something went wrong';
+  const errorMessage = error.response?.data?.message || 'Something went wrong';
+
   return Promise.reject(new Error(errorMessage));
 };
 
@@ -15,14 +16,14 @@ const callApi = {
 
   // 🔹Authentication API route management
   signup: async (formData) => {
-    return publicInstance
+    return authInstance
       .post('/auth/signup', formData)
       .then((res) => res.data.message)
       .catch(errorHandle);
   },
 
   signin: async (formData) => {
-    return publicInstance
+    return authInstance
       .post('/auth/signin', formData)
       .then((res) => {
         return res.data;

@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "../api/callApi";
-import { useProvider } from "../context/GlobalProvider";
 
 export const usePostStore = create((set, get) => ({
   post: null,
@@ -20,6 +19,12 @@ export const usePostStore = create((set, get) => ({
   setPosts: (postId) => {
     set((state) => ({
       posts: state.posts.find((post) => post.postId === postId) || null,
+    }));
+  },
+
+  removePostsByUserId: (userId) => {
+    set((state) => ({
+      posts: state.posts.filter((post) => post.userId !== userId),
     }));
   },
 

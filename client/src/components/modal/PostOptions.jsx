@@ -2,11 +2,11 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Ellipsis } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
 import ConfirmationBox from "./ConfirmationBox";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { usePostStore } from "@/store/usePostStore";
+import { Link, useLocation } from "react-router-dom";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 
 const PostOptions = ({ data }) => {
@@ -54,7 +54,7 @@ const PostOptions = ({ data }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Ellipsis />
+        <Ellipsis className="btn-secondary" />
       </DialogTrigger>
       <DialogContent className="max-w-96 bg-secondary border-none p-0">
         <div>

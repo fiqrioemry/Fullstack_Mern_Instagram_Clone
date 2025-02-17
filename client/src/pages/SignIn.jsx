@@ -28,7 +28,7 @@ const SignIn = () => {
           </Button>
           <CardFooter className="mt-2 space-x-2">
             <span> Dont have an account ? signup</span>
-            <Link to="/signup" className="btn-primary">
+            <Link to="/signup" className="btn-secondary">
               here
             </Link>
           </CardFooter>

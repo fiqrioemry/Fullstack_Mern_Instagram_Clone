@@ -67,7 +67,7 @@ export const useCommentStore = create((set, get) => ({
 
   likeComment: async (commentId) => {
     try {
-      const message = await callApi.likeComment(commentId);
+      const { message } = await callApi.likeComment(commentId);
       toast.success(message);
       get().setLikeComment(commentId);
     } catch (error) {
@@ -77,7 +77,7 @@ export const useCommentStore = create((set, get) => ({
 
   likeReply: async (commentId, parentId) => {
     try {
-      const message = await callApi.likeComment(commentId);
+      const { message } = await callApi.likeComment(commentId);
       toast.success(message);
       get().setLikeReply(commentId, parentId);
     } catch (error) {
