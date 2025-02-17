@@ -4,6 +4,10 @@ export const signInState = {
   password: '',
 };
 
+export const searchState = {
+  username: '',
+};
+
 export const signInControl = [
   {
     name: 'identifier',

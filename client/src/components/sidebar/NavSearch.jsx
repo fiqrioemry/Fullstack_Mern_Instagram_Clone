@@ -1,32 +1,50 @@
 /* eslint-disable react/display-name */
-/* eslint-disable react/prop-types */
-
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { forwardRef, useEffect } from "react";
-import { useFormSchema } from "../../hooks/useFormSchema";
-import { useUserStore } from "../../store/useUserStore";
-import Avatar from "../ui/Avatar";
-import SearchLoading from "../skeleton/SearchLoading";
+import { searchState } from "@/config";
 import { Link } from "react-router-dom";
-
-const searchState = {
-  username: "",
-};
+import Avatar from "@/components/ui/Avatar";
+import { Input } from "@/components/ui/input";
+import { useUserStore } from "@/store/useUserStore";
+import { useFormSchema } from "@/hooks/useFormSchema";
+import SearchLoading from "@/components/skeleton/SearchLoading";
+import { forwardRef, useEffect, useMemo, useCallback, useRef } from "react";
 
 const NavSearch = forwardRef(({ openSearch }, ref) => {
-  const { users, searchUser, searching } = useUserStore();
+  const debounceRef = useRef(null);
   const searchForm = useFormSchema(searchState);
+  const { users, searchUser, searching, searchTerm } = useUserStore();
+
+  const searchHandler = useCallback(() => {
+    if (!searchForm.values.username.trim()) return;
+    searchUser(searchForm.values.username);
+  }, [searchForm.values.username, searchUser]);
 
   useEffect(() => {
-    if (!searchForm.values.username.trim()) return;
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(searchHandler, 300);
 
-    const delayDebounce = setTimeout(() => {
-      searchUser(searchForm.values.username);
-    }, 300);
+    return () => clearTimeout(debounceRef.current);
+  }, [searchForm.values.username, searchHandler]);
 
-    return () => clearTimeout(delayDebounce);
-  }, [searchForm.values.username, searchUser]);
+  const userResults = useMemo(() => {
+    if (searching) return <SearchLoading />;
+    if (users.length === 0 && searchTerm)
+      return <p className="text-muted-foreground mt-4">No Users Found</p>;
+
+    return users.map((user) => (
+      <div className="flex items-center gap-4" key={user.id || user.username}>
+        <Avatar avatar={user.avatar} />
+        <div>
+          <Link to={`/${user.username}`} className="btn-secondary">
+            {user.username}
+          </Link>
+          <p className="text-xs md:text-sm text-muted-foreground">
+            {user.fullname}
+          </p>
+        </div>
+      </div>
+    ));
+  }, [users, searching, searchTerm]);
 
   return (
     <div
@@ -34,63 +52,20 @@ const NavSearch = forwardRef(({ openSearch }, ref) => {
       className={cn(openSearch ? "left-20" : "-left-96", "nav-search")}
     >
       <div className="px-4 py-6">
-        <h3 className="text-lg font-semibold">Search Users</h3>
+        <h3>Search Users</h3>
         <form className="mt-3">
           <Input
             name="username"
             placeholder="Search by username..."
             value={searchForm.values.username}
             onChange={searchForm.handleChange}
-            className="w-full p-2 border border-gray-300 rounded-lg"
+            className="w-full border-muted-foreground/20"
           />
         </form>
-
         {searchForm.values.username &&
           searchForm.values.username.length > 0 && (
-            <div className="mt-4 space-y-2 p-2">
-              {searching ? (
-                <SearchLoading />
-              ) : users && users.length > 0 ? (
-                <>
-                  {users.map((user) => (
-                    <div className="flex gap-4" key={user.index}>
-                      <Avatar avatar={user.avatar} />
-                      <div className="space-y-2">
-                        <Link
-                          to={`${user.username}`}
-                          className="btn-secondary"
-                        />
-                        <p className="text-muted-foreground">{user.fullname}</p>
-                      </div>
-                    </div>
-                  ))}
-                </>
-              ) : (
-                <p className="text-muted-foreground mt-4">No Users Found</p>
-              )}
-            </div>
+            <div className="mt-4 space-y-2 p-2">{userResults}</div>
           )}
-
-        {users.length > 0 && (
-          <div className="mt-4 space-y-2 p-2">
-            {users.map((user) => (
-              <button
-                key={user.id}
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100"
-              >
-                <Avatar avatar={user.avatar} className="w-10 h-10 mr-3" />
-                <div className="text-left">
-                  <h4 className="font-semibold">{user.username}</h4>
-                  <span className="text-sm text-gray-500">{user.fullname}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
-
-        {users.length === 0 && searchForm.values.username && (
-          <p className="mt-4 text-sm text-gray-500">No users found.</p>
-        )}
       </div>
     </div>
   );
