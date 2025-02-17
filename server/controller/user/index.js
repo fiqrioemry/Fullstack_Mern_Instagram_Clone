@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const { Op } = require('sequelize');
-const { User, Profile, Post, sequelize } = require('../../models');
+const { User, Profile, sequelize } = require('../../models');
 const {
   uploadMediaToCloudinary,
   deleteMediaFromCloudinary,
@@ -16,7 +16,7 @@ async function searchUser(req, res) {
       });
     }
 
-    const users = await User.findAll({
+    const usersData = await User.findAll({
       where: {
         [Op.or]: [{ username: { [Op.like]: `%${query}%` } }],
       },
@@ -27,29 +27,28 @@ async function searchUser(req, res) {
           as: 'profile',
           attributes: ['fullname', 'avatar'],
           where: {
-            fullname: { [Op.like]: `%${query}%` }, // Tambahkan pencarian di Profile
+            fullname: { [Op.like]: `%${query}%` },
           },
-          required: false, // Pastikan include tetap bekerja jika fullname tidak cocok
+          required: false,
         },
       ],
       limit: 5,
     });
 
-    if (users.length === 0) {
+    if (usersData.length === 0) {
       return res.status(404).json({
         message: 'No users found',
       });
     }
 
-    return res.status(200).json({
-      success: true,
-      data: users.map((user) => ({
-        userId: user.id,
-        username: user.username,
-        fullname: user.profile?.fullname || null,
-        avatar: user.profile?.avatar || null,
-      })),
-    });
+    const users = usersData.map((user) => ({
+      userId: user.id,
+      username: user.username,
+      fullname: user.profile?.fullname || null,
+      avatar: user.profile?.avatar || null,
+    }));
+
+    return res.status(200).json(users);
   } catch (error) {
     console.error(error);
     return res.status(500).json({

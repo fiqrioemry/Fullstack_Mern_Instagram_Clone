@@ -254,7 +254,7 @@ async function toggleLikeComment(req, res) {
     }
 
     await t.commit();
-    return res.status(200).json('You Liked the comment');
+    return res.status(200).json({ message: 'You Liked the comment' });
   } catch (error) {
     await t.rollback();
     console.log(error.message);
