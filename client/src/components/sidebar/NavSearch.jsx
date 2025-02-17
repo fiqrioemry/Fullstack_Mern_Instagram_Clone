@@ -7,6 +7,8 @@ import { forwardRef, useEffect } from "react";
 import { useFormSchema } from "../../hooks/useFormSchema";
 import { useUserStore } from "../../store/useUserStore";
 import Avatar from "../ui/Avatar";
+import SearchLoading from "../skeleton/SearchLoading";
+import { Link } from "react-router-dom";
 
 const searchState = {
   username: "",
@@ -42,6 +44,32 @@ const NavSearch = forwardRef(({ openSearch }, ref) => {
             className="w-full p-2 border border-gray-300 rounded-lg"
           />
         </form>
+
+        {searchForm.values.username &&
+          searchForm.values.username.length > 0 && (
+            <div className="mt-4 space-y-2 p-2">
+              {searching ? (
+                <SearchLoading />
+              ) : users && users.length > 0 ? (
+                <>
+                  {users.map((user) => (
+                    <div className="flex gap-4" key={user.index}>
+                      <Avatar avatar={user.avatar} />
+                      <div className="space-y-2">
+                        <Link
+                          to={`${user.username}`}
+                          className="btn-secondary"
+                        />
+                        <p className="text-muted-foreground">{user.fullname}</p>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <p className="text-muted-foreground mt-4">No Users Found</p>
+              )}
+            </div>
+          )}
 
         {users.length > 0 && (
           <div className="mt-4 space-y-2 p-2">
