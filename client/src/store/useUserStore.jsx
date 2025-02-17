@@ -4,10 +4,24 @@ import callApi from "../api/callApi";
 
 export const useUserStore = create((set, get) => ({
   profile: null,
+  users: [],
   followers: [],
   followings: [],
   loading: true,
   error: null,
+
+  searchUser: async (username) => {
+    set({ loading: true });
+    try {
+      console.log(username);
+      const users = await callApi.searchUser(username);
+      set({ users });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
 
   getUserProfile: async (username) => {
     set({ loading: true, error: null });

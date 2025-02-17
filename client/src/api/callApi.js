@@ -47,9 +47,9 @@ const callApi = {
   },
 
   // 🔹 User interaction API route management
-  searchUser: async () => {
+  searchUser: async (username) => {
     return authInstance
-      .get('/user')
+      .get(`/user?query=${username}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
