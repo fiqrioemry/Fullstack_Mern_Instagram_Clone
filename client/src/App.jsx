@@ -53,6 +53,7 @@ function App() {
           }
         >
           <Route index element={<Home />} />
+
           <Route path="explore" element={<Explore />} />
           <Route path="p/:id" element={<PostDetail />} />
           <Route path=":username" element={<Profile />}>

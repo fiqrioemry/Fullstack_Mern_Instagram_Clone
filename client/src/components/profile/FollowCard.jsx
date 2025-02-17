@@ -27,20 +27,20 @@ const FollowCard = ({ data }) => {
   };
 
   return (
-    <div className="flex items-center justify-between p-3 hover:bg-gray-100">
+    <div className="flex-between p-3">
       <div className="flex items-center gap-3">
         <Avatar avatar={data.avatar} />
         <div>
-          <Link to={`/${data.username}`} className="font-medium text-gray-800">
+          <Link to={`/${data.username}`} className="btn-secondary">
             {data.username}
           </Link>
-          <p className="text-gray-500 text-sm">{data.fullname}</p>
+          <p className="text-muted-foreground">{data.fullname}</p>
         </div>
       </div>
       {data.userId !== user.userId && (
         <Button
           onClick={data.isFollow ? handleUnfollowClick : handleFollow}
-          variant={data.isFollow ? "following" : "follow"}
+          variant={data.isFollow ? "ghost" : "accent"}
         >
           {loading[data.userId] ? (
             <Loader className="animate-spin" />
@@ -55,7 +55,6 @@ const FollowCard = ({ data }) => {
         cancelLabel="Cancel"
         confirmLabel="Unfollow"
         open={showConfirmation}
-        confirmVariant="delete"
         onConfirm={handleConfirmUnfollow}
         title={`Unfollow ${data.username}?`}
         onClose={() => setShowConfirmation(false)}

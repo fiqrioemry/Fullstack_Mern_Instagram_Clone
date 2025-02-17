@@ -5,7 +5,7 @@ import PostOptions from "@/components/modal/PostOptions";
 
 const PostAuthor = ({ data }) => {
   return (
-    <div className="p-2 mt-2 mb-2">
+    <div className="p-2 mt-2 mb-2 ">
       <div className="flex-between">
         <div className="flex items-center gap-2">
           <Avatar avatar={data.avatar} />

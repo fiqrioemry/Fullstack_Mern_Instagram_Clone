@@ -11,12 +11,10 @@ import Image from "../ui/Image";
 const Galleries = ({ images }) => {
   return (
     <Carousel>
-      <CarouselContent className="flex items-center">
+      <CarouselContent>
         {images.map((image, index) => (
           <CarouselItem key={index}>
-            <div className="flex aspect-square">
-              <Image url={image} />
-            </div>
+            <Image url={image} />
           </CarouselItem>
         ))}
       </CarouselContent>

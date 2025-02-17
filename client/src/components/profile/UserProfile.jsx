@@ -33,11 +33,11 @@ const UserProfile = ({ profile }) => {
                   <Button
                     className="w-full"
                     onClick={() => handleFollow(profile.userId)}
-                    variant={profile.isFollowing ? "following" : "follow"}
+                    variant={profile.isFollowing ? "secondary" : "accent"}
                   >
                     {profile.isFollowing ? "Following" : "Follow"}
                   </Button>
-                  <Button className="w-full" variant="following">
+                  <Button className="w-full" variant="secondary">
                     Message
                   </Button>
                 </div>
@@ -45,14 +45,14 @@ const UserProfile = ({ profile }) => {
               <div className="flex justify-center md:justify-start items-center gap-6 mt-4">
                 <span>{profile.posts} Posts</span>
                 <Link
-                  className="hover-btn"
+                  className="btn-secondary"
                   to={`/${profile.username}/followings`}
                   state={{ background: location }}
                 >
                   {profile.followings} Followings
                 </Link>
                 <Link
-                  className="hover-btn"
+                  className="btn-secondary"
                   to={`/${profile.username}/followers`}
                   state={{ background: location }}
                 >
@@ -60,7 +60,9 @@ const UserProfile = ({ profile }) => {
                 </Link>
               </div>
               <div className="space-y-2 mt-4 text-justify">
-                <span className="text-gray-500">{profile.fullname}</span>
+                <span className="text-muted-foreground">
+                  {profile.fullname}
+                </span>
                 <p>
                   Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                   Tempore sapiente commodi est deserunt quasi iusto, molestiae,

@@ -1,8 +1,9 @@
 import Galleries from "../post/Galleries";
 import Avatar from "@/components/ui/Avatar";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import ConfirmationBox from "./ConfirmationBox";
 import { postControl, postState } from "@/config";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Textarea } from "@/components/ui/textarea";
 import { usePostStore } from "@/store/usePostStore";
@@ -10,24 +11,20 @@ import { useFormSchema } from "@/hooks/useFormSchema";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { useState, useCallback, useMemo } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ArrowLeft, ArrowRight, PlusSquare } from "lucide-react";
-import ConfirmationBox from "./ConfirmationBox";
 
-export function CreateNewPost() {
+export function CreateNewPost({ isOpen, setIsOpen }) {
   const { user } = useAuthStore();
   const [step, setStep] = useState(1);
   const { createPost } = usePostStore();
-  const [isOpen, setIsOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const formPost = useFormSchema(postState, postControl, createPost);
-  const { multiFile } = useFileUpload(formPost.setFieldValue, formPost.values);
-
   const isFormDirty = useMemo(() => formPost.dirty, [formPost.dirty]);
+  const { multiFile } = useFileUpload(formPost.setFieldValue, formPost.values);
 
   const resetAndCloseDialog = useCallback(() => {
     formPost.resetForm();
     setIsOpen(false);
-  }, [formPost]);
+  }, [formPost, setIsOpen]);
 
   const handleCancel = useCallback(() => {
     if (isFormDirty) setShowConfirmation(true);
@@ -58,18 +55,15 @@ export function CreateNewPost() {
         open={isOpen}
         onOpenChange={(open) => (!open ? handleCloseDialog() : setIsOpen(open))}
       >
-        <button onClick={() => setIsOpen(true)}>
-          <PlusSquare /> <span className="hidden md:block">Create</span>
-        </button>
-        <DialogContent>
+        <DialogContent className="max-w-2xl p-0 border-none bg-secondary">
           {formPost.values.images.length === 0 && (
-            <div className="flex justify-center py-2 border-b">
+            <div className="flex-center py-2 border-b border-muted-foreground/50">
               <h3>Create New Post</h3>
             </div>
           )}
 
           {step === 1 && formPost.values.images.length > 0 && (
-            <div className="flex justify-between py-2 border-b">
+            <div className="flex-between py-2 border-b border-muted-foreground/50">
               <ArrowLeft onClick={handleCancel} />
               <h3>Edit</h3>
               <ArrowRight onClick={() => setStep(2)} />
@@ -77,15 +71,17 @@ export function CreateNewPost() {
           )}
 
           {step === 2 && formPost.values.images.length > 0 && (
-            <div className="flex justify-between items-center py-2 border-b">
+            <div className="flex-between py-2 border-b border-muted-foreground/50">
               <ArrowLeft onClick={() => setStep(1)} />
               <h3>Create New Post</h3>
-              <Button onClick={handleSave}>Share</Button>
+              <button className="btn-accent" onClick={handleSave}>
+                Share
+              </button>
             </div>
           )}
 
           {formPost.values.images.length === 0 && (
-            <div className="h-[17rem] w-[20rem] relative">
+            <div className="h-72 relative">
               <Input
                 multiple
                 type="file"
@@ -101,31 +97,35 @@ export function CreateNewPost() {
               >
                 <div className="text-center space-y-2">
                   <div className="mb-4">Drag photos and videos here</div>
-                  <label
-                    htmlFor="images"
-                    className="py-2 px-2 border bg-blue-500 text-white rounded-md"
-                  >
+                  <button className="btn btn-accent">
                     Select from computer
-                  </label>
+                  </button>
                 </div>
               </label>
             </div>
           )}
 
           {step === 1 && formPost.values.images.length > 0 && (
-            <div className="h-[17rem] w-[24rem]">
+            <div className="flex items-center">
               <Galleries images={formPost.values.images} />
             </div>
           )}
 
           {step === 2 && formPost.values.images.length > 0 && (
-            <div className="w-full block md:flex h-auto md:h-[20rem] overflow-y-scroll">
-              <div className="w-full md:w-1/2">
+            <div className="md:flex block">
+              <div className="h-72 items-center flex bg-muted-foreground w-full md:w-1/2">
                 <Galleries images={formPost.values.images} />
               </div>
-              <div className="h-[20rem] w-full md:w-1/2 mb-2">
+              <div className="w-full md:w-1/2 mb-2">
                 <Avatar avatar={user.avatar} />
-                <Textarea placeholder="Write a caption..." />
+                {/* Menghubungkan Textarea dengan form state */}
+                <Textarea
+                  placeholder="Write a caption..."
+                  value={formPost.values.caption || ""}
+                  onChange={(e) =>
+                    formPost.setFieldValue("caption", e.target.value)
+                  }
+                />
               </div>
             </div>
           )}

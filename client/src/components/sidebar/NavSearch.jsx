@@ -1,28 +1,24 @@
+/* eslint-disable react/display-name */
+/* eslint-disable react/prop-types */
+
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { useProvider } from "@/context/GlobalProvider";
+import { forwardRef } from "react";
 
-const NavSearch = () => {
-  const { openSearch, searchRef } = useProvider();
-
+const NavSearch = forwardRef(({ openSearch }, ref) => {
   return (
     <div
-      ref={searchRef}
-      className={cn(
-        openSearch ? "left-20" : "-left-96",
-        "absolute top-0 bottom-0 w-80 h-full bg-background border-r z-10 duration-300 transition-all ease-in"
-      )}
+      ref={ref}
+      className={cn(openSearch ? "left-20" : "-left-96", "nav-search")}
     >
-      <div className="px-3">
-        <div className="flex py-10">
-          <h3>Search panel</h3>
-        </div>
-        <form>
+      <div className="px-4 py-6">
+        <h3>Search panel</h3>
+        <form className="mt-5">
           <Input />
         </form>
       </div>
     </div>
   );
-};
+});
 
 export default NavSearch;

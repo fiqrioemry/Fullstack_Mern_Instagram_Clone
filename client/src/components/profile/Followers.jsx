@@ -26,9 +26,12 @@ const Followers = () => {
 
   return (
     <Dialog defaultOpen onOpenChange={(open) => !open && navigate(-1)}>
-      <DialogContent className="sm:w-[400px] p-0" variant="detail">
+      <DialogContent
+        className="sm:w-[400px] p-0 border-none bg-secondary"
+        variant="detail"
+      >
         <div>
-          <div className="flex justify-center items-center p-4 border-b relative">
+          <div className="flex-center p-4 border-b border-muted-foreground/50 relative">
             <h4>Followers</h4>
             <DialogClose className="absolute right-3">
               <X size={24} />

@@ -8,17 +8,17 @@ const PostControl = ({ post, formik }) => {
   const { likePost } = usePostStore();
   const handleLikePost = () => likePost(post.postId);
   const handleComment = () => formik.setFieldValue("postId", post.postId);
-  console.log(post.createdAt);
+
   return (
-    <div className="mt-2 py-2 space-y-1">
-      <div className="flex-between">
+    <div className="space-y-1">
+      <div className="flex-between mt-3">
         <div className="flex gap-4">
           <Heart
+            aria-label="Like Post"
             onClick={handleLikePost}
             className="btn-secondary"
             fill={post.isLiked ? "red" : "transparent"}
             stroke={post.isLiked ? "red" : "currentColor"}
-            aria-label="Like Post"
           />
           <MessageCircle
             onClick={handleComment}

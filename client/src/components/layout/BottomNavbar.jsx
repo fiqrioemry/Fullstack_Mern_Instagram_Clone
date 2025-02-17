@@ -7,32 +7,25 @@ import { Home, Compass, MessageCircle, Bell } from "lucide-react";
 const nav_items = [
   { to: "/", icon: Home },
   { to: "/explore", icon: Compass },
-  { to: "/message", icon: MessageCircle },
   { to: "/notification", icon: Bell },
+  { to: "/message", icon: MessageCircle },
 ];
 
 const BottomNavbar = () => {
   const { user } = useAuthStore();
 
   return (
-    <div className="md:hidden fixed bottom-0 w-full px-4 bg-background border-t">
-      <nav className="flex items-center justify-between">
+    <div className="bottom-navbar">
+      <nav className="flex-between">
         {nav_items.map(({ to, icon: Icon }) => (
-          <Link
-            key={to}
-            to={to}
-            className="p-4 rounded-lg hover:bg-gray-100 duration-300"
-          >
+          <Link key={to} to={to} className="btn-nav">
             <Icon size={24} />
           </Link>
         ))}
 
         <CreateNewPost />
 
-        <Link
-          to={`/${user.username}`}
-          className="p-4 rounded-lg hover:bg-gray-100 duration-300"
-        >
+        <Link to={`/${user.username}`} className="btn-nav">
           <Avatar avatar={user.avatar} />
         </Link>
       </nav>

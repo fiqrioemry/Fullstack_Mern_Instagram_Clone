@@ -29,12 +29,14 @@ const Post = ({ post }) => {
   return (
     <div className="grid grid-cols-10">
       {/* Galeri Foto */}
-      <div className="col-span-6">
-        <Galleries images={post.images} />
+      <div className="col-span-5 lg:col-span-6 border-r border-muted-foreground/60">
+        <div className="h-full flex items-center bg-secondary">
+          <Galleries images={post.images} />
+        </div>
       </div>
 
       {/* Bagian kanan (Penulis, Caption, Komentar, dll.) */}
-      <div className="col-span-4 flex flex-col h-full">
+      <div className="col-span-5 lg:col-span-4 flex flex-col h-full">
         <PostAuthor data={post} />
 
         {/* Bagian Caption & Komentar harus bisa memenuhi ruang yang tersedia */}

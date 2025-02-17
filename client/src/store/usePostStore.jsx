@@ -43,7 +43,7 @@ export const usePostStore = create((set, get) => ({
       const post = await callApi.getPostDetail(postId);
       set({ post });
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }
@@ -57,7 +57,7 @@ export const usePostStore = create((set, get) => ({
       );
       set({ posts, totalPosts, message });
     } catch (error) {
-      toast.error(error);
+      console.log(error.message);
     } finally {
       set({ loading: false });
     }
@@ -70,7 +70,7 @@ export const usePostStore = create((set, get) => ({
         await callApi.getPostsFromFollowings(limit);
       set({ posts, totalPosts, message });
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }
@@ -78,11 +78,11 @@ export const usePostStore = create((set, get) => ({
 
   likePost: async (postId) => {
     try {
-      const message = await callApi.likePost(postId);
+      const { message } = await callApi.likePost(postId);
       toast.success(message);
       get().setLike(postId);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   },
 

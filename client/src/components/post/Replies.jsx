@@ -44,7 +44,7 @@ const Replies = ({ replies, formik, parentId }) => {
                   className="text-xs btn-secondary"
                   onClick={() => {
                     formik.setFieldValue("postId", reply.postId);
-                    formik.setFieldValue("parentId", reply.commentId);
+                    formik.setFieldValue("parentId", parentId);
                     formik.setFieldValue("content", `@${reply.username} `);
                   }}
                 >

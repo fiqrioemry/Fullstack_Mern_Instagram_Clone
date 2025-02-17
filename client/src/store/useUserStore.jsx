@@ -40,10 +40,10 @@ export const useUserStore = create((set, get) => ({
 
   setFollowings: (followingId) => {
     set((state) => ({
-      followings: state.followings.map((following) =>
-        following.userId === followingId
-          ? { ...following, isFollow: !following.isFollow }
-          : following
+      followings: state.followings.map((follow) =>
+        follow.userId === followingId
+          ? { ...follow, isFollow: !follow.isFollow }
+          : follow
       ),
     }));
   },

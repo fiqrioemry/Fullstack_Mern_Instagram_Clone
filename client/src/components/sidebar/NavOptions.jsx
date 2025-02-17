@@ -20,12 +20,13 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
+import NavItem from "./NavItem";
 
-function NavOption({ openSearch }) {
+function NavOptions({ openSearch }) {
   const ref = useRef(null);
   const { signout } = useAuthStore();
-  const { handleDarkMode, darkMode } = useTheme();
   const [open, setOpen] = useState(false);
+  const { handleDarkMode, darkMode } = useTheme();
   const [showModeToggle, setShowModeToggle] = useState(false);
 
   useEffect(() => {
@@ -40,33 +41,27 @@ function NavOption({ openSearch }) {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
+  const handleOpen = () => {
+    setOpen((prev) => !prev);
+  };
+
+  const labelClass = cn(
+    openSearch ? "opacity-0" : "opacity-100",
+    "duration-300 transition-all ease-in"
+  );
+
   return (
     <DropdownMenu open={open}>
       <DropdownMenuTrigger asChild>
-        <button
-          onClick={() => setOpen((prev) => !prev)}
-          className="flex items-center hover:bg-gray-100 w-full rounded-md"
-        >
-          <div className="flex justify-center w-20 p-4">
-            <Menu size={24} />
-          </div>
-          <span
-            className={cn(
-              openSearch ? "opacity-0" : "opacity-100",
-              "duration-300 transition-all ease-in"
-            )}
-          >
-            More
-          </span>
-        </button>
+        <NavItem
+          label="More"
+          onClick={handleOpen}
+          labelClass={labelClass}
+          icon={<Menu size={24} />}
+        />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        ref={ref}
-        className={cn("w-64", !open && "opacity-0")}
-        align="end"
-        alignOffset={-40}
-      >
+      <DropdownMenuContent ref={ref} className="bg-secondary">
         {showModeToggle ? (
           <>
             <DropdownMenuItem onClick={() => setShowModeToggle(false)}>
@@ -117,4 +112,4 @@ function NavOption({ openSearch }) {
   );
 }
 
-export default NavOption;
+export default NavOptions;

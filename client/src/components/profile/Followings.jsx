@@ -26,7 +26,7 @@ const Followings = () => {
 
   return (
     <Dialog defaultOpen onOpenChange={(open) => !open && navigate(-1)}>
-      <DialogContent className="sm:w-[400px] p-0" variant="detail">
+      <DialogContent className="sm:w-[400px] p-0 border-none bg-secondary">
         <div>
           <div className="flex justify-center items-center p-4 border-b relative">
             <h4>Followings</h4>

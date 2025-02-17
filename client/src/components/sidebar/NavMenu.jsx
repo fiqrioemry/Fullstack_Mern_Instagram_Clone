@@ -1,118 +1,81 @@
+import {
+  Home,
+  Bell,
+  Search,
+  Compass,
+  SquarePlus,
+  MessageCircle,
+} from "lucide-react";
+import NavItem from "./NavItem";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
 import Avatar from "@/components/ui/Avatar";
+import { forwardRef, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useProvider } from "@/context/GlobalProvider";
-import { Search, Home, Compass, MessageCircle, Bell } from "lucide-react";
+import { CreateNewPost } from "@/components/modal/CreateNewPost";
 
-const NavMenu = () => {
+// eslint-disable-next-line react/display-name, react/prop-types
+const NavMenu = forwardRef(({ openSearch, handleSearch }, ref) => {
   const { user } = useAuthStore();
-  const { handleSearch, openSearch, searchRef } = useProvider();
+  const [openCreate, setOpenCreate] = useState(false);
+
+  const handleCreatePost = () => {
+    setOpenCreate((prev) => !prev);
+  };
+
+  const labelClass = cn(
+    openSearch ? "opacity-0" : "opacity-100",
+    "duration-300 transition-all ease-in"
+  );
 
   return (
-    <nav className="space-y-4">
-      <Link
+    <div className="space-y-4">
+      <NavItem
         to="/"
-        className="inline-flex items-center hover:bg-gray-100 w-full rounded-md"
-      >
-        <div className="flex justify-center w-20 p-4">
-          <Home size={24} />
-        </div>
-        <span
-          className={cn(
-            openSearch ? "opacity-0" : "opacity-100",
-            " duration-300 transition-all ease-in"
-          )}
-        >
-          Home
-        </span>
-      </Link>
-      <button
-        ref={searchRef}
+        label="Home"
+        labelClass={labelClass}
+        icon={<Home size={24} />}
+      />
+      <NavItem
+        ref={ref}
+        label="Search"
+        labelClass={labelClass}
         onClick={handleSearch}
-        className="flex items-center hover:bg-gray-100 w-full rounded-md"
-      >
-        <div className="flex justify-center w-20 p-4">
-          <Search size={24} />
-        </div>
-        <span
-          className={cn(
-            openSearch ? "opacity-0" : "opacity-100",
-            " duration-300 transition-all ease-in"
-          )}
-        >
-          Search
-        </span>
-      </button>
-      <Link
+        icon={<Search size={24} />}
+      />
+      <NavItem
         to="/explore"
-        className="inline-flex items-center hover:bg-gray-100 w-full rounded-md"
-      >
-        <div className="flex  justify-center w-20 p-4">
-          <Compass size={24} />
-        </div>
-
-        <span
-          className={cn(
-            openSearch ? "opacity-0" : "opacity-100",
-            " duration-300 transition-all ease-in"
-          )}
-        >
-          Explore
-        </span>
-      </Link>
-      <Link
+        label="Explore"
+        labelClass={labelClass}
+        icon={<Compass size={24} />}
+      />
+      <NavItem
         to="/message"
-        className="inline-flex items-center hover:bg-gray-100 w-full rounded-md"
-      >
-        <div className="flex justify-center w-20 p-4">
-          <MessageCircle size={24} />
-        </div>
-
-        <span
-          className={cn(
-            openSearch ? "opacity-0" : "opacity-100",
-            " duration-300 transition-all ease-in"
-          )}
-        >
-          Message
-        </span>
-      </Link>
-      <Link
+        label="Message"
+        labelClass={labelClass}
+        icon={<MessageCircle size={24} />}
+      />
+      <NavItem
         to="/notification"
-        className="inline-flex items-center hover:bg-gray-100 w-full rounded-md"
-      >
-        <div className="flex items-center justify-center w-20 p-4">
-          <Bell size={24} />
-        </div>
+        label="Notification"
+        labelClass={labelClass}
+        icon={<Bell size={24} />}
+      />
+      <NavItem
+        label="Create"
+        labelClass={labelClass}
+        onClick={handleCreatePost}
+        icon={<SquarePlus size={24} />}
+      />
+      <NavItem
+        label="Profile"
+        to={`/${user.username}`}
+        labelClass={labelClass}
+        icon={<Avatar avatar={user.avatar} />}
+      />
 
-        <span
-          className={cn(
-            openSearch ? "opacity-0" : "opacity-100",
-            " duration-300 transition-all ease-in"
-          )}
-        >
-          Notification
-        </span>
-      </Link>
-      <Link
-        to={`${user.username}`}
-        className="inline-flex items-center hover:bg-gray-100 w-full rounded-md"
-      >
-        <div className="flex justify-center w-20 px-3 py-2">
-          <Avatar avatar={user.avatar} />
-        </div>
-        <span
-          className={cn(
-            openSearch ? "opacity-0" : "opacity-100",
-            " duration-300 transition-all ease-in"
-          )}
-        >
-          Profile
-        </span>
-      </Link>
-    </nav>
+      <CreateNewPost isOpen={openCreate} setIsOpen={setOpenCreate} />
+    </div>
   );
-};
+});
 
 export default NavMenu;

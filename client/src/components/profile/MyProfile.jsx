@@ -23,10 +23,10 @@ const UserProfile = ({ profile }) => {
                 </div>
 
                 <div className="flex items-center gap-4 w-full md:w-2/3">
-                  <Button className="w-full" variant="following">
+                  <Button className="w-full" variant="secondary">
                     Edit Profile
                   </Button>
-                  <Button className="w-full" variant="following">
+                  <Button className="w-full" variant="secondary">
                     View Archive
                   </Button>
                 </div>
@@ -34,14 +34,14 @@ const UserProfile = ({ profile }) => {
               <div className="flex justify-center md:justify-start items-center gap-6 mt-4">
                 <span>{profile.posts} Posts</span>
                 <Link
-                  className="hover-btn"
+                  className="btn-hover"
                   to={`/${profile.username}/followings`}
                   state={{ background: location }}
                 >
                   {profile.followings} Followings
                 </Link>
                 <Link
-                  className="hover-btn"
+                  className="btn-hover"
                   to={`/${profile.username}/followers`}
                   state={{ background: location }}
                 >
@@ -49,7 +49,9 @@ const UserProfile = ({ profile }) => {
                 </Link>
               </div>
               <div className="space-y-2 mt-4 text-justify">
-                <span className="text-gray-500">{profile.fullname}</span>
+                <span className="text-muted-foreground">
+                  {profile.fullname}
+                </span>
                 <p>
                   Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                   Tempore sapiente commodi est deserunt quasi iusto, molestiae,
