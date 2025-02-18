@@ -60,6 +60,12 @@ async function userSignUp(req, res) {
   try {
     const { username, email, password, fullname } = req.body;
 
+    if (!username || !email || !fullname || !password) {
+      return res.status(400).json({
+        message: 'All field required',
+      });
+    }
+
     const existUser = await User.findOne({
       where: { [Op.or]: [{ email }, { username }] },
     });
@@ -85,10 +91,10 @@ async function userSignUp(req, res) {
       avatar,
     });
 
-    return res.status(201).json({ message: 'Registration is success' });
+    return res.status(201).json({ message: 'Registration successful' });
   } catch (error) {
     return res.status(500).json({
-      message: 'Registration is failed',
+      message: 'Registration failed',
       error: error.message,
     });
   }
@@ -97,6 +103,12 @@ async function userSignUp(req, res) {
 async function userSignIn(req, res) {
   try {
     const { identifier, password } = req.body;
+
+    if (!identifier || !password) {
+      return res.status(400).json({
+        message: 'All field required',
+      });
+    }
 
     const user = await User.findOne({
       where: { [Op.or]: [{ email: identifier }, { username: identifier }] },
@@ -118,7 +130,7 @@ async function userSignIn(req, res) {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
-        message: 'Password is incorrect',
+        message: 'Password incorrect',
       });
     }
 
@@ -195,7 +207,7 @@ async function userAuthRefresh(req, res) {
 
     if (!refreshToken) {
       return res.status(401).json({
-        message: 'Session is Expired, Please log in',
+        message: 'Session Expired, Please Login',
       });
     }
 
@@ -208,7 +220,7 @@ async function userAuthRefresh(req, res) {
     if (!user) {
       return res.status(403).json({
         success: false,
-        message: 'Invalid refresh token, please log in',
+        message: 'Invalid refresh token, please login',
       });
     }
 

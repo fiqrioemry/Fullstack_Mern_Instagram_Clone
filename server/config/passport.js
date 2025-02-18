@@ -11,7 +11,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (profile, done) => {
       try {
         let user = await User.findOne({
           where: { email: profile.emails[0].value },
@@ -21,7 +21,7 @@ passport.use(
           user = await User.create({
             username: profile.displayName.replace(/\s+/g, '').toLowerCase(),
             email: profile.emails[0].value,
-            password: null, // Tidak perlu password untuk Google login
+            password: null,
           });
 
           await Profile.create({
