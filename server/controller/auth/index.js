@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
+const speakeasy = require('speakeasy');
 const redis = require('../../config/redis');
 const sendOTP = require('../../utils/sendOTP');
 const { User, Profile } = require('../../models');
@@ -16,12 +17,13 @@ async function sendingOTP(req, res) {
       return res.status(400).send({ message: 'Email already exist' });
 
     const secret = speakeasy.generateSecret({ length: 20 });
+
     const otp = speakeasy.totp({
       secret: secret.base32,
       encoding: 'base32',
     });
 
-    await redis.setEx(`otp:${email}`, 300, otp);
+    await redis.setex(`otp:${email}`, 900, otp);
 
     await sendOTP(email, otp);
 
@@ -38,12 +40,14 @@ async function verifyOTP(req, res) {
   try {
     const storedOtp = await redis.get(`otp:${email}`);
 
-    if (!storedOtp) return res.status(400).send({ message: 'OTP is expired' });
+    console.log(storedOtp);
+
+    if (!storedOtp) return res.status(400).send({ message: 'OTP Expired' });
 
     if (storedOtp !== otp) {
-      return res.status(400).send({ message: 'Invalid OTP code' });
+      return res.status(400).send({ message: 'Invalid OTP' });
     } else {
-      return res.status(200).send({ message: 'OTP is verified.' });
+      return res.status(200).send({ message: 'OTP Verified.' });
     }
   } catch (error) {
     return res

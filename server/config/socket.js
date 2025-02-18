@@ -1,8 +1,8 @@
 require('dotenv').config();
-const { createServer } = require('http');
 const express = require('express');
-const { Server } = require('socket.io');
 const redis = require('./redis.js');
+const { Server } = require('socket.io');
+const { createServer } = require('http');
 
 const app = express();
 const server = createServer(app);
