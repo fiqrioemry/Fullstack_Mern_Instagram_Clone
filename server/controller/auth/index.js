@@ -7,6 +7,8 @@ const sendOTP = require('../../utils/sendOTP');
 const { User, Profile } = require('../../models');
 const randomAvatar = require('../../utils/randomAvatar');
 
+async function googleAuth(req, res) {}
+
 async function sendingOTP(req, res) {
   const { email } = req.body;
 
@@ -14,7 +16,7 @@ async function sendingOTP(req, res) {
     const existingUser = await User.findOne({ where: { email } });
 
     if (existingUser)
-      return res.status(400).send({ message: 'Email already exist' });
+      return res.status(400).send({ message: 'Email Already Exist' });
 
     const secret = speakeasy.generateSecret({ length: 20 });
 
@@ -40,8 +42,6 @@ async function verifyOTP(req, res) {
   try {
     const storedOtp = await redis.get(`otp:${email}`);
 
-    console.log(storedOtp);
-
     if (!storedOtp) return res.status(400).send({ message: 'OTP Expired' });
 
     if (storedOtp !== otp) {
@@ -66,7 +66,7 @@ async function userSignUp(req, res) {
 
     if (existUser)
       return res.status(400).json({
-        message: 'Username or Email already exist',
+        message: 'Username already exist',
       });
     const salt = await bcrypt.genSalt();
 
@@ -235,4 +235,5 @@ module.exports = {
   verifyOTP,
   userAuthCheck,
   userAuthRefresh,
+  googleAuth,
 };

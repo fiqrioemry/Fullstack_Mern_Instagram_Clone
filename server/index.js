@@ -4,6 +4,7 @@ const cors = require('cors');
 const services = require('./routes');
 const cookies = require('cookie-parser');
 const { app, server } = require('./config/socket');
+const passport = require('passport');
 const limiter = require('./middleware/limiter');
 const router = require('./routes');
 
@@ -21,7 +22,7 @@ app.use(
     methods: ['POST', 'PUT', 'GET', 'DELETE'],
   }),
 );
-
+app.use(passport.initialize());
 // route configuration
 app.use('/api/auth', router.authRoute);
 app.use('/api/user', services.userRoute);
