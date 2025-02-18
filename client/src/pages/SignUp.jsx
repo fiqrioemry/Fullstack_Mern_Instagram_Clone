@@ -34,9 +34,10 @@ const SignUp = () => {
     signUpState,
     getFormControl(),
     signup,
-    navigate
+    navigate,
+    false
   );
-
+  console.log(signUpForm.values);
   return (
     <div className="h-screen flex-center">
       <Card className="min-w-80 h-96">

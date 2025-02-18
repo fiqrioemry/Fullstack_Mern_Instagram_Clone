@@ -31,7 +31,7 @@ const baseValidations = {
     .required('Fullname is required'),
   username: Yup.string()
     .min(6, 'Min. 6 Characters')
-    .required('fUsername is required'),
+    .required('Username is required'),
   password: Yup.string()
     .min(6, 'Min. 6 characters')
     .required('Password is required'),

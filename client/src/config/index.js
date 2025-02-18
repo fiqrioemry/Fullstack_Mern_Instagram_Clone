@@ -30,6 +30,7 @@ export const signUpState = {
   fullname: '',
   email: '',
   password: '',
+  otp: '',
 };
 
 export const signUpControl = [
@@ -59,7 +60,6 @@ export const signUpControl = [
 export const sendOTPControl = [
   {
     name: 'email',
-    label: 'email',
     type: 'email',
     placeholder: 'Enter your email',
     component: 'input',
@@ -69,7 +69,6 @@ export const sendOTPControl = [
 export const verifyOTPControl = [
   {
     name: 'otp',
-    label: 'OTP Code',
     type: 'text',
     component: 'input',
   },

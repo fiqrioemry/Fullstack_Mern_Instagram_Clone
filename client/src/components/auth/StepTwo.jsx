@@ -38,15 +38,15 @@ const StepTwo = ({ signUpForm, formControl }) => {
 
         <div className="text-center">
           <h5>Enter Verification Code</h5>
-          <div>Your verification code has been sent to:</div>
+          <p className="text-sm">Your verification code has been sent to:</p>
           <span>{signUpForm.values.email}</span>
         </div>
       </div>
-      <div className="flex flex-col space-y-4 items-center justify-center">
+      <div className="text-center">
         <InputForm formik={signUpForm} formControl={formControl}>
           <InputButton title={"Submit"} formik={signUpForm} />
         </InputForm>
-        <div className="text-sm">
+        <div className="text-sm mt-2">
           {countdown > 0 ? (
             <span>
               Please wait <b>{countdown}s</b> to resend code
@@ -55,7 +55,7 @@ const StepTwo = ({ signUpForm, formControl }) => {
             <span>
               Did not receive the code?{" "}
               <button
-                className="text_button"
+                className="btn-secondary"
                 type="button"
                 onClick={handleResendOTP}
                 disabled={isResendDisabled}

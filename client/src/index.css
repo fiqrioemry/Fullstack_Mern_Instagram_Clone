@@ -89,11 +89,11 @@
   }
 
   h5 {
-    @apply text-lg capitalize font-medium;
+    @apply text-base capitalize font-medium;
   }
 
   h6 {
-    @apply text-xs md:text-sm text-red-500 font-light;
+    @apply text-xs text-red-500 font-light;
   }
 
   .aside {

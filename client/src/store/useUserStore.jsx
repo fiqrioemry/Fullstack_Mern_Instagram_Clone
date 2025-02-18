@@ -70,6 +70,7 @@ export const useUserStore = create((set, get) => ({
       const message = await callApi.toggleFollow(followingId);
 
       get().setFollowings(followingId);
+
       get().setFollowers(followingId);
 
       usePostStore.getState().updatePostsFollowStatus(followingId);

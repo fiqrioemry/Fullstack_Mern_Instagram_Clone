@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import callApi from "../api/callApi";
 
 export const useAuthStore = create((set, get) => ({
-  step: 3,
+  step: 1,
   user: null,
   loading: false,
   accessToken: null,
@@ -45,6 +45,7 @@ export const useAuthStore = create((set, get) => ({
 
   signup: async (formData, navigate) => {
     set({ loading: true });
+    console.log(formData);
     try {
       const step = get().step;
 
