@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 
-const GoogleAuth = () => {
+const GoogleAuth = ({ buttonTitle }) => {
   const handleGoogleAuth = () => {
     window.location.href = "http://localhost:5000/api/auth/google";
   };
@@ -9,7 +9,8 @@ const GoogleAuth = () => {
   return (
     <div>
       <Button onClick={handleGoogleAuth} className="w-full">
-        <FcGoogle size={24} /> Sign in with Google
+        <FcGoogle size={24} />
+        {buttonTitle}
       </Button>
     </div>
   );

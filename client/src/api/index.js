@@ -2,7 +2,7 @@ import axios from 'axios';
 import callApi from './callApi';
 import { useAuthStore } from '../store/useAuthStore';
 
-export const publicInstance = axios.create({
+export const authInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true,
   headers: {
@@ -11,7 +11,7 @@ export const publicInstance = axios.create({
   },
 });
 
-export const authInstance = axios.create({
+export const publicInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true,
   headers: {

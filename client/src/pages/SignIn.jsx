@@ -23,12 +23,11 @@ const SignIn = () => {
           <div className="py-4 text-center">
             <h3>Momengram</h3>
           </div>
-          {/* signin form */}
           <InputForm formik={signInForm} formControl={signInControl}>
             <InputButton formik={signInForm} title="signin" loading={loading} />
-          </InputForm>{" "}
+          </InputForm>
           <div className="flex-center py-2">OR</div>
-          <GoogleAuth />
+          <GoogleAuth buttonTitle={"Signin with google"} />
           <CardFooter className="mt-2 space-x-2">
             <span> Dont have an account ? signup</span>
             <Link to="/signup" className="btn-secondary">
