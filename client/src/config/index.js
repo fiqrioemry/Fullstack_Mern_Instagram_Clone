@@ -48,17 +48,29 @@ export const signUpControl = [
     component: 'input',
   },
   {
-    name: 'email',
-    label: 'email ',
-    type: 'email',
-    placeholder: 'Enter your email  ',
-    component: 'input',
-  },
-  {
     name: 'password',
     label: 'password',
     type: 'password',
     placeholder: 'Enter your password ',
+    component: 'input',
+  },
+];
+
+export const sendOTPControl = [
+  {
+    name: 'email',
+    label: 'email',
+    type: 'email',
+    placeholder: 'Enter your email',
+    component: 'input',
+  },
+];
+
+export const verifyOTPControl = [
+  {
+    name: 'otp',
+    label: 'OTP Code',
+    type: 'text',
     component: 'input',
   },
 ];

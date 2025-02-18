@@ -22,6 +22,20 @@ const callApi = {
       .catch(errorHandle);
   },
 
+  sendOTP: async (formData) => {
+    return authInstance
+      .post('/auth/send-otp', formData)
+      .then((res) => res.data.message)
+      .catch(errorHandle);
+  },
+
+  verifyOTP: async (formData) => {
+    return authInstance
+      .post('/auth/verify-otp', formData)
+      .then((res) => res.data.message)
+      .catch(errorHandle);
+  },
+
   signin: async (formData) => {
     return authInstance
       .post('/auth/signin', formData)

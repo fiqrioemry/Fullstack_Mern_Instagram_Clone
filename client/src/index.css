@@ -92,6 +92,10 @@
     @apply text-lg capitalize font-medium;
   }
 
+  h6 {
+    @apply text-xs md:text-sm text-red-500 font-light;
+  }
+
   .aside {
     @apply w-72 md:relative md:block hidden;
   }

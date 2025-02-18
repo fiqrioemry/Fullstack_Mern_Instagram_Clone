@@ -25,19 +25,30 @@ export function formatFormDataDates(data, dateFields = []) {
   return formattedDates;
 }
 const baseValidations = {
+  // authentication form validation ---
+  fullname: Yup.string()
+    .min(6, 'Min. 6 characters')
+    .required('Fullname is required'),
+  username: Yup.string()
+    .min(6, 'Min. 6 Characters')
+    .required('fUsername is required'),
+  password: Yup.string()
+    .min(6, 'Min. 6 characters')
+    .required('Password is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  otp: Yup.string().min(6, 'Min. 6 digits').required('OTP is required'),
+
   city: Yup.string().required('Required'),
   gender: Yup.string().required('Required'),
   province: Yup.string().required('Required'),
   location: Yup.string().required('Required'),
-  otp: Yup.string().min(6, 'Min. 6 digits').required('Required'),
-  email: Yup.string().email('Invalid email').required('Required'),
+
   zipcode: Yup.string().min(5, 'Min. 5 digits').required('Required'),
   name: Yup.string().min(6, 'Min. 6 characters').required('Required'),
   bio: Yup.string().min(20, 'Min. 20 characters').required('Required'),
   title: Yup.string().min(3, 'Min. 3 characters').required('Required'),
   start_date: Yup.date().required('Required').typeError('Invalid date'),
   company: Yup.string().min(3, 'Min. 3 characters').required('Required'),
-  password: Yup.string().min(5, 'Min. 5 characters').required('Required'),
   address: Yup.string().min(12, 'Min. 12 characters').required('Required'),
   description: Yup.string().min(20, 'Min. 20 characters').required('Required'),
   categoryId: Yup.mixed().required('Required'),
