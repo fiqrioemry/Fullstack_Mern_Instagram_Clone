@@ -29,7 +29,11 @@ const baseValidations = {
     .min(6, 'Min. 6 characters')
     .required('Fullname is required'),
   username: Yup.string()
-    .min(8, 'Min. 8 Characters')
+    .min(8, 'Min 8 characters')
+    .matches(
+      /^(?!.*[_.]{2})[a-zA-Z0-9][a-zA-Z0-9._]{6,}[a-zA-Z0-9]$/,
+      "Cannot contain '.' or '_' at the beginning or end",
+    )
     .required('Username is required'),
   password: Yup.string()
     .min(6, 'Min. 6 characters')

@@ -45,6 +45,15 @@ const callApi = {
       .catch(errorHandle);
   },
 
+  googleAuth: async () => {
+    return authInstance
+      .post('/auth/google')
+      .then((res) => {
+        return res.data;
+      })
+      .catch(errorHandle);
+  },
+
   signout: async () => {
     return publicInstance
       .post('/auth/signout')
