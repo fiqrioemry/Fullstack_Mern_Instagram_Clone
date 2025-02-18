@@ -9,16 +9,6 @@ export const useAuthStore = create((set, get) => ({
   accessToken: null,
   isAuthenticate: null,
 
-  googleAuth: async () => {
-    try {
-      const { message, accessToken } = await callApi.googleAuth();
-      set({ accessToken });
-      toast.success(message);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  },
-
   setAccessToken: (accessToken) => set({ accessToken }),
 
   authCheck: async () => {
@@ -55,7 +45,6 @@ export const useAuthStore = create((set, get) => ({
 
   signup: async (formData, navigate) => {
     set({ loading: true });
-    console.log(formData);
     try {
       const step = get().step;
 

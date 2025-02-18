@@ -14,14 +14,6 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  googleAuth: async () => {
-    return authInstance
-      .get('/auth/google')
-      .then((res) => {
-        return res.data;
-      })
-      .catch(errorHandle);
-  },
   // 🔹Authentication API route management
   signup: async (formData) => {
     return authInstance

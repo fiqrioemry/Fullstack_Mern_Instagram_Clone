@@ -13,7 +13,6 @@ const Profile = () => {
   const location = useLocation();
   const { username } = useParams();
   const { profile, getUserProfile, loading } = useUserStore();
-
   useEffect(() => {
     getUserProfile(username);
   }, [username]);

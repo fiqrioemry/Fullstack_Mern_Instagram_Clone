@@ -37,7 +37,7 @@ authInstance.interceptors.request.use(
 authInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const { setAccessToken, logout } = useAuthStore.getState();
+    const { logout } = useAuthStore.getState();
     if (
       error.response.status === 401 &&
       error.config &&
@@ -45,7 +45,6 @@ authInstance.interceptors.response.use(
     ) {
       try {
         const accessToken = await callApi.refreshToken();
-        setAccessToken(accessToken);
 
         error.config.headers.Authorization = `Bearer ${accessToken}`;
         return authInstance(error.config);
