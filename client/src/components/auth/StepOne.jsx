@@ -16,7 +16,7 @@ const StepOne = ({ signUpForm, formControl }) => {
         <InputButton title={"Signup"} formik={signUpForm} />
       </InputForm>
       <div className="text-center text-sm">Or continue with</div>
-      <Button variant="outline" className="w-full">
+      <Button className="w-full">
         <FcGoogle /> <span>Google</span>
       </Button>
 

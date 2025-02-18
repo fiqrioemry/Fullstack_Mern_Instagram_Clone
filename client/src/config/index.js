@@ -11,9 +11,9 @@ export const searchState = {
 export const signInControl = [
   {
     name: 'identifier',
-    label: 'email / username',
-    type: 'email',
-    placeholder: 'Enter your email / username ',
+    label: 'email or username',
+    type: 'text',
+    placeholder: 'Enter your email or username ',
     component: 'input',
   },
   {

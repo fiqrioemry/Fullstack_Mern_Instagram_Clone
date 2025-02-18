@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
@@ -18,7 +19,7 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         accent:
-          "bg-blue-500 hover:bg-blue-800 text-background hover:text-background/80",
+          "bg-blue-500 hover:bg-blue-800 text-foreground hover:text-foreground/80",
 
         ghost:
           "bg-muted-foreground/60 hover:bg-muted-foreground/20 duration-300",

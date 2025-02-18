@@ -25,19 +25,30 @@ export function formatFormDataDates(data, dateFields = []) {
   return formattedDates;
 }
 const baseValidations = {
-  // authentication form validation ---
   fullname: Yup.string()
     .min(6, 'Min. 6 characters')
     .required('Fullname is required'),
   username: Yup.string()
-    .min(6, 'Min. 6 Characters')
+    .min(8, 'Min. 8 Characters')
     .required('Username is required'),
   password: Yup.string()
     .min(6, 'Min. 6 characters')
     .required('Password is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
   otp: Yup.string().min(6, 'Min. 6 digits').required('OTP is required'),
-
+  identifier: Yup.string()
+    .test(
+      'is-email-or-username',
+      'Must be a valid email or username',
+      (value) => {
+        if (!value) return false;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const usernameRegex =
+          /^(?!.*[_.]{2})[a-zA-Z0-9][a-zA-Z0-9._]{6,}[a-zA-Z0-9]$/;
+        return emailRegex.test(value) || usernameRegex.test(value);
+      },
+    )
+    .required('Email or username is required'),
   city: Yup.string().required('Required'),
   gender: Yup.string().required('Required'),
   province: Yup.string().required('Required'),
