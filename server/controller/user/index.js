@@ -1,21 +1,14 @@
-const fs = require('fs').promises;
-const { Op } = require('sequelize');
-const { User, Profile, sequelize } = require('../../models');
 const {
   uploadMediaToCloudinary,
   deleteMediaFromCloudinary,
 } = require('../../utils/cloudinary');
+const fs = require('fs').promises;
+const { Op } = require('sequelize');
+const { User, Profile, sequelize } = require('../../models');
 
 async function searchUser(req, res) {
   const { query } = req.query;
-
   try {
-    if (!query) {
-      return res.status(400).json({
-        message: "Query parameter 'query' is required",
-      });
-    }
-
     const usersData = await User.findAll({
       where: {
         [Op.or]: [{ username: { [Op.like]: `%${query}%` } }],
@@ -50,7 +43,6 @@ async function searchUser(req, res) {
 
     return res.status(200).json(users);
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       message: 'Failed to search for users',
       error: error.message,
@@ -58,7 +50,6 @@ async function searchUser(req, res) {
   }
 }
 
-// tested
 async function getMyProfile(req, res) {
   const { userId } = req.user;
 
@@ -77,7 +68,7 @@ async function getMyProfile(req, res) {
       });
     }
 
-    const payload = {
+    const profile = {
       userId: user.id,
       username: user.username,
       email: user.email,
@@ -88,7 +79,7 @@ async function getMyProfile(req, res) {
       birthday: user.profile.birthday,
     };
 
-    return res.status(200).json({ payload });
+    return res.status(200).json(profile);
   } catch (error) {
     return res.status(500).json({
       message: 'Failed to retrieve user detail',
@@ -161,10 +152,10 @@ async function updateMyProfile(req, res) {
     await transaction.commit();
 
     return res.status(200).json({
-      message: 'Profile is updated successfully.',
+      message: 'Profile updated.',
     });
   } catch (error) {
-    await transaction.rollback(); // Rollback semua kalo error
+    await transaction.rollback();
     return res.status(500).json({
       message: 'Failed to update profile',
       error: error.message,
@@ -193,7 +184,7 @@ async function getUserProfile(req, res) {
     });
 
     if (!user) {
-      return res.status(404).json('User not found');
+      return res.status(404).json({ message: 'User not found' });
     }
 
     const [followingsCount, followersCount, postsCount] = await Promise.all([
@@ -220,54 +211,8 @@ async function getUserProfile(req, res) {
 
     return res.status(200).json(profile);
   } catch (error) {
-    console.log(error.message);
-    return res.status(500).json('Failed to retrieve user profile');
-  }
-}
-
-async function getFollowRecommend(req, res) {
-  const { userId } = req.user;
-  try {
-    const user = await User.findByPk(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found  ' });
-    }
-
-    const followedUsers = await user.getFollowings({
-      attributes: ['id'],
-    });
-
-    const followedIds = followedUsers.map((follow) => follow.id);
-
-    const recommendations = await User.findAll({
-      where: {
-        id: {
-          [Op.ne]: userId,
-          [Op.notIn]: followedIds,
-        },
-      },
-      attributes: ['id', 'username'],
-      include: [
-        {
-          model: Profile,
-          attributes: ['avatar'],
-        },
-      ],
-    });
-    const data = recommendations.map((user) => ({
-      userId: user.id,
-      username: user.username,
-      avatar: user.profile?.avatar || null,
-    }));
-
-    res.status(200).json({
-      success: true,
-      data: data,
-    });
-  } catch (error) {
     return res.status(500).json({
-      message: 'Failed to retrieve follow recommendations',
+      message: 'Failed to retrieve user profile',
       error: error.message,
     });
   }
@@ -278,5 +223,4 @@ module.exports = {
   getMyProfile,
   updateMyProfile,
   getUserProfile,
-  getFollowRecommend,
 };

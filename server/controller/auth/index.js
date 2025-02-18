@@ -1,8 +1,56 @@
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
+const redis = require('../../config/redis');
+const sendOTP = require('../../utils/sendOTP');
 const { User, Profile } = require('../../models');
 const randomAvatar = require('../../utils/randomAvatar');
+
+async function sendingOTP(req, res) {
+  const { email } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ where: { email } });
+
+    if (existingUser)
+      return res.status(400).send({ message: 'Email already exist' });
+
+    const secret = speakeasy.generateSecret({ length: 20 });
+    const otp = speakeasy.totp({
+      secret: secret.base32,
+      encoding: 'base32',
+    });
+
+    await redis.setEx(`otp:${email}`, 300, otp);
+
+    await sendOTP(email, otp);
+
+    return res.status(200).send({ message: 'OTP Send to Email' });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ message: 'Failed to send OTP', error: error.message });
+  }
+}
+
+async function verifyOTP(req, res) {
+  const { email, otp } = req.body;
+  try {
+    const storedOtp = await redis.get(`otp:${email}`);
+
+    if (!storedOtp) return res.status(400).send({ message: 'OTP is expired' });
+
+    if (storedOtp !== otp) {
+      return res.status(400).send({ message: 'Invalid OTP code' });
+    } else {
+      return res.status(200).send({ message: 'OTP is verified.' });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ message: 'An error occurred', error: error.message });
+  }
+}
 
 async function userSignUp(req, res) {
   try {
@@ -14,7 +62,6 @@ async function userSignUp(req, res) {
 
     if (existUser)
       return res.status(400).json({
-        success: false,
         message: 'Username or Email already exist',
       });
     const salt = await bcrypt.genSalt();
@@ -71,14 +118,12 @@ async function userSignIn(req, res) {
       });
     }
 
-    // Generate Access Token (Short-lived)
     const accessToken = jwt.sign(
       { userId: user.id },
       process.env.ACCESS_TOKEN,
-      { expiresIn: '15m' },
+      { expiresIn: '30m' },
     );
 
-    // Generate Refresh Token (Long-lived)
     const refreshToken = jwt.sign(
       { userId: user.id },
       process.env.REFRESH_TOKEN,
@@ -93,10 +138,9 @@ async function userSignIn(req, res) {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    // Send Response with Access Token (Do not store it in Cookie)
     res.status(200).json({
       message: 'Login successful',
-      accessToken, // Frontend should store this in memory (not in Cookie)
+      accessToken,
     });
   } catch (error) {
     return res.status(500).json({
@@ -183,6 +227,8 @@ module.exports = {
   userSignIn,
   userSignUp,
   userSignOut,
+  sendingOTP,
+  verifyOTP,
   userAuthCheck,
   userAuthRefresh,
 };

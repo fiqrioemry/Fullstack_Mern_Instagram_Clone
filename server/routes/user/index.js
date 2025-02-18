@@ -1,9 +1,8 @@
 const {
+  searchUser,
   getMyProfile,
   getUserProfile,
   updateMyProfile,
-  getFollowRecommend,
-  searchUser,
 } = require('../../controller/user');
 const { getUserPosts } = require('../../controller/post');
 
@@ -30,6 +29,5 @@ router.post('/:followingId/follow', isAuthenticate, followUser);
 router.get('/:username/posts', isAuthenticate, getUserPosts);
 router.get('/:username/followers', isAuthenticate, getFollowers);
 router.get('/:username/followings', isAuthenticate, getFollowings);
-router.get('/recommend/follow', isAuthenticate, getFollowRecommend);
 
 module.exports = router;

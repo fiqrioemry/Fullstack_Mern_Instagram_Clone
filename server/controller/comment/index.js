@@ -211,7 +211,7 @@ async function toggleLikeComment(req, res) {
 
     if (!comment) {
       await t.rollback();
-      return res.status(404).json('Comment not found');
+      return res.status(404).json({ message: 'Comment not found' });
     }
 
     const like = await Like.findOne({
@@ -233,7 +233,7 @@ async function toggleLikeComment(req, res) {
       });
 
       await t.commit();
-      return res.status(200).json('You unliked the comment');
+      return res.status(200).json({ message: 'You unliked the comment' });
     }
 
     await Like.create(

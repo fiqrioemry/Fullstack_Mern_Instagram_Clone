@@ -1,20 +1,20 @@
 const {
-  uploadMediaToCloudinary,
-  deleteMediaFromCloudinary,
-} = require('../../utils/cloudinary');
-const fs = require('fs').promises;
-const {
   User,
   Post,
   Follow,
   Like,
   Profile,
   Comment,
-  Notification,
   sequelize,
+  Notification,
   PostGallery,
 } = require('../../models');
+const fs = require('fs').promises;
 const { Op } = require('sequelize');
+const {
+  uploadMediaToCloudinary,
+  deleteMediaFromCloudinary,
+} = require('../../utils/cloudinary');
 
 async function getPostsFromFollowings(req, res) {
   const userId = req.user.userId;
@@ -22,7 +22,7 @@ async function getPostsFromFollowings(req, res) {
 
   try {
     const followingsData = await Follow.findAll({
-      where: { followerId: userId, status: 'active' },
+      where: { followerId: userId },
       attributes: ['followingId'],
     });
 
@@ -89,10 +89,10 @@ async function getPostsFromFollowings(req, res) {
 
     return res.status(200).json({ totalPosts, posts });
   } catch (error) {
-    console.error(error.message);
-    return res
-      .status(500)
-      .json({ message: 'Failed to get posts from followings' });
+    return res.status(500).json({
+      message: 'Failed to get posts from followings',
+      error: error.message,
+    });
   }
 }
 
@@ -210,8 +210,9 @@ async function getPublicPosts(req, res) {
 
     return res.status(200).json({ totalPosts, posts });
   } catch (error) {
-    console.error(error.message);
-    return res.status(500).json({ message: 'Failed to get user posts' });
+    return res
+      .status(500)
+      .json({ message: 'Failed to get user posts', error: error.message });
   }
 }
 
@@ -285,8 +286,9 @@ async function getUserPosts(req, res) {
 
     return res.status(200).json({ totalPosts, posts });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Failed to get user posts' });
+    return res
+      .status(500)
+      .json({ message: 'Failed to get user posts', error: error.message });
   }
 }
 
@@ -318,11 +320,11 @@ async function createPost(req, res) {
 
     await t.commit();
 
-    res.status(201).json({ message: 'New post is created' });
+    res.status(201).json({ message: 'New post created' });
   } catch (error) {
-    console.error(error.message);
     return res.status(500).json({
       message: 'Failed to create new post',
+      error: error.message,
     });
   }
 }
@@ -386,7 +388,7 @@ async function updatePost(req, res) {
 
     await t.commit();
 
-    res.status(200).json({ message: 'Post is updated' });
+    res.status(200).json({ message: 'Post updated' });
   } catch (error) {
     await t.rollback();
     console.error(error.message);
@@ -434,7 +436,7 @@ async function deletePost(req, res) {
 
     await t.commit();
 
-    return res.status(200).json({ message: 'Post deleted successfully' });
+    return res.status(200).json({ message: 'Post deleted' });
   } catch (error) {
     await t.rollback();
     console.error(error.message);
