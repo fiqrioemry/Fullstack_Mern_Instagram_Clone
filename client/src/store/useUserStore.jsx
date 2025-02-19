@@ -2,6 +2,7 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "@/api/callApi";
 import { usePostStore } from "./usePostStore";
+import { useAuthStore } from "./useAuthStore";
 
 export const useUserStore = create((set, get) => ({
   users: [],
@@ -64,6 +65,13 @@ export const useUserStore = create((set, get) => ({
       ),
     }));
   },
+  removeFollowings: (followingId) => {
+    set((state) => ({
+      followings: state.followings.filter(
+        (follow) => follow.userId !== followingId
+      ),
+    }));
+  },
 
   toggleFollow: async (followingId) => {
     try {
@@ -77,6 +85,18 @@ export const useUserStore = create((set, get) => ({
 
       if (window.location.pathname === "/") {
         usePostStore.getState().removePostsByUserId(followingId);
+      }
+
+      if (
+        window.location.pathname.includes(useAuthStore.getState().user.username)
+      ) {
+        get().removeFollowings(followingId);
+        set((state) => ({
+          profile: {
+            ...state.profile,
+            followings: Math.max(0, state.profile.followings - 1),
+          },
+        }));
       }
 
       toast.success(message);

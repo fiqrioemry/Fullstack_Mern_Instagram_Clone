@@ -10,7 +10,7 @@ const MiniPost = ({ post }) => {
       <Link
         to={`/p/${post.postId}`}
         state={{ background: location }}
-        className="absolute top-0 bottom-0 left-0 right-0 bg-black/50 flex-center"
+        className="absolute top-0 bottom-0 left-0 right-0 hover:bg-black/50 bg-transparent flex-center duration-300"
       >
         <div className="flex items-center gap-4">
           <div className="flex gap-x-2 text-white">

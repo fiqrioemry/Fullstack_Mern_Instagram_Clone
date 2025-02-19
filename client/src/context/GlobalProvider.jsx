@@ -9,8 +9,6 @@ const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
   const { user, authCheck, isAuthenticate } = useAuthStore();
 
-  window.scrollTo("top");
-
   useEffect(() => {
     authCheck();
   }, [authCheck]);
