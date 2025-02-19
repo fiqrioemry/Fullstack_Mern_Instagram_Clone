@@ -147,7 +147,7 @@ export const usePostStore = create((set, get) => ({
       const { message } = await callApi.deletePost(postId);
 
       const returnPath = useAuthStore.getState().user.username;
-      get().setPosts(postId);
+      get().setDeletedPosts(postId);
       navigate(`/${returnPath}`);
       toast.success(message);
     } catch (error) {

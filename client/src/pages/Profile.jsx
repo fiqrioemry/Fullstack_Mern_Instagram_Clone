@@ -13,6 +13,7 @@ const Profile = () => {
   const location = useLocation();
   const { username } = useParams();
   const { profile, getUserProfile, loading } = useUserStore();
+
   useEffect(() => {
     getUserProfile(username);
   }, [username]);
@@ -21,7 +22,6 @@ const Profile = () => {
 
   if (profile && profile.length === 0) return <NotFound />;
 
-  console.log(profile);
   return (
     <div className="flex justify-center">
       <div className="max-w-4xl py-10 space-y-10 px-4">
