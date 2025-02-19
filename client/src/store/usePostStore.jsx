@@ -28,19 +28,21 @@ export const usePostStore = create((set, get) => ({
   },
 
   updatePostsFollowStatus: (followingId) => {
-    set((state) => ({
-      posts: state.posts.map((post) =>
+    set((state) => {
+      const updatedPosts = state.posts.map((post) =>
         post.userId === followingId
           ? { ...post, isFollow: !post.isFollow }
           : post
-      ),
-    }));
-    set((state) => ({
-      post: {
-        ...state.post,
-        isFollow: !state.post.isFollow,
-      },
-    }));
+      );
+
+      return {
+        posts: updatedPosts,
+        post:
+          state.post && state.post.userId === followingId
+            ? { ...state.post, isFollow: !state.post.isFollow }
+            : state.post,
+      };
+    });
   },
 
   commentCount: (postId) => {
