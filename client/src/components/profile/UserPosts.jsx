@@ -19,7 +19,7 @@ const UserPosts = () => {
   }, [getUserPosts, username]);
 
   return (
-    <div>
+    <div className="mb-8">
       {loading ? (
         <UserPostsLoading />
       ) : posts.length === 0 ? (

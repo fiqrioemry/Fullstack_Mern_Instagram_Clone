@@ -70,9 +70,7 @@ export function CreateNewPost({ isOpen, setIsOpen }) {
               </div>
               {formPost.values.images.length > 0 ? (
                 <div>
-                  <div className="h-80 flex-center">
-                    <Galleries images={formPost.values.images} />
-                  </div>
+                  <Galleries images={formPost.values.images} />
 
                   <div className="mt-4 mb-4 px-2">
                     <Input

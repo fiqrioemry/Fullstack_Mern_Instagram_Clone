@@ -10,7 +10,7 @@ import Image from "@/components/ui/Image";
 
 const Galleries = ({ images }) => {
   return (
-    <Carousel>
+    <Carousel className="max-h-80 flex-center overflow-hidden">
       <CarouselContent>
         {images.map((image, index) => (
           <CarouselItem key={index}>

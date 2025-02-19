@@ -14,7 +14,7 @@ const Image = ({ url }) => {
           alt="image"
         />
       ) : (
-        <img src={url} alt="image" className="w-full h-full object-contain" />
+        <img src={url} alt="image" className="w-full h-full object-cover" />
       )}
     </>
   );

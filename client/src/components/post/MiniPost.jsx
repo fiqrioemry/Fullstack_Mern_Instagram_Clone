@@ -6,7 +6,7 @@ const MiniPost = ({ post }) => {
   const location = useLocation();
 
   return (
-    <div className="relative">
+    <div className="md:h-60 md:w-60 w-40 h-40 overflow-hidden relative">
       <Link
         to={`/p/${post.postId}`}
         state={{ background: location }}
@@ -23,6 +23,7 @@ const MiniPost = ({ post }) => {
           </div>
         </div>
       </Link>
+
       <img
         className="w-full h-full object-cover"
         src={post.images[0]}
