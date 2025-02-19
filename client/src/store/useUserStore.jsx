@@ -87,6 +87,15 @@ export const useUserStore = create((set, get) => ({
         usePostStore.getState().removePostsByUserId(followingId);
       }
 
+      set((state) => ({
+        profile: {
+          ...state.profile,
+          isFollowing:
+            state.profile.userId === followingId
+              ? !state.profile.isFollowing
+              : state.profile.isFollowing,
+        },
+      }));
       if (
         window.location.pathname.includes(useAuthStore.getState().user.username)
       ) {

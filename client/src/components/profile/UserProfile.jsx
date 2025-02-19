@@ -6,10 +6,10 @@ import { useUserStore } from "@/store/useUserStore";
 
 const UserProfile = ({ profile }) => {
   const location = useLocation();
-  const { follow } = useUserStore();
+  const { toggleFollow } = useUserStore();
 
   const handleFollow = (followingId) => {
-    follow(followingId);
+    toggleFollow(followingId);
   };
   return (
     <div className="py-10">

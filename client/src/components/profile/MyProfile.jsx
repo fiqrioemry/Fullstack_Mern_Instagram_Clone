@@ -52,11 +52,7 @@ const UserProfile = ({ profile }) => {
                 <span className="text-muted-foreground">
                   {profile.fullname}
                 </span>
-                <p>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Tempore sapiente commodi est deserunt quasi iusto, molestiae,
-                  fuga labore optio qui ipsam ducimus accusamus eum minima.
-                </p>
+                <p>{profile.bio}</p>
               </div>
             </div>
           </div>

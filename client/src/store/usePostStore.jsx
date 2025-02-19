@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "../api/callApi";
+import { useAuthStore } from "./useAuthStore";
 
 export const usePostStore = create((set, get) => ({
   post: null,
@@ -18,6 +19,12 @@ export const usePostStore = create((set, get) => ({
   setPosts: (postId) => {
     set((state) => ({
       posts: state.posts.find((post) => post.postId === postId) || null,
+    }));
+  },
+
+  setDeletedPosts: (postId) => {
+    set((state) => ({
+      posts: state.posts.filter((post) => post.postId !== postId) || [],
     }));
   },
 
@@ -122,6 +129,10 @@ export const usePostStore = create((set, get) => ({
     try {
       set({ loading: true });
       const { message } = await callApi.createPost(formData);
+      await get().getPublicPosts();
+
+      const username = useAuthStore.getState().user.username;
+      await get().getUserPosts(username);
       toast.success(message);
     } catch (error) {
       toast.error(error.message);
@@ -129,13 +140,15 @@ export const usePostStore = create((set, get) => ({
       set({ loading: false });
     }
   },
+
   deletePost: async (postId, navigate) => {
     try {
       set({ loading: true });
       const { message } = await callApi.deletePost(postId);
-      if (window.location.pathname !== "/") {
-        navigate(-1);
-      }
+
+      const returnPath = useAuthStore.getState().user.username;
+      get().setPosts(postId);
+      navigate(`/${returnPath}`);
       toast.success(message);
     } catch (error) {
       console.log(error.message);
