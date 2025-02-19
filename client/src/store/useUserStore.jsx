@@ -41,7 +41,6 @@ export const useUserStore = create((set, get) => ({
   },
 
   getMyProfile: async () => {
-    set({ loading: true });
     try {
       const profile = await callApi.getMyProfile();
       set({ profile });
@@ -54,7 +53,7 @@ export const useUserStore = create((set, get) => ({
   },
 
   updateMyProfile: async (formData) => {
-    set({ loading: true });
+    set({ updating: true });
     try {
       const { message } = await callApi.updateMyProfile(formData);
       await get().getMyProfile();
@@ -62,7 +61,7 @@ export const useUserStore = create((set, get) => ({
     } catch (error) {
       console.log(error.message);
     } finally {
-      set({ loading: false });
+      set({ updating: false });
     }
   },
 
