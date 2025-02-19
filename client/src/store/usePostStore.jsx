@@ -35,6 +35,12 @@ export const usePostStore = create((set, get) => ({
           : post
       ),
     }));
+    set((state) => ({
+      post: {
+        ...state.post,
+        isFollow: !state.post.isFollow,
+      },
+    }));
   },
 
   commentCount: (postId) => {
