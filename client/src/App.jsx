@@ -4,7 +4,6 @@ import SignIn from "./pages/SignIn";
 import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Messages from "./pages/Messages";
-import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import PostDetail from "./pages/PostDetail";
 import Layout from "./components/layout/Layout";
@@ -17,6 +16,7 @@ import Followers from "./components/profile/Followers";
 import { AuthRoute, NonAuthRoute } from "./middleware";
 import Followings from "./components/profile/Followings";
 import { Route, Routes, useLocation } from "react-router-dom";
+import SettingsLayout from "./pages/SettingsLayout";
 
 function App() {
   const location = useLocation();
@@ -61,7 +61,7 @@ function App() {
             <Route path="tags" element={<UserTags />} />
             <Route path="saved" element={<UserSaved />} />
           </Route>
-          <Route path="settings" element={<Settings />} />
+          <Route path="settings" element={<SettingsLayout />} />
           <Route path="message" element={<Messages />} />
           <Route path="notification" element={<Notifications />} />
           <Route path="*" element={<NotFound />} />

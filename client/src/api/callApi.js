@@ -78,14 +78,16 @@ const callApi = {
 
   getMyProfile: async () => {
     return authInstance
-      .get(`/user`)
+      .get('/user/profile')
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
   updateMyProfile: async (formData) => {
     return authInstance
-      .put('/user/profile', formData)
+      .put('/user/profile', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       .then((res) => res.data.message)
       .catch(errorHandle);
   },
