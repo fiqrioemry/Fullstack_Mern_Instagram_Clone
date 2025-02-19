@@ -1,4 +1,3 @@
-import NotFound from "./NotFound";
 import Posts from "@/components/post/Posts";
 import { usePostStore } from "@/store/usePostStore";
 import AuthorCard from "@/components/profile/AuthorCard";
@@ -21,16 +20,16 @@ const Explore = () => {
         <div className="flex justify-center">
           <div className="w-full max-w-[30rem] p-2">
             <div className="md:mt-0 mt-12 md:mb-0 mb-12 py-6">
-              {loading && posts.length === 0 ? (
+              {posts.length === 0 ? (
                 <PostsLoading />
               ) : (
                 <div className="space-y-6">
-                  {posts.length > 0 ? (
-                    posts.map((post) => <Posts post={post} key={post.postId} />)
-                  ) : (
-                    <NotFound />
-                  )}
-                  {loading && <PostsLoading />}
+                  <div>
+                    {posts.map((post) => (
+                      <Posts post={post} key={post.postId} />
+                    ))}
+                  </div>
+                  {loading && posts.length > 0 && <PostsLoading />}
                   <div ref={triggerRef} className="h-10"></div>
                   {posts.length >= totalPosts && (
                     <div className="text-center text-muted-foreground">

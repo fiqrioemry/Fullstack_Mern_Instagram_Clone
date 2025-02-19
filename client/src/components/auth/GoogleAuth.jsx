@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 // eslint-disable-next-line react/prop-types
 const GoogleAuth = ({ buttonTitle }) => {
   const handleGoogleAuth = () => {
-    window.location.href = "http://localhost:5000/api/auth/google";
+    window.location.href = `${import.meta.env.VITE_BASE_URL}/auth/google`;
   };
 
   return (

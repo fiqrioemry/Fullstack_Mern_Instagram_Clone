@@ -6,8 +6,7 @@ export const usePostStore = create((set, get) => ({
   post: null,
   posts: [],
   totalPosts: 0,
-  loading: true,
-  error: null,
+  loading: false,
   message: "",
 
   setPost: (postId) => {
@@ -47,18 +46,20 @@ export const usePostStore = create((set, get) => ({
   },
 
   getPublicPosts: async (limit) => {
-    set({ loading: true, error: null });
+    set({ loading: true });
     try {
       const { posts, totalPosts } = await callApi.getPublicPosts(limit);
       set({ posts, totalPosts });
     } catch (error) {
-      set({ error: error.message });
+      set({ posts: [] });
+      console.log(error.message);
     } finally {
       set({ loading: false });
     }
   },
 
   getPostDetail: async (postId) => {
+    set({ loading: true });
     try {
       const post = await callApi.getPostDetail(postId);
       set({ post });
@@ -72,12 +73,13 @@ export const usePostStore = create((set, get) => ({
 
   getUserPosts: async (username) => {
     try {
-      set({ loading: true, error: null });
+      set({ loading: true });
       const { posts, totalPosts, message } = await callApi.getUserPosts(
         username
       );
       set({ posts, totalPosts, message });
     } catch (error) {
+      set({ posts: [] });
       set({ error: error.message });
     } finally {
       set({ loading: false });
@@ -85,13 +87,14 @@ export const usePostStore = create((set, get) => ({
   },
 
   getPostsFromFollowings: async (limit) => {
-    set({ loading: true, error: null });
+    set({ loading: true });
     try {
       const { posts, totalPosts, message } =
         await callApi.getPostsFromFollowings(limit);
       set({ posts, totalPosts, message });
     } catch (error) {
-      set({ error: error.message });
+      set({ posts: [] });
+      console.log(error.message);
     } finally {
       set({ loading: false });
     }
@@ -107,14 +110,27 @@ export const usePostStore = create((set, get) => ({
     }
   },
 
-  deletePost: async (postId) => {
+  createPost: async (formData) => {
     try {
-      set({ loading: true, error: null });
-      const message = await callApi.deletePost(postId);
-      get().setPosts(postId);
+      set({ loading: true });
+      const { message } = await callApi.createPost(formData);
       toast.success(message);
     } catch (error) {
-      set({ error: error.message });
+      toast.error(error.message);
+    } finally {
+      set({ loading: false });
+    }
+  },
+  deletePost: async (postId, navigate) => {
+    try {
+      set({ loading: true });
+      const { message } = await callApi.deletePost(postId);
+      if (window.location.pathname !== "/") {
+        navigate(-1);
+      }
+      toast.success(message);
+    } catch (error) {
+      console.log(error.message);
     } finally {
       set({ loading: false });
     }

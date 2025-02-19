@@ -6,7 +6,7 @@ import {
   CarouselContent,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Image from "../ui/Image";
+import Image from "@/components/ui/Image";
 
 const Galleries = ({ images }) => {
   return (

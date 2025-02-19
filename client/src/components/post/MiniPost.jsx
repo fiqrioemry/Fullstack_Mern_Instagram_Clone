@@ -10,9 +10,9 @@ const MiniPost = ({ post }) => {
       <Link
         to={`/p/${post.postId}`}
         state={{ background: location }}
-        className="post_card"
+        className="absolute top-0 bottom-0 left-0 right-0 bg-black/50 flex-center"
       >
-        <div className="flex items-center gap-x-6">
+        <div className="flex items-center gap-4">
           <div className="flex gap-x-2 text-white">
             {post.likes}
             <HeartIcon />

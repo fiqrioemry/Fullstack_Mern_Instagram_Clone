@@ -36,7 +36,10 @@ const NavSearch = forwardRef(({ openSearch }, ref) => {
       <div className="flex items-center gap-4" key={user.id || user.username}>
         <Avatar avatar={user.avatar} />
         <div>
-          <Link to={`/${user.username}`} className="btn-secondary">
+          <Link
+            to={`/${user.username}`}
+            className="text-xs md:text-sm btn-secondary"
+          >
             {user.username}
           </Link>
           <p className="text-xs md:text-sm text-muted-foreground">

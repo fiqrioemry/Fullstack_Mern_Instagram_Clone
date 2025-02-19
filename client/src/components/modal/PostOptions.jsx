@@ -6,12 +6,13 @@ import ConfirmationBox from "./ConfirmationBox";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { usePostStore } from "@/store/usePostStore";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 
 const PostOptions = ({ data }) => {
-  const location = useLocation().pathname;
   const { user } = useAuthStore();
+  const navigate = useNavigate();
+  const location = useLocation().pathname;
   const [open, setOpen] = useState(false);
   const { toggleFollow } = useUserStore();
   const { deletePost } = usePostStore();
@@ -37,8 +38,9 @@ const PostOptions = ({ data }) => {
   };
 
   const handleConfirmDelete = () => {
-    if (selectedPost) deletePost(data.postId);
+    if (selectedPost) deletePost(data.postId, navigate);
     setShowConfirmation(false);
+    setOpen(false);
   };
 
   const handleConfirmUnfollow = () => {

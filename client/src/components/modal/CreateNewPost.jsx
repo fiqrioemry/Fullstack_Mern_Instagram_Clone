@@ -1,11 +1,9 @@
 import Galleries from "../post/Galleries";
-import Avatar from "@/components/ui/Avatar";
+import { CloudUpload, Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import ConfirmationBox from "./ConfirmationBox";
 import { postControl, postState } from "@/config";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useAuthStore } from "@/store/useAuthStore";
-import { Textarea } from "@/components/ui/textarea";
 import { usePostStore } from "@/store/usePostStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import { useFileUpload } from "@/hooks/useFileUpload";
@@ -14,13 +12,14 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 // eslint-disable-next-line react/prop-types
 export function CreateNewPost({ isOpen, setIsOpen }) {
-  const { user } = useAuthStore();
-  const [step, setStep] = useState(1);
-  const { createPost } = usePostStore();
+  const { createPost, loading } = usePostStore();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const formPost = useFormSchema(postState, postControl, createPost);
   const isFormDirty = useMemo(() => formPost.dirty, [formPost.dirty]);
-  const { multiFile } = useFileUpload(formPost.setFieldValue, formPost.values);
+  const { multiFile, handleDrop, handleDragOver } = useFileUpload(
+    formPost.setFieldValue,
+    formPost.values
+  );
 
   const resetAndCloseDialog = useCallback(() => {
     formPost.resetForm();
@@ -56,78 +55,65 @@ export function CreateNewPost({ isOpen, setIsOpen }) {
         open={isOpen}
         onOpenChange={(open) => (!open ? handleCloseDialog() : setIsOpen(open))}
       >
-        <DialogContent className="max-w-2xl p-0 border-none bg-secondary">
-          {formPost.values.images.length === 0 && (
-            <div className="flex-center py-2 border-b border-muted-foreground/50">
-              <h3>Create New Post</h3>
+        <DialogContent className="w-96 max-w-2xl p-0 border-none bg-secondary">
+          {loading ? (
+            <div className="h-96 flex-center">
+              <div className="flex flex-col justify-center items-center">
+                <Loader size={40} className="animate-spin" />
+                <p>Uploading</p>
+              </div>
             </div>
-          )}
+          ) : (
+            <div>
+              <div className="text-center border-b py-2">
+                <h4 className="font-semibold">Create New Post</h4>
+              </div>
+              {formPost.values.images.length > 0 ? (
+                <div>
+                  <div className="h-80 flex-center">
+                    <Galleries images={formPost.values.images} />
+                  </div>
 
-          {step === 1 && formPost.values.images.length > 0 && (
-            <div className="flex-between py-2 border-b border-muted-foreground/50">
-              <ArrowLeft onClick={handleCancel} />
-              <h3>Edit</h3>
-              <ArrowRight onClick={() => setStep(2)} />
-            </div>
-          )}
-
-          {step === 2 && formPost.values.images.length > 0 && (
-            <div className="flex-between py-2 border-b border-muted-foreground/50">
-              <ArrowLeft onClick={() => setStep(1)} />
-              <h3>Create New Post</h3>
-              <button className="btn-accent" onClick={handleSave}>
-                Share
-              </button>
-            </div>
-          )}
-
-          {formPost.values.images.length === 0 && (
-            <div className="h-72 relative">
-              <Input
-                multiple
-                type="file"
-                id="images"
-                name="images"
-                accept="image/*"
-                onChange={multiFile}
-                className="hidden"
-              />
-              <label
-                htmlFor="images"
-                className="absolute h-full w-full flex items-center justify-center"
-              >
-                <div className="text-center space-y-2">
-                  <div className="mb-4">Drag photos and videos here</div>
-                  <button className="btn btn-accent">
-                    Select from computer
-                  </button>
+                  <div className="mt-4 mb-4 px-2">
+                    <Input
+                      name="content"
+                      value={formPost.values.name}
+                      onChange={formPost.handleChange}
+                      placeholder="Write a caption here ..."
+                      className="outline-none focus:outline-none border border-muted-foreground"
+                    />
+                    <div className="flex justify-end gap-4 mt-4">
+                      <Button onClick={handleCancel}>Cancel</Button>
+                      <Button variant="accent" onClick={handleSave}>
+                        Post
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </label>
-            </div>
-          )}
-
-          {step === 1 && formPost.values.images.length > 0 && (
-            <div className="flex items-center">
-              <Galleries images={formPost.values.images} />
-            </div>
-          )}
-
-          {step === 2 && formPost.values.images.length > 0 && (
-            <div className="md:flex block">
-              <div className="h-72 items-center flex bg-muted-foreground w-full md:w-1/2">
-                <Galleries images={formPost.values.images} />
-              </div>
-              <div className="w-full md:w-1/2 mb-2">
-                <Avatar avatar={user.avatar} />
-                {/* Menghubungkan Textarea dengan form state */}
-                <Textarea
-                  placeholder="Write a caption..."
-                  value={formPost.values.caption || ""}
-                  onChange={(e) =>
-                    formPost.setFieldValue("caption", e.target.value)
-                  }
-                />
-              </div>
+              ) : (
+                <label
+                  htmlFor="post"
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  className="h-80 z-10 flex items-center justify-center  cursor-pointer bg-muted/50 hover:bg-muted transition-all duration-300"
+                >
+                  <div className="flex-center flex-col">
+                    <CloudUpload size={24} />
+                    <label htmlFor="post" className="btn-accent">
+                      Select Your Images
+                    </label>
+                  </div>
+                  <input
+                    id="post"
+                    multiple
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    name="images"
+                    onChange={multiFile}
+                  />
+                </label>
+              )}
             </div>
           )}
         </DialogContent>

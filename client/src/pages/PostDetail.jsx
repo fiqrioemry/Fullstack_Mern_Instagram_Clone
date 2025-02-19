@@ -13,19 +13,13 @@ const PostDetail = () => {
     getPostDetail(id);
   }, [getPostDetail, id]);
 
+  if (post && post.length === 0) return <NotFound />;
+
   return (
     <div className="flex justify-center">
       <div className="max-w-2xl md:max-w-4xl w-full">
         <div className="mt-12 md:mt-0 py-6 space-y-6">
-          <div>
-            {loading ? (
-              <PostLoading />
-            ) : post.length === 0 ? (
-              <NotFound />
-            ) : (
-              <Post post={post} />
-            )}
-          </div>
+          <div>{loading || !post ? <PostLoading /> : <Post post={post} />}</div>
         </div>
       </div>
     </div>

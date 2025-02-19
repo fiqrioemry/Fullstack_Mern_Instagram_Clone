@@ -112,7 +112,6 @@ const callApi = {
   },
 
   // 🔹 social content API route management :
-  // 🔹 Post API's
   getUserPosts: async (username) => {
     return authInstance
       .get(`/user/${username}/posts`)
@@ -122,7 +121,9 @@ const callApi = {
 
   createPost: async (formData) => {
     return authInstance
-      .post('/post', formData)
+      .post('/post', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       .then((res) => res.data)
       .catch(errorHandle);
   },
