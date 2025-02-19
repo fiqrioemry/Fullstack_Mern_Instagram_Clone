@@ -40,6 +40,32 @@ export const useUserStore = create((set, get) => ({
     }
   },
 
+  getMyProfile: async () => {
+    set({ loading: true });
+    try {
+      const profile = await callApi.getMyProfile();
+      set({ profile });
+    } catch (error) {
+      set({ profile: [] });
+      console.log(error.message);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  updateMyProfile: async (formData) => {
+    set({ loading: true });
+    try {
+      const { message } = await callApi.updateMyProfile(formData);
+      await get().getMyProfile();
+      toast.success(message);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
   setProfile: (updateData) => {
     set((state) => ({
       profile: { ...state.profile, ...updateData },

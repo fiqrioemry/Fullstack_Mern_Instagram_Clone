@@ -1,13 +1,5 @@
 /* eslint-disable react/prop-types */
-import {
-  Menu,
-  Moon,
-  Sun,
-  LogOut,
-  Bookmark,
-  Settings,
-  ChevronLeft,
-} from "lucide-react";
+import { Menu, Moon, Sun, LogOut, Settings, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -21,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import NavItem from "./NavItem";
+import { Link } from "react-router-dom";
 
 function NavOptions({ openSearch }) {
   const ref = useRef(null);
@@ -89,14 +82,12 @@ function NavOptions({ openSearch }) {
           </>
         ) : (
           <>
-            <DropdownMenuItem>
-              <Settings />
-              <span>Settings</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Bookmark />
-              <span>Saved</span>
-            </DropdownMenuItem>
+            <Link to="/settings">
+              <DropdownMenuItem>
+                <Settings />
+                <span>Settings</span>
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuItem onClick={() => setShowModeToggle(true)}>
               <Moon />
               <span>Switch appearance</span>
