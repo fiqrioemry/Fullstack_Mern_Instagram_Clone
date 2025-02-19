@@ -1,16 +1,7 @@
-const path = require('path');
 const multer = require('multer');
-const fs = require('fs').promises;
 
-// Storage configuration
-const storage = multer.diskStorage({
-  destination: 'uploads/',
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
+const storage = multer.memoryStorage();
 
-// filter configuration
 function fileFilter(params) {
   return (req, file, cb) => {
     const allowedExtensions = {
@@ -24,9 +15,7 @@ function fileFilter(params) {
       return cb(new Error('Invalid file type parameter'), false);
     }
 
-    const extName = extRegex.test(
-      path.extname(file.originalname).toLowerCase(),
-    );
+    const extName = extRegex.test(file.originalname.toLowerCase());
 
     const mimeType = extRegex.test(file.mimetype);
 
@@ -38,19 +27,7 @@ function fileFilter(params) {
   };
 }
 
-// error handler configuration
-function multerErrorHandle(err, req, res, next) {
-  if (err instanceof multer.MulterError) {
-    res.status(400).send({ message: err.message });
-  } else if (err) {
-    res.status(400).send({ message: err.message });
-  } else {
-    next();
-  }
-}
-
-// multer configuration
-function upload(params, size) {
+function upload(params = 'image', size) {
   return multer({
     storage: storage,
     limits: { fileSize: size || 5000000 },
@@ -60,5 +37,4 @@ function upload(params, size) {
 
 module.exports = {
   upload,
-  multerErrorHandle,
 };

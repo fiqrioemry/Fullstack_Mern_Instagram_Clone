@@ -297,20 +297,24 @@ async function createPost(req, res) {
   const { userId } = req.user;
   const { content } = req.body;
   const t = await sequelize.transaction();
+
   try {
-    if (!content || files.length === 0) {
-      return res.status(400).json({ message: 'Content or images are missing' });
+    if (!files || files.length === 0) {
+      return res.status(400).json({ message: 'Missing Images' });
     }
 
     const newPost = await Post.create({ userId, content }, { transaction: t });
 
-    const uploadPromises = req.files.map(async (file) => {
-      const uploadedMedia = await uploadMediaToCloudinary(file.path);
-      await fs.unlink(file.path);
+    const uploadPromises = files.map(async (file) => {
+      const uploadedMedia = await uploadMediaToCloudinary(
+        file.buffer,
+        file.mimetype,
+      );
       return uploadedMedia;
     });
 
     const uploadedImages = await Promise.all(uploadPromises);
+
     const images = uploadedImages.map((url) => ({
       postId: newPost.id,
       image: url.secure_url,
@@ -322,6 +326,7 @@ async function createPost(req, res) {
 
     res.status(201).json({ message: 'New post created' });
   } catch (error) {
+    await t.rollback();
     return res.status(500).json({
       message: 'Failed to create new post',
       error: error.message,

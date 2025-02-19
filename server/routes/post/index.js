@@ -23,18 +23,8 @@ const {
 
 router.get('/', isAuthenticate, getPublicPosts);
 router.get('/followings', isAuthenticate, getPostsFromFollowings);
-router.post(
-  '/',
-  upload('image').array('images', 5),
-  isAuthenticate,
-  createPost,
-);
-router.put(
-  '/:postId',
-  isAuthenticate,
-  upload('image').array('images', 5),
-  updatePost,
-);
+router.post('/', upload().array('images', 5), isAuthenticate, createPost);
+router.put('/:postId', isAuthenticate, upload().array('images', 5), updatePost);
 router.delete('/:postId', isAuthenticate, deletePost);
 router.get('/:postId', isAuthenticate, getPostDetail);
 

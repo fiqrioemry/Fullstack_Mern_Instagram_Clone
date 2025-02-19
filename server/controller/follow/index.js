@@ -81,7 +81,7 @@ async function getFollowers(req, res) {
     }
 
     const userFollowers = await Follow.findAll({
-      where: { followingId: user.id, status: 'active' },
+      where: { followingId: user.id },
       limit,
       include: [
         {
@@ -105,7 +105,7 @@ async function getFollowers(req, res) {
 
     // Ambil daftar user yang sedang login ikuti
     const myFollowings = await Follow.findAll({
-      where: { followerId: userId, status: 'active' },
+      where: { followerId: userId },
       attributes: ['followingId'],
     });
 
@@ -139,7 +139,7 @@ async function getFollowings(req, res) {
     }
 
     const userFollowings = await Follow.findAll({
-      where: { followerId: user.id, status: 'active' },
+      where: { followerId: user.id },
       limit,
       include: [
         {
@@ -162,7 +162,7 @@ async function getFollowings(req, res) {
     }
 
     const myFollowings = await Follow.findAll({
-      where: { followerId: userId, status: 'active' },
+      where: { followerId: userId },
       attributes: ['followingId'],
     });
 

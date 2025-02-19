@@ -2,16 +2,87 @@ const {
   uploadMediaToCloudinary,
   deleteMediaFromCloudinary,
 } = require('../../utils/cloudinary');
-const fs = require('fs').promises;
 const { Op } = require('sequelize');
 const { User, Profile, sequelize } = require('../../models');
+
+async function updateProfile(req, res) {
+  const file = req.file;
+  const userId = req.user.userId;
+  const transaction = await sequelize.transaction();
+  const { fullname, bio, birthday, gender } = req.body;
+
+  try {
+    const profile = await Profile.findOne({ where: { userId }, transaction });
+
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+
+    let avatar = profile.avatar;
+    let uploadedImage;
+
+    const isUpdated =
+      (bio && profile.bio !== bio) ||
+      (gender && profile.gender !== gender) ||
+      (birthday && profile.birthday !== birthday) ||
+      (fullname && profile.fullname !== fullname) ||
+      file;
+
+    if (!isUpdated) {
+      return res.status(400).json({
+        message: 'No changes detected',
+      });
+    }
+
+    if (file?.buffer) {
+      try {
+        uploadedImage = await uploadMediaToCloudinary(
+          file.buffer,
+          file.mimetype,
+        );
+
+        if (profile.avatar) {
+          await deleteMediaFromCloudinary(profile.avatar);
+        }
+
+        avatar = uploadedImage.secure_url;
+      } catch (error) {
+        await transaction.rollback();
+        return res.status(500).json({ message: 'Failed to upload avatar' });
+      }
+    }
+
+    profile.avatar = avatar;
+    profile.bio = bio || profile.bio;
+    profile.gender = gender || profile.gender;
+    profile.birthday = birthday || profile.birthday;
+    profile.fullname = fullname || profile.fullname;
+
+    await profile.save({ transaction });
+
+    await transaction.commit();
+
+    return res.status(200).json({
+      message: 'Profile updated.',
+    });
+  } catch (error) {
+    await transaction.rollback();
+    return res.status(500).json({
+      message: 'Failed to update profile',
+      error: error.message,
+    });
+  }
+}
 
 async function searchUser(req, res) {
   const { query } = req.query;
   try {
     const usersData = await User.findAll({
       where: {
-        [Op.or]: [{ username: { [Op.like]: `%${query}%` } }],
+        [Op.or]: [
+          { username: { [Op.like]: `%${query}%` } },
+          { '$profile.fullname$': { [Op.like]: `%${query}%` } },
+        ],
       },
       attributes: ['id', 'username'],
       include: [
@@ -19,19 +90,13 @@ async function searchUser(req, res) {
           model: Profile,
           as: 'profile',
           attributes: ['fullname', 'avatar'],
-          where: {
-            fullname: { [Op.like]: `%${query}%` },
-          },
-          required: false,
         },
       ],
       limit: 5,
     });
 
     if (usersData.length === 0) {
-      return res.status(404).json({
-        message: 'No users found',
-      });
+      return res.status(404).json({ message: 'No users found' });
     }
 
     const users = usersData.map((user) => ({
@@ -83,81 +148,6 @@ async function getMyProfile(req, res) {
   } catch (error) {
     return res.status(500).json({
       message: 'Failed to retrieve user detail',
-      error: error.message,
-    });
-  }
-}
-
-async function updateMyProfile(req, res) {
-  const { userId } = req.user;
-  const file = req.file;
-  const { fullname, bio, birthday, gender } = req.body;
-
-  const transaction = await sequelize.transaction();
-
-  try {
-    const profile = await Profile.findOne({ where: { userId }, transaction });
-
-    if (!profile) {
-      if (file && file.path) {
-        await fs.unlink(file.path);
-      }
-      return res.status(404).json({ message: 'Profile not found' });
-    }
-
-    let avatar = profile.avatar;
-    let uploadedImage;
-
-    const isUpdated =
-      profile.bio !== bio ||
-      profile.gender !== gender ||
-      profile.birthday !== birthday ||
-      profile.fullname !== fullname;
-
-    if (!isUpdated) {
-      if (file && file.path) {
-        await fs.unlink(file.path);
-      }
-      await transaction.rollback();
-      return res.status(400).json({
-        message: 'No changes detected. Please modify the data before updating.',
-      });
-    }
-
-    if (file && file.path) {
-      try {
-        uploadedImage = await uploadMediaToCloudinary(file.path);
-
-        if (profile.avatar) {
-          await deleteMediaFromCloudinary(profile.avatar);
-        }
-
-        avatar = uploadedImage.secure_url;
-
-        await fs.unlink(file.path);
-      } catch (error) {
-        await transaction.rollback();
-        return res.status(500).json({ message: 'Failed to upload avatar' });
-      }
-    }
-
-    profile.bio = bio;
-    profile.gender = gender;
-    profile.birthday = birthday;
-    profile.fullname = fullname;
-    profile.avatar = avatar;
-
-    await profile.save({ transaction });
-
-    await transaction.commit();
-
-    return res.status(200).json({
-      message: 'Profile updated.',
-    });
-  } catch (error) {
-    await transaction.rollback();
-    return res.status(500).json({
-      message: 'Failed to update profile',
       error: error.message,
     });
   }
@@ -221,6 +211,6 @@ async function getUserProfile(req, res) {
 module.exports = {
   searchUser,
   getMyProfile,
-  updateMyProfile,
+  updateProfile,
   getUserProfile,
 };

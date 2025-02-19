@@ -2,7 +2,7 @@ const {
   searchUser,
   getMyProfile,
   getUserProfile,
-  updateMyProfile,
+  updateProfile,
 } = require('../../controller/user');
 const { getUserPosts } = require('../../controller/post');
 
@@ -19,9 +19,9 @@ const {
 router.get('/profile', isAuthenticate, getMyProfile);
 router.put(
   '/profile',
-  upload('image').single('file'),
+  upload().single('avatar'),
   isAuthenticate,
-  updateMyProfile,
+  updateProfile,
 );
 router.get('/', searchUser);
 router.get('/:username', isAuthenticate, getUserProfile);

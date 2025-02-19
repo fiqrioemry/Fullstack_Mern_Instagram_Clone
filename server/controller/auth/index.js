@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
+const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const speakeasy = require('speakeasy');
 const redis = require('../../config/redis');
@@ -7,7 +8,42 @@ const sendOTP = require('../../utils/sendOTP');
 const { User, Profile } = require('../../models');
 const randomAvatar = require('../../utils/randomAvatar');
 
-async function googleAuth(req, res) {}
+async function googleAuth(req, res, next) {
+  passport.authenticate('google', { scope: ['profile', 'email'] })(
+    req,
+    res,
+    next,
+  );
+}
+
+async function googleAuthCallback(req, res) {
+  passport.authenticate('google', { session: false }, async (err, user) => {
+    if (err || !user) {
+      return res.status(401).json({ message: 'Google authentication failed' });
+    }
+
+    try {
+      const refreshToken = jwt.sign(
+        { userId: user.id },
+        process.env.REFRESH_TOKEN,
+        { expiresIn: '7d' },
+      );
+
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.redirect(process.env.CLIENT_HOST);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: 'Failed to generate token', error: error.message });
+    }
+  })(req, res);
+}
 
 async function sendingOTP(req, res) {
   const { email } = req.body;
@@ -146,7 +182,6 @@ async function userSignIn(req, res) {
       { expiresIn: '7d' },
     );
 
-    // Set HTTP-Only Cookie for Refresh Token
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -248,4 +283,5 @@ module.exports = {
   userAuthCheck,
   userAuthRefresh,
   googleAuth,
+  googleAuthCallback,
 };
