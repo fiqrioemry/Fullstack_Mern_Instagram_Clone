@@ -25,7 +25,7 @@
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
+    --muted: 240, 3.8%, 46.1% / 0.2;
     --muted-foreground: 240 3.8% 46.1%;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
@@ -53,7 +53,7 @@
     --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
+    --muted: 240 5% 64.9% / 0.2;
     --muted-foreground: 240 5% 64.9%;
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
@@ -94,6 +94,14 @@
 
   h6 {
     @apply text-xs text-red-500 font-light;
+  }
+
+  p {
+    @apply text-muted-foreground/50 text-xs md:text-sm;
+  }
+
+  span {
+    @apply text-xs md:text-sm;
   }
 
   .aside {
@@ -146,7 +154,7 @@
   }
 
   .btn-secondary {
-    @apply font-medium text-foreground hover:text-foreground/60 cursor-pointer duration-300;
+    @apply font-medium text-foreground hover:text-foreground/60 cursor-pointer text-xs md:text-sm duration-300;
   }
 
   .btn-delete {

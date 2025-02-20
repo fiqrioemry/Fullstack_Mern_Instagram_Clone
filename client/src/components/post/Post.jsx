@@ -29,7 +29,7 @@ const Post = ({ post }) => {
   return (
     <div className="grid grid-cols-10 h-[34rem]">
       {/* Galeri Foto */}
-      <div className="col-span-5 lg:col-span-6 border-r border-muted-foreground/60">
+      <div className="col-span-5 lg:col-span-6 border-r border-muted">
         <div className="h-full flex items-center bg-secondary">
           <Galleries images={post.images} />
         </div>
@@ -40,7 +40,7 @@ const Post = ({ post }) => {
         <PostAuthor data={post} />
 
         {/* Bagian Caption & Komentar harus bisa memenuhi ruang yang tersedia */}
-        <div className="border-t border-muted-foreground/60 overflow-hidden">
+        <div className="border-t border-muted overflow-hidden">
           <div className="overflow-y-scroll h-80 p-2 ">
             <Caption post={post} />
             {loadingComment ? (
@@ -52,12 +52,12 @@ const Post = ({ post }) => {
         </div>
 
         {/* Bagian Kontrol Post */}
-        <div className="border-t border-muted-foreground/60 p-2">
+        <div className="border-t border-muted p-2">
           <PostControl post={post} formik={commentForm} />
         </div>
 
         {/* Bagian Input Komentar */}
-        <div className="border-t border-muted-foreground/60 p-2">
+        <div className="border-t border-muted p-2">
           <PostInput postId={post.postId} formik={commentForm} />
         </div>
       </div>

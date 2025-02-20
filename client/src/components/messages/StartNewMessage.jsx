@@ -71,7 +71,7 @@ const StartNewMessage = ({ open, setOpen }) => {
               placeholder="Search by username..."
               value={searchForm.values.username}
               onChange={searchForm.handleChange}
-              className="w-full border-muted-foreground/20"
+              className="w-full border-muted"
             />
           </form>
           <div className="">

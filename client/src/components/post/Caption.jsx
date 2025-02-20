@@ -9,16 +9,16 @@ const Caption = ({ post }) => {
         <img
           src={post.avatar}
           alt="User Avatar"
-          className="w-9 h-9 overflow-hidden border-muted-foreground/60 flex-shrink-0 border rounded-full"
+          className="w-9 h-9 overflow-hidden border-muted flex-shrink-0 border rounded-full"
         />
       </div>
 
       {/* Username & Content */}
       <div className="flex-1">
-        <Link to={`${post.username}`} className="text-sm font-medium">
+        <Link to={`${post.username}`} className="btn-secondary">
           {post.username}
         </Link>
-        <p className="text-sm">{post.content}</p>
+        <div className="text-xs md:text-sm">{post.content}</div>
         <Timestamp createdAt={post.createdAt} />
       </div>
     </div>

@@ -27,18 +27,18 @@ const MessageContainer = () => {
         <ChatContainerLoading />
       ) : (
         <div>
-          <div className="border-b border-muted-foreground/20">
+          <div className="border-b border-muted">
             <div className="flex items-center py-4 px-2 space-x-4">
               <Avatar />
               <span>Ahmadfiqri</span>
             </div>
           </div>
           <div className="flex-1 p-4 overflow-y-auto space-y-4"></div>
-          <div className="border-t border-muted-foreground/20">
+          <div className="border-t border-muted">
             <div className="flex items-center py-2 px-4 space-x-4">
               <input
                 type="text"
-                className="flex-1 p-2 border bg-background rounded-lg focus:outline-none "
+                className="flex-1 p-2 border-muted bg-background rounded-lg focus:outline-none "
                 placeholder="Type a message..."
               />
 

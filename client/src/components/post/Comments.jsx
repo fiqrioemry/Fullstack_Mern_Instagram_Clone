@@ -28,7 +28,7 @@ const Comments = ({ formik }) => {
                 <span className="text-sm">{comment.content}</span>
               </div>
 
-              <div className="text-xs flex items-center space-x-2 text-muted-foreground">
+              <div className="text-xs flex items-center space-x-2 text-muted">
                 <Timestamp createdAt={comment.createdAt} />
                 {comment.likes > 0 && <span>{comment.likes} likes</span>}
 
@@ -47,7 +47,7 @@ const Comments = ({ formik }) => {
 
                 {/* Tombol Reply */}
                 <button
-                  className="text-xs btn-secondary"
+                  className="btn-secondary"
                   onClick={() => {
                     formik.setFieldValue("postId", comment.postId);
                     formik.setFieldValue("parentId", comment.commentId);
@@ -67,7 +67,7 @@ const Comments = ({ formik }) => {
                       comment.username
                     )
                   }
-                  className="flex items-center text-xs space-x-2 text-muted-foreground"
+                  className="flex items-center text-xs space-x-2 text-muted-foreground/50"
                 >
                   <span> View replies ({comment.replies}) </span>
                   {loadingReply[comment.commentId] && (
