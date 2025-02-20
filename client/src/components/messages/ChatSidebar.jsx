@@ -15,10 +15,10 @@ const ChatSidebar = ({ handleClick }) => {
     getChats();
   }, [getChats]);
 
-  if (!loading) return <ChatSidebarLoading />;
+  if (loading) return <ChatSidebarLoading />;
 
   return (
-    <>
+    <div>
       <div className="border-b border-muted">
         <div className="flex-between px-2 py-4">
           <div className="flex items-center gap-2">
@@ -33,7 +33,7 @@ const ChatSidebar = ({ handleClick }) => {
       <div className="flex-1 px-2 py-4 overflow-y-auto space-y-4 ">
         {chats.length > 0 && <ChatList />}
       </div>
-    </>
+    </div>
   );
 };
 export default ChatSidebar;
