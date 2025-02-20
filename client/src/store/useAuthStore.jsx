@@ -1,6 +1,12 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import callApi from "../api/callApi";
+import callApi from "@/api/callApi";
+import { io } from "socket.io-client";
+
+const BASE_URL =
+  import.meta.env.VITE_BASE_URL === "development"
+    ? "http://localhost:5000/api"
+    : "/api";
 
 export const useAuthStore = create((set, get) => ({
   step: 1,
@@ -8,6 +14,8 @@ export const useAuthStore = create((set, get) => ({
   loading: false,
   accessToken: null,
   isAuthenticate: null,
+  onlineUsers: [],
+  socket: null,
 
   setAccessToken: (accessToken) => set({ accessToken }),
 
@@ -15,6 +23,7 @@ export const useAuthStore = create((set, get) => ({
     try {
       const user = await callApi.authCheck();
       set({ user, isAuthenticate: true });
+      get().connectSocket();
     } catch {
       set({ user: null, isAuthenticate: false });
     }
@@ -77,5 +86,26 @@ export const useAuthStore = create((set, get) => ({
     } catch (error) {
       console.log(error);
     }
+  },
+
+  connectSocket: () => {
+    const { user } = get();
+    if (!user || get().socket?.connected) return;
+
+    const socket = io(BASE_URL, {
+      query: {
+        userId: user.userId,
+      },
+    });
+    socket.connect();
+
+    set({ socket: socket });
+
+    socket.on("getOnlineUsers", (userIds) => {
+      set({ onlineUsers: userIds });
+    });
+  },
+  disconnectSocket: () => {
+    if (get().socket?.connected) get().socket.disconnect();
   },
 }));

@@ -207,6 +207,28 @@ const callApi = {
       .then((res) => res.data)
       .catch(errorHandle);
   },
+
+  // Real Time Chat API's Management :
+  getAllMessages: async () => {
+    return authInstance
+      .get('/chat')
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  getMessage: async (receiverId) => {
+    return authInstance
+      .get(`/chat/message/${receiverId}`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  sendMessage: async (formData) => {
+    return authInstance
+      .post(`/chat/message`, formData)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
 };
 
 export default callApi;
