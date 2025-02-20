@@ -25,6 +25,7 @@ export const useMessageStore = create((set, get) => ({
     set({ loading: true });
     try {
       const messages = await callApi.getMessage(userId);
+      console.log(messages);
       set({ messages });
     } catch (error) {
       set({ messages: [] });
