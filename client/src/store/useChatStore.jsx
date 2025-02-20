@@ -4,10 +4,10 @@ import { useAuthStore } from "./useAuthStore";
 import callApi from "../api/callApi";
 
 export const useChatStore = create((set, get) => ({
+  chat: null,
   chats: [],
-  chat: [],
-  selectedUser: null,
   loading: false,
+  selectedUser: null,
 
   getChats: async () => {
     set({ loading: true });

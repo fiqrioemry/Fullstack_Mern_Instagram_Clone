@@ -1,26 +1,26 @@
 import { useEffect } from "react";
-import MessageList from "./MessageList";
+import ChatList from "./ChatList";
 import Avatar from "@/components/ui/Avatar";
 import { MessageSquareDiff } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useMessageStore } from "@/store/useMessageStore";
-import MessageSidebarLoading from "@/components/skeleton/MessageSidebarLoading";
+import { useChatStore } from "@/store/useChatStore";
+import ChatSidebarLoading from "@/components/skeleton/ChatSidebarLoading";
 
 // eslint-disable-next-line react/prop-types
-const MessageSidebar = ({ handleClick }) => {
+const ChatSidebar = ({ handleClick }) => {
   const { user } = useAuthStore();
-  const { getAllMessages, messages, loading } = useMessageStore();
+  const { getChats, chats, loading } = useChatStore();
 
   useEffect(() => {
-    getAllMessages();
-  }, [getAllMessages]);
+    getChats();
+  }, [getChats]);
 
-  if (loading) return <MessageSidebarLoading />;
+  if (!loading) return <ChatSidebarLoading />;
 
   return (
-    <aside className="h-full border-r border-muted">
+    <>
       <div className="border-b border-muted">
-        <div className="flex items-center justify-between px-2 py-4">
+        <div className="flex-between px-2 py-4">
           <div className="flex items-center gap-2">
             <Avatar avatar={user.avatar} />
             <span className="text-sm">{user.username}</span>
@@ -30,8 +30,10 @@ const MessageSidebar = ({ handleClick }) => {
           </button>
         </div>
       </div>
-      {messages.length > 0 && <MessageList />}
-    </aside>
+      <div className="flex-1 px-2 py-4 overflow-y-auto space-y-4 ">
+        {chats.length > 0 && <ChatList />}
+      </div>
+    </>
   );
 };
-export default MessageSidebar;
+export default ChatSidebar;

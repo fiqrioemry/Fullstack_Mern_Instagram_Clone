@@ -36,7 +36,7 @@ const baseValidations = {
     )
     .required('Username is required'),
   password: Yup.string()
-    .min(6, 'Min. 6 characters')
+    .min(5, 'Min. 5 characters')
     .required('Password is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
   otp: Yup.string().min(6, 'Min. 6 digits').required('OTP is required'),

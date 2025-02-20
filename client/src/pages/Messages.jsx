@@ -1,23 +1,26 @@
 import { useState } from "react";
-import MessageSidebar from "@/components/messages/MessageSidebar";
+import ChatSidebar from "@/components/messages/ChatSidebar";
+import ChatContainer from "@/components/messages/ChatContainer";
 import SearchUserForChat from "@/components/messages/SearchUserForChat";
-import MessageContainer from "@/components/messages/MessageContainer";
 
 export default function Messages() {
   const [open, setOpen] = useState(false);
 
-  const handleFindUser = () => {
+  const handleSearchUser = () => {
     setOpen((prev) => !prev);
   };
   return (
     <div className="flex h-screen">
       <SearchUserForChat open={open} setOpen={setOpen} />
-
       <div className="w-1/4">
-        <MessageSidebar handleClick={handleFindUser} />
+        <div className="h-full border-r border-muted">
+          <ChatSidebar handleClick={handleSearchUser} />
+        </div>
       </div>
       <div className="w-3/4">
-        <MessageContainer handleClick={handleFindUser} />
+        <div className="flex flex-col h-full">
+          <ChatContainer handleClick={handleSearchUser} />
+        </div>
       </div>
     </div>
   );

@@ -209,23 +209,23 @@ const callApi = {
   },
 
   // Real Time Chat API's Management :
-  getAllMessages: async () => {
+  getChats: async () => {
     return authInstance
       .get('/chat')
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
-  getMessage: async (receiverId) => {
+  getChat: async (receiverId) => {
     return authInstance
-      .get(`/chat/message/${receiverId}`)
+      .get(`/chat/${receiverId}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
-  sendMessage: async (formData) => {
+  sendChat: async (formData) => {
     return authInstance
-      .post(`/chat/message`, formData)
+      .post(`/chat`, formData)
       .then((res) => res.data)
       .catch(errorHandle);
   },
