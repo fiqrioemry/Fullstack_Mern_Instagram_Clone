@@ -4,7 +4,7 @@ import { useAuthStore } from "./useAuthStore";
 import callApi from "../api/callApi";
 
 export const useChatStore = create((set, get) => ({
-  chat: null,
+  chat: [],
   chats: [],
   loading: false,
   selectedUser: null,
@@ -15,49 +15,61 @@ export const useChatStore = create((set, get) => ({
       const chats = await callApi.getChats();
       set({ chats });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }
   },
 
   getChat: async (userId) => {
+    if (!userId) return;
+
     set({ loading: true });
     try {
-      const chat = await callApi.getChat(userId);
+      const { message, chat } = await callApi.getChat(userId);
+      toast.success(message);
       set({ chat });
     } catch (error) {
       set({ chat: [] });
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }
   },
 
   sendChat: async (formData, receiverId) => {
+    if (!receiverId) return;
+
     set({ loading: true });
     try {
       const { message, newChat } = await callApi.sendChat(formData, receiverId);
+
       toast.success(message);
-      set({ chat: [...get.state.chat, newChat] });
+
+      set((state) => ({
+        chat: [...state.chat, newChat],
+      }));
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }
   },
+
   subscribeToMessages: () => {
-    const { selectedUser } = get();
+    const { selectedUser, chat } = get();
     if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;
 
+    socket.off("newChat");
     socket.on("newChat", (newChat) => {
-      const isSentFromSelectedUser = newChat.senderId === selectedUser.userId;
-      if (!isSentFromSelectedUser) return;
-      set({
-        chat: [...get().chat, newChat],
-      });
+      if (
+        newChat.senderId === selectedUser.userId ||
+        newChat.receiverId === selectedUser.userId
+      ) {
+        set({ chat: [...chat, newChat] });
+      }
     });
   },
 
@@ -66,5 +78,7 @@ export const useChatStore = create((set, get) => ({
     socket.off("newChat");
   },
 
-  setSelectedUser: (selectedUser) => set({ selectedUser }),
+  setSelectedUser: (selectedUser) => {
+    set({ selectedUser, chat: [] });
+  },
 }));

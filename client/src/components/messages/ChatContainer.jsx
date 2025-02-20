@@ -6,19 +6,31 @@ import ChatContainerLoading from "@/components/skeleton/ChatContainerLoading";
 import ChatSelected from "./ChatSelected";
 
 const ChatContainer = ({ handleClick }) => {
-  const { selectedUser, getChat, chat, loading } = useChatStore();
+  const {
+    selectedUser,
+    getChat,
+    chat,
+    loading,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  } = useChatStore();
 
   useEffect(() => {
     if (selectedUser) {
       getChat(selectedUser.userId);
+      subscribeToMessages();
     }
-  }, [getChat, selectedUser]);
 
-  if (loading && !chat) return <ChatContainerLoading />;
+    return () => {
+      unsubscribeFromMessages();
+    };
+  }, [getChat, selectedUser, subscribeToMessages, unsubscribeFromMessages]);
+
+  if (loading) return <ChatContainerLoading />;
 
   return (
     <>
-      {!selectedUser ? (
+      {!selectedUser || !chat ? (
         <NoSelectedChat handleClick={handleClick} />
       ) : (
         <ChatSelected />
