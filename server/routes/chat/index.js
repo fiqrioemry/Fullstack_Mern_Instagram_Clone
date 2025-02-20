@@ -1,22 +1,18 @@
 const express = require('express');
 const { upload } = require('../../middleware/media');
 const {
-  sendMessage,
-  getMessages,
-  getAllChat,
+  sendChat,
+  getChat,
+  getChats,
   getOnlineUsers,
 } = require('../../controller/chat');
 const isAuthenticate = require('../../middleware/isAuthenticate');
 const router = express.Router();
 
+router.get('/', isAuthenticate, getChats);
+router.get('/:receiverId', isAuthenticate, getChat);
+router.post('/', upload('image').single('file'), isAuthenticate, sendChat);
+
 router.get('/user-status/:userId', isAuthenticate, getOnlineUsers);
-router.get('/', isAuthenticate, getAllChat);
-router.get('/message/:receiverId', isAuthenticate, getMessages);
-router.post(
-  '/message',
-  upload('image').single('file'),
-  isAuthenticate,
-  sendMessage,
-);
 
 module.exports = router;

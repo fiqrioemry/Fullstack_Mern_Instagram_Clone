@@ -30,8 +30,8 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // 🔹 Relasi ke Chat
-      this.hasMany(models.Chat, { foreignKey: 'user1_id', as: 'chat1' });
-      this.hasMany(models.Chat, { foreignKey: 'user2_id', as: 'chat2' });
+      this.hasMany(models.Chat, { foreignKey: 'senderId', as: 'sender' });
+      this.hasMany(models.Chat, { foreignKey: 'receiverId', as: 'receiver' });
     }
   }
   User.init(

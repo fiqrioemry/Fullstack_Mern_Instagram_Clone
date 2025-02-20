@@ -1,30 +1,28 @@
 const fs = require('fs').promises;
-const cassandra = require('../../config/cassandra');
-const { Notification, Chat, Profile, User } = require('../../models');
-const { io, getReceiverSocketId } = require('../../config/socket');
-const { uploadMediaToCloudinary } = require('../../utils/cloudinary');
 const { Op } = require('sequelize');
 const redis = require('../../config/redis.js');
+const cassandra = require('../../config/cassandra');
+const { Chat, Profile, User } = require('../../models');
+const { io, getReceiverSocketId } = require('../../config/socket');
+const { uploadMediaToCloudinary } = require('../../utils/cloudinary');
 
-async function getAllChat(req, res) {
+async function getChats(req, res) {
+  const userId = req.user.userId;
   try {
-    redis;
-    const userId = req.user.userId;
-
     const chats = await Chat.findAll({
       where: {
-        [Op.or]: [{ user1_id: userId }, { user2_id: userId }],
+        [Op.or]: [{ senderId: userId }, { receiverId: userId }],
       },
       include: [
         {
           model: User,
-          as: 'user1',
+          as: 'sender',
           attributes: ['id', 'username'],
           include: { model: Profile, as: 'profile' },
         },
         {
           model: User,
-          as: 'user2',
+          as: 'receiver',
           attributes: ['id', 'username'],
           include: { model: Profile, as: 'profile' },
         },
@@ -33,15 +31,17 @@ async function getAllChat(req, res) {
 
     const chatList = await Promise.all(
       chats.map(async (chat) => {
-        const chatPartner = chat.user1_id === userId ? chat.user2 : chat.user1;
+        const chatPartner =
+          chat.senderId === userId ? chat.senderId : chat.receiverId;
 
         let status = await redis.get(`user_status:${chatPartner.id}`);
         if (!status) status = 'offline';
 
         return {
-          chat_id: chat.id,
+          chatId: chat.id,
+          userId: chatPartner.userId,
           username: chatPartner.username,
-          avatar: chatPartner.profile ? chatPartner.profile.avatar : null,
+          avatar: chatPartner.profile.avatar,
           status,
         };
       }),
@@ -54,37 +54,36 @@ async function getAllChat(req, res) {
   }
 }
 
-async function sendMessage(req, res) {
+async function sendChat(req, res) {
   const file = req.file;
-  let { chat_id } = req.body;
-  const sender_id = req.user.userId;
-  const { receiver_id, message } = req.body;
+  const senderId = req.user.userId;
+  let { chatId, message, receiverId } = req.body;
 
   try {
-    if (!sender_id || !receiver_id) {
+    if (!senderId || !receiverId) {
       return res
         .status(400)
         .json({ message: 'Sender ID and Receiver ID are required' });
     }
 
-    if (!chat_id) {
+    if (!chatId) {
       const existingChat = await Chat.findOne({
         where: {
           [Op.or]: [
-            { user1_id: sender_id, user2_id: receiver_id },
-            { user1_id: receiver_id, user2_id: sender_id },
+            { senderId, receiverId },
+            { senderId: receiverId, receiverId: senderId },
           ],
         },
       });
 
       if (existingChat) {
-        chat_id = existingChat.id;
+        chatId = existingChat.id;
       } else {
         const newChat = await Chat.create({
-          user1_id: sender_id,
-          user2_id: receiver_id,
+          senderId,
+          receiverId,
         });
-        chat_id = newChat.id;
+        chatId = newChat.id;
       }
     }
 
@@ -104,53 +103,53 @@ async function sendMessage(req, res) {
 
     const query =
       'INSERT INTO messages (chat_id, sender_id, receiver_id, message, media_url, timestamp) VALUES (?, ?, ?, ?, ?, ?)';
-    await cassandra.execute(
+    const newChat = await cassandra.execute(
       query,
-      [chat_id, sender_id, receiver_id, message, media_url, timestamp],
+      [chatId, senderId, receiverId, message, media_url, timestamp],
       { prepare: true },
     );
 
-    const receiverSocketId = getReceiverSocketId(receiver_id);
+    const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('receive_message', {
-        chat_id,
-        sender_id,
-        receiver_id,
+        chatId,
+        senderId,
+        receiverId,
         message,
         media_url,
         timestamp,
       });
 
       io.to(receiverSocketId).emit('new_notification', {
-        sender_id,
+        senderId,
         message: 'New message received',
       });
     }
 
-    res.status(200).json({ message: 'Message sent successfully', chat_id });
+    res.status(200).json({ message: 'Chat is sent' });
   } catch (error) {
     res
       .status(500)
-      .json({ message: 'Failed to send message', error: error.message });
+      .json({ message: 'Failed to send chat', error: error.message });
   }
 }
 
-async function getMessages(req, res) {
+async function getChat(req, res) {
+  const senderId = req.user.userId;
   const receiverId = req.params.receiverId;
-  const userId = req.user.userId;
 
   try {
-    const chat = await Chat.findOne({
+    const prevChat = await Chat.findOne({
       where: {
         [Op.or]: [
-          { user1_id: userId, user2_id: receiverId },
-          { user1_id: receiverId, user2_id: userId },
+          { senderId, receiverId },
+          { senderId: receiverId, receiverId: senderId },
         ],
       },
       include: [
         {
           model: User,
-          as: 'user1',
+          as: 'sender',
           attributes: ['id', 'username'],
           include: { model: Profile, as: 'profile' },
         },
@@ -163,11 +162,11 @@ async function getMessages(req, res) {
       ],
     });
 
-    if (!chat) {
-      return res.status(200).json({ message: 'Start a new chat', data: [] });
+    if (!prevChat) {
+      return res.status(200).json({ message: 'Start a new chat', chat: [] });
     }
 
-    const chat_id = chat.id;
+    const chat_id = prevChat.id;
     const query = `SELECT * FROM messages WHERE chat_id = ? ORDER BY timestamp DESC`;
     const result = await cassandra.execute(query, [chat_id], { prepare: true });
 
@@ -175,10 +174,13 @@ async function getMessages(req, res) {
       return res.status(404).json({ message: 'No message found in history' });
     }
 
-    res.status(200).json(result.rows);
+    const chat = result.rows;
+
+    res.status(200).json({ chat });
   } catch (error) {
-    console.error('❌ Error fetching messages:', error);
-    res.status(500).json({ error: 'Failed to retrieve messages' });
+    res
+      .status(500)
+      .json({ message: 'Failed to retrieve messages', error: error.message });
   }
 }
 
@@ -193,4 +195,4 @@ async function getOnlineUsers(req, res) {
     res.status(500).json({ message: 'Failed to get user status' });
   }
 }
-module.exports = { getMessages, sendMessage, getAllChat, getOnlineUsers };
+module.exports = { getChats, getChat, sendChat, getOnlineUsers };

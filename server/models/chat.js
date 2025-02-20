@@ -4,8 +4,8 @@ const { Model, DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   class Chat extends Model {
     static associate(models) {
-      this.belongsTo(models.User, { foreignKey: 'user1_id', as: 'user1' });
-      this.belongsTo(models.User, { foreignKey: 'user2_id', as: 'user2' });
+      this.belongsTo(models.User, { foreignKey: 'senderId', as: 'sender' });
+      this.belongsTo(models.User, { foreignKey: 'receiverId', as: 'receiver' });
     }
   }
 
@@ -17,11 +17,11 @@ module.exports = (sequelize) => {
         allowNull: false,
         primaryKey: true,
       },
-      user1_id: {
+      senderId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      user2_id: {
+      receiverId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
