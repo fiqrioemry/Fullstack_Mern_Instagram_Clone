@@ -1,6 +1,6 @@
 import { useState } from "react";
 import MessageSidebar from "@/components/messages/MessageSidebar";
-import StartNewMessage from "@/components/messages/StartNewMessage";
+import SearchUserForChat from "@/components/messages/SearchUserForChat";
 import MessageContainer from "@/components/messages/MessageContainer";
 
 export default function Messages() {
@@ -11,7 +11,8 @@ export default function Messages() {
   };
   return (
     <div className="flex h-screen">
-      <StartNewMessage open={open} setOpen={setOpen} />
+      <SearchUserForChat open={open} setOpen={setOpen} />
+
       <div className="w-1/4">
         <MessageSidebar handleClick={handleFindUser} />
       </div>

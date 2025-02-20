@@ -3,8 +3,8 @@ import toast from "react-hot-toast";
 import { useAuthStore } from "./useAuthStore";
 import callApi from "../api/callApi";
 
-export const useMessageStore = create((set, get) => ({
-  message: [],
+export const useChatStore = create((set, get) => ({
+  chats: [],
   chat: [],
   selectedUser: null,
   loading: false,
@@ -21,29 +21,25 @@ export const useMessageStore = create((set, get) => ({
     }
   },
 
-  getMessage: async (userId) => {
+  getChat: async (userId) => {
     set({ loading: true });
     try {
-      const messages = await callApi.getMessage(userId);
-      console.log(messages);
-      set({ messages });
+      const chat = await callApi.getChat(userId);
+      set({ chat });
     } catch (error) {
-      set({ messages: [] });
+      set({ chat: [] });
       console.log(error.message);
     } finally {
       set({ loading: false });
     }
   },
 
-  sendMessage: async (formData, receiverId) => {
+  sendChat: async (formData, receiverId) => {
     set({ loading: true });
     try {
-      const { message, newChat } = await callApi.sendMessage(
-        formData,
-        receiverId
-      );
+      const { message, newChat } = await callApi.sendChat(formData, receiverId);
       toast.success(message);
-      set({ messages: [...get.state.messages, newChat] });
+      set({ chat: [...get.state.chat, newChat] });
     } catch (error) {
       console.log(error.message);
     } finally {
@@ -56,19 +52,18 @@ export const useMessageStore = create((set, get) => ({
 
     const socket = useAuthStore.getState().socket;
 
-    socket.on("newMessage", (newMessage) => {
-      const isMessageSentFromSelectedUser =
-        newMessage.senderId === selectedUser._id;
-      if (!isMessageSentFromSelectedUser) return;
+    socket.on("newChat", (newChat) => {
+      const isSentFromSelectedUser = newChat.senderId === selectedUser.userId;
+      if (!isSentFromSelectedUser) return;
       set({
-        message: [...get().message, newMessage],
+        chat: [...get().chat, newChat],
       });
     });
   },
 
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
-    socket.off("newMessage");
+    socket.off("newChat");
   },
 
   setSelectedUser: (selectedUser) => set({ selectedUser }),
