@@ -8,90 +8,6 @@ const sendOTP = require('../../utils/sendOTP');
 const { User, Profile } = require('../../models');
 const randomAvatar = require('../../utils/randomAvatar');
 
-async function googleAuth(req, res, next) {
-  passport.authenticate('google', { scope: ['profile', 'email'] })(
-    req,
-    res,
-    next,
-  );
-}
-
-async function googleAuthCallback(req, res) {
-  passport.authenticate('google', { session: false }, async (err, user) => {
-    if (err || !user) {
-      return res.status(401).json({ message: 'Google authentication failed' });
-    }
-
-    try {
-      const refreshToken = jwt.sign(
-        { userId: user.id },
-        process.env.REFRESH_TOKEN,
-        { expiresIn: '7d' },
-      );
-
-      res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
-
-      res.redirect(process.env.CLIENT_HOST);
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ message: 'Failed to generate token', error: error.message });
-    }
-  })(req, res);
-}
-
-async function sendingOTP(req, res) {
-  const { email } = req.body;
-
-  try {
-    const existingUser = await User.findOne({ where: { email } });
-
-    if (existingUser)
-      return res.status(400).send({ message: 'Email Already Exist' });
-
-    const secret = speakeasy.generateSecret({ length: 20 });
-
-    const otp = speakeasy.totp({
-      secret: secret.base32,
-      encoding: 'base32',
-    });
-
-    await redis.setex(`otp:${email}`, 900, otp);
-
-    await sendOTP(email, otp);
-
-    return res.status(200).send({ message: 'OTP Send to Email' });
-  } catch (error) {
-    return res
-      .status(500)
-      .send({ message: 'Failed to send OTP', error: error.message });
-  }
-}
-
-async function verifyOTP(req, res) {
-  const { email, otp } = req.body;
-  try {
-    const storedOtp = await redis.get(`otp:${email}`);
-
-    if (!storedOtp) return res.status(400).send({ message: 'OTP Expired' });
-
-    if (storedOtp !== otp) {
-      return res.status(400).send({ message: 'Invalid OTP' });
-    } else {
-      return res.status(200).send({ message: 'OTP Verified.' });
-    }
-  } catch (error) {
-    return res
-      .status(500)
-      .send({ message: 'An error occurred', error: error.message });
-  }
-}
-
 async function userSignUp(req, res) {
   try {
     const { username, email, password, fullname } = req.body;
@@ -271,6 +187,90 @@ async function userAuthRefresh(req, res) {
       message: 'Failed to refresh token',
       error: error.message,
     });
+  }
+}
+
+async function googleAuth(req, res, next) {
+  passport.authenticate('google', { scope: ['profile', 'email'] })(
+    req,
+    res,
+    next,
+  );
+}
+
+async function googleAuthCallback(req, res) {
+  passport.authenticate('google', { session: false }, async (err, user) => {
+    if (err || !user) {
+      return res.status(401).json({ message: 'Google authentication failed' });
+    }
+
+    try {
+      const refreshToken = jwt.sign(
+        { userId: user.id },
+        process.env.REFRESH_TOKEN,
+        { expiresIn: '7d' },
+      );
+
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.redirect(process.env.CLIENT_HOST);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: 'Failed to generate token', error: error.message });
+    }
+  })(req, res);
+}
+
+async function sendingOTP(req, res) {
+  const { email } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ where: { email } });
+
+    if (existingUser)
+      return res.status(400).send({ message: 'Email Already Exist' });
+
+    const secret = speakeasy.generateSecret({ length: 20 });
+
+    const otp = speakeasy.totp({
+      secret: secret.base32,
+      encoding: 'base32',
+    });
+
+    await redis.setex(`otp:${email}`, 900, otp);
+
+    await sendOTP(email, otp);
+
+    return res.status(200).send({ message: 'OTP Send to Email' });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ message: 'Failed to send OTP', error: error.message });
+  }
+}
+
+async function verifyOTP(req, res) {
+  const { email, otp } = req.body;
+  try {
+    const storedOtp = await redis.get(`otp:${email}`);
+
+    if (!storedOtp) return res.status(400).send({ message: 'OTP Expired' });
+
+    if (storedOtp !== otp) {
+      return res.status(400).send({ message: 'Invalid OTP' });
+    } else {
+      return res.status(200).send({ message: 'OTP Verified.' });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ message: 'An error occurred', error: error.message });
   }
 }
 

@@ -9,55 +9,64 @@ const { uploadMediaToCloudinary } = require('../../utils/cloudinary');
 async function getChats(req, res) {
   const userId = req.user.userId;
   try {
-    const chats = await Chat.findAll({
-      where: {
-        [Op.or]: [{ senderId: userId }, { receiverId: userId }],
-      },
+    const chatsData = await Chat.findAll({
+      where: { [Op.or]: [{ senderId: userId }, { receiverId: userId }] },
       include: [
         {
           model: User,
           as: 'sender',
           attributes: ['id', 'username'],
-          include: { model: Profile, as: 'profile' },
+          include: { model: Profile, as: 'profile', attributes: ['avatar'] },
         },
         {
           model: User,
           as: 'receiver',
           attributes: ['id', 'username'],
-          include: { model: Profile, as: 'profile' },
+          include: { model: Profile, as: 'profile', attributes: ['avatar'] },
         },
       ],
     });
 
-    const chatList = await Promise.all(
-      chats.map(async (chat) => {
-        const chatPartner =
-          chat.senderId === userId ? chat.senderId : chat.receiverId;
+    // Ambil semua status user dari Redis
+    const keys = await redis.keys('user_status:*');
+    const onlineUsers = new Set();
+    for (const key of keys) {
+      const userId = key.split(':')[1];
+      const status = await redis.get(key);
+      if (status === 'online') {
+        onlineUsers.add(parseInt(userId));
+      }
+    }
 
-        let status = await redis.get(`user_status:${chatPartner.id}`);
-        if (!status) status = 'offline';
+    const chats = chatsData.map((chat) => {
+      const chatPartner =
+        chat.senderId === userId ? chat.receiver : chat.sender;
 
-        return {
-          chatId: chat.id,
-          userId: chatPartner.userId,
-          username: chatPartner.username,
-          avatar: chatPartner.profile.avatar,
-          status,
-        };
-      }),
-    );
+      return {
+        chatId: chat.id,
+        userId: chatPartner.id,
+        username: chatPartner.username,
+        avatar:
+          chatPartner.profile?.avatar ||
+          `https://api.dicebear.com/5.x/adventurer/svg?seed=${chatPartner.username}`,
+        status: onlineUsers.has(chatPartner.id) ? 'online' : 'offline',
+      };
+    });
 
-    res.status(200).json(chatList);
+    res.status(200).json(chats);
   } catch (error) {
     console.error('❌ Error fetching chat list:', error);
-    res.status(500).json({ message: 'Failed to retrieve chat list' });
+    res
+      .status(500)
+      .json({ message: 'Failed to retrieve chat list', error: error.message });
   }
 }
 
 async function sendChat(req, res) {
   const file = req.file;
   const senderId = req.user.userId;
-  let { chatId, message, receiverId } = req.body;
+  const receiverId = req.params.receiverId;
+  let { chatId, message } = req.body;
 
   try {
     if (!senderId || !receiverId) {
@@ -90,20 +99,22 @@ async function sendChat(req, res) {
     let media_url = '';
     let timestamp = new Date();
 
-    if (file && file.path) {
+    if (file?.buffer) {
       try {
-        let uploadedImage = await uploadMediaToCloudinary(file.path);
+        const uploadedImage = await uploadMediaToCloudinary(
+          file.buffer,
+          file.mimetype,
+        );
         media_url = uploadedImage.secure_url;
         await fs.unlink(file.path);
       } catch (error) {
-        if (file.path) await fs.unlink(file.path);
-        return res.status(500).json({ message: 'Failed to upload media' });
+        return res.status(500).json({ message: 'Failed to upload image' });
       }
     }
 
     const query =
       'INSERT INTO messages (chat_id, sender_id, receiver_id, message, media_url, timestamp) VALUES (?, ?, ?, ?, ?, ?)';
-    const newChat = await cassandra.execute(
+    await cassandra.execute(
       query,
       [chatId, senderId, receiverId, message, media_url, timestamp],
       { prepare: true },
@@ -122,7 +133,7 @@ async function sendChat(req, res) {
 
       io.to(receiverSocketId).emit('new_notification', {
         senderId,
-        message: 'New message received',
+        message: 'New Chat received',
       });
     }
 
@@ -155,7 +166,7 @@ async function getChat(req, res) {
         },
         {
           model: User,
-          as: 'user2',
+          as: 'receiver',
           attributes: ['id', 'username'],
           include: { model: Profile, as: 'profile' },
         },
@@ -167,32 +178,23 @@ async function getChat(req, res) {
     }
 
     const chat_id = prevChat.id;
-    const query = `SELECT * FROM messages WHERE chat_id = ? ORDER BY timestamp DESC`;
+    const query = `SELECT * FROM messages WHERE chat_id = ? ORDER BY timestamp ASC`;
     const result = await cassandra.execute(query, [chat_id], { prepare: true });
 
     if (!result || result.rows.length === 0) {
-      return res.status(404).json({ message: 'No message found in history' });
+      return res
+        .status(404)
+        .json({ message: 'no chat found in history', chat: [] });
     }
 
     const chat = result.rows;
 
-    res.status(200).json({ chat });
+    res.status(200).json({ message: 'Success fetch chat', chat });
   } catch (error) {
     res
       .status(500)
-      .json({ message: 'Failed to retrieve messages', error: error.message });
+      .json({ message: 'Failed to retrieve Chat', error: error.message });
   }
 }
 
-async function getOnlineUsers(req, res) {
-  try {
-    const { userId } = req.params;
-    let status = await redis.get(`user_status:${userId}`);
-    if (!status) status = 'offline';
-
-    res.status(200).json({ userId, status });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to get user status' });
-  }
-}
-module.exports = { getChats, getChat, sendChat, getOnlineUsers };
+module.exports = { getChats, getChat, sendChat };

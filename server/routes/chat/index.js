@@ -11,8 +11,11 @@ const router = express.Router();
 
 router.get('/', isAuthenticate, getChats);
 router.get('/:receiverId', isAuthenticate, getChat);
-router.post('/', upload('image').single('file'), isAuthenticate, sendChat);
-
-router.get('/user-status/:userId', isAuthenticate, getOnlineUsers);
+router.post(
+  '/:receiverId',
+  upload('image').single('file'),
+  isAuthenticate,
+  sendChat,
+);
 
 module.exports = router;

@@ -15,10 +15,10 @@ const io = new Server(server, {
   transports: ['websocket'],
 });
 
-const userSocketMap = {};
+const userSocketMap = new Map();
 
 function getReceiverSocketId(userId) {
-  return userSocketMap[userId];
+  return userSocketMap.get(userId);
 }
 
 io.on('connection', async (socket) => {
@@ -26,11 +26,10 @@ io.on('connection', async (socket) => {
 
   const userId = socket.handshake.query.userId;
   if (userId) {
-    userSocketMap[userId] = socket.id;
+    userSocketMap.set(userId, socket.id);
     socket.userId = userId;
 
-    // 🔹 Simpan status user online di Redis dengan TTL 5 menit
-    await redis.set(`user_status:${userId}`, 'online', 'EX', 300);
+    await redis.setex(`user_status:${userId}`, 300, 'online');
 
     io.emit('user_status_update', { userId, status: 'online' });
   }
@@ -39,16 +38,19 @@ io.on('connection', async (socket) => {
     console.log('❌ A user disconnected:', socket.id);
 
     if (socket.userId) {
-      delete userSocketMap[socket.userId];
+      userSocketMap.delete(socket.userId);
 
-      // 🔹 Simpan last seen di Redis
-      const lastSeen = new Date().toISOString();
-      await redis.set(`user_status:${socket.userId}`, `last_seen:${lastSeen}`);
+      // Tunggu 10 detik sebelum mengubah status ke offline (untuk menangani reconnect)
+      setTimeout(async () => {
+        if (!userSocketMap.has(socket.userId)) {
+          await redis.setex(`user_status:${socket.userId}`, 300, 'offline');
 
-      io.emit('user_status_update', {
-        userId: socket.userId,
-        status: `last_seen:${lastSeen}`,
-      });
+          io.emit('user_status_update', {
+            userId: socket.userId,
+            status: 'offline',
+          });
+        }
+      }, 10000);
     }
   });
 });
