@@ -12,7 +12,7 @@ const ConfirmationBox = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-sm bg-secondary border-none p-0 pt-6">
+      <DialogContent>
         <div className="text-center">
           <h4 className="text-lg font-semibold">{title}</h4>
           <p className="text-muted-foreground/60 mt-2 text-sm">{message}</p>

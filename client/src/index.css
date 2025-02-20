@@ -122,6 +122,10 @@
     @apply md:hidden fixed bottom-0 w-full px-4 bg-background border-t border-muted-foreground/50;
   }
 
+  .border-default {
+    @apply border-b border-muted-foreground;
+  }
+
   .nav-search {
     @apply absolute top-0 bottom-0 w-80 h-full bg-background border-r border-muted-foreground/50 z-10 duration-300 transition-all ease-in;
   }
@@ -151,5 +155,9 @@
 
   .btn-accent {
     @apply text-blue-500 hover:text-blue-700 disabled:text-gray-500 font-medium cursor-pointer duration-300;
+  }
+
+  .btn-selection {
+    @apply flex items-center w-full hover:bg-muted-foreground/20 p-2 rounded-md duration-300 gap-4;
   }
 }

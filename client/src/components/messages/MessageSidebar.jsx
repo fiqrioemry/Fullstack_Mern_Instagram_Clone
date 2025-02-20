@@ -1,5 +1,5 @@
-import Avatar from "@/components/ui/Avatar";
 import { useEffect, useState } from "react";
+import Avatar from "@/components/ui/Avatar";
 import StartNewMessage from "./StartNewMessage";
 import { MessageSquareDiff } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";

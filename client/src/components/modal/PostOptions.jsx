@@ -58,17 +58,17 @@ const PostOptions = ({ data }) => {
       <DialogTrigger asChild>
         <Ellipsis className="btn-secondary" />
       </DialogTrigger>
-      <DialogContent className="max-w-96 bg-secondary border-none p-0">
+      <DialogContent>
         <div>
           <button
-            className="btn btn-delete border-b border-muted-foreground rounded-none py-4"
+            className="w-full btn-delete border-b border-muted-foreground/20 py-4"
             onClick={user.userId === data.userId ? handleDelete : handleReport}
           >
             {user.userId === data.userId ? "delete" : "report"}
           </button>
           {user.userId !== data.userId && (
             <button
-              className="btn btn-delete border-b border-muted-foreground rounded-none py-4"
+              className="w-full btn-delete  border-b border-muted-foreground/20 py-4"
               onClick={data.isFollow ? handleUnfollow : handleFollow}
             >
               {data.isFollow ? "unfollow" : "follow"}
@@ -80,7 +80,7 @@ const PostOptions = ({ data }) => {
                 ? `/${data.username}`
                 : `/p/${data.postId}`
             }
-            className="btn btn-secondary border-b border-muted-foreground  rounded-none py-4"
+            className="btn btn-secondary  border-b border-muted-foreground/20 rounded-none py-4"
           >
             {location === `/p/${data.postId}` ? "go to profile" : "go to post"}
           </Link>

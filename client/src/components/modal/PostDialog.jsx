@@ -27,7 +27,7 @@ const PostDialog = () => {
   return (
     <Dialog defaultOpen={true} onOpenChange={(open) => !open && navigate(-1)}>
       <DialogTitle>
-        <DialogContent className="max-w-4xl md:max-w-[62rem] border-none p-0 overflow-hidden">
+        <DialogContent className="max-w-4xl md:max-w-[62rem] bg-background">
           {post ? <Post post={post} /> : <PostLoading />}
         </DialogContent>
       </DialogTitle>
