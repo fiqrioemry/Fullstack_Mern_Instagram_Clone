@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 const redis = require('../../config/redis.js');
 const cassandra = require('../../config/cassandra');
 const { Chat, Profile, User } = require('../../models');
-const { io, getReceiverSocketId } = require('../../config/socket.js');
+const { io, getReceiverSocketId } = require('../../config/socket');
 const { uploadMediaToCloudinary } = require('../../utils/cloudinary');
 
 async function getChats(req, res) {
