@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 const redis = require('../../config/redis.js');
 const cassandra = require('../../config/cassandra');
 const { Chat, Profile, User } = require('../../models');
-const { io, getReceiverSocketId } = require('../../config/socket');
+const { io, getReceiverSocketId } = require('../../config/socket.js');
 const { uploadMediaToCloudinary } = require('../../utils/cloudinary');
 
 async function getChats(req, res) {
@@ -120,24 +120,21 @@ async function sendChat(req, res) {
       { prepare: true },
     );
 
+    const newChat = {
+      chatId,
+      senderId,
+      receiverId,
+      message,
+      media_url,
+      timestamp,
+    };
+
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit('receive_message', {
-        chatId,
-        senderId,
-        receiverId,
-        message,
-        media_url,
-        timestamp,
-      });
-
-      io.to(receiverSocketId).emit('new_notification', {
-        senderId,
-        message: 'New Chat received',
-      });
+      io.to(receiverSocketId).emit('newMessage', newChat);
     }
 
-    res.status(200).json({ message: 'Chat is sent' });
+    res.status(200).json({ message: 'Chat is sent', newChat });
   } catch (error) {
     res
       .status(500)
