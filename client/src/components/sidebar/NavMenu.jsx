@@ -17,7 +17,7 @@ import { CreateNewPost } from "@/components/modal/CreateNewPost";
 const NavMenu = forwardRef(({ openSearch, handleSearch }, ref) => {
   const { user } = useAuthStore();
   const [openCreate, setOpenCreate] = useState(false);
-
+  console.log(user);
   const handleCreatePost = () => {
     setOpenCreate((prev) => !prev);
   };

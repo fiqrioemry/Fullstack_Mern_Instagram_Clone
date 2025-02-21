@@ -2,12 +2,24 @@ import { useEffect, useRef } from "react";
 import { Image, Send } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { useChatStore } from "@/store/useChatStore";
-import { useAuthStore } from "../../store/useAuthStore";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useFormSchema } from "@/hooks/useFormSchema";
+import { chatControl, chatState } from "../../config";
 
 const ChatSelected = () => {
   const { user } = useAuthStore();
   const chatEndRef = useRef(null);
-  const { selectedUser, chat } = useChatStore();
+  const { selectedUser, chat, sendChat } = useChatStore();
+  const chatForm = useFormSchema(
+    chatState,
+    chatControl,
+    sendChat,
+    selectedUser.userId
+  );
+
+  const handleSendMessage = () => {
+    chatForm.handleSubmit();
+  };
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -45,11 +57,11 @@ const ChatSelected = () => {
 
                   <div
                     className={`p-3 rounded-lg shadow-md max-w-xs ${
-                      isSender ? "bg-blue-500 text-white" : "bg-secondary"
+                      isSender ? "bg-blue-500 text-foreground" : "bg-secondary"
                     }`}
                   >
                     <div className="text-sm">{message.message}</div>
-                    <span className="text-xs text-muted-foreground block mt-1">
+                    <span className="text-xs text-foreground block mt-1">
                       {new Date(message.timestamp).toLocaleTimeString()}
                     </span>
                   </div>
@@ -65,13 +77,20 @@ const ChatSelected = () => {
       <div className="border-t border-muted p-4 flex items-center space-x-4">
         <input
           type="text"
+          name="message"
+          value={chatForm.values.message}
+          onChange={chatForm.handleChange}
           className="flex-1 p-2 border border-muted bg-background rounded-lg focus:outline-none"
           placeholder="Type a message..."
         />
         <button className="p-1 btn-accent">
           <Image className="h-5 w-5" />
         </button>
-        <button className="p-1 btn-accent">
+        <button
+          onClick={handleSendMessage}
+          disabled={!(chatForm.isValid && chatForm.dirty)}
+          className="p-1 btn-accent disabled:cursor-not-allowed"
+        >
           <Send className="h-5 w-5" />
         </button>
       </div>

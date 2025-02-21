@@ -223,9 +223,9 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  sendChat: async (formData) => {
+  sendChat: async (formData, receiverId) => {
     return authInstance
-      .post(`/chat`, formData)
+      .post(`/chat/${receiverId}`, formData)
       .then((res) => res.data)
       .catch(errorHandle);
   },

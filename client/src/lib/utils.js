@@ -53,41 +53,14 @@ const baseValidations = {
       },
     )
     .required('Email or username is required'),
-  city: Yup.string().required('Required'),
+  message: Yup.string().required('Required'),
   gender: Yup.string().required('Required'),
   province: Yup.string().required('Required'),
   location: Yup.string().required('Required'),
-
-  zipcode: Yup.string().min(5, 'Min. 5 digits').required('Required'),
-  name: Yup.string().min(6, 'Min. 6 characters').required('Required'),
-  bio: Yup.string().min(20, 'Min. 20 characters').required('Required'),
-  title: Yup.string().min(3, 'Min. 3 characters').required('Required'),
-  start_date: Yup.date().required('Required').typeError('Invalid date'),
-  company: Yup.string().min(3, 'Min. 3 characters').required('Required'),
-  address: Yup.string().min(12, 'Min. 12 characters').required('Required'),
-  description: Yup.string().min(20, 'Min. 20 characters').required('Required'),
-  categoryId: Yup.mixed().required('Required'),
-  files: Yup.array()
-    .min(1, 'Please upload at least one file')
-    .required('Files are required'),
-  price: Yup.number()
-    .typeError('Price must be a number')
-    .positive('Price must be greater than zero')
-    .required('Required'),
-  stock: Yup.number()
-    .typeError('Stock must be a number')
-    .integer('Stock must be a whole number')
-    .min(0, 'Stock cannot be negative')
-    .required('Required'),
-
   birthday: Yup.date()
     .max(new Date(), 'Cannot be in the future')
     .required('Required')
     .typeError('Invalid date'),
-  end_date: Yup.date()
-    .nullable()
-    .typeError('Invalid date')
-    .min(Yup.ref('start_date'), 'Must be after start date'),
 };
 
 export const newValidationSchema = (fields = []) => {

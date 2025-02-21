@@ -35,6 +35,7 @@ export const useAuthStore = create((set, get) => ({
       const { message, accessToken } = await callApi.signin(formData);
       set({ accessToken });
       toast.success(message);
+      get().connectSocket();
       await get().authCheck();
     } catch (error) {
       toast.error(error.message);
@@ -83,6 +84,7 @@ export const useAuthStore = create((set, get) => ({
       const message = await callApi.signout();
       set({ user: null, isAuthenticate: false, accessToken: null });
       toast.success(message);
+      get().disconnectSocket();
     } catch (error) {
       console.log(error);
     }
@@ -90,6 +92,7 @@ export const useAuthStore = create((set, get) => ({
 
   connectSocket: () => {
     const { user } = get();
+
     if (!user || get().socket?.connected) return;
 
     const socket = io(BASE_URL, {
@@ -97,6 +100,7 @@ export const useAuthStore = create((set, get) => ({
         userId: user.userId,
       },
     });
+
     socket.connect();
 
     set({ socket: socket });

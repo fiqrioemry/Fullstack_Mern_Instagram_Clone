@@ -39,16 +39,12 @@ export const useChatStore = create((set, get) => ({
 
   sendChat: async (formData, receiverId) => {
     if (!receiverId) return;
-
+    const { chat } = get();
     set({ loading: true });
     try {
       const { message, newChat } = await callApi.sendChat(formData, receiverId);
-
       toast.success(message);
-
-      set((state) => ({
-        chat: [...state.chat, newChat],
-      }));
+      set({ chat: [...chat, newChat] });
     } catch (error) {
       console.error(error.message);
     } finally {
@@ -57,25 +53,25 @@ export const useChatStore = create((set, get) => ({
   },
 
   subscribeToMessages: () => {
-    const { selectedUser, chat } = get();
+    const { selectedUser } = get();
     if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;
 
-    socket.off("newChat");
-    socket.on("newChat", (newChat) => {
-      if (
-        newChat.senderId === selectedUser.userId ||
-        newChat.receiverId === selectedUser.userId
-      ) {
-        set({ chat: [...chat, newChat] });
-      }
+    socket.on("newMessage", (newChat) => {
+      const isMessageSentFromSelectedUser =
+        newChat.receiverId === selectedUser.userId;
+      if (!isMessageSentFromSelectedUser) return;
+
+      set({
+        chat: [...get().chat, newChat],
+      });
     });
   },
 
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
-    socket.off("newChat");
+    socket.off("newMessage");
   },
 
   setSelectedUser: (selectedUser) => {
