@@ -6,25 +6,25 @@ import callApi from "../api/callApi";
 export const useChatStore = create((set, get) => ({
   chat: [],
   chats: [],
-  loading: false,
+  loading: {},
   selectedUser: null,
 
   getChats: async () => {
-    set({ loading: true });
+    set((state) => ({ loading: { ...state.loading, getChats: true } }));
+
     try {
       const chats = await callApi.getChats();
       set({ chats });
     } catch (error) {
       console.error(error.message);
     } finally {
-      set({ loading: false });
+      set((state) => ({ loading: { ...state.loading, getChats: false } }));
     }
   },
+  getChat: async () => {
+    const userId = get().selectedUser.userId;
+    set((state) => ({ loading: { ...state.loading, getChat: true } }));
 
-  getChat: async (userId) => {
-    if (!userId) return;
-
-    set({ loading: true });
     try {
       const { message, chat } = await callApi.getChat(userId);
       toast.success(message);
@@ -33,14 +33,13 @@ export const useChatStore = create((set, get) => ({
       set({ chat: [] });
       console.error(error.message);
     } finally {
-      set({ loading: false });
+      set((state) => ({ loading: { ...state.loading, getChat: false } }));
     }
   },
 
-  sendChat: async (formData, receiverId) => {
-    if (!receiverId) return;
-    const { chat } = get();
-    set({ loading: true });
+  sendChat: async (formData) => {
+    const receiverId = get().selectedUser.userId;
+    set((state) => ({ loading: { ...state.loading, getChat: true } }));
     try {
       const { message, newChat } = await callApi.sendChat(formData, receiverId);
       toast.success(message);
