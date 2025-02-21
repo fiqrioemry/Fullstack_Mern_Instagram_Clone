@@ -5,8 +5,8 @@ import { io } from "socket.io-client";
 
 const BASE_URL =
   import.meta.env.VITE_BASE_URL === "development"
-    ? "http://localhost:5000/api"
-    : "/api";
+    ? "http://localhost:5000"
+    : "/";
 
 export const useAuthStore = create((set, get) => ({
   step: 1,
@@ -35,43 +35,7 @@ export const useAuthStore = create((set, get) => ({
       const { message, accessToken } = await callApi.signin(formData);
       set({ accessToken });
       toast.success(message);
-      get().connectSocket();
-      await get().authCheck();
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  resendOTP: async (email) => {
-    try {
-      const message = await callApi.sendOTP(email);
-      toast.success(message);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  },
-
-  signup: async (formData, navigate) => {
-    set({ loading: true });
-    try {
-      const step = get().step;
-
-      if (step === 1) {
-        const message = await callApi.sendOTP(formData);
-        toast.success(message);
-        set({ step: 2 });
-      } else if (step === 2) {
-        const message = await callApi.verifyOTP(formData);
-        toast.success(message);
-        set({ step: 3 });
-      } else if (step === 3) {
-        const message = await callApi.signup(formData);
-        toast.success(message);
-        set({ step: 1 });
-        navigate("/signin");
-      }
+      await get().authCheck(); // ✅ Auth check setelah login
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -83,34 +47,45 @@ export const useAuthStore = create((set, get) => ({
     try {
       const message = await callApi.signout();
       set({ user: null, isAuthenticate: false, accessToken: null });
+      get().disconnectSocket(); // ✅ Matikan koneksi socket saat logout
       toast.success(message);
-      get().disconnectSocket();
     } catch (error) {
       console.log(error);
     }
   },
 
   connectSocket: () => {
-    const { user } = get();
+    const { user, socket } = get();
 
-    if (!user || get().socket?.connected) return;
+    if (!user || (socket && socket.connected)) return; // ✅ Hindari koneksi duplikat
 
-    const socket = io(BASE_URL, {
-      query: {
-        userId: user.userId,
-      },
+    const newSocket = io(BASE_URL, {
+      query: { userId: user.userId },
       withCredentials: true,
+      reconnection: true, // ✅ Aktifkan auto-reconnect
     });
 
-    socket.connect();
+    newSocket.on("connect", () => {
+      console.log("🔹 Socket connected:", newSocket.id);
+    });
 
-    set({ socket: socket });
+    newSocket.on("disconnect", (reason) => {
+      console.log("❌ Socket disconnected:", reason);
+    });
 
-    socket.on("getOnlineUsers", (userIds) => {
+    newSocket.on("getOnlineUsers", (userIds) => {
       set({ onlineUsers: userIds });
+      console.log("📌 Online Users:", userIds);
     });
+
+    set({ socket: newSocket });
   },
+
   disconnectSocket: () => {
-    if (get().socket?.connected) get().socket.disconnect();
+    const { socket } = get();
+    if (socket) {
+      socket.disconnect();
+      set({ socket: null });
+    }
   },
 }));
