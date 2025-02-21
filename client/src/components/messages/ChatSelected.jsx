@@ -1,21 +1,17 @@
 import { useEffect, useRef } from "react";
 import { Image, Send } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import { chatControl, chatState } from "@/config";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
-import { chatControl, chatState } from "../../config";
 
 const ChatSelected = () => {
   const { user } = useAuthStore();
   const chatEndRef = useRef(null);
-  const { selectedUser, chat, sendChat } = useChatStore();
-  const chatForm = useFormSchema(
-    chatState,
-    chatControl,
-    sendChat,
-    selectedUser.userId
-  );
+  const { selectedUser, loading, chat, sendChat } = useChatStore();
+  const chatForm = useFormSchema(chatState, chatControl, sendChat);
 
   const handleSendMessage = () => {
     chatForm.handleSubmit();
@@ -70,6 +66,12 @@ const ChatSelected = () => {
             })}
           </div>
         )}
+        {loading.sendChat && (
+          <div className="flex items-end space-x-2 justify-end">
+            <Skeleton className="h-12 rounded-lg shadow-md max-w-xs " />
+          </div>
+        )}
+
         <div ref={chatEndRef} />
       </div>
 

@@ -8,8 +8,6 @@ const ChatList = () => {
     setSelectedUser(user);
   };
 
-  console.log(chats);
-
   return (
     <div className="flex-1 overflow-y-auto py-4 space-y-4">
       {chats.map((chat) => (

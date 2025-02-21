@@ -15,7 +15,7 @@ const ChatSidebar = ({ handleClick }) => {
     getChats();
   }, [getChats]);
 
-  if (loading) return <ChatSidebarLoading />;
+  if (loading.getChats) return <ChatSidebarLoading />;
 
   return (
     <div>

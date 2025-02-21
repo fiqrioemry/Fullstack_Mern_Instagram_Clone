@@ -26,7 +26,7 @@ const ChatContainer = ({ handleClick }) => {
     };
   }, [getChat, selectedUser, subscribeToMessages, unsubscribeFromMessages]);
 
-  if (loading) return <ChatContainerLoading />;
+  if (loading.getChat) return <ChatContainerLoading />;
 
   return (
     <>
