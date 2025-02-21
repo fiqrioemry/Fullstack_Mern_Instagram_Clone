@@ -38,7 +38,7 @@ const ChatSelected = () => {
         ) : (
           <div className="space-y-2">
             {chat.map((message) => {
-              const isSender = message.sender_id === user.userId;
+              const isSender = message.senderId === user.userId;
 
               return (
                 <div
@@ -68,7 +68,7 @@ const ChatSelected = () => {
         )}
         {loading.sendChat && (
           <div className="flex items-end space-x-2 justify-end">
-            <Skeleton className="h-12 rounded-lg shadow-md max-w-xs " />
+            <Skeleton className="h-14 w-1/2 rounded-lg max-w-xs  " />
           </div>
         )}
 

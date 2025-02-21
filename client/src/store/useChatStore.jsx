@@ -40,10 +40,11 @@ export const useChatStore = create((set, get) => ({
   sendChat: async (formData) => {
     const receiverId = get().selectedUser.userId;
     set({ loading: { ...get().loading, sendChat: true } });
+
     try {
       const { message, newChat } = await callApi.sendChat(formData, receiverId);
-      toast.success(message);
       set({ chat: [...get().chat, newChat] });
+      toast.success(message);
     } catch (error) {
       console.error(error.message);
     } finally {

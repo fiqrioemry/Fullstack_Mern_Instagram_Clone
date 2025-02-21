@@ -99,6 +99,7 @@ export const useAuthStore = create((set, get) => ({
       query: {
         userId: user.userId,
       },
+      withCredentials: true,
     });
 
     socket.connect();

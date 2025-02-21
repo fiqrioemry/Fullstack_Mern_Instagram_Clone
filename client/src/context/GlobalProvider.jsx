@@ -7,8 +7,10 @@ import PageLoading from "@/components/skeleton/PageLoading";
 const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
-  const { user, authCheck, isAuthenticate, onlineUsers } = useAuthStore();
+  const { user, authCheck, isAuthenticate, onlineUsers, socket } =
+    useAuthStore();
   console.log("online user : ", onlineUsers);
+  console.log("socket : ", socket);
 
   useEffect(() => {
     authCheck();
