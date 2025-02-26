@@ -1,18 +1,12 @@
+/* eslint-disable react/prop-types */
 import Avatar from "@/components/ui/Avatar";
-import { useChatStore } from "@/store/useChatStore";
 
-const ChatList = () => {
-  const { chats, setSelectedUser } = useChatStore();
-
-  const handleSelectedMessage = (user) => {
-    setSelectedUser(user);
-  };
-
+const ChatList = ({ chats, setSelectedUser }) => {
   return (
     <div className="flex-1 overflow-y-auto py-4 space-y-4">
       {chats.map((chat) => (
         <button
-          onClick={() => handleSelectedMessage(chat)}
+          onClick={() => setSelectedUser(chat)}
           className="hover:bg-secondary duration-300 w-full py-2 px-4"
           key={chat.userId}
         >

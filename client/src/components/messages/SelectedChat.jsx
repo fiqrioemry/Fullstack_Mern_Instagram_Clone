@@ -2,21 +2,23 @@ import { Image, Send } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { chatControl, chatState } from "@/config";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useChatStore } from "@/store/useChatStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import useScrollToView from "@/hooks/useScrollToView";
 
-const ChatSelected = () => {
+const SelectedChat = () => {
   const { user } = useAuthStore();
-  const { selectedUser, loading, chat, sendChat } = useChatStore();
+
+  const { sendChat, loading, selectedUser } = useChatStore();
+
   const chatForm = useFormSchema(chatState, chatControl, sendChat);
+
+  const { viewRef } = useScrollToView(selectedUser);
 
   const handleSendMessage = () => {
     chatForm.handleSubmit();
   };
-
-  const { viewRef } = useScrollToView(selectedUser);
 
   return (
     <div className="flex flex-col h-full">
@@ -97,4 +99,4 @@ const ChatSelected = () => {
   );
 };
 
-export default ChatSelected;
+export default SelectedChat;
