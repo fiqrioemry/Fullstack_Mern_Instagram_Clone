@@ -51,9 +51,6 @@ async function sendChat(req, res) {
   let { chatId, message } = req.body;
 
   try {
-    console.log('sender Id', senderId);
-    console.log('receiver Id', receiverId);
-    console.log(message);
     if (!senderId || !receiverId) {
       return res
         .status(400)
@@ -97,7 +94,6 @@ async function sendChat(req, res) {
       }
     }
 
-    console.log('berhasil');
     const query =
       'INSERT INTO messages (chat_id, sender_id, receiver_id, message, media_url, timestamp) VALUES (?, ?, ?, ?, ?, ?)';
     await cassandra.execute(
@@ -116,6 +112,7 @@ async function sendChat(req, res) {
     };
 
     const receiverSocketId = getReceiverSocketId(receiverId);
+
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('newChat', newChat);
     }
