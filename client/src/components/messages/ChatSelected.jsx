@@ -16,7 +16,7 @@ const ChatSelected = () => {
     chatForm.handleSubmit();
   };
 
-  const { ref } = useScrollToView(selectedUser);
+  const { viewRef } = useScrollToView(selectedUser);
 
   return (
     <div className="flex flex-col h-full">
@@ -69,7 +69,7 @@ const ChatSelected = () => {
           </div>
         )}
 
-        <div ref={ref} />
+        <div ref={viewRef} />
       </div>
 
       {/* Input Box */}

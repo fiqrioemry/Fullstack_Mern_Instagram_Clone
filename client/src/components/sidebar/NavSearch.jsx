@@ -1,76 +1,33 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 import { cn } from "@/lib/utils";
-import { searchState } from "@/config";
-import { Link } from "react-router-dom";
-import Avatar from "@/components/ui/Avatar";
-import { Input } from "@/components/ui/input";
-import { useUserStore } from "@/store/useUserStore";
-import { useFormSchema } from "@/hooks/useFormSchema";
-import SearchLoading from "@/components/skeleton/SearchLoading";
-import { forwardRef, useEffect, useMemo, useCallback, useRef } from "react";
+import { forwardRef } from "react";
+import SearchInput from "./SearchInput";
+import SearchResult from "./SearchResult";
+import { useNavigate } from "react-router-dom";
+import useHandleSearch from "@/hooks/useHandleSearch";
 
 const NavSearch = forwardRef(({ openSearch }, ref) => {
-  const debounceRef = useRef(null);
-  const searchForm = useFormSchema(searchState);
-  const { users, searchUser, searching, searchTerm } = useUserStore();
-
-  const searchHandler = useCallback(() => {
-    if (!searchForm.values.username.trim()) return;
-    searchUser(searchForm.values.username);
-  }, [searchForm.values.username, searchUser]);
-
-  useEffect(() => {
-    clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(searchHandler, 300);
-
-    return () => clearTimeout(debounceRef.current);
-  }, [searchForm.values.username, searchHandler]);
-
-  const userResults = useMemo(() => {
-    if (searching) return <SearchLoading />;
-    if (users.length === 0 && searchTerm)
-      return <p className="text-muted-foreground mt-4">No Users Found</p>;
-
-    return users.map((user) => (
-      <div className="flex items-center gap-4" key={user.id || user.username}>
-        <Avatar avatar={user.avatar} />
-        <div>
-          <Link
-            to={`/${user.username}`}
-            className="text-xs md:text-sm btn-secondary"
-          >
-            {user.username}
-          </Link>
-          <p className="text-xs md:text-sm text-muted-foreground">
-            {user.fullname}
-          </p>
-        </div>
-      </div>
-    ));
-  }, [users, searching, searchTerm]);
+  const navigate = useNavigate();
+  const handleNavigate = (username) => {
+    navigate(`/p/${username}`);
+  };
+  const { users, searching, searchTerm, searchForm } = useHandleSearch();
 
   return (
     <div
       ref={ref}
-      className={cn(openSearch ? "left-20" : "-left-96", "nav-search")}
+      className={cn(openSearch ? "left-20" : "-left-96", "nav-search px-4")}
     >
-      <div className="px-4 py-6">
-        <h3>Search Users</h3>
-        <form className="mt-3">
-          <Input
-            name="username"
-            placeholder="Search by username..."
-            value={searchForm.values.username}
-            onChange={searchForm.handleChange}
-            className="w-full border-muted-foreground/20"
-          />
-        </form>
-        {searchForm.values.username &&
-          searchForm.values.username.length > 0 && (
-            <div className="mt-4 space-y-2 p-2">{userResults}</div>
-          )}
-      </div>
+      <SearchInput searchForm={searchForm} />
+      {searchForm?.values?.username?.length > 0 && (
+        <SearchResult
+          users={users}
+          searchTerm={searchTerm}
+          onClick={handleNavigate}
+          searching={searching}
+        />
+      )}
     </div>
   );
 });

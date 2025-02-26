@@ -1,37 +1,21 @@
+import { useMemo } from "react";
 import { X } from "lucide-react";
-import { searchState } from "@/config";
-import { Input } from "@/components/ui/input";
 import Avatar from "@/components/ui/Avatar";
-import { useUserStore } from "@/store/useUserStore";
+import { Input } from "@/components/ui/input";
 import { useChatStore } from "@/store/useChatStore";
-import { useFormSchema } from "@/hooks/useFormSchema";
+import useHandleSearch from "@/hooks/useHandleSearch";
 import SearchLoading from "@/components/skeleton/SearchLoading";
-import { useEffect, useMemo, useCallback, useRef } from "react";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 
 // eslint-disable-next-line react/prop-types
 const SearchUserForChat = ({ open, setOpen }) => {
-  const debounceRef = useRef(null);
   const { setSelectedUser } = useChatStore();
-  const searchForm = useFormSchema(searchState);
-  const { users, searchUser, searching, searchTerm } = useUserStore();
+  const { users, searching, searchTerm, searchForm } = useHandleSearch();
 
-  const handleStartNewMessage = (user) => {
+  const handleNewChat = (user) => {
     setSelectedUser(user);
     setOpen(false);
   };
-
-  const searchHandler = useCallback(() => {
-    if (!searchForm.values.username.trim()) return;
-    searchUser(searchForm.values.username);
-  }, [searchForm.values.username, searchUser]);
-
-  useEffect(() => {
-    clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(searchHandler, 300);
-
-    return () => clearTimeout(debounceRef.current);
-  }, [searchForm.values.username, searchHandler]);
 
   const userResults = useMemo(() => {
     if (searching) return <SearchLoading />;
@@ -41,7 +25,7 @@ const SearchUserForChat = ({ open, setOpen }) => {
 
     return users.map((user) => (
       <button
-        onClick={() => handleStartNewMessage(user)}
+        onClick={() => handleNewChat(user)}
         className="btn-selection"
         key={user.userId}
       >

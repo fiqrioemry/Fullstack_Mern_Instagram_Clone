@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 
 const useScrollToView = (state) => {
-  const ref = useRef(null);
+  const viewRef = useRef(null);
 
   useEffect(() => {
-    ref.current?.scrollIntoView({ behavior: "smooth" });
+    viewRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [state]);
 
-  return { ref };
+  return { viewRef };
 };
 
 export default useScrollToView;
