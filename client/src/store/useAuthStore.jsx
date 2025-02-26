@@ -2,6 +2,7 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "@/api/callApi";
 import { io } from "socket.io-client";
+import { initializeSocket } from "../socket/socket";
 
 const BASE_URL =
   import.meta.env.VITE_BASE_URL === "development"
@@ -35,7 +36,8 @@ export const useAuthStore = create((set, get) => ({
       const { message, accessToken } = await callApi.signin(formData);
       set({ accessToken });
       toast.success(message);
-      await get().authCheck(); // ✅ Auth check setelah login
+
+      await get().authCheck();
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -47,7 +49,7 @@ export const useAuthStore = create((set, get) => ({
     try {
       const message = await callApi.signout();
       set({ user: null, isAuthenticate: false, accessToken: null });
-      get().disconnectSocket(); // ✅ Matikan koneksi socket saat logout
+      get().disconnectSocket();
       toast.success(message);
     } catch (error) {
       console.log(error);
@@ -55,37 +57,24 @@ export const useAuthStore = create((set, get) => ({
   },
 
   connectSocket: () => {
-    const { user, socket } = get();
+    if (!get().user || get().socket?.connected) return;
 
-    if (!user || (socket && socket.connected)) return; // ✅ Hindari koneksi duplikat
-
-    const newSocket = io(BASE_URL, {
-      query: { userId: user.userId },
-      withCredentials: true,
-      reconnection: true, // ✅ Aktifkan auto-reconnect
+    const socket = io(BASE_URL, {
+      query: { userId: get().user.userId },
     });
 
-    newSocket.on("connect", () => {
-      console.log("🔹 Socket connected:", newSocket.id);
-    });
+    socket.connect();
 
-    newSocket.on("disconnect", (reason) => {
-      console.log("❌ Socket disconnected:", reason);
-    });
+    set({ socket: socket });
 
-    newSocket.on("getOnlineUsers", (userIds) => {
+    socket.on("getOnlineUsers", (userIds) => {
+      console.log("Socket connected:", socket.id);
+      console.log("Online Users:", userIds);
       set({ onlineUsers: userIds });
-      console.log("📌 Online Users:", userIds);
     });
-
-    set({ socket: newSocket });
   },
 
   disconnectSocket: () => {
-    const { socket } = get();
-    if (socket) {
-      socket.disconnect();
-      set({ socket: null });
-    }
+    if (get().socket?.connected) get().socket.disconnect();
   },
 }));
