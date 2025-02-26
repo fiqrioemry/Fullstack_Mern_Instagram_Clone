@@ -5,15 +5,10 @@ const express = require('express');
 const services = require('./routes');
 const cookieParser = require('cookie-parser');
 const limiter = require('./middleware/limiter');
+const { app, server } = require('./config/socket');
 const passport = require('passport');
 
 // socket
-const { createServer } = require('http');
-const { initializeSocket } = require('./config/socket');
-
-const app = express();
-const httpServer = createServer(app);
-initializeSocket(httpServer);
 
 const CLIENT_HOST = process.env.CLIENT_HOST;
 const SERVER_PORT = process.env.SERVER_PORT;
@@ -39,6 +34,6 @@ app.use('/api/post', services.postRoute);
 app.use('/api/chat', services.chatRoute);
 app.use('/api/notifcation', services.notificationRoute);
 
-httpServer.listen(SERVER_PORT, () => {
+server.listen(SERVER_PORT, () => {
   console.log(`✅ Connected to Server on port ${SERVER_PORT}`);
 });

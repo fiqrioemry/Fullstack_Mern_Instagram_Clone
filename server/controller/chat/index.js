@@ -2,8 +2,8 @@ const fs = require('fs').promises;
 const { Op } = require('sequelize');
 const cassandra = require('../../config/cassandra');
 const { Chat, Profile, User } = require('../../models');
+const { getReceiverSocketId } = require('../../config/socket');
 const uploadToCloudinary = require('../../utils/uploadToCloudinary');
-const { getIO, getConnectedUsers } = require('../../config/socket');
 
 async function getChats(req, res) {
   const userId = req.user.userId;
@@ -47,10 +47,13 @@ async function getChats(req, res) {
 async function sendChat(req, res) {
   const file = req.file;
   const senderId = req.user.userId;
-  const receiverId = req.params.receiverId;
+  const receiverId = Number(req.params.receiverId);
   let { chatId, message } = req.body;
 
   try {
+    console.log('sender Id', senderId);
+    console.log('receiver Id', receiverId);
+    console.log(message);
     if (!senderId || !receiverId) {
       return res
         .status(400)
@@ -94,6 +97,7 @@ async function sendChat(req, res) {
       }
     }
 
+    console.log('berhasil');
     const query =
       'INSERT INTO messages (chat_id, sender_id, receiver_id, message, media_url, timestamp) VALUES (?, ?, ?, ?, ?, ?)';
     await cassandra.execute(
@@ -111,14 +115,9 @@ async function sendChat(req, res) {
       timestamp,
     };
 
-    const io = getIO();
-    const connectedUsers = getConnectedUsers();
-    const receiverSocketId = connectedUsers.get(receiverId);
-
+    const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit('newChat', {
-        chat: newChat,
-      });
+      io.to(receiverSocketId).emit('newChat', newChat);
     }
 
     res.status(200).json({ message: 'Chat is sent', newChat });
