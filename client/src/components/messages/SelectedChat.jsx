@@ -1,21 +1,43 @@
-/* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import { Image, Send } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { chatControl, chatState } from "@/config";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import useScrollToView from "@/hooks/useScrollToView";
+import { useChatStore } from "@/store/useChatStore";
+import ChatContainerLoading from "@/components/skeleton/ChatContainerLoading";
 
-const SelectedChat = ({ sendChat, selectedUser, chat }) => {
+const SelectedChat = () => {
   const { user } = useAuthStore();
-
+  const {
+    loading,
+    chat,
+    sendChat,
+    getChat,
+    selectedUser,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  } = useChatStore();
   const chatForm = useFormSchema(chatState, chatControl, sendChat);
-
   const { viewRef } = useScrollToView(selectedUser);
 
   const handleSendMessage = () => {
     chatForm.handleSubmit();
   };
+
+  useEffect(() => {
+    if (selectedUser) {
+      getChat(selectedUser.userId);
+      subscribeToMessages();
+    }
+
+    return () => {
+      unsubscribeFromMessages();
+    };
+  }, [getChat, selectedUser, subscribeToMessages, unsubscribeFromMessages]);
+
+  if (loading.getChat) return <ChatContainerLoading />;
 
   return (
     <div className="flex flex-col h-full">

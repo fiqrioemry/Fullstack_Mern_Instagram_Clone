@@ -1,19 +1,15 @@
 /* eslint-disable react/prop-types */
 import ChatList from "./ChatList";
 import Avatar from "@/components/ui/Avatar";
+import useLoadChats from "@/hooks/useLoadChats";
 import { MessageSquareDiff } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import ChatSidebarLoading from "@/components/skeleton/ChatSidebarLoading";
-import { useChatStore } from "../../store/useChatStore";
-import { useEffect } from "react";
 
 const ChatSidebar = ({ setOpen }) => {
   const { user } = useAuthStore();
-  const { chats, chat, setSelectedUser, getChats, loading } = useChatStore();
 
-  useEffect(() => {
-    getChats();
-  }, [getChats, chat]);
+  const { loading, chats, setSelectedUser } = useLoadChats();
 
   if (loading.getChats) return <ChatSidebarLoading />;
 
