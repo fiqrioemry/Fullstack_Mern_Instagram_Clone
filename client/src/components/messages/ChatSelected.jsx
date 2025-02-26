@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { Image, Send } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { chatControl, chatState } from "@/config";
@@ -6,10 +5,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
+import useScrollToView from "@/hooks/useScrollToView";
 
 const ChatSelected = () => {
   const { user } = useAuthStore();
-  const chatEndRef = useRef(null);
   const { selectedUser, loading, chat, sendChat } = useChatStore();
   const chatForm = useFormSchema(chatState, chatControl, sendChat);
 
@@ -17,9 +16,7 @@ const ChatSelected = () => {
     chatForm.handleSubmit();
   };
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chat]);
+  const { ref } = useScrollToView(selectedUser);
 
   return (
     <div className="flex flex-col h-full">
@@ -72,7 +69,7 @@ const ChatSelected = () => {
           </div>
         )}
 
-        <div ref={chatEndRef} />
+        <div ref={ref} />
       </div>
 
       {/* Input Box */}

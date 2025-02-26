@@ -2,19 +2,16 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "@/api/callApi";
 import { io } from "socket.io-client";
-import { initializeSocket } from "../socket/socket";
 
 const BASE_URL =
-  import.meta.env.VITE_BASE_URL === "development"
-    ? "http://localhost:5000"
-    : "/";
+  import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
 
 export const useAuthStore = create((set, get) => ({
   step: 1,
   user: null,
   loading: false,
   accessToken: null,
-  isAuthenticate: null,
+  checkingAuth: true,
   onlineUsers: [],
   socket: null,
 
@@ -23,10 +20,11 @@ export const useAuthStore = create((set, get) => ({
   authCheck: async () => {
     try {
       const user = await callApi.authCheck();
-      set({ user, isAuthenticate: true });
-      get().connectSocket();
+      set({ user });
     } catch {
-      set({ user: null, isAuthenticate: false });
+      set({ user: null });
+    } finally {
+      set({ checkingAuth: false });
     }
   },
 
@@ -36,7 +34,6 @@ export const useAuthStore = create((set, get) => ({
       const { message, accessToken } = await callApi.signin(formData);
       set({ accessToken });
       toast.success(message);
-
       await get().authCheck();
     } catch (error) {
       toast.error(error.message);
@@ -47,33 +44,34 @@ export const useAuthStore = create((set, get) => ({
 
   signout: async () => {
     try {
+      set({ loading: true });
       const message = await callApi.signout();
-      set({ user: null, isAuthenticate: false, accessToken: null });
-      get().disconnectSocket();
+      set({ user: null, accessToken: null });
       toast.success(message);
     } catch (error) {
       console.log(error);
+    } finally {
+      set({ loading: false });
     }
   },
 
   connectSocket: () => {
-    if (!get().user || get().socket?.connected) return;
+    const { authUser } = get();
+    if (!authUser || get().socket?.connected) return;
 
     const socket = io(BASE_URL, {
-      query: { userId: get().user.userId },
+      query: {
+        userId: authUser._id,
+      },
     });
-
     socket.connect();
 
     set({ socket: socket });
 
     socket.on("getOnlineUsers", (userIds) => {
-      console.log("Socket connected:", socket.id);
-      console.log("Online Users:", userIds);
       set({ onlineUsers: userIds });
     });
   },
-
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
   },

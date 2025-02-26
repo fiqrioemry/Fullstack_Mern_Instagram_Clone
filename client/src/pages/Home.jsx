@@ -1,20 +1,20 @@
 import Posts from "@/components/post/Posts";
 import { usePostStore } from "@/store/usePostStore";
+import useScrollToView from "@/hooks/useScrollToView";
 import AuthorCard from "@/components/profile/AuthorCard";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import NoPostToShow from "@/components/post/NoPostToShow";
 import PostsLoading from "@/components/skeleton/PostsLoading";
-import LastPostNotifcation from "../components/post/LastPostNotifcation";
+import LastPostNotifcation from "@/components/post/LastPostNotifcation";
 
 const Home = () => {
   const { getPostsFromFollowings, posts, loading, totalPosts } = usePostStore();
-  const { triggerRef } = useInfiniteScroll({
-    initialLimit: 3,
-    increment: 3,
-    fetchData: getPostsFromFollowings,
-    totalItems: totalPosts,
-    currentItems: posts.length,
-  });
+  const { scrollRef } = useScrollToView();
+  const { triggerRef } = useInfiniteScroll(
+    totalPosts,
+    getPostsFromFollowings,
+    posts.length
+  );
 
   return (
     <div className="flex">
@@ -22,6 +22,7 @@ const Home = () => {
         <div className="flex justify-center">
           <div className="w-full max-w-[30rem] px-2">
             <div className="md:mt-0 mt-12 md:mb-0 mb-12 py-6">
+              <div ref={scrollRef}></div>
               {loading && posts.length === 0 ? (
                 <PostsLoading />
               ) : (

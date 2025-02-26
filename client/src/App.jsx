@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import PostDetail from "./pages/PostDetail";
 import Layout from "./components/layout/Layout";
 import Notifications from "./pages/Notifications";
+import SettingsLayout from "./pages/SettingsLayout";
 import UserTags from "./components/profile/UserTags";
 import UserPosts from "./components/profile/UserPosts";
 import UserSaved from "./components/profile/UserSaved";
@@ -15,12 +16,14 @@ import PostDialog from "./components/modal/PostDialog";
 import Followers from "./components/profile/Followers";
 import { AuthRoute, NonAuthRoute } from "./middleware";
 import Followings from "./components/profile/Followings";
-import { Route, Routes, useLocation } from "react-router-dom";
-import SettingsLayout from "./pages/SettingsLayout";
+import { Route, Routes } from "react-router-dom";
+import PageLoading from "@/components/skeleton/PageLoading";
+import useAuthChecking from "./hooks/useAuthChecking";
 
 function App() {
-  const location = useLocation();
-  const background = location.state?.background;
+  const { checkingAuth, location, background } = useAuthChecking();
+
+  if (checkingAuth) return <PageLoading />;
 
   return (
     <>

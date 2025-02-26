@@ -1,15 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 
-const useInfiniteScroll = ({
-  initialLimit,
-  increment,
-  fetchData,
-  totalItems,
-  currentItems,
-}) => {
+const useInfiniteScroll = (fetchData, totalItems, currentItems) => {
   const observer = useRef(null);
   const triggerRef = useRef(null);
-  const [limit, setLimit] = useState(initialLimit);
+  const [limit, setLimit] = useState(3);
 
   useEffect(() => {
     fetchData(limit);
@@ -18,7 +12,7 @@ const useInfiniteScroll = ({
   useEffect(() => {
     observer.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && currentItems < totalItems) {
-        setLimit((prevLimit) => prevLimit + increment);
+        setLimit((prevLimit) => prevLimit + 3);
       }
     });
 
