@@ -135,7 +135,7 @@
   }
 
   .nav-search {
-    @apply absolute top-0 bottom-0 w-80 h-full bg-background border-r border-muted-foreground/50 z-10 duration-300 transition-all ease-in;
+    @apply absolute top-0 bottom-0 w-80 px-4 py-2 h-full bg-background border-r border-muted-foreground/50 z-10 duration-300 transition-all ease-in;
   }
 
   .input-primary {
