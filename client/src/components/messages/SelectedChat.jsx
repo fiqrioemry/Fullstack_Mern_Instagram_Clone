@@ -1,16 +1,13 @@
+/* eslint-disable react/prop-types */
 import { Image, Send } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { chatControl, chatState } from "@/config";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useChatStore } from "@/store/useChatStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import useScrollToView from "@/hooks/useScrollToView";
 
-const SelectedChat = () => {
+const SelectedChat = ({ sendChat, selectedUser, chat }) => {
   const { user } = useAuthStore();
-
-  const { sendChat, loading, selectedUser } = useChatStore();
 
   const chatForm = useFormSchema(chatState, chatControl, sendChat);
 
@@ -63,11 +60,6 @@ const SelectedChat = () => {
                 </div>
               );
             })}
-          </div>
-        )}
-        {loading.sendChat && (
-          <div className="flex items-end space-x-2 justify-end">
-            <Skeleton className="h-14 w-1/2 rounded-lg max-w-xs  " />
           </div>
         )}
 
