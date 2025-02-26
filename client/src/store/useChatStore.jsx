@@ -40,10 +40,12 @@ export const useChatStore = create((set, get) => ({
   sendChat: async (formData) => {
     const receiverId = get().selectedUser.userId;
     set({ loading: { ...get().loading, sendChat: true } });
-
     try {
       const { message, newChat } = await callApi.sendChat(formData, receiverId);
+      console.log(newChat);
       set({ chat: [...get().chat, newChat] });
+
+      console.log(get().chat);
       toast.success(message);
     } catch (error) {
       console.error(error.message);
@@ -75,6 +77,6 @@ export const useChatStore = create((set, get) => ({
     socket.off("newChat");
   },
   setSelectedUser: (selectedUser) => {
-    set({ selectedUser, chat: [] });
+    set({ selectedUser });
   },
 }));

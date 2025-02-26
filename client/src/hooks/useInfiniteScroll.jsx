@@ -7,6 +7,7 @@ const useInfiniteScroll = (fetchData, totalItems, currentItems) => {
 
   useEffect(() => {
     fetchData(limit);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit]);
 
   useEffect(() => {
