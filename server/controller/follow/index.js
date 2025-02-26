@@ -2,8 +2,8 @@ const {
   User,
   Profile,
   Follow,
-  Notification,
   sequelize,
+  Notification,
 } = require('../../models');
 
 // tested

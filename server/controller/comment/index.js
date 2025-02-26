@@ -1,11 +1,11 @@
 const {
   User,
   Post,
+  Like,
   Profile,
   Comment,
-  Notification,
-  Like,
   sequelize,
+  Notification,
 } = require('../../models');
 
 function extractMentions(content) {

@@ -1,15 +1,6 @@
-const nodemailer = require('nodemailer');
+const transporter = require('../config/nodemailer');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.USER_EMAIL,
-    pass: process.env.USER_PASSWORD,
-  },
-  tls: { rejectUnauthorized: false },
-});
-
-module.exports = (email, otpcode) => {
+const sendOTP = (email, otpcode) => {
   return new Promise((resolve, reject) => {
     const options = {
       from: `Momengram <${process.env.USER_EMAIL}>`,
@@ -30,3 +21,5 @@ module.exports = (email, otpcode) => {
     });
   });
 };
+
+module.exports = sendOTP;

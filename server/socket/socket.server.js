@@ -1,14 +1,13 @@
 const { Server } = require('socket.io');
 
 let io;
-
 const connectedUsers = new Map();
 // { userId: socketId }
 
 const initializeSocket = (httpServer) => {
   io = new Server(httpServer, {
     cors: {
-      origin: process.env.CLIENT_HOST,
+      origin: process.env.CLIENT_URL,
       credentials: true,
     },
   });

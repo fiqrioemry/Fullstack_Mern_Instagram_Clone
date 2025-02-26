@@ -1,9 +1,7 @@
-const {
-  uploadMediaToCloudinary,
-  deleteMediaFromCloudinary,
-} = require('../../utils/cloudinary');
 const { Op } = require('sequelize');
 const { User, Profile, sequelize } = require('../../models');
+const uploadToCloudinary = require('../../utils/uploadToCloudinary');
+const deleteFromCloudinary = require('../../utils/deleteFromCloudinary');
 
 async function updateProfile(req, res) {
   const file = req.file;
@@ -36,13 +34,10 @@ async function updateProfile(req, res) {
 
     if (file?.buffer) {
       try {
-        uploadedImage = await uploadMediaToCloudinary(
-          file.buffer,
-          file.mimetype,
-        );
+        uploadedImage = await uploadToCloudinary(file.buffer, file.mimetype);
 
         if (profile.avatar) {
-          await deleteMediaFromCloudinary(profile.avatar);
+          await deleteFromCloudinary(profile.avatar);
         }
 
         avatar = uploadedImage.secure_url;
@@ -135,12 +130,12 @@ async function getMyProfile(req, res) {
 
     const profile = {
       userId: user.id,
-      username: user.username,
       email: user.email,
-      fullname: user.profile.fullname,
-      avatar: user.profile.avatar,
+      username: user.username,
       bio: user.profile.bio,
+      avatar: user.profile.avatar,
       gender: user.profile.gender,
+      fullname: user.profile.fullname,
       birthday: user.profile.birthday,
     };
 

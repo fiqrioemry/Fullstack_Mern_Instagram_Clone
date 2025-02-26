@@ -1,10 +1,9 @@
 const fs = require('fs').promises;
 const { Op } = require('sequelize');
-const redis = require('../../config/redis.js');
 const cassandra = require('../../config/cassandra');
 const { Chat, Profile, User } = require('../../models');
-const { io, getReceiverSocketId } = require('../../config/socket');
-const { uploadMediaToCloudinary } = require('../../utils/cloudinary');
+const uploadToCloudinary = require('../../utils/uploadToCloudinary');
+const { getIO, getConnectedUsers } = require('../../config/socket');
 
 async function getChats(req, res) {
   const userId = req.user.userId;
@@ -27,17 +26,6 @@ async function getChats(req, res) {
       ],
     });
 
-    // Ambil semua status user dari Redis
-    const keys = await redis.keys('user_status:*');
-    const onlineUsers = new Set();
-    for (const key of keys) {
-      const userId = key.split(':')[1];
-      const status = await redis.get(key);
-      if (status === 'online') {
-        onlineUsers.add(parseInt(userId));
-      }
-    }
-
     const chats = chatsData.map((chat) => {
       const chatPartner =
         chat.senderId === userId ? chat.receiver : chat.sender;
@@ -46,19 +34,13 @@ async function getChats(req, res) {
         chatId: chat.id,
         userId: chatPartner.id,
         username: chatPartner.username,
-        avatar:
-          chatPartner.profile?.avatar ||
-          `https://api.dicebear.com/5.x/adventurer/svg?seed=${chatPartner.username}`,
-        status: onlineUsers.has(chatPartner.id) ? 'online' : 'offline',
+        avatar: chatPartner.profile?.avatar,
       };
     });
 
     res.status(200).json(chats);
   } catch (error) {
-    console.error('❌ Error fetching chat list:', error);
-    res
-      .status(500)
-      .json({ message: 'Failed to retrieve chat list', error: error.message });
+    res.status(500).json({ message: error.message });
   }
 }
 
@@ -101,7 +83,7 @@ async function sendChat(req, res) {
 
     if (file?.buffer) {
       try {
-        const uploadedImage = await uploadMediaToCloudinary(
+        const uploadedImage = await uploadToCloudinary(
           file.buffer,
           file.mimetype,
         );
@@ -129,9 +111,14 @@ async function sendChat(req, res) {
       timestamp,
     };
 
-    const receiverSocketId = getReceiverSocketId(receiverId);
+    const io = getIO();
+    const connectedUsers = getConnectedUsers();
+    const receiverSocketId = connectedUsers.get(receiverId);
+
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit('newMessage', newChat);
+      io.to(receiverSocketId).emit('newChat', {
+        chat: newChat,
+      });
     }
 
     res.status(200).json({ message: 'Chat is sent', newChat });
@@ -184,13 +171,20 @@ async function getChat(req, res) {
         .json({ message: 'no chat found in history', chat: [] });
     }
 
-    const chat = result.rows;
+    const chat = result.rows.map((chat) => {
+      return {
+        chatId: chat.chat_id,
+        senderId: chat.sender_id,
+        receiverId: chat.receiver_id,
+        message: chat.message,
+        media_url: chat.media_url,
+        timestamp: chat.timestamp,
+      };
+    });
 
     res.status(200).json({ message: 'Success fetch chat', chat });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: 'Failed to retrieve Chat', error: error.message });
+    res.status(500).json({ message: error.message });
   }
 }
 

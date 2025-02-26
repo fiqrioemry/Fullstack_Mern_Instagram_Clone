@@ -1,5 +1,4 @@
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 const passport = require('passport');
 const speakeasy = require('speakeasy');
 const { User, Profile } = require('../models');

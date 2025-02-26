@@ -1,6 +1,5 @@
+require('dotenv').config();
 const Redis = require('ioredis');
-const dotenv = require('dotenv');
-dotenv.config();
 
 const { REDIS_PORT, DB_HOST } = process.env;
 

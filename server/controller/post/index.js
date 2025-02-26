@@ -11,10 +11,8 @@ const {
 } = require('../../models');
 const fs = require('fs').promises;
 const { Op } = require('sequelize');
-const {
-  uploadMediaToCloudinary,
-  deleteMediaFromCloudinary,
-} = require('../../utils/cloudinary');
+const uploadToCloudinary = require('../../utils/uploadToCloudinary');
+const deleteFromCloudinary = require('../../utils/deleteFromCloudinary');
 
 async function getPostsFromFollowings(req, res) {
   const userId = req.user.userId;
@@ -306,7 +304,7 @@ async function createPost(req, res) {
     const newPost = await Post.create({ userId, content }, { transaction: t });
 
     const uploadPromises = files.map(async (file) => {
-      const uploadedMedia = await uploadMediaToCloudinary(
+      const uploadedMedia = await uploadToCloudinary(
         file.buffer,
         file.mimetype,
       );
@@ -366,7 +364,7 @@ async function updatePost(req, res) {
     let newImages = [];
     if (req.files && req.files.length > 0) {
       const uploadPromises = req.files.map(async (file) => {
-        const uploadedMedia = await uploadMediaToCloudinary(file.path);
+        const uploadedMedia = await uploadToCloudinary(file.path);
         await fs.unlink(file.path);
         return uploadedMedia;
       });
@@ -388,7 +386,7 @@ async function updatePost(req, res) {
     });
 
     for (const img of imagesToDelete) {
-      await deleteMediaFromCloudinary(img.image);
+      await deleteFromCloudinary(img.image);
     }
 
     await t.commit();
@@ -428,7 +426,7 @@ async function deletePost(req, res) {
     });
 
     const deleteImagePromises = images.map(async (img) => {
-      await deleteMediaFromCloudinary(img.image);
+      await deleteFromCloudinary(img.image);
     });
     await Promise.all(deleteImagePromises);
 
