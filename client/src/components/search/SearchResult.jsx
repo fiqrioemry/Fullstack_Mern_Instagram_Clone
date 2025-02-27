@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import Avatar from "@/components/ui/Avatar";
 import SearchLoading from "@/components/skeleton/SearchLoading";
 
-const SearchResult = ({ users, searching, searchTerm, onClick }) => {
+const SearchResult = ({ users, searching, onClick, searchTerm }) => {
   const memoizedUsers = useMemo(() => {
     if (searching) return <SearchLoading />;
 
@@ -24,7 +24,7 @@ const SearchResult = ({ users, searching, searchTerm, onClick }) => {
         </div>
       </button>
     ));
-  }, [users, searching, searchTerm]);
+  }, [users, searching]);
 
   return <>{memoizedUsers}</>;
 };

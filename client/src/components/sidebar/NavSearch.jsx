@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/store/useUserStore";
 import useHandleSearch from "@/hooks/useHandleSearch";
 import SearchInput from "@/components/search/SearchInput";
 import SearchResult from "@/components/search/SearchResult";
@@ -10,9 +11,14 @@ import SearchResult from "@/components/search/SearchResult";
 const NavSearch = forwardRef(({ openSearch }, ref) => {
   const navigate = useNavigate();
 
-  const handleNavigate = (user) => navigate(`/${user.username}`);
+  const { users, searching, searchUser } = useUserStore();
 
-  const { users, searching, searchTerm, searchForm } = useHandleSearch();
+  const { searchForm } = useHandleSearch(searchUser);
+
+  const handleNavigate = (user) => {
+    searchForm.resetForm();
+    navigate(`/${user.username}`);
+  };
 
   return (
     <div
@@ -24,8 +30,8 @@ const NavSearch = forwardRef(({ openSearch }, ref) => {
         <SearchResult
           users={users}
           searching={searching}
-          searchTerm={searchTerm}
           onClick={handleNavigate}
+          searchTerm={searchForm.values.username}
         />
       )}
     </div>

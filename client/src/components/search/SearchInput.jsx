@@ -6,10 +6,10 @@ const SearchInput = ({ searchForm, handleSearch }) => {
     <div className="w-full">
       <Input
         name="username"
-        placeholder="Search by username..."
-        value={searchForm?.values?.username}
         onClick={handleSearch}
+        placeholder="Search by username..."
         onChange={searchForm?.handleChange}
+        value={searchForm?.values?.username}
         className="text-sm md:text-md w-full border-muted-foreground/20"
       />
     </div>

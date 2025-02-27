@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/store/useUserStore";
 import useHandleSearch from "@/hooks/useHandleSearch";
 import SearchInput from "@/components/search/SearchInput";
 import SearchResult from "@/components/search/SearchResult";
@@ -8,15 +9,10 @@ import SearchResult from "@/components/search/SearchResult";
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const {
-    users,
-    searching,
-    searchTerm,
-    searchForm,
-    searchRef,
-    openSearch,
-    handleSearch,
-  } = useHandleSearch();
+  const { users, searching, searchUser } = useUserStore();
+
+  const { searchForm, searchRef, openSearch, handleSearch } =
+    useHandleSearch(searchUser);
 
   const handleNavigate = (user) => {
     searchForm.resetForm();
@@ -46,8 +42,8 @@ const Navbar = () => {
             <SearchResult
               users={users}
               searching={searching}
-              searchTerm={searchTerm}
               onClick={handleNavigate}
+              searchTerm={searchForm.values.username}
             />
           )}
         </div>
