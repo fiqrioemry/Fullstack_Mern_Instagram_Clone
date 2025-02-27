@@ -12,12 +12,13 @@ import { Switch } from "@/components/ui/switch";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Moon, Sun, LogOut, Settings, ChevronLeft } from "lucide-react";
 
-function MoreOptions({ open, SetOpen, toggleTheme, setToggleTheme, moreRef }) {
+function MoreOptions({ open, toggleTheme, setToggleTheme, moreRef }) {
   const { signout } = useAuthStore();
   const { handleDarkMode, darkMode } = useTheme();
 
+  console.log("BUKA");
   return (
-    <DropdownMenu open={open}>
+    <DropdownMenu open={open} onOpenChange={(open) => !open}>
       <DropdownMenuContent ref={moreRef} className="bg-secondary">
         {toggleTheme ? (
           <>

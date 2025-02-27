@@ -1,5 +1,6 @@
 import {
   Home,
+  Menu,
   Bell,
   Search,
   Compass,
@@ -8,17 +9,30 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import NavItem from "../sidebar/NavItem";
 import Avatar from "@/components/ui/Avatar";
+import NavItem from "@/components/sidebar/NavItem";
 import { useAuthStore } from "@/store/useAuthStore";
-import SearchPanel from "../notifications/SearchPanel";
 import useOpenSlidePanel from "@/hooks/useOpenSlidePanel";
+import useOpenMoreOptions from "@/hooks/useOpenMoreOptions";
+import MoreOptions from "@//components/sidebar/MoreOptions";
 import { CreateNewPost } from "@/components/modal/CreateNewPost";
+
+import SearchPanel from "@/components/sidebar/SearchPanel";
 
 export default function Sidebar() {
   const { user } = useAuthStore();
   const [openCreate, setOpenCreate] = useState(false);
   const { handleOpenPanel, openPanel, panelRef } = useOpenSlidePanel();
+  const { moreRef, openMore, setOpenMore, toggleTheme, setToggleTheme } =
+    useOpenMoreOptions();
+
+  const handleOpenCreate = () => {
+    setOpenCreate((prev) => !prev);
+  };
+
+  const handleOpenMore = () => {
+    setOpenMore((prev) => !prev);
+  };
 
   const labelClass = cn(
     openPanel ? "opacity-0" : "opacity-100",
@@ -29,7 +43,6 @@ export default function Sidebar() {
     <aside className="flex h-screen relative w-96">
       <SearchPanel openPanel={openPanel} panelRef={panelRef} />
       <CreateNewPost isOpen={openCreate} setIsOpen={setOpenCreate} />
-
       <nav
         className={cn(openPanel ? "w-20" : "w-full", "side-navbar space-y-4")}
       >
@@ -67,7 +80,7 @@ export default function Sidebar() {
         <NavItem
           label="Create"
           labelClass={labelClass}
-          onClick={handleCreatePost}
+          onClick={handleOpenCreate}
           icon={<SquarePlus size={24} />}
         />
         <NavItem
@@ -75,6 +88,18 @@ export default function Sidebar() {
           to={`/${user.username}`}
           labelClass={labelClass}
           icon={<Avatar avatar={user.avatar} />}
+        />
+        <NavItem
+          label="More"
+          labelClass={labelClass}
+          onClick={handleOpenMore}
+          icon={<Menu size={24} />}
+        />
+        <MoreOptions
+          open={openMore}
+          moreRef={moreRef}
+          toggleTheme={toggleTheme}
+          setToggleTheme={setToggleTheme}
         />
       </nav>
     </aside>

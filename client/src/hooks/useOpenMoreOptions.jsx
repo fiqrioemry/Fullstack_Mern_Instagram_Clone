@@ -5,10 +5,6 @@ const useOpenMoreOptions = () => {
   const [openMore, setOpenMore] = useState(false);
   const [toggleTheme, setToggleTheme] = useState(false);
 
-  const handleOpenMore = () => {
-    setOpenMore((prev) => !prev);
-  };
-
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (moreRef.current && !moreRef.current.contains(event.target)) {
@@ -27,7 +23,6 @@ const useOpenMoreOptions = () => {
     setOpenMore,
     toggleTheme,
     setToggleTheme,
-    handleOpenMore,
   };
 };
 

@@ -24,7 +24,7 @@ const Profile = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="max-w-4xl py-10 space-y-10 px-4">
+      <div className="w-full max-w-4xl py-10 space-y-10 px-4">
         {profile?.isMyProfile ? (
           <MyProfile profile={profile} />
         ) : (
