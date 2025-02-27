@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import Avatar from "@/components/ui/Avatar";
-import useScrollToView from "@/hooks/useScrollToView";
 import { useAuthStore } from "@/store/useAuthStore";
+import useScrollToView from "@/hooks/useScrollToView";
 
 const ChatDisplay = ({ chat, selectedUser }) => {
   const { user } = useAuthStore();
@@ -14,7 +14,7 @@ const ChatDisplay = ({ chat, selectedUser }) => {
     );
 
   return (
-    <>
+    <div className="flex-1 p-4 overflow-y-auto space-y-4">
       <div className="space-y-2">
         {chat.map((message) => {
           const isSender = message.senderId == user.userId;
@@ -45,7 +45,7 @@ const ChatDisplay = ({ chat, selectedUser }) => {
         })}
       </div>
       <div ref={viewRef} />
-    </>
+    </div>
   );
 };
 

@@ -1,22 +1,23 @@
-/* eslint-disable react/prop-types */
-import Avatar from "@/components/ui/Avatar";
+import ChatPartner from "./ChatPartner";
+import useLoadChats from "@/hooks/useLoadChats";
+import ChatListLoading from "@/components/skeleton/ChatListLoading";
 
-const ChatList = ({ chats, setSelectedUser }) => {
+const ChatList = () => {
+  const { loading, chats, setSelectedUser } = useLoadChats();
+
+  if (loading.getChats) return <ChatListLoading />;
+
+  if (chats.length === 0) return null;
+
   return (
-    <div className="flex-1 overflow-y-auto py-4 space-y-4">
+    <div className="flex-1 overflow-y-auto py-4 px-2 space-y-4">
       {chats.map((chat) => (
         <button
           onClick={() => setSelectedUser(chat)}
           className="hover:bg-secondary duration-300 w-full py-2 px-4"
           key={chat.userId}
         >
-          <div className="flex items-center gap-4">
-            <Avatar avatar={chat.avatar} />
-            <div className="flex flex-col items-start text-sm">
-              <div>{chat.username}</div>
-              <div>{chat.status}</div>
-            </div>
-          </div>
+          <ChatPartner user={chat} />
         </button>
       ))}
     </div>

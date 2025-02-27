@@ -113,6 +113,7 @@ export const useUserStore = create((set, get) => ({
       }
 
       set((state) => ({
+        // akan error jika halaman profile belum diakses untuk membuat state pada profile
         profile: {
           ...state.profile,
           isFollowing:
@@ -121,6 +122,7 @@ export const useUserStore = create((set, get) => ({
               : state.profile.isFollowing,
         },
       }));
+
       if (
         window.location.pathname.includes(useAuthStore.getState().user.username)
       ) {
@@ -135,7 +137,7 @@ export const useUserStore = create((set, get) => ({
 
       toast.success(message);
     } catch (error) {
-      toast.error(error);
+      console.log(error);
     }
   },
 

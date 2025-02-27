@@ -26,6 +26,7 @@ const ChatInput = () => {
         <Image className="h-5 w-5" />
       </button>
       <button
+        type="button"
         onClick={handleSendMessage}
         disabled={!(chatForm.isValid && chatForm.dirty)}
         className="p-1 btn-accent disabled:cursor-not-allowed"

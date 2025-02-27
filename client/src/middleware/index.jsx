@@ -14,7 +14,7 @@ export const AuthRoute = ({ children }) => {
 export const NonAuthRoute = ({ children }) => {
   const { user } = useAuthStore();
 
-  if (user && user.length > 0) return <Navigate to="/" />;
+  if (user) return <Navigate to="/" />;
 
   return <Fragment>{children}</Fragment>;
 };

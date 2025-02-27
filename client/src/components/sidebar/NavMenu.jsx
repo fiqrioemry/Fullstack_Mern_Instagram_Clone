@@ -16,8 +16,9 @@ import { CreateNewPost } from "@/components/modal/CreateNewPost";
 // eslint-disable-next-line react/display-name, react/prop-types
 const NavMenu = forwardRef(({ openSearch, handleSearch }, ref) => {
   const { user } = useAuthStore();
+
   const [openCreate, setOpenCreate] = useState(false);
-  console.log(user);
+
   const handleCreatePost = () => {
     setOpenCreate((prev) => !prev);
   };

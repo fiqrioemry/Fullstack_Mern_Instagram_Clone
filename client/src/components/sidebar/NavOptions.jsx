@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Menu, Moon, Sun, LogOut, Settings, ChevronLeft } from "lucide-react";
+import NavItem from "./NavItem";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -7,13 +7,13 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 import useTheme from "@/hooks/useTheme";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
-import NavItem from "./NavItem";
-import { Link } from "react-router-dom";
+import { Menu, Moon, Sun, LogOut, Settings, ChevronLeft } from "lucide-react";
 
 function NavOptions({ openSearch }) {
   const ref = useRef(null);

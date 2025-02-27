@@ -7,7 +7,7 @@ export default function Messages() {
   const [open, setOpen] = useState();
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen md:mt-0 mt-14">
       <SearchUserForChat open={open} setOpen={setOpen} />
 
       <div className="w-1/4 h-full border-r border-muted">

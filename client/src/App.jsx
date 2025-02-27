@@ -5,20 +5,23 @@ import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Messages from "./pages/Messages";
 import NotFound from "./pages/NotFound";
+import { Toaster } from "react-hot-toast";
 import PostDetail from "./pages/PostDetail";
-import Layout from "./components/layout/Layout";
 import Notifications from "./pages/Notifications";
 import SettingsLayout from "./pages/SettingsLayout";
+
+import Layout from "./components/layout/Layout";
 import UserTags from "./components/profile/UserTags";
 import UserPosts from "./components/profile/UserPosts";
 import UserSaved from "./components/profile/UserSaved";
 import PostDialog from "./components/modal/PostDialog";
 import Followers from "./components/profile/Followers";
-import { AuthRoute, NonAuthRoute } from "./middleware";
 import Followings from "./components/profile/Followings";
-import { Route, Routes } from "react-router-dom";
 import PageLoading from "@/components/skeleton/PageLoading";
+
+import { Route, Routes } from "react-router-dom";
 import useAuthChecking from "./hooks/useAuthChecking";
+import { AuthRoute, NonAuthRoute } from "./middleware";
 
 function App() {
   const { checkingAuth, location, background } = useAuthChecking();
@@ -27,6 +30,7 @@ function App() {
 
   return (
     <>
+      <Toaster />
       <Routes location={background || location}>
         <Route
           path="/signin"

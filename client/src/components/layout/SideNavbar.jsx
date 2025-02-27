@@ -1,35 +1,21 @@
 import { cn } from "@/lib/utils";
+import { useRef, useState } from "react";
 import NavMenu from "@/components/sidebar/NavMenu";
-import { useEffect, useRef, useState } from "react";
 import NavSearch from "@/components/sidebar/NavSearch";
 import NavOptions from "@/components/sidebar/NavOptions";
+import useOpenSearchBar from "@/hooks/useOpenSearchBar";
 
 const SideNavbar = () => {
   const btnRef = useRef(null);
   const searchRef = useRef(null);
   const [openSearch, setOpenSearch] = useState(false);
 
-  const handleSearch = () => {
-    setOpenSearch((prevState) => !prevState);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target) &&
-        btnRef.current &&
-        !btnRef.current.contains(event.target)
-      ) {
-        setOpenSearch(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [openSearch]);
+  const { handleOpen } = useOpenSearchBar(
+    openSearch,
+    setOpenSearch,
+    btnRef,
+    searchRef
+  );
 
   return (
     <aside className="aside">
@@ -38,7 +24,7 @@ const SideNavbar = () => {
         <NavMenu
           ref={btnRef}
           openSearch={openSearch}
-          handleSearch={handleSearch}
+          handleSearch={handleOpen}
         />
         <NavOptions openSearch={openSearch} />
       </nav>

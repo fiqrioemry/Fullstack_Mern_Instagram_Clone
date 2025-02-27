@@ -9,9 +9,9 @@ import SearchResult from "@/components/search/SearchResult";
 
 const NavSearch = forwardRef(({ openSearch }, ref) => {
   const navigate = useNavigate();
-  const handleNavigate = (user) => {
-    navigate(`/${user.username}`);
-  };
+
+  const handleNavigate = (user) => navigate(`/${user.username}`);
+
   const { users, searching, searchTerm, searchForm } = useHandleSearch();
 
   return (

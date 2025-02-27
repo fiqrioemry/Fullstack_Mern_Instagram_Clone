@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import { useChatStore } from "@/store/useChatStore";
 
 const useLoadChats = () => {
-  const { chats, setSelectedUser, getChats, loading } = useChatStore();
+  const { chats, sendChat, setSelectedUser, getChats, loading } =
+    useChatStore();
 
   useEffect(() => {
     getChats();
-  }, [getChats]);
+  }, [getChats, sendChat]);
 
   return { setSelectedUser, chats, getChats, loading };
 };
