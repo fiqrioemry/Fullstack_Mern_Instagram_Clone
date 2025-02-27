@@ -26,6 +26,7 @@ const SideNavbar = () => {
           openSearch={openSearch}
           handleSearch={handleOpen}
         />
+
         <NavOptions openSearch={openSearch} />
       </nav>
     </aside>

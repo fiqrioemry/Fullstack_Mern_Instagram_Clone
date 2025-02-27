@@ -126,6 +126,14 @@
   .side-navbar {
     @apply absolute top-0 left-0 bottom-0 border-r border-muted-foreground/50 duration-300 bg-background transition-all ease-in p-2 z-30;
   }
+
+  .sidebar {
+    @apply absolute top-0 bottom-0 left-0 bg-blue-500 border-r border-muted-foreground/50  duration-300  transition-all ease-in  z-30;
+  }
+
+  .search {
+    @apply absolute top-0 left-20 bottom-0 bg-background border-r border-muted-foreground/50  delay-150 duration-300 transition-all ease-in;
+  }
   .bottom-navbar {
     @apply md:hidden fixed bottom-0 w-full px-4 bg-background border-t border-muted-foreground/50;
   }
@@ -135,7 +143,7 @@
   }
 
   .nav-search {
-    @apply absolute top-0 bottom-0 w-80 px-4 py-2 h-full bg-background border-r border-muted-foreground/50 z-10 duration-300 transition-all ease-in;
+    @apply absolute top-0 bottom-0 w-80 px-4 py-2 h-full bg-background border-r border-muted-foreground/50  duration-300 transition-all ease-in;
   }
 
   .input-primary {
