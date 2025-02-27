@@ -1,32 +1,26 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useMemo } from "react";
 import Avatar from "@/components/ui/Avatar";
 import SearchLoading from "@/components/skeleton/SearchLoading";
 
-const SearchResult = ({ users, searching, onClick, searchTerm }) => {
-  const memoizedUsers = useMemo(() => {
-    if (searching) return <SearchLoading />;
+const Results = ({ users, searching, onClick }) => {
+  if (searching) return <SearchLoading />;
 
-    if (users.length === 0 && searchTerm)
-      return <p className="text-muted-foreground mt-4">No Users Found</p>;
+  if (users.length === 0)
+    return <p className="text-muted-foreground mt-4">No Users Found</p>;
 
-    return users.map((user) => (
-      <button
-        onClick={() => onClick(user)}
-        className="btn-selection mt-2"
-        key={user.userId}
-      >
-        <Avatar avatar={user.avatar} />
-        <div className="flex flex-col items-start text-xs md:text-sm">
-          <div> {user.username}</div>
-          <p>{user.fullname}</p>
-        </div>
-      </button>
-    ));
-  }, [users, searching]);
-
-  return <>{memoizedUsers}</>;
+  return users.map((user) => (
+    <button
+      onClick={() => onClick(user)}
+      className="btn-selection mt-2"
+      key={user.userId}
+    >
+      <Avatar avatar={user.avatar} />
+      <div className="flex flex-col items-start text-xs md:text-sm">
+        <div> {user.username}</div>
+        <p>{user.fullname}</p>
+      </div>
+    </button>
+  ));
 };
 
-export default SearchResult;
+export default Results;

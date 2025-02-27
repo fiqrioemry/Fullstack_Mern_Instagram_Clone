@@ -2,7 +2,7 @@ import { searchState } from "@/config";
 import { useFormSchema } from "./useFormSchema";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const useHandleSearch = ({ searchUser }) => {
+const useHandleSearch = (searchUser) => {
   const searchRef = useRef(null);
   const debounceRef = useRef(null);
   const searchForm = useFormSchema(searchState);

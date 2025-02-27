@@ -15,10 +15,10 @@ export const useUserStore = create((set, get) => ({
 
   searchUser: async (username) => {
     if (!username.trim()) return;
-    set({ searching: true, users: [] });
-
+    set({ searching: true });
     try {
       const users = await callApi.searchUser(username);
+      console.log(users);
       set({ users });
     } catch (error) {
       set({ users: [], error: error.message });
