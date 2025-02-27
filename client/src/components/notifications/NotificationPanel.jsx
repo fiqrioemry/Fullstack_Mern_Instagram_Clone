@@ -3,10 +3,10 @@ import { cn } from "@/lib/utils";
 const NotificationPanel = ({ openPanel, panelRef }) => {
   return (
     <div
-      ref={openPanel === "notification" ? panelRef : null} // Gunakan panelRef hanya jika panel terbuka
+      ref={openPanel === "notification" ? panelRef : null}
       className={cn(
         openPanel === "notification" ? "w-96" : "w-0",
-        "absolute bg-background left-20 h-full z-20 delay-150 overflow-hidden transition-all duration-300 border-r border-muted-foreground/50 "
+        "absolute bg-background left-20 h-full z-20 delay-150 overflow-hidden transition-all duration-300 border-r border-muted-foreground/50"
       )}
     >
       <div className="w-96 px-4 space-y-4">

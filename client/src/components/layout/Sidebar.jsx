@@ -14,11 +14,14 @@ export default function Sidebar() {
       <NotificationPanel openPanel={openPanel} panelRef={panelRef} />
 
       <nav
+        ref={panelRef}
         className={cn(
-          "w-20 absolute bg-background h-full z-30 border-r duration-300 overflow-hidden"
+          openPanel ? "w-20" : "w-20",
+          "absolute bg-background h-full z-30 border-r duration-300 overflow-hidden"
         )}
       >
         <button
+          ref={panelRef}
           onClick={() => handleOpen("search")}
           className="py-2 w-96 flex items-center gap-4 hover:bg-muted-foreground/50 duration-300"
         >
@@ -27,6 +30,7 @@ export default function Sidebar() {
         </button>
 
         <button
+          ref={panelRef}
           onClick={() => handleOpen("notification")}
           className="py-2 w-96 flex items-center gap-4 hover:bg-muted-foreground/50 duration-300"
         >

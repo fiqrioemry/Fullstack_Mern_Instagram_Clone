@@ -1,11 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 
 const useOpenSlidePanel = () => {
-  const panelRef = useRef(null);
   const [openPanel, setOpenPanel] = useState(null);
+  const panelRef = useRef(null); // Menyimpan referensi ke panel aktif
 
   const handleOpen = (panel) => {
-    setOpenPanel((prevPanel) => (prevPanel === panel ? null : panel));
+    console.log(panel);
+    console.log(openPanel);
+    console.log(openPanel === panel);
+    setOpenPanel(openPanel === panel ? null : panel);
   };
 
   const handleClose = () => {
@@ -14,12 +17,8 @@ const useOpenSlidePanel = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        openPanel &&
-        panelRef.current &&
-        !panelRef.current.contains(event.target)
-      ) {
-        handleClose();
+      if (panelRef.current && !panelRef.current.contains(event.target)) {
+        handleClose(); // Tutup panel
       }
     };
 
