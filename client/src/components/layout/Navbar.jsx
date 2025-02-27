@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useHandleSearch from "@/hooks/useHandleSearch";
@@ -9,22 +9,35 @@ import SearchResult from "@/components/search/SearchResult";
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const [openSearch, setOpenSearcn] = useState(false);
-
   const handleNavigate = (user) => navigate(`/${user.username}`);
 
-  const { users, searching, searchTerm, searchForm } = useHandleSearch();
+  const {
+    users,
+    searching,
+    searchTerm,
+    searchForm,
+    searchRef,
+    openSearch,
+    handleSearch,
+  } = useHandleSearch();
 
-  const searchActive = cn(openSearch ? "hidden" : "block", "duration-300 px-2");
+  const searchActive = cn(
+    openSearch ? "w-0" : "w-14",
+    "overflow-hidden duration-300 "
+  );
+
+  const inputActive = cn(openSearch ? "w-full" : "w-96", "duration-300 px-2");
 
   return (
     <nav className="navbar">
       <div className="flex items-center">
         <div className={searchActive}>
-          <h3>logo</h3>
+          <div className="flex justify-center">
+            <h3>logo</h3>
+          </div>
         </div>
-        <div className="w-full relative">
-          <SearchInput setOpenSearch={setOpenSearcn} searchForm={searchForm} />
+        <div ref={searchRef} className={inputActive}>
+          <SearchInput handleSearch={handleSearch} searchForm={searchForm} />
 
           {searchForm?.values?.username?.length > 0 && (
             <SearchResult
@@ -36,7 +49,9 @@ const Navbar = () => {
           )}
         </div>
         <div className={searchActive}>
-          <Settings />
+          <div className="flex justify-center">
+            <Settings />
+          </div>
         </div>
       </div>
     </nav>

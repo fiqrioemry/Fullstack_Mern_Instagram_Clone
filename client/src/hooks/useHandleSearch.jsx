@@ -40,7 +40,15 @@ const useHandleSearch = () => {
     return () => clearTimeout(debounceRef.current);
   }, [searchForm.values.username, searchHandler]);
 
-  return { users, searching, searchTerm, searchForm, handleSearch };
+  return {
+    users,
+    searching,
+    searchTerm,
+    searchForm,
+    searchRef,
+    openSearch,
+    handleSearch,
+  };
 };
 
 export default useHandleSearch;
