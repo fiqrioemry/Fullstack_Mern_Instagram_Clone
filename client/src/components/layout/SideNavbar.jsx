@@ -19,7 +19,11 @@ const SideNavbar = () => {
 
   return (
     <aside className="aside">
-      <NavSearch openSearch={openSearch} ref={searchRef} />
+      <NavSearch
+        ref={searchRef}
+        openSearch={openSearch}
+        setOpenSearch={setOpenSearch}
+      />
       <nav className={cn(openSearch ? "w-20" : "w-full", "side-navbar")}>
         <NavMenu
           ref={btnRef}

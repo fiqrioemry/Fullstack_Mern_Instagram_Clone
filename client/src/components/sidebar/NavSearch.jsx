@@ -8,14 +8,15 @@ import useHandleSearch from "@/hooks/useHandleSearch";
 import SearchInput from "@/components/search/SearchInput";
 import SearchResult from "@/components/search/SearchResult";
 
-const NavSearch = forwardRef(({ openSearch }, ref) => {
+const NavSearch = forwardRef(({ openSearch, setOpenSearch }, ref) => {
   const navigate = useNavigate();
 
-  const { users, searchTerm, searching, searchUser } = useUserStore();
+  const { users, searching, searchUser } = useUserStore();
 
-  const { searchForm } = useHandleSearch(searchUser);
+  const { searchForm, searchRef, handleSearch } = useHandleSearch(searchUser);
 
   const handleNavigate = (user) => {
+    setOpenSearch(false);
     searchForm.resetForm();
     navigate(`/${user.username}`);
   };
@@ -25,15 +26,14 @@ const NavSearch = forwardRef(({ openSearch }, ref) => {
       ref={ref}
       className={cn(openSearch ? "left-20" : "-left-96", "nav-search")}
     >
-      <div className="mt-4 space-y-4">
+      <div ref={searchRef} className="mt-4 space-y-4">
         <h3>Search result</h3>
-        <SearchInput searchForm={searchForm} />
+        <SearchInput searchForm={searchForm} handleSearch={handleSearch} />
         {searchForm?.values?.username?.length > 0 && (
           <SearchResult
             users={users}
             searching={searching}
             onClick={handleNavigate}
-            searchTerm={searchTerm}
           />
         )}
       </div>

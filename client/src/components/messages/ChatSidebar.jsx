@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import ChatList from "./ChatList";
-import Avatar from "@/components/ui/Avatar";
+import UserDisplay from "./UserDisplay";
 import { MessageSquareDiff } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -9,16 +9,14 @@ const ChatSidebar = ({ setOpen }) => {
 
   return (
     <div>
-      <div className="border-b border-muted">
-        <div className="h-20 flex-between px-4">
-          <div className="md:flex items-center gap-2 hidden">
-            <Avatar avatar={user.avatar} />
-            <span className="text-sm">{user.username}</span>
-          </div>
-          <button onClick={() => setOpen(true)} className="btn-secondary">
-            <MessageSquareDiff />
-          </button>
+      <div className="border-b border-muted md:flex-between flex-center py-4 px-2">
+        <div className="hidden md:block">
+          <UserDisplay user={user} />
         </div>
+
+        <button onClick={() => setOpen(true)} className="btn-secondary">
+          <MessageSquareDiff size={36} />
+        </button>
       </div>
       <ChatList />
     </div>

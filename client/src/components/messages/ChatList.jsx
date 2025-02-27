@@ -1,4 +1,4 @@
-import ChatPartner from "./ChatPartner";
+import UserDisplay from "./UserDisplay";
 import useLoadChats from "@/hooks/useLoadChats";
 import ChatListLoading from "@/components/skeleton/ChatListLoading";
 
@@ -13,11 +13,11 @@ const ChatList = () => {
     <div className="flex-1 overflow-y-auto py-4 px-2 space-y-4">
       {chats.map((chat) => (
         <button
+          key={chat.userId}
           onClick={() => setSelectedUser(chat)}
           className="hover:bg-secondary duration-300 w-full py-2 px-4"
-          key={chat.userId}
         >
-          <ChatPartner user={chat} />
+          <UserDisplay user={chat} />
         </button>
       ))}
     </div>

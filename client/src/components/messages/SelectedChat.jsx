@@ -1,6 +1,6 @@
 import ChatInput from "./ChatInput";
+import UserDisplay from "./UserDisplay";
 import ChatDisplay from "./ChatDisplay";
-import ChatPartner from "./ChatPartner";
 import useLoadChat from "@/hooks/useLoadChat";
 import ChatContainerLoading from "@/components/skeleton/ChatContainerLoading";
 
@@ -12,8 +12,9 @@ const SelectedChat = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Chat header */}
-      <div className="border-b border-muted">
-        <ChatPartner user={selectedUser} />
+      <div className="flex items-center border-b border-muted py-4 gap-4 px-2">
+        <UserDisplay user={selectedUser} />
+        <div className="block md:hidden">{selectedUser.username}</div>
       </div>
 
       {/* Chat display */}

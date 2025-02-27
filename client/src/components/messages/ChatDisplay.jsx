@@ -10,7 +10,9 @@ const ChatDisplay = ({ chat, selectedUser }) => {
 
   if (chat.length === 0)
     return (
-      <div className="text-center text-muted-foreground">No Chat History</div>
+      <div className="flex-1 p-4 overflow-y-auto space-y-4">
+        <div className="text-center text-muted-foreground">No Chat History</div>
+      </div>
     );
 
   return (
