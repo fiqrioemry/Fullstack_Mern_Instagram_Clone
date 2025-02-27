@@ -1,24 +1,21 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const useOpenSlidePanel = () => {
-  const [openPanel, setOpenPanel] = useState(null);
-  const panelRef = useRef(null); // Menyimpan referensi ke panel aktif
+const useOpenSearchPanel = () => {
+  const panelRef = useRef(null);
+  const [openPanel, setOpenPanel] = useState(false);
 
-  const handleOpen = (panel) => {
-    console.log(panel);
-    console.log(openPanel);
-    console.log(openPanel === panel);
-    setOpenPanel(openPanel === panel ? null : panel);
+  const handleOpenPanel = () => {
+    setOpenPanel((prev) => !prev);
   };
 
-  const handleClose = () => {
-    setOpenPanel(null);
+  const handleClosePanel = () => {
+    setOpenPanel(false);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (panelRef.current && !panelRef.current.contains(event.target)) {
-        handleClose(); // Tutup panel
+      if (openPanel.current && !openPanel.current.contains(event.target)) {
+        handleClosePanel();
       }
     };
 
@@ -28,7 +25,7 @@ const useOpenSlidePanel = () => {
     };
   }, [openPanel]);
 
-  return { handleOpen, openPanel, handleClose, panelRef };
+  return { handleOpenPanel, panelRef, openPanel };
 };
 
-export default useOpenSlidePanel;
+export default useOpenSearchPanel;

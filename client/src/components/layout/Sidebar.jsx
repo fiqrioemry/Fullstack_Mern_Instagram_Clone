@@ -1,42 +1,81 @@
+import {
+  Home,
+  Bell,
+  Search,
+  Compass,
+  SquarePlus,
+  MessageCircle,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Bell, Search } from "lucide-react";
+import { useState } from "react";
+import NavItem from "../sidebar/NavItem";
+import Avatar from "@/components/ui/Avatar";
+import { useAuthStore } from "@/store/useAuthStore";
 import SearchPanel from "../notifications/SearchPanel";
-import useOpenSlidePanel from "../../hooks/useOpenSlidePanel";
-import NotificationPanel from "../notifications/NotificationPanel";
+import useOpenSlidePanel from "@/hooks/useOpenSlidePanel";
+import { CreateNewPost } from "@/components/modal/CreateNewPost";
 
 export default function Sidebar() {
-  const { handleOpen, openPanel, panelRef } = useOpenSlidePanel();
+  const { user } = useAuthStore();
+  const [openCreate, setOpenCreate] = useState(false);
+  const { handleOpenPanel, openPanel, panelRef } = useOpenSlidePanel();
+
+  const labelClass = cn(
+    openPanel ? "opacity-0" : "opacity-100",
+    "duration-300 transition-all ease-in"
+  );
 
   return (
     <aside className="flex h-screen relative w-96">
-      {/* Kirim panelRef agar bisa mendeteksi klik di luar */}
       <SearchPanel openPanel={openPanel} panelRef={panelRef} />
-      <NotificationPanel openPanel={openPanel} panelRef={panelRef} />
+      <CreateNewPost isOpen={openCreate} setIsOpen={setOpenCreate} />
 
       <nav
-        ref={panelRef}
-        className={cn(
-          openPanel ? "w-20" : "w-20",
-          "absolute bg-background h-full z-30 border-r duration-300 overflow-hidden"
-        )}
+        className={cn(openPanel ? "w-20" : "w-full", "side-navbar space-y-4")}
       >
-        <button
+        <NavItem
+          to="/"
+          label="Home"
+          labelClass={labelClass}
+          icon={<Home size={24} />}
+        />
+        <NavItem
           ref={panelRef}
-          onClick={() => handleOpen("search")}
-          className="py-2 w-96 flex items-center gap-4 hover:bg-muted-foreground/50 duration-300"
-        >
-          <Search className="w-20" />
-          <span>search</span>
-        </button>
-
-        <button
-          ref={panelRef}
-          onClick={() => handleOpen("notification")}
-          className="py-2 w-96 flex items-center gap-4 hover:bg-muted-foreground/50 duration-300"
-        >
-          <Bell className="w-20" />
-          <span>notification</span>
-        </button>
+          label="Search"
+          labelClass={labelClass}
+          onClick={handleOpenPanel}
+          icon={<Search size={24} />}
+        />
+        <NavItem
+          to="/explore"
+          label="Explore"
+          labelClass={labelClass}
+          icon={<Compass size={24} />}
+        />
+        <NavItem
+          to="/message"
+          label="Message"
+          labelClass={labelClass}
+          icon={<MessageCircle size={24} />}
+        />
+        <NavItem
+          to="/notification"
+          label="Notification"
+          labelClass={labelClass}
+          icon={<Bell size={24} />}
+        />
+        <NavItem
+          label="Create"
+          labelClass={labelClass}
+          onClick={handleCreatePost}
+          icon={<SquarePlus size={24} />}
+        />
+        <NavItem
+          label="Profile"
+          to={`/${user.username}`}
+          labelClass={labelClass}
+          icon={<Avatar avatar={user.avatar} />}
+        />
       </nav>
     </aside>
   );
