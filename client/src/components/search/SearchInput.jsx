@@ -10,7 +10,7 @@ const SearchInput = ({ searchForm, handleSearch }) => {
         value={searchForm?.values?.username}
         onClick={handleSearch}
         onChange={searchForm?.handleChange}
-        className="w-full border-muted-foreground/20"
+        className="text-sm md:text-md w-full border-muted-foreground/20"
       />
     </div>
   );

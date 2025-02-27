@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-
 import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useHandleSearch from "@/hooks/useHandleSearch";
@@ -8,8 +7,6 @@ import SearchResult from "@/components/search/SearchResult";
 
 const Navbar = () => {
   const navigate = useNavigate();
-
-  const handleNavigate = (user) => navigate(`/${user.username}`);
 
   const {
     users,
@@ -21,9 +18,15 @@ const Navbar = () => {
     handleSearch,
   } = useHandleSearch();
 
+  const handleNavigate = (user) => {
+    searchForm.resetForm();
+    handleSearch();
+    navigate(`/${user.username}`);
+  };
+
   const searchActive = cn(
     openSearch ? "w-0" : "w-14",
-    "overflow-hidden duration-300 "
+    "overflow-hidden  delay-50 duration-300 ease-in-out transition-all "
   );
 
   const inputActive = cn(openSearch ? "w-full" : "w-96", "duration-300 px-2");

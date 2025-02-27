@@ -10,13 +10,14 @@ const useHandleSearch = () => {
   const [openSearch, setOpenSearch] = useState(false);
 
   const handleSearch = () => {
-    setOpenSearch(true);
+    setOpenSearch((prev) => !prev);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setOpenSearch(false);
+        searchForm.resetForm();
       }
     };
 
