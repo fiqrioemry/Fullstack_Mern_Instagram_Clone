@@ -12,12 +12,12 @@ import Notifications from "./pages/Notifications";
 
 import Layout from "./components/layout/Layout";
 import UserTags from "./components/profile/UserTags";
-import UserPosts from "./components/profile/UserPosts";
 import UserSaved from "./components/profile/UserSaved";
 import PostDialog from "./components/modal/PostDialog";
 import Followers from "./components/profile/Followers";
 import Followings from "./components/profile/Followings";
 import PageLoading from "@/components/skeleton/PageLoading";
+import ProfilePosts from "./components/profile/ProfilePosts";
 
 import { Route, Routes } from "react-router-dom";
 import useAuthChecking from "./hooks/useAuthChecking";
@@ -63,7 +63,7 @@ function App() {
           <Route path="explore" element={<Explore />} />
           <Route path="p/:id" element={<PostDetail />} />
           <Route path=":username" element={<Profile />}>
-            <Route index element={<UserPosts />} />
+            <Route index element={<ProfilePosts />} />
             <Route path="tags" element={<UserTags />} />
             <Route path="saved" element={<UserSaved />} />
           </Route>

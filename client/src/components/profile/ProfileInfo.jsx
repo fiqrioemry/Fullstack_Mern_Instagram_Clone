@@ -5,7 +5,7 @@ import { useUserStore } from "@/store/useUserStore";
 import { useChatStore } from "@/store/useChatStore";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const UserProfile = ({ profile }) => {
+const ProfileInfo = ({ profile }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toggleFollow } = useUserStore();
@@ -100,4 +100,4 @@ const UserProfile = ({ profile }) => {
   );
 };
 
-export default UserProfile;
+export default ProfileInfo;

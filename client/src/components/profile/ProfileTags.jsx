@@ -2,7 +2,7 @@ import { Camera } from "lucide-react";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from "@/store/useAuthStore";
 
-const UserTags = () => {
+const ProfileTags = () => {
   const { user } = useAuthStore();
   const { profile } = useUserStore();
 
@@ -29,4 +29,4 @@ const UserTags = () => {
   );
 };
 
-export default UserTags;
+export default ProfileTags;

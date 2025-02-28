@@ -4,7 +4,7 @@ import NotFound from "./NotFound";
 import NavTabs from "@/components/profile/NavTabs";
 import { useUserStore } from "@/store/useUserStore";
 import { Outlet, useParams } from "react-router-dom";
-import UserProfile from "@/components/profile/UserProfile";
+import ProfileInfo from "@/components/profile/ProfileInfo";
 import ProfileLoading from "@/components/skeleton/ProfileLoading";
 
 const Profile = () => {
@@ -21,7 +21,7 @@ const Profile = () => {
 
   return (
     <div className="w-full max-w-2xl">
-      <UserProfile profile={profile} />
+      <ProfileInfo profile={profile} />
       <NavTabs profile={profile} />
       <Outlet />
     </div>

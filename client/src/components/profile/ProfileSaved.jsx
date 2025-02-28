@@ -1,6 +1,6 @@
 import { Bookmark } from "lucide-react";
 
-const UserSaved = () => {
+const ProfileSaved = () => {
   return (
     <div className="text-center space-y-3 py-12">
       <div className="flex items-center justify-center">
@@ -21,4 +21,4 @@ const UserSaved = () => {
   );
 };
 
-export default UserSaved;
+export default ProfileSaved;
