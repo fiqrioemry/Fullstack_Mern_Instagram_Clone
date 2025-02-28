@@ -13,7 +13,7 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="border-t border-muted p-4 flex items-center space-x-4">
+    <div className="border-t border-muted md:p-4 p-2 flex items-center space-x-4">
       <input
         type="text"
         name="message"

@@ -2,7 +2,7 @@
 import Avatar from "@/components/ui/Avatar";
 import { useAuthStore } from "@/store/useAuthStore";
 import useScrollToView from "@/hooks/useScrollToView";
-
+import { ScrollArea } from "@/components/ui/scroll-area";
 const ChatDisplay = ({ chat, selectedUser }) => {
   const { user } = useAuthStore();
 
@@ -16,7 +16,7 @@ const ChatDisplay = ({ chat, selectedUser }) => {
     );
 
   return (
-    <div className="flex-1 p-4 overflow-y-auto space-y-4">
+    <ScrollArea className="flex-1 overflow-y-auto py-4 px-2">
       <div className="space-y-2">
         {chat.map((message) => {
           const isSender = message.senderId == user.userId;
@@ -47,7 +47,7 @@ const ChatDisplay = ({ chat, selectedUser }) => {
         })}
       </div>
       <div ref={viewRef} />
-    </div>
+    </ScrollArea>
   );
 };
 

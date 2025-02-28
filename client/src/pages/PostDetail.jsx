@@ -17,13 +17,7 @@ const PostDetail = () => {
 
   if (post.length === 0) return <NotFound />;
 
-  return (
-    <div className="min-h-screen">
-      <div className="px-2 md:px-10 md:py-6 py-20">
-        <Post post={post} />
-      </div>
-    </div>
-  );
+  return <Post post={post} />;
 };
 
 export default PostDetail;
