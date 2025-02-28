@@ -29,9 +29,9 @@ const SignIn = () => {
           <div className="flex-center py-2">OR</div>
           <GoogleAuth buttonTitle={"Signin with google"} />
           <CardFooter className="mt-2 space-x-2">
-            <span> Dont have an account ? signup</span>
+            <span> Dont have an account ? </span>
             <Link to="/signup" className="btn-secondary">
-              here
+              signup
             </Link>
           </CardFooter>
         </CardContent>

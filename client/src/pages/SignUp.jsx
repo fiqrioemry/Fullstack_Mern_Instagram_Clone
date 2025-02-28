@@ -41,7 +41,7 @@ const SignUp = () => {
 
   useEffect(() => {
     resetStep();
-  }, []);
+  }, [resetStep]);
 
   return (
     <div className="h-screen flex-center">

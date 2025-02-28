@@ -20,13 +20,13 @@ const Profile = () => {
   if (profile && profile.length === 0) return <NotFound />;
 
   return (
-    <div className="flex justify-center">
-      <div className=" max-w-xl md:max-w-4xl py-10 ">
+    <section className="flex justify-center">
+      <div className="w-full max-w-xl md:max-w-4xl py-10 mt-8 md:mt-0">
         <UserProfile profile={profile} />
         <NavTabs profile={profile} />
         <Outlet />
       </div>
-    </div>
+    </section>
   );
 };
 

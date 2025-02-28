@@ -33,6 +33,15 @@ export const signUpState = {
   otp: '',
 };
 
+export const uploadAvatarControl = [
+  {
+    name: 'avatar',
+    label: 'change avatar',
+    type: 'file',
+    component: 'single-upload',
+  },
+];
+
 export const signUpControl = [
   {
     name: 'username',

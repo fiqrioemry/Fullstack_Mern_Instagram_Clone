@@ -146,6 +146,7 @@
   .btn {
     @apply flex items-center justify-center w-full py-2 px-4 rounded-md capitalize;
   }
+
   .btn-nav {
     @apply flex items-center w-full py-2 px-2 rounded-md capitalize hover:bg-muted-foreground/10 text-primary;
   }
@@ -162,11 +163,15 @@
     @apply font-medium text-red-700 hover:text-red-500 cursor-pointer duration-300;
   }
 
+  .btn-ghost {
+    @apply font-medium text-red-700 hover:text-red-500 cursor-pointer duration-300;
+  }
+
   .btn-accent {
     @apply text-blue-500 hover:text-blue-700 disabled:text-gray-500 font-medium cursor-pointer duration-300;
   }
 
   .btn-selection {
-    @apply flex items-center w-full hover:bg-muted-foreground/20 p-2 rounded-md duration-300 gap-4;
+    @apply flex justify-center items-center text-sm font-semibold w-full bg-muted-foreground/10 hover:bg-muted-foreground/20 p-2 rounded-md duration-300 gap-4;
   }
 }

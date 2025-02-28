@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import InputLabel from "./InputLabel";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import SelectComponent from "./SelectComponent";
 import DateComponent from "./DateComponent";
+import { Input } from "@/components/ui/input";
+import SelectComponent from "./SelectComponent";
+import { Textarea } from "@/components/ui/textarea";
 
-function InputForm({ formik, formControl, disabled = false, children }) {
+function InputForm({ formik, formControl, children, disabled = false }) {
   function renderComponentByType(control) {
     const { label, name, type, placeholder, maxLength, options } = control;
     const value = formik.values[name];

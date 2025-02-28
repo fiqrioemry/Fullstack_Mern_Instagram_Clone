@@ -11,6 +11,7 @@ export const useUserStore = create((set, get) => ({
   followers: [],
   followings: [],
   loading: true,
+  updating: false,
   searching: false,
 
   searchUser: async (username) => {
@@ -28,6 +29,7 @@ export const useUserStore = create((set, get) => ({
   },
 
   getUserProfile: async (username) => {
+    set({ loading: true });
     try {
       const profile = await callApi.getUserProfile(username);
       set({ profile });
@@ -40,8 +42,12 @@ export const useUserStore = create((set, get) => ({
   },
 
   getMyProfile: async () => {
+    set({ loading: true });
     try {
+      console.log("getting");
       const profile = await callApi.getMyProfile();
+
+      console.log(profile);
       set({ profile });
     } catch (error) {
       set({ profile: [] });
@@ -51,7 +57,7 @@ export const useUserStore = create((set, get) => ({
     }
   },
 
-  updateMyProfile: async (formData) => {
+  updateProfile: async (formData) => {
     set({ updating: true });
     try {
       const message = await callApi.updateMyProfile(formData);

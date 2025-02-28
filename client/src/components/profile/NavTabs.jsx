@@ -13,11 +13,14 @@ const NavTabs = ({ profile }) => {
             <Grid2X2 /> <span>Post</span>
           </TabsTrigger>
         </Link>
-        <Link to="saved">
-          <TabsTrigger value="saved">
-            <Bookmark /> <span>Saved</span>
-          </TabsTrigger>
-        </Link>
+        {profile.isMyProfile && (
+          <Link to="saved">
+            <TabsTrigger value="saved">
+              <Bookmark /> <span>Saved</span>
+            </TabsTrigger>
+          </Link>
+        )}
+
         <Link to="tags">
           <TabsTrigger value="tags">
             <Tags /> <span>tags</span>

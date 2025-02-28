@@ -1,11 +1,10 @@
 /* eslint-disable react/prop-types */
-
-const InputLabel = ({ formik, control }) => {
+const InputLabel = ({ formik, label, name }) => {
   return (
-    <div className="flex items-center gap-2 text-sm">
-      <label htmlFor={control.label}>{control.label}</label>
-      {formik.touched[control.name] && formik.errors[control.name] && (
-        <h6>{formik.errors[control.name]}</h6>
+    <div className="flex items-center capitalize text-sm md:text-md gap-2 h-4 mb-1">
+      <label htmlFor={label}>{label}</label>
+      {formik.touched[name] && formik.errors[name] && (
+        <h6>{formik.errors[name]}</h6>
       )}
     </div>
   );

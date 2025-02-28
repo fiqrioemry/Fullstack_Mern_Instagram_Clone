@@ -23,7 +23,7 @@ const StepOne = ({ signUpForm, formControl }) => {
 
       {/* to signin */}
       <div className="text-center text-sm">
-        <span>Already have an account?</span>
+        <span>Already have an account ? </span>
         <Link to="/signin" className="btn-secondary">
           Sign In
         </Link>
