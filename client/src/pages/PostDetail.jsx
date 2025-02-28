@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import NotFound from "./NotFound";
-import Post from "@/components/post/Post";
 import { useParams } from "react-router-dom";
 import { usePostStore } from "@/store/usePostStore";
 import PostLoading from "@/components/skeleton/PostLoading";
+import PostDisplay from "../components/post-detail/PostDisplay";
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -18,8 +18,8 @@ const PostDetail = () => {
   if (post.length === 0) return <NotFound />;
 
   return (
-    <div className="w-full mx-2 md:mx-12 pt-8 ">
-      <Post post={post} />
+    <div className="w-full mx-2 md:mx-4 lg:mx-8 ">
+      <PostDisplay post={post} />
     </div>
   );
 };

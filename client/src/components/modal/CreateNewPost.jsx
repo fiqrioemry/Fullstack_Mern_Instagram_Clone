@@ -1,5 +1,4 @@
 import Galleries from "../post/Galleries";
-import { CloudUpload, Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ConfirmationBox from "./ConfirmationBox";
@@ -8,6 +7,7 @@ import { usePostStore } from "@/store/usePostStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { useState, useCallback, useMemo } from "react";
+import { CloudUpload, Loader, Plus } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 // eslint-disable-next-line react/prop-types
@@ -70,7 +70,25 @@ export function CreateNewPost({ isOpen, setIsOpen }) {
               </div>
               {formPost.values.images.length > 0 ? (
                 <div>
-                  <Galleries images={formPost.values.images} />
+                  <div className="relative h-96 flex-center overflow-hidden">
+                    <Galleries images={formPost.values.images} />
+                    <div className="absolute bottom-2 left-2">
+                      <label htmlFor="post">
+                        <div className="flex-center rounded-full bg-blue-500 h-10 w-10">
+                          <Plus size={24} />
+                        </div>
+                        <input
+                          id="post"
+                          multiple
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          name="images"
+                          onChange={multiFile}
+                        />
+                      </label>
+                    </div>
+                  </div>
 
                   <div className="mt-4 mb-4 px-2">
                     <Input
@@ -93,7 +111,7 @@ export function CreateNewPost({ isOpen, setIsOpen }) {
                   htmlFor="post"
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
-                  className="h-80 z-10 flex items-center justify-center  cursor-pointer bg-muted/50 hover:bg-muted transition-all duration-300"
+                  className="h-80 z-10 flex items-center justify-center cursor-pointer bg-muted/50 hover:bg-muted transition-all duration-300"
                 >
                   <div className="flex-center flex-col">
                     <CloudUpload size={24} />

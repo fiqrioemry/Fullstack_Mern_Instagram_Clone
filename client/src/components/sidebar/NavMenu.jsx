@@ -25,7 +25,7 @@ const NavMenu = forwardRef(({ openSearch, handleSearch }, ref) => {
 
   const labelClass = cn(
     openSearch ? "opacity-0" : "opacity-100",
-    "duration-300 transition-all ease-in"
+    "duration-300 transition-all ease-in hidden lg:block"
   );
 
   return (

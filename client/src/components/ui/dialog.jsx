@@ -25,6 +25,7 @@ const DialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef(
+  // eslint-disable-next-line react/prop-types
   ({ className, children, ...props }, ref) => (
     <DialogPortal>
       <DialogOverlay />

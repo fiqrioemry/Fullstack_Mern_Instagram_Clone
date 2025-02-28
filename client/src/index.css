@@ -105,7 +105,7 @@
   }
 
   .aside {
-    @apply w-72 md:relative md:block hidden;
+    @apply w-20 lg:w-72 md:relative md:block hidden;
   }
 
   .screen-center {
@@ -175,8 +175,6 @@
     @apply flex justify-center items-center text-sm font-semibold min-w-32 bg-muted-foreground/10 hover:bg-muted-foreground/20 p-2 rounded-md duration-300 gap-4;
   }
 }
-
-
 
 @layer base {
   * {

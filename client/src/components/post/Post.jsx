@@ -28,32 +28,45 @@ const Post = ({ post }) => {
   }, [getComments, post.postId]);
 
   return (
-    <div className="grid grid-cols-10 h-[90vh] border border-muted">
+    <div className="grid grid-cols-10 border border-muted overflow-hidden ">
       {/* Galeri Foto */}
-      <div className="hidden md:block col-span-5 lg:col-span-6 overflow-hidden">
-        <Galleries images={post.images} />
+      <div className="hidden md:block lg:col-span-6 h-[90vh] ">
+        <div className="h-full place-content-center bg-secondary">
+          <Galleries images={post.images} />
+        </div>
       </div>
 
-      <div className="col-span-10 lg:col-span-4 h-[90vh]">
+      <div className="col-span-10 lg:col-span-4 h-[80vh] md:h-[90vh]">
         <div className="flex flex-col h-full">
-          <div className="border-b border-muted">
+          <div className="md:block hidden border-b border-muted">
             <PostAuthor data={post} />
           </div>
-          <ScrollArea className="flex-1 overflow-y-auto border-b border-muted p-2">
-            <Caption post={post} />
-            {loadingComment ? (
-              <CommentsLoading />
-            ) : (
-              <Comments formik={commentForm} />
-            )}
+
+          {/* for mobile view */}
+          <div className="block md:hidden py-4 border-b border-muted">
+            <div className="text-center">
+              <h4>Comments</h4>
+            </div>
+          </div>
+
+          {/* comment & reply */}
+          <ScrollArea className="flex-1 overflow-y-auto border-b border-muted ">
+            <div className="p-2">
+              <Caption post={post} />
+              {loadingComment ? (
+                <CommentsLoading />
+              ) : (
+                <Comments formik={commentForm} />
+              )}
+            </div>
           </ScrollArea>
 
-          {/* Bagian Kontrol Post */}
+          {/* post control : reply & saved*/}
           <div className="border-b border-muted px-2">
             <PostControl post={post} formik={commentForm} />
           </div>
 
-          {/* Bagian Input Komentar */}
+          {/* post input : comment */}
           <div className="px-2">
             <PostInput postId={post.postId} formik={commentForm} />
           </div>

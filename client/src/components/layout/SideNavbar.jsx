@@ -24,7 +24,9 @@ const SideNavbar = () => {
         openSearch={openSearch}
         setOpenSearch={setOpenSearch}
       />
-      <nav className={cn(openSearch ? "w-20" : "w-full", "side-navbar")}>
+      <nav
+        className={cn(openSearch ? "w-20" : "w-20 lg:w-full", "side-navbar")}
+      >
         <NavMenu
           ref={btnRef}
           openSearch={openSearch}
