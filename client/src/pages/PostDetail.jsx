@@ -18,7 +18,7 @@ const PostDetail = () => {
   if (post.length === 0) return <NotFound />;
 
   return (
-    <div className="w-full">
+    <div className="w-full mx-2 md:mx-12 pt-8 ">
       <Post post={post} />
     </div>
   );

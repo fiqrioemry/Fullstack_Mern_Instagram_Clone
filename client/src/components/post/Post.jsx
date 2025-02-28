@@ -7,6 +7,7 @@ import Galleries from "./Galleries";
 import PostAuthor from "./PostAuthor";
 import PostControl from "./PostControl";
 import { useFormSchema } from "@/hooks/useFormSchema";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { commentControl, commentState } from "@/config";
 import { useCommentStore } from "@/store/useCommentStore";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
@@ -27,38 +28,35 @@ const Post = ({ post }) => {
   }, [getComments, post.postId]);
 
   return (
-    <div className="grid grid-cols-10">
+    <div className="grid grid-cols-10  border border-muted">
       {/* Galeri Foto */}
-      <div className="col-span-5 lg:col-span-6 border-r border-muted">
-        <div className="h-full bg-secondary">
-          <Galleries images={post.images} />
-        </div>
+      <div className="col-span-5 lg:col-span-6 h-[90vh] overflow-hidden">
+        <Galleries images={post.images} />
       </div>
 
-      {/* Bagian kanan (Penulis, Caption, Komentar, dll.) */}
-      <div className="col-span-5 lg:col-span-4 flex flex-col h-full">
-        <PostAuthor data={post} />
-
-        {/* Bagian Caption & Komentar harus bisa memenuhi ruang yang tersedia */}
-        <div className="border-t border-muted overflow-hidden">
-          <div className="overflow-y-scroll h-80 p-2 ">
+      <div className="col-span-5 lg:col-span-4 h-[90vh]">
+        <div className="flex flex-col h-full">
+          <div className="border-b border-muted">
+            <PostAuthor data={post} />
+          </div>
+          <ScrollArea className="flex-1 overflow-y-auto border-b border-muted p-2">
             <Caption post={post} />
             {loadingComment ? (
               <CommentsLoading />
             ) : (
               <Comments formik={commentForm} />
             )}
+          </ScrollArea>
+
+          {/* Bagian Kontrol Post */}
+          <div className="border-b border-muted px-2">
+            <PostControl post={post} formik={commentForm} />
           </div>
-        </div>
 
-        {/* Bagian Kontrol Post */}
-        <div className="border-t border-muted p-2">
-          <PostControl post={post} formik={commentForm} />
-        </div>
-
-        {/* Bagian Input Komentar */}
-        <div className="border-t border-muted p-2">
-          <PostInput postId={post.postId} formik={commentForm} />
+          {/* Bagian Input Komentar */}
+          <div className="px-2">
+            <PostInput postId={post.postId} formik={commentForm} />
+          </div>
         </div>
       </div>
     </div>

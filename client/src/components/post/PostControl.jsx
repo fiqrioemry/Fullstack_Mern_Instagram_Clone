@@ -10,8 +10,8 @@ const PostControl = ({ post, formik }) => {
   const handleComment = () => formik.setFieldValue("postId", post.postId);
 
   return (
-    <div className="space-y-1">
-      <div className="flex-between mt-3">
+    <div className="space-y-1 py-2">
+      <div className="flex-between">
         <div className="flex gap-4">
           <Heart
             aria-label="Like Post"

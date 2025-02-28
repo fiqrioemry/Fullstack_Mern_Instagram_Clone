@@ -11,7 +11,7 @@ const PostInput = ({ postId, formik }) => {
   }, [formik.values.postId, formik.values.parentId]);
 
   return (
-    <form onSubmit={formik.handleSubmit} className="flex items-center">
+    <form onSubmit={formik.handleSubmit} className="flex items-center py-2 ">
       <input
         ref={inputRef}
         type="text"
