@@ -20,7 +20,7 @@ const Profile = () => {
   if (profile.length === 0) return <NotFound />;
 
   return (
-    <div className="py-12">
+    <div className="w-full max-w-2xl">
       <UserProfile profile={profile} />
       <NavTabs profile={profile} />
       <Outlet />

@@ -10,7 +10,7 @@ export default function Messages() {
     <>
       <SearchUserForChat open={open} setOpen={setOpen} />
 
-      <div className="w-1/6 md:w-1/4 h-full border-r border-muted ">
+      <div className="w-1/6 md:w-1/4 h-full border-r border-muted">
         <ChatSidebar setOpen={setOpen} />
       </div>
 

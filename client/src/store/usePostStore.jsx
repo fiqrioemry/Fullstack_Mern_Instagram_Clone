@@ -85,16 +85,12 @@ export const usePostStore = create((set, get) => ({
 
   getUserPosts: async (username) => {
     try {
-      set({ loading: true });
       const { posts, totalPosts, message } = await callApi.getUserPosts(
         username
       );
       set({ posts, totalPosts, message });
     } catch (error) {
-      set({ posts: [] });
-      set({ error: error.message });
-    } finally {
-      set({ loading: false });
+      console.log(error.message);
     }
   },
 

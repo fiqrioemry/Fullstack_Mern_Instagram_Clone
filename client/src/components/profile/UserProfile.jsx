@@ -20,7 +20,7 @@ const UserProfile = ({ profile }) => {
     navigate("/message");
   };
   return (
-    <div className="flex justify-center mb-10">
+    <div className="flex justify-center py-10 md:py-8">
       <div className="flex flex-col items-center ">
         <div className=" flex md:flex-row flex-col items-center md:gap-8 gap-2">
           <div className="w-32 h-32 rounded-full overflow-hidden border-2 flex-shrink-0">
