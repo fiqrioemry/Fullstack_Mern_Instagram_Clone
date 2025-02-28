@@ -28,13 +28,13 @@ const Post = ({ post }) => {
   }, [getComments, post.postId]);
 
   return (
-    <div className="grid grid-cols-10  border border-muted">
+    <div className="grid grid-cols-10 h-[90vh] border border-muted">
       {/* Galeri Foto */}
-      <div className="col-span-5 lg:col-span-6 h-[90vh] overflow-hidden">
+      <div className="hidden md:block col-span-5 lg:col-span-6 overflow-hidden">
         <Galleries images={post.images} />
       </div>
 
-      <div className="col-span-5 lg:col-span-4 h-[90vh]">
+      <div className="col-span-10 lg:col-span-4 h-[90vh]">
         <div className="flex flex-col h-full">
           <div className="border-b border-muted">
             <PostAuthor data={post} />

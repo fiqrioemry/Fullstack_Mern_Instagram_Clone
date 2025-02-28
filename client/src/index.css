@@ -175,3 +175,14 @@
     @apply flex justify-center items-center text-sm font-semibold min-w-32 bg-muted-foreground/10 hover:bg-muted-foreground/20 p-2 rounded-md duration-300 gap-4;
   }
 }
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
