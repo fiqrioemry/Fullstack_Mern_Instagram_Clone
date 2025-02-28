@@ -5,7 +5,7 @@ import { useAuthStore } from "./useAuthStore";
 
 export const usePostStore = create((set, get) => ({
   post: null,
-  posts: [],
+  posts: null,
   totalPosts: 0,
   loading: false,
   message: "",
@@ -74,15 +74,12 @@ export const usePostStore = create((set, get) => ({
   },
 
   getPostDetail: async (postId) => {
-    set({ loading: true });
     try {
       const post = await callApi.getPostDetail(postId);
       set({ post });
     } catch (error) {
       set({ post: [] });
       console.log(error.message);
-    } finally {
-      set({ loading: false });
     }
   },
 

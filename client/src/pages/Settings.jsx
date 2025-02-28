@@ -14,8 +14,8 @@ const Settings = () => {
   if (!profile) return <SettingsLoading />;
 
   return (
-    <div className="min-h-screen py-12 px-0 md:px-10 mb-4 md:mb-0">
-      <div>
+    <div className="min-h-screen">
+      <div className="grid grid-cols-12 gap-4 px-2 md:px-10 py-[4rem] md:py-[2rem]">
         <AvatarSetting />
         <ProfileSetting />
       </div>

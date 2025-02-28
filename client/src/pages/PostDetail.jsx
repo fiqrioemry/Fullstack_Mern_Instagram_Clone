@@ -7,20 +7,20 @@ import PostLoading from "@/components/skeleton/PostLoading";
 
 const PostDetail = () => {
   const { id } = useParams();
-  const { post, getPostDetail, loading } = usePostStore();
+  const { post, getPostDetail } = usePostStore();
 
   useEffect(() => {
     getPostDetail(id);
   }, [getPostDetail, id]);
 
-  if (post && post.length === 0) return <NotFound />;
+  if (!post) return <PostLoading />;
+
+  if (post.length === 0) return <NotFound />;
 
   return (
-    <div className="flex justify-center">
-      <div className="max-w-2xl md:max-w-4xl w-full">
-        <div className="mt-12 md:mt-0 py-6 space-y-6">
-          <div>{loading || !post ? <PostLoading /> : <Post post={post} />}</div>
-        </div>
+    <div className="min-h-screen">
+      <div className="px-2 md:px-10 md:py-6 py-20">
+        <Post post={post} />
       </div>
     </div>
   );

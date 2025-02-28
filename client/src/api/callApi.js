@@ -83,12 +83,12 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  updateMyProfile: async (formData) => {
+  updateProfile: async (formData) => {
     return authInstance
       .put('/user/profile', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
-      .then((res) => res.data.message)
+      .then((res) => res.data)
       .catch(errorHandle);
   },
 

@@ -11,17 +11,17 @@ const AvatarSetting = () => {
   const { singleFile } = useFileUpload(
     avatarForm.setFieldValue,
     avatarForm.values.avatar,
-    avatarForm.handleSubmit
+    updateProfile
   );
 
   return (
     <div className="col-span-12 md:col-span-4">
-      <div className="flex justify-center w-full space-y-4">
+      <div className="flex flex-col items-center space-y-4">
         {/* avatar picture */}
         <div className="w-40 h-40 border border-muted">
           <img
             className="w-full h-full object-cover"
-            src={avatarForm.values.avatar}
+            src={profile.avatar}
             alt="avatar picture"
           />
         </div>
@@ -29,7 +29,10 @@ const AvatarSetting = () => {
         {/* update avatar form */}
         <button className="relative btn-selection" disabled={loading}>
           {loading ? (
-            <Loader className="animate-spin" />
+            <>
+              <Loader className="animate-spin" />
+              <span>uploading</span>
+            </>
           ) : (
             <>
               <Camera />

@@ -7,52 +7,50 @@ import AuthorCard from "@/components/profile/AuthorCard";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import NoPostToShow from "@/components/post/NoPostToShow";
 import PostsLoading from "@/components/skeleton/PostsLoading";
+import HomeLoading from "../components/skeleton/HomeLoading";
 
 const Home = () => {
   const { viewRef } = useScrollToView();
   const { getPostsFromFollowings, posts, loading, totalPosts } = usePostStore();
-  const { triggerRef } = useInfiniteScroll(
-    getPostsFromFollowings,
-    totalPosts,
-    posts.length
-  );
+
+  const { triggerRef } = useInfiniteScroll(getPostsFromFollowings, totalPosts);
+
+  if (!posts) return <HomeLoading />;
+
+  if (posts.length === 0) return <NoPostToShow />;
 
   return (
-    <div className="flex">
+    <div className="min-h-screen flex">
+      {/* scroll to top ref*/}
       <div ref={viewRef} />
-      <div className="flex-grow">
-        <div className="flex justify-center">
-          <div className="w-full max-w-[30rem] px-2">
-            <div className="md:mt-0 mt-12 md:mb-0 mb-12 py-6">
-              {loading && posts.length === 0 ? (
-                <PostsLoading />
-              ) : (
-                <div className="space-y-6">
-                  {posts.length === 0 ? (
-                    <NoPostToShow />
-                  ) : (
-                    posts.map((post) => <Posts post={post} key={post.postId} />)
-                  )}
+      {/* posts display */}
+      <div className="flex px-2 md:px-10 py-[3rem] md:py-0 mb-8">
+        <div className="md:w-7/12 px-4 md:px-2 space-y-2">
+          {posts.map((post) => (
+            <Posts post={post} key={post.postId} />
+          ))}
 
-                  {loading && posts.length > 0 && <PostsLoading />}
+          {loading && <PostsLoading />}
 
-                  <div ref={triggerRef} className="h-12" />
+          <div ref={triggerRef} className="h-12" />
 
-                  {posts.length >= totalPosts && posts.length > 0 && (
-                    <>
-                      <EndOfPost />
-                      <Link to="/" className="btn btn-secondary">
-                        Follow User For More
-                      </Link>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
+          {posts.length >= totalPosts && (
+            <>
+              <EndOfPost />
+              <Link to="/explore" className="btn btn-secondary">
+                Follow User For More
+              </Link>
+            </>
+          )}
+        </div>
+
+        {/* author card */}
+        <div className="w-5/12 hidden md:block">
+          <div className="flex justify-center py-4">
+            <AuthorCard />
           </div>
         </div>
       </div>
-      <AuthorCard />
     </div>
   );
 };

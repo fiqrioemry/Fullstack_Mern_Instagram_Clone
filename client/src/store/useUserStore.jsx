@@ -11,7 +11,6 @@ export const useUserStore = create((set, get) => ({
   followers: [],
   followings: [],
   loading: false,
-  updating: false,
   searching: false,
 
   searchUser: async (username) => {
@@ -19,7 +18,6 @@ export const useUserStore = create((set, get) => ({
     set({ searching: true });
     try {
       const users = await callApi.searchUser(username);
-      console.log(users);
       set({ users });
     } catch (error) {
       set({ users: [], error: error.message });
@@ -51,9 +49,9 @@ export const useUserStore = create((set, get) => ({
   updateProfile: async (formData) => {
     set({ loading: true });
     try {
-      const message = await callApi.updateMyProfile(formData);
-      await get().getMyProfile();
+      const { message, profile } = await callApi.updateProfile(formData);
       toast.success(message);
+      set({ profile });
     } catch (error) {
       console.log(error.message);
     } finally {
@@ -109,7 +107,6 @@ export const useUserStore = create((set, get) => ({
       }
 
       set((state) => ({
-        // akan error jika halaman profile belum diakses untuk membuat state pada profile
         profile: {
           ...state.profile,
           isFollowing:

@@ -19,7 +19,7 @@ const Posts = ({ post }) => {
   );
 
   return (
-    <div className="border-b border-muted-foreground/50 py-2">
+    <div className="border-b border-muted">
       <PostAuthor data={post} />
       <Galleries images={post.images} />
       <PostControl post={post} formik={commentForm} />
