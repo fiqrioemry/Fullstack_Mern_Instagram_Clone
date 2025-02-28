@@ -1,12 +1,12 @@
-import Posts from "@/components/post/Posts";
-import EndOfPost from "@/components/post/EndOfPost";
 import { usePostStore } from "@/store/usePostStore";
 import useScrollToView from "@/hooks/useScrollToView";
-import AuthorCard from "@/components/profile/AuthorCard";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
-import NoPostToShow from "@/components/post/NoPostToShow";
+import EndOfPost from "@/components/home-explore/EndOfPost";
+import HomeLoading from "@/components/skeleton/HomeLoading";
 import PostsLoading from "@/components/skeleton/PostsLoading";
-import HomeLoading from "../components/skeleton/HomeLoading";
+import AuthorCard from "@/components/home-explore/AuthorCard";
+import NoPostToShow from "@/components/home-explore/NoPostToShow";
+import PostsLayout from "../components/home-explore/PostsLayout";
 
 const Home = () => {
   const { viewRef } = useScrollToView();
@@ -25,7 +25,7 @@ const Home = () => {
       {/* posts display */}
       <div className="flex-1">
         {posts.map((post) => (
-          <Posts post={post} key={post.postId} />
+          <PostsLayout post={post} key={post.postId} />
         ))}
 
         {loading && <PostsLoading />}
