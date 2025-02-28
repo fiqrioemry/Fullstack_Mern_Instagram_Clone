@@ -27,7 +27,7 @@ const Post = ({ post }) => {
   }, [getComments, post.postId]);
 
   return (
-    <div className="grid grid-cols-10 h-[34rem]">
+    <div className="grid grid-cols-10">
       {/* Galeri Foto */}
       <div className="col-span-5 lg:col-span-6 border-r border-muted">
         <div className="h-full flex items-center bg-secondary">

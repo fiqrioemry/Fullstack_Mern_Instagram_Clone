@@ -17,7 +17,11 @@ const PostDetail = () => {
 
   if (post.length === 0) return <NotFound />;
 
-  return <Post post={post} />;
+  return (
+    <div className="w-full">
+      <Post post={post} />
+    </div>
+  );
 };
 
 export default PostDetail;

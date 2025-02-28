@@ -8,15 +8,19 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { Toaster } from "react-hot-toast";
 import PostDetail from "./pages/PostDetail";
-import Notifications from "./pages/Notifications";
-
 import Layout from "./components/layout/Layout";
-import UserTags from "./components/profile/UserTags";
-import UserSaved from "./components/profile/UserSaved";
+import Notifications from "./pages/Notifications";
 import PostDialog from "./components/modal/PostDialog";
-import Followers from "./components/profile/Followers";
-import Followings from "./components/profile/Followings";
 import PageLoading from "@/components/skeleton/PageLoading";
+
+// profile
+// profile info
+import Followers from "./components/profile/info/Followers";
+import Followings from "./components/profile/info/Followings";
+
+// profile page
+import ProfileTags from "./components/profile/ProfileTags";
+import ProfileSaved from "./components/profile/ProfileSaved";
 import ProfilePosts from "./components/profile/ProfilePosts";
 
 import { Route, Routes } from "react-router-dom";
@@ -64,8 +68,8 @@ function App() {
           <Route path="p/:id" element={<PostDetail />} />
           <Route path=":username" element={<Profile />}>
             <Route index element={<ProfilePosts />} />
-            <Route path="tags" element={<UserTags />} />
-            <Route path="saved" element={<UserSaved />} />
+            <Route path="tags" element={<ProfileTags />} />
+            <Route path="saved" element={<ProfileSaved />} />
           </Route>
           <Route path="message" element={<Messages />} />
           <Route path="settings" element={<Settings />} />
