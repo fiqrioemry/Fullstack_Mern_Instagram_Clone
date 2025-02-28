@@ -15,6 +15,8 @@ export const useAuthStore = create((set, get) => ({
   onlineUsers: [],
   socket: null,
 
+  resetStep: () => set({ step: 1 }),
+
   setAccessToken: (accessToken) => set({ accessToken }),
 
   authCheck: async () => {
@@ -26,6 +28,31 @@ export const useAuthStore = create((set, get) => ({
       set({ user: null });
     } finally {
       set({ checkingAuth: false });
+    }
+  },
+
+  signup: async (formData, navigate) => {
+    set({ loading: true });
+    try {
+      const step = get().step;
+      if (step === 1) {
+        const { message } = await callApi.sendOTP(formData);
+        toast.success(message);
+        set({ step: 2 });
+      } else if (step === 2) {
+        const { message } = await callApi.verifyOTP(formData);
+        toast.success(message);
+        set({ step: 3 });
+      } else if (step === 3) {
+        const { message } = await callApi.register(formData);
+        toast.success(message);
+        set({ step: 1 });
+        navigate("/signin");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      set({ loading: false });
     }
   },
 

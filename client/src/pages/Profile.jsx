@@ -1,16 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import NotFound from "./NotFound";
+import NavTabs from "@/components/profile/NavTabs";
 import { useUserStore } from "@/store/useUserStore";
-import MyProfile from "@/components/profile/MyProfile";
-import { Bookmark, Grid2X2, Tags } from "lucide-react";
+import { Outlet, useParams } from "react-router-dom";
 import UserProfile from "@/components/profile/UserProfile";
 import ProfileLoading from "@/components/skeleton/ProfileLoading";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Outlet, useParams, useLocation, Link } from "react-router-dom";
 
 const Profile = () => {
-  const location = useLocation();
   const { username } = useParams();
   const { profile, getUserProfile, loading } = useUserStore();
 
@@ -24,35 +21,10 @@ const Profile = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full max-w-4xl py-10 space-y-10 px-4">
-        {profile?.isMyProfile ? (
-          <MyProfile profile={profile} />
-        ) : (
-          <UserProfile profile={profile} />
-        )}
-
-        <div>
-          <Tabs defaultValue={location.pathname}>
-            <TabsList className="w-full">
-              <Link to={`/${profile.username}`}>
-                <TabsTrigger value={`/${profile.username}`}>
-                  <Grid2X2 /> <span>Post</span>
-                </TabsTrigger>
-              </Link>
-              <Link to="saved">
-                <TabsTrigger value="saved">
-                  <Bookmark /> <span>Saved</span>
-                </TabsTrigger>
-              </Link>
-              <Link to="tags">
-                <TabsTrigger value="tags">
-                  <Tags /> <span>tags</span>
-                </TabsTrigger>
-              </Link>
-            </TabsList>
-          </Tabs>
-          <Outlet />
-        </div>
+      <div className=" max-w-xl md:max-w-4xl py-10 ">
+        <UserProfile profile={profile} />
+        <NavTabs profile={profile} />
+        <Outlet />
       </div>
     </div>
   );

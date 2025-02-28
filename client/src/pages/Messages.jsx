@@ -7,10 +7,10 @@ export default function Messages() {
   const [open, setOpen] = useState();
 
   return (
-    <div className="flex h-screen md:mt-0 mt-12 mb-12 md:mb-0">
+    <div className="flex h-screen  md:mt-0 mt-12 mb-12 md:mb-0">
       <SearchUserForChat open={open} setOpen={setOpen} />
 
-      <div className="w-1/6 md:w-1/4 h-full border-r border-muted">
+      <div className="w-1/6 md:w-1/4 h-full border-r border-muted ">
         <ChatSidebar setOpen={setOpen} />
       </div>
 
