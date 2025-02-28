@@ -4,11 +4,11 @@ import SignIn from "./pages/SignIn";
 import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Messages from "./pages/Messages";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { Toaster } from "react-hot-toast";
 import PostDetail from "./pages/PostDetail";
 import Notifications from "./pages/Notifications";
-import SettingsLayout from "./pages/SettingsLayout";
 
 import Layout from "./components/layout/Layout";
 import UserTags from "./components/profile/UserTags";
@@ -68,8 +68,8 @@ function App() {
             <Route path="tags" element={<UserTags />} />
             <Route path="saved" element={<UserSaved />} />
           </Route>
-          <Route path="settings" element={<SettingsLayout />} />
           <Route path="message" element={<Messages />} />
+          <Route path="settings" element={<Settings />} />
           <Route path="notification" element={<Notifications />} />
           <Route path="*" element={<NotFound />} />
         </Route>

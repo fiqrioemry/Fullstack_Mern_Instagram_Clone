@@ -9,15 +9,15 @@ import ProfileLoading from "@/components/skeleton/ProfileLoading";
 
 const Profile = () => {
   const { username } = useParams();
-  const { profile, getUserProfile, loading } = useUserStore();
+  const { profile, getUserProfile } = useUserStore();
 
   useEffect(() => {
     getUserProfile(username);
   }, [username]);
 
-  if (loading) return <ProfileLoading />;
+  if (!profile) return <ProfileLoading />;
 
-  if (profile && profile.length === 0) return <NotFound />;
+  if (profile.length === 0) return <NotFound />;
 
   return (
     <section className="flex justify-center">

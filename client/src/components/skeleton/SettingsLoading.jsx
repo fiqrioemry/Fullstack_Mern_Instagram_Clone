@@ -2,30 +2,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const SettingsLoading = () => {
   return (
-    <div className="h-screen flex justify-center">
-      <div className="flex flex-col items-center max-w-2xl">
-        <div className="flex  md:items-start items-center md:flex-row flex-col  md:gap-8 gap-4">
-          <Skeleton className="h-32 w-32 rounded-full flex-shrink-0" />
-
-          <div>
-            <div className="flex flex-col md:flex-row items-center gap-4">
-              <Skeleton className="h-6 w-32" />
-              <div className="flex items-center gap-4">
-                <Skeleton className="h-12 w-28" />
-                <Skeleton className="h-12 w-28" />
-              </div>
-            </div>
-            <div className="flex justify-center md:justify-start items-center gap-6 mt-4">
-              <Skeleton className="h-6 w-24" />
-              <Skeleton className="h-6 w-24" />
-              <Skeleton className="h-6 w-24" />
-            </div>
-            <div className="space-y-2 mt-4 text-justify">
-              <Skeleton className="h-6 w-24" />
-              <Skeleton className="h-6 w-full" />
-              <Skeleton className="h-6 w-full" />
-            </div>
-          </div>
+    <div className="min-h-screen py-12 px-2 md:px-10 mb-4 md:mb-0">
+      <div className="grid grid-cols-12 gap-4 p-4">
+        <div className="col-span-12 md:col-span-4 flex justify-center">
+          <Skeleton className="h-40 w-40 rounded-md" />
+        </div>
+        <div className="col-span-12 md:col-span-8 space-y-6 md:space-y-8">
+          <Skeleton className="h-7 md:h-9 w-full rounded-md" />
+          <Skeleton className="h-7 md:h-9 w-full rounded-md" />
+          <Skeleton className="h-7 md:h-9 w-full rounded-md" />
+          <Skeleton className="h-7 md:h-9 w-full rounded-md" />
+          <Skeleton className="h-7 md:h-9 w-full rounded-md" />
+          <Skeleton className="h-7 md:h-9 w-40 rounded-md" />
         </div>
       </div>
     </div>

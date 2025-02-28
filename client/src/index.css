@@ -160,7 +160,7 @@
   }
 
   .btn-delete {
-    @apply font-medium text-red-700 hover:text-red-500 cursor-pointer duration-300;
+    @apply flex justify-center items-center font-medium text-red-700 hover:text-red-500 cursor-pointer duration-300;
   }
 
   .btn-ghost {
@@ -172,6 +172,6 @@
   }
 
   .btn-selection {
-    @apply flex justify-center items-center text-sm font-semibold w-full bg-muted-foreground/10 hover:bg-muted-foreground/20 p-2 rounded-md duration-300 gap-4;
+    @apply flex justify-center items-center text-sm font-semibold min-w-32 bg-muted-foreground/10 hover:bg-muted-foreground/20 p-2 rounded-md duration-300 gap-4;
   }
 }

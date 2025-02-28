@@ -10,7 +10,7 @@ export const useUserStore = create((set, get) => ({
   profile: null,
   followers: [],
   followings: [],
-  loading: true,
+  loading: false,
   updating: false,
   searching: false,
 
@@ -29,36 +29,27 @@ export const useUserStore = create((set, get) => ({
   },
 
   getUserProfile: async (username) => {
-    set({ loading: true });
     try {
       const profile = await callApi.getUserProfile(username);
       set({ profile });
     } catch (error) {
       set({ profile: [] });
       console.log(error.message);
-    } finally {
-      set({ loading: false });
     }
   },
 
   getMyProfile: async () => {
-    set({ loading: true });
     try {
-      console.log("getting");
       const profile = await callApi.getMyProfile();
-
-      console.log(profile);
       set({ profile });
     } catch (error) {
       set({ profile: [] });
       console.log(error.message);
-    } finally {
-      set({ loading: false });
     }
   },
 
   updateProfile: async (formData) => {
-    set({ updating: true });
+    set({ loading: true });
     try {
       const message = await callApi.updateMyProfile(formData);
       await get().getMyProfile();
@@ -66,7 +57,7 @@ export const useUserStore = create((set, get) => ({
     } catch (error) {
       console.log(error.message);
     } finally {
-      set({ updating: false });
+      set({ loading: false });
     }
   },
 
