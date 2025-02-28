@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import Posts from "@/components/post/Posts";
 import EndOfPost from "@/components/post/EndOfPost";
 import { usePostStore } from "@/store/usePostStore";
@@ -20,11 +19,11 @@ const Home = () => {
   if (posts.length === 0) return <NoPostToShow />;
 
   return (
-    <>
+    <div className="flex mx-2 md:mx-12">
       {/* scroll to top ref*/}
       <div ref={viewRef} />
       {/* posts display */}
-      <div className="md:w-7/12 px-4 md:px-2 space-y-2">
+      <div className="flex-1">
         {posts.map((post) => (
           <Posts post={post} key={post.postId} />
         ))}
@@ -42,7 +41,7 @@ const Home = () => {
           <AuthorCard />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

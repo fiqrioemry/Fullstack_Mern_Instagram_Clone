@@ -12,7 +12,7 @@ const Layout = () => {
       <main className="flex">
         <SideNavbar />
         <ScrollArea className="flex-1 overflow-y-auto">
-          <div className="flex h-screen pt-[50px] pb-[50px] md:pt-0 md:pb-0">
+          <div className="flex justify-center h-screen py-[3rem] md:py-0">
             <Outlet />
           </div>
         </ScrollArea>
