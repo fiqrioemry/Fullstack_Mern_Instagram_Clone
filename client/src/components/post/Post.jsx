@@ -30,7 +30,7 @@ const Post = ({ post }) => {
     <div className="grid grid-cols-10">
       {/* Galeri Foto */}
       <div className="col-span-5 lg:col-span-6 border-r border-muted">
-        <div className="h-full flex items-center bg-secondary">
+        <div className="h-full bg-secondary">
           <Galleries images={post.images} />
         </div>
       </div>

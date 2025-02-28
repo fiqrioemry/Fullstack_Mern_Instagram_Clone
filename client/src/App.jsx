@@ -1,3 +1,4 @@
+// pages
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
@@ -6,26 +7,22 @@ import Explore from "./pages/Explore";
 import Messages from "./pages/Messages";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import { Toaster } from "react-hot-toast";
 import PostDetail from "./pages/PostDetail";
-import Layout from "./components/layout/Layout";
 import Notifications from "./pages/Notifications";
-import PostDialog from "./components/modal/PostDialog";
-import PageLoading from "@/components/skeleton/PageLoading";
 
-// profile
-// profile info
-import Followers from "./components/profile/info/Followers";
-import Followings from "./components/profile/info/Followings";
-
-// profile page
-import ProfileTags from "./components/profile/ProfileTags";
-import ProfileSaved from "./components/profile/ProfileSaved";
-import ProfilePosts from "./components/profile/ProfilePosts";
-
+import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import useAuthChecking from "./hooks/useAuthChecking";
 import { AuthRoute, NonAuthRoute } from "./middleware";
+
+import Layout from "./components/layout/Layout";
+import PostDialog from "./components/modal/PostDialog";
+import ProfileTags from "./components/profile/ProfileTags";
+import PageLoading from "@/components/skeleton/PageLoading";
+import Followers from "./components/profile/info/Followers";
+import ProfileSaved from "./components/profile/ProfileSaved";
+import ProfilePosts from "./components/profile/ProfilePosts";
+import Followings from "./components/profile/info/Followings";
 
 function App() {
   const { checkingAuth, location, background } = useAuthChecking();

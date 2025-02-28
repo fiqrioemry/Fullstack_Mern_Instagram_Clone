@@ -19,9 +19,11 @@ const PostsLayout = ({ post }) => {
   );
 
   return (
-    <div className="border-b border-muted">
+    <div className="border-b border-muted ">
       <PostAuthor data={post} />
+
       <Galleries images={post.images} />
+
       <PostControl post={post} formik={commentForm} />
       <div className="text-foreground">{post.content}</div>
       {post.comments > 0 && (

@@ -19,11 +19,11 @@ const Explore = () => {
   if (posts.length === 0) return <NoPostToShow />;
 
   return (
-    <div className="flex mx-2 md:mx-12">
+    <div className="flex mx-2 md:mx-12 w-full">
       {/* scroll to top ref*/}
       <div ref={viewRef} />
       {/* posts display */}
-      <div className="flex-1">
+      <div className="flex-1 w-full md:w-7/12">
         {posts.map((post) => (
           <PostsLayout post={post} key={post.postId} />
         ))}
