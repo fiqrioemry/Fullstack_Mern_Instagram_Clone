@@ -28,8 +28,8 @@ const PostDisplay = ({ post }) => {
   }, [getComments, post.postId]);
 
   return (
-    <div className="m-10">
-      <div className="flex md:flex-row flex-col">
+    <div className="mx-2 md:mx-8">
+      <div className="flex md:flex-row flex-col py-2 md:py-8">
         <div className="w-full md:w-6/12 lg:w-7/12">
           <Galleries images={post.images} />
         </div>
@@ -41,7 +41,7 @@ const PostDisplay = ({ post }) => {
             </div>
 
             {/* comment & reply */}
-            <ScrollArea className="flex-1 overflow-y-auto border-b border-muted ">
+            <ScrollArea className="flex-1 border-b border-muted ">
               <div className="p-2">
                 <Caption post={post} />
                 {loadingComment ? (

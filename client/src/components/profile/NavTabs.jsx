@@ -7,7 +7,7 @@ const NavTabs = ({ profile }) => {
   const location = useLocation();
   return (
     <Tabs defaultValue={location.pathname}>
-      <TabsList className="w-full">
+      <TabsList className="w-full mb-6">
         <Link to={`/${profile.username}`}>
           <TabsTrigger value={`/${profile.username}`}>
             <Grid2X2 /> <span>Post</span>

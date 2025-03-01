@@ -14,10 +14,12 @@ const Settings = () => {
   if (!profile) return <SettingsLoading />;
 
   return (
-    <div className="min-h-screen w-full ">
-      <div className="grid grid-cols-12 gap-4 px-2 md:px-10 pt-[2rem] pb-[4rem] md:pb-0">
-        <AvatarSetting />
-        <ProfileSetting />
+    <div className="flex justify-center">
+      <div className="w-full max-w-xl md:max-w-3xl py-6 mx-2">
+        <div className="flex md:flex-row flex-col gap-8">
+          <AvatarSetting />
+          <ProfileSetting />
+        </div>
       </div>
     </div>
   );

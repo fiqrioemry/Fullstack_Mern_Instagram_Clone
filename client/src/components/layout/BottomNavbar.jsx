@@ -16,19 +16,17 @@ const BottomNavbar = () => {
 
   return (
     <div className="bottom-navbar">
-      <nav className="flex-between">
-        {nav_items.map(({ to, icon: Icon }) => (
-          <Link key={to} to={to} className="btn-nav flex justify-center">
-            <Icon size={24} />
-          </Link>
-        ))}
-
-        <CreateNewPost />
-
-        <Link to={`/${user.username}`} className="btn-nav flex justify-center">
-          <Avatar avatar={user.avatar} />
+      {nav_items.map(({ to, icon: Icon }) => (
+        <Link key={to} to={to} className="btn-nav flex justify-center">
+          <Icon size={24} />
         </Link>
-      </nav>
+      ))}
+
+      <CreateNewPost />
+
+      <Link to={`/${user.username}`} className="btn-nav flex justify-center">
+        <Avatar avatar={user.avatar} />
+      </Link>
     </div>
   );
 };

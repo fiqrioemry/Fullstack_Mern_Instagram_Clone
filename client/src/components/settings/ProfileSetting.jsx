@@ -25,7 +25,7 @@ const ProfileSetting = () => {
   };
 
   return (
-    <div className="col-span-12 md:col-span-8">
+    <div className="flex-1">
       <InputForm
         formik={profileForm}
         disabled={!editProfile}

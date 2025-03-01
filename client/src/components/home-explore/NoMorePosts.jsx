@@ -5,7 +5,7 @@ const NoMorePosts = () => {
 
   const showButton = location.pathname === "/";
   return (
-    <div className="pb-20">
+    <div className="mb-8">
       <div className="text-center text-muted">
         <p>You have reached the end</p>
         <p>No more post to show</p>

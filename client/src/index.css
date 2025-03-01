@@ -120,7 +120,7 @@
     @apply flex items-center justify-between;
   }
   .navbar {
-    @apply bg-background py-2 px-2 top-0 right-0 left-0 md:hidden border-b border-muted-foreground/50 z-10 space-y-4;
+    @apply flex items-center  h-14 md:hidden  top-0 left-0 right-0  text-center border-b border-muted z-10;
   }
 
   .side-navbar {
@@ -128,7 +128,7 @@
   }
 
   .bottom-navbar {
-    @apply md:hidden fixed bottom-0 w-full px-4 bg-background border-t border-muted-foreground/50;
+    @apply flex items-center h-14 md:hidden border-t border-muted bottom-0 left-0 right-0 z-10;
   }
 
   .border-default {

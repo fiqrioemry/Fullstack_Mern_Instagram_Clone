@@ -19,11 +19,7 @@ const ProfilePosts = () => {
 
   if (posts.length === 0) return <NoPostsDisplay profile={profile} />;
 
-  return (
-    <div className="pb-14 md:pb-8">
-      <PostsDisplay posts={posts} />
-    </div>
-  );
+  return <PostsDisplay posts={posts} />;
 };
 
 export default ProfilePosts;

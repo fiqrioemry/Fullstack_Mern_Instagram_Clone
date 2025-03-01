@@ -20,12 +20,10 @@ const Home = () => {
   if (posts.length === 0) return <NoPostToShow />;
 
   return (
-    <div className="w-full flex mx-2 md:mx-12 ">
-      {/* scroll to top ref*/}
-      <div ref={viewRef} />
-
+    <div className="flex mx-2 md:mx-8 space-y-2">
       {/* posts display */}
       <div className="flex-1 ">
+        <div ref={viewRef} />
         {posts.map((post) => (
           <PostsDisplay post={post} key={post.postId} />
         ))}

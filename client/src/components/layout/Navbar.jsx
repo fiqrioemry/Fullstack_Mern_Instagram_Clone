@@ -29,32 +29,30 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="flex items-center">
-        {/* Logo */}
-        <div className={searchActive}>
-          <div className="flex justify-center">
-            <h3>logo</h3>
-          </div>
+      {/* Logo */}
+      <div className={searchActive}>
+        <div className="flex justify-center">
+          <h3>logo</h3>
         </div>
+      </div>
 
-        {/* search function */}
-        <div ref={searchRef} className={inputActive}>
-          <SearchInput handleSearch={handleSearch} searchForm={searchForm} />
+      {/* search function */}
+      <div ref={searchRef} className={inputActive}>
+        <SearchInput handleSearch={handleSearch} searchForm={searchForm} />
 
-          {searchForm?.values?.username?.length > 0 && (
-            <Results
-              users={users}
-              searching={searching}
-              onClick={handleNavigate}
-            />
-          )}
-        </div>
+        {searchForm?.values?.username?.length > 0 && (
+          <Results
+            users={users}
+            searching={searching}
+            onClick={handleNavigate}
+          />
+        )}
+      </div>
 
-        {/* dropdown menu settings */}
-        <div className={searchActive}>
-          <div className="flex justify-center">
-            <Settings />
-          </div>
+      {/* dropdown menu settings */}
+      <div className={searchActive}>
+        <div className="flex justify-center">
+          <Settings />
         </div>
       </div>
     </nav>

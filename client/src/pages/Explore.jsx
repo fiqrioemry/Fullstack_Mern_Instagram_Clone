@@ -11,7 +11,6 @@ import NoMorePosts from "../components/home-explore/NoMorePosts";
 const Explore = () => {
   const { viewRef } = useScrollToView();
   const { getPublicPosts, posts, loading, totalPosts } = usePostStore();
-
   const { triggerRef } = useInfiniteScroll(getPublicPosts, totalPosts);
 
   if (!posts) return <HomeLoading />;
@@ -19,12 +18,10 @@ const Explore = () => {
   if (posts.length === 0) return <NoPostToShow />;
 
   return (
-    <div className="flex mx-2 md:mx-12 w-full">
-      {/* scroll to top ref*/}
-      <div ref={viewRef} />
-
+    <div className="flex mx-2 md:mx-8 space-y-2">
       {/* posts display */}
-      <div className="flex-1 w-full md:w-7/12">
+      <div className="flex-1 ">
+        <div ref={viewRef} />
         {posts.map((post) => (
           <PostsDisplay post={post} key={post.postId} />
         ))}

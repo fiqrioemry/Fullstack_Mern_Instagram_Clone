@@ -15,46 +15,44 @@ const AvatarSetting = () => {
   );
 
   return (
-    <div className="col-span-12 md:col-span-4">
-      <div className="flex flex-col items-center space-y-4">
-        {/* avatar picture */}
-        <div className="w-40 h-40 border border-muted">
-          <img
-            className="w-full h-full object-cover"
-            src={profile.avatar}
-            alt="avatar picture"
-          />
-        </div>
-
-        {/* update avatar form */}
-        <button className="relative btn-selection" disabled={loading}>
-          {loading ? (
-            <>
-              <Loader className="animate-spin" />
-              <span>uploading</span>
-            </>
-          ) : (
-            <>
-              <Camera />
-              <span>change avatar</span>
-            </>
-          )}
-          <label
-            htmlFor="avatar"
-            className="absolute top-0 right-0 left-0 bottom-0 z-10"
-          >
-            <input
-              id="avatar"
-              type="file"
-              name="avatar"
-              accept="image/*"
-              className="hidden"
-              disabled={loading}
-              onChange={singleFile}
-            />
-          </label>
-        </button>
+    <div className="flex flex-col justify-center md:justify-start items-center gap-4 ">
+      {/* avatar picture */}
+      <div className="w-40 h-40 border border-muted">
+        <img
+          className="w-full h-full object-cover"
+          src={profile.avatar}
+          alt="avatar picture"
+        />
       </div>
+
+      {/* update avatar form */}
+      <button className="relative btn-selection w-40" disabled={loading}>
+        {loading ? (
+          <>
+            <Loader className="animate-spin" />
+            <span>uploading</span>
+          </>
+        ) : (
+          <>
+            <Camera />
+            <span>change avatar</span>
+          </>
+        )}
+        <label
+          htmlFor="avatar"
+          className="absolute top-0 right-0 left-0 bottom-0 z-10"
+        >
+          <input
+            id="avatar"
+            type="file"
+            name="avatar"
+            accept="image/*"
+            className="hidden"
+            disabled={loading}
+            onChange={singleFile}
+          />
+        </label>
+      </button>
     </div>
   );
 };

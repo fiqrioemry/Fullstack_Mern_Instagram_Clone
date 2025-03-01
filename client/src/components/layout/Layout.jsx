@@ -7,18 +7,19 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const Layout = () => {
   return (
-    <Fragment className="h-screen">
+    <Fragment className="flex flex-col">
       <Navbar />
-
-      <ScrollArea className="flex overflow-y-auto ">
+      <div className="flex-1 flex">
         <SideNavbar />
-        <div className="flex-1">
+        <ScrollArea className="flex-1 overflow-y-auto md:h-screen h-[calc(100vh-56px-56px)]">
           <Outlet />
-        </div>
-      </ScrollArea>
+        </ScrollArea>
+      </div>
       <BottomNavbar />
     </Fragment>
   );
 };
 
 export default Layout;
+
+// h-[calc(100vh-50px-40px)]
