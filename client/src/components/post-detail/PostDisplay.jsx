@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
-import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import Caption from "@/components/post/Caption";
 import Comments from "@/components/post/Comments";
 import PostInput from "@/components/post/PostInput";
@@ -15,7 +13,6 @@ import { useCommentStore } from "@/store/useCommentStore";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
 
 const PostDisplay = ({ post }) => {
-  const navigate = useNavigate();
   const { createComment, getComments, loadingComment } = useCommentStore();
   const commentForm = useFormSchema(
     commentState,
@@ -24,10 +21,6 @@ const PostDisplay = ({ post }) => {
     post.postId
   );
 
-  const handlePrevious = () => {
-    navigate(-1);
-  };
-
   useEffect(() => {
     if (post.postId) {
       getComments(post.postId);
@@ -35,20 +28,14 @@ const PostDisplay = ({ post }) => {
   }, [getComments, post.postId]);
 
   return (
-    <div className="h-screen flex flex-col pb-[4rem] md:pb-12 lg:pb-8">
-      <div className="py-4">
-        <ArrowLeft onClick={handlePrevious} />
-      </div>
-      <div className="flex flex-1 md:flex-row flex-col border border-muted overflow-hidden">
-        {/* Galeri Foto */}
+    <div className="m-10">
+      <div className="flex md:flex-row flex-col">
         <div className="w-full md:w-6/12 lg:w-7/12">
-          <div className="h-full place-content-center bg-secondary">
-            <Galleries images={post.images} />
-          </div>
+          <Galleries images={post.images} />
         </div>
 
-        <div className="w-full md:w-6/12 lg:w-5/12">
-          <div className="flex flex-col h-[60vh] md:h-full">
+        <div className="w-full md:w-6/12 lg:w-5/12 border border-muted">
+          <div className="flex flex-col h-full">
             <div className="border-b border-muted">
               <PostAuthor data={post} />
             </div>

@@ -11,12 +11,12 @@ const Layout = () => {
       <Navbar />
       <main className="flex">
         <SideNavbar />
-        <ScrollArea className="flex-1 overflow-y-auto">
+        <ScrollArea className="flex-1 overflow-y-auto ">
           <div className="flex justify-center h-screen py-[3rem] md:py-0">
             <Outlet />
           </div>
         </ScrollArea>
-        <BottomNavbar />
+        {/* <BottomNavbar /> */}
       </main>
     </Fragment>
   );

@@ -24,6 +24,7 @@ import ProfileSaved from "./components/profile/ProfileSaved";
 import ProfilePosts from "./components/profile/ProfilePosts";
 import Followings from "./components/profile/info/Followings";
 import FollowDialog from "./components/profile/FollowDialog";
+import Testing from "./pages/Testing";
 
 function App() {
   const { checkingAuth, location, background } = useAuthChecking();
@@ -42,7 +43,7 @@ function App() {
             </NonAuthRoute>
           }
         />
-
+        <Route path="/testing" element={<Testing />} />
         <Route
           path="/signup"
           element={
