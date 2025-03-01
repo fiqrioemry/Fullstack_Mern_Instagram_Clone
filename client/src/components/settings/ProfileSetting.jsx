@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { profileControl } from "@/config";
+import { Button } from "@/components/ui/button";
 import InputForm from "@/components/form/InputForm";
 import { useUserStore } from "@/store/useUserStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
@@ -13,8 +14,8 @@ const ProfileSetting = () => {
     setEditProfile(true);
   };
 
-  const handleCancel = () => {
-    profileForm.resetForm();
+  const handleCancel = async () => {
+    await profileForm.resetForm();
     setEditProfile(false);
   };
 
@@ -31,32 +32,35 @@ const ProfileSetting = () => {
         formControl={profileControl}
       >
         {editProfile ? (
-          <div className="space-x-4">
-            <button
+          <div className="flex items-center gap-4">
+            <Button
               type="button"
+              className="min-w-32"
+              variant="destructive"
               onClick={handleCancel}
-              className="btn-selection"
             >
               cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="accent"
+              className="min-w-32"
               onClick={handleSave}
-              className="btn-selection"
               disabled={!profileForm.dirty || !profileForm.isValid}
             >
               save
-            </button>
+            </Button>
           </div>
         ) : (
           <div>
-            <button
+            <Button
               type="button"
+              variant="secondary"
+              className="min-w-32"
               onClick={handleEdit}
-              className="btn-selection "
             >
               Edit Profile
-            </button>
+            </Button>
           </div>
         )}
       </InputForm>

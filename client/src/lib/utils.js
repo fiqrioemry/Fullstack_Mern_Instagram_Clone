@@ -54,13 +54,6 @@ const baseValidations = {
     )
     .required('Email or username is required'),
   message: Yup.string().required('Required'),
-  gender: Yup.string().required('Required'),
-  province: Yup.string().required('Required'),
-  location: Yup.string().required('Required'),
-  birthday: Yup.date()
-    .max(new Date(), 'Cannot be in the future')
-    .required('Required')
-    .typeError('Invalid date'),
 };
 
 export const newValidationSchema = (fields = []) => {

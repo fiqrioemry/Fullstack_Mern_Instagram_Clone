@@ -44,6 +44,7 @@ export const useUserStore = create((set) => ({
   },
 
   getUserProfile: async (username) => {
+    set({ profile: null });
     try {
       const profile = await callApi.getUserProfile(username);
       set({ profile });
@@ -54,6 +55,7 @@ export const useUserStore = create((set) => ({
   },
 
   getMyProfile: async () => {
+    set({ profile: null });
     try {
       const profile = await callApi.getMyProfile();
       set({ profile });
