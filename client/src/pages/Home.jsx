@@ -10,6 +10,7 @@ import NoMorePosts from "../components/home-explore/NoMorePosts";
 
 const Home = () => {
   const { viewRef } = useScrollToView();
+
   const { getPostsFromFollowings, posts, loading, totalPosts } = usePostStore();
 
   const { triggerRef } = useInfiniteScroll(getPostsFromFollowings, totalPosts);

@@ -22,7 +22,9 @@ const PostsDisplay = ({ post }) => {
     <div className="border-b border-muted ">
       <PostAuthor data={post} />
 
-      <Galleries images={post.images} />
+      <div className="h-96 flex-center overflow-hidden">
+        <Galleries images={post.images} />
+      </div>
 
       <PostControl post={post} formik={commentForm} />
       <div className="text-foreground">{post.content}</div>
