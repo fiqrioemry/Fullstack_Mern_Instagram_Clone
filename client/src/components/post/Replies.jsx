@@ -1,5 +1,8 @@
 /* eslint-disable react/prop-types */
-import { Heart } from "lucide-react";
+
+import LikeCount from "./LikeCount";
+import LikeButton from "./LikeButton";
+import ReplyButton from "./ReplyButton";
 import { Link } from "react-router-dom";
 import Avatar from "@/components/ui/Avatar";
 import Timestamp from "@/components/ui/Timestamp";
@@ -25,31 +28,15 @@ const Replies = ({ replies, formik, parentId }) => {
 
               <div className="text-xs flex items-center space-x-2">
                 <Timestamp createdAt={reply.createdAt} />
-                {reply.likes > 0 && <span>{reply.likes} likes</span>}
+                <LikeCount data={reply} />
 
-                <button
-                  className="flex items-center space-x-1"
-                  onClick={() => likeReply(reply.commentId, parentId)}
-                >
-                  <Heart
-                    className={`w-4 h-4 cursor-pointer transition ${
-                      reply.isLiked
-                        ? "text-red-500 fill-red-500"
-                        : "text-muted-foreground hover:text-muted-foreground/60"
-                    }`}
-                  />
-                </button>
-
-                <button
-                  className="text-xs btn-secondary"
-                  onClick={() => {
-                    formik.setFieldValue("postId", reply.postId);
-                    formik.setFieldValue("parentId", parentId);
-                    formik.setFieldValue("content", `@${reply.username} `);
-                  }}
-                >
-                  Reply
-                </button>
+                <LikeButton
+                  data={reply}
+                  onClick={likeReply}
+                  id={reply.commentId}
+                  parentId={parentId}
+                />
+                <ReplyButton form={formik} parentId={parentId} data={reply} />
               </div>
             </div>
           </div>

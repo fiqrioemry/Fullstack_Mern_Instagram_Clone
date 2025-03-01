@@ -138,7 +138,6 @@ export const usePostStore = create((set, get) => ({
     try {
       set({ loading: true });
       const { message } = await callApi.deletePost(postId);
-
       const returnPath = useAuthStore.getState().user.username;
       get().setDeletedPosts(postId);
       navigate(`/${returnPath}`);
@@ -163,7 +162,7 @@ export const usePostStore = create((set, get) => ({
             }
           : state.post,
 
-      posts: state.posts.map((post) =>
+      posts: state.posts?.map((post) =>
         post.postId === postId
           ? {
               ...post,
