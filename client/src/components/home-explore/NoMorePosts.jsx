@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 
-const EndOfPost = () => {
+const NoMorePosts = () => {
   const location = useLocation();
 
   const showButton = location.pathname === "/";
@@ -19,4 +19,4 @@ const EndOfPost = () => {
   );
 };
 
-export default EndOfPost;
+export default NoMorePosts;

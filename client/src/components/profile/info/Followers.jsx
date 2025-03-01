@@ -2,56 +2,39 @@ import { X } from "lucide-react";
 import { useEffect } from "react";
 import FollowCard from "./FollowCard";
 import NoFollowers from "./NoFollowers";
+import { useParams } from "react-router-dom";
 import { useUserStore } from "@/store/useUserStore";
+import { DialogClose } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FollowLoading from "@/components/skeleton/FollowLoading";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 
 const Followers = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const { username } = useParams();
-  const { getFollowers, followers, loading } = useUserStore();
+  const { getFollowers, followers } = useUserStore();
 
   useEffect(() => {
     getFollowers(username);
   }, [getFollowers, username]);
 
-  useEffect(() => {
-    if (location.state?.background) {
-      window.history.replaceState({}, "", location.pathname);
-    }
-  }, [location]);
+  if (!followers) return <FollowLoading />;
+
+  if (followers.length === 0) return <NoFollowers />;
 
   return (
-    <Dialog defaultOpen onOpenChange={(open) => !open && navigate(-1)}>
-      <DialogContent
-        className="sm:w-[400px] p-0 border-none bg-secondary"
-        variant="detail"
-      >
-        <div>
-          <div className="flex-center p-4 border-b border-muted-foreground/50 relative">
-            <h4>Followers</h4>
-            <DialogClose className="absolute right-3">
-              <X size={24} />
-            </DialogClose>
-          </div>
+    <div>
+      <div className="flex-center p-4 border-b border-muted relative">
+        <h4>Followers</h4>
+        <DialogClose className="absolute right-3">
+          <X size={24} />
+        </DialogClose>
+      </div>
 
-          <ScrollArea className="h-80 overflow-y-auto">
-            {loading ? (
-              <FollowLoading />
-            ) : followers.length ? (
-              followers.map((user) => (
-                <FollowCard data={user} key={user.userId} />
-              ))
-            ) : (
-              <NoFollowers />
-            )}
-          </ScrollArea>
-        </div>
-      </DialogContent>
-    </Dialog>
+      <ScrollArea className="h-80 overflow-y-auto">
+        {followers.map((user) => (
+          <FollowCard data={user} key={user.userId} />
+        ))}
+      </ScrollArea>
+    </div>
   );
 };
 

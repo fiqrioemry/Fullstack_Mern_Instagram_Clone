@@ -8,7 +8,7 @@ import PostControl from "@/components/post/PostControl";
 import { commentControl, commentState } from "@/config";
 import { useCommentStore } from "@/store/useCommentStore";
 
-const PostsLayout = ({ post }) => {
+const PostsDisplay = ({ post }) => {
   const location = useLocation();
   const { createComment } = useCommentStore();
   const commentForm = useFormSchema(
@@ -40,4 +40,4 @@ const PostsLayout = ({ post }) => {
   );
 };
 
-export default PostsLayout;
+export default PostsDisplay;

@@ -1,13 +1,13 @@
-import ChatInput from "./ChatInput";
-import UserDisplay from "./UserDisplay";
-import ChatDisplay from "./ChatDisplay";
 import useLoadChat from "@/hooks/useLoadChat";
+import ChatInput from "@/components/messages/chat-container/ChatInput";
+import UserDisplay from "@/components/messages/chat-sidebar/UserDisplay";
+import ChatDisplay from "@/components/messages/chat-container/ChatDisplay";
 import ChatContainerLoading from "@/components/skeleton/ChatContainerLoading";
 
 const SelectedChat = () => {
-  const { chat, loading, selectedUser } = useLoadChat();
+  const { chat, selectedUser } = useLoadChat();
 
-  if (loading.getChat) return <ChatContainerLoading />;
+  if (!chat) return <ChatContainerLoading />;
 
   return (
     <div className="flex flex-col h-full">

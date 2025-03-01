@@ -8,8 +8,8 @@ export const useUserStore = create((set, get) => ({
   users: [],
   error: null,
   profile: null,
-  followers: [],
-  followings: [],
+  followers: null,
+  followings: null,
   loading: false,
   searching: false,
 
@@ -23,6 +23,24 @@ export const useUserStore = create((set, get) => ({
       set({ users: [], error: error.message });
     } finally {
       set({ searching: false });
+    }
+  },
+
+  getFollowers: async (username) => {
+    try {
+      const followers = await callApi.getFollowers(username);
+      set({ followers });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  },
+
+  getFollowings: async (username) => {
+    try {
+      const followings = await callApi.getFollowings(username);
+      set({ followings });
+    } catch (error) {
+      toast.error(error);
     }
   },
 
@@ -95,12 +113,11 @@ export const useUserStore = create((set, get) => ({
   toggleFollow: async (followingId) => {
     try {
       const message = await callApi.toggleFollow(followingId);
+      toast.success(message);
 
       get().setFollowings(followingId);
 
       get().setFollowers(followingId);
-
-      usePostStore.getState().updatePostsFollowStatus(followingId);
 
       if (window.location.pathname === "/") {
         usePostStore.getState().removePostsByUserId(followingId);
@@ -127,34 +144,8 @@ export const useUserStore = create((set, get) => ({
           },
         }));
       }
-
-      toast.success(message);
     } catch (error) {
       console.log(error);
-    }
-  },
-
-  getFollowers: async (username) => {
-    set({ loading: true });
-    try {
-      const followers = await callApi.getFollowers(username);
-      set({ followers });
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  getFollowings: async (username) => {
-    set({ loading: true });
-    try {
-      const followings = await callApi.getFollowings(username);
-      set({ followings });
-    } catch (error) {
-      toast.error(error);
-    } finally {
-      set({ loading: false });
     }
   },
 }));

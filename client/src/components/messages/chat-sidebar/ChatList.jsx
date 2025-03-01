@@ -4,9 +4,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ChatListLoading from "@/components/skeleton/ChatListLoading";
 
 const ChatList = () => {
-  const { loading, chats, setSelectedUser } = useLoadChats();
+  const { chats, setSelectedUser } = useLoadChats();
 
-  if (loading.getChats) return <ChatListLoading />;
+  if (!chats) return <ChatListLoading />;
 
   if (chats.length === 0) return null;
 

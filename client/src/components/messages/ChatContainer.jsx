@@ -1,6 +1,6 @@
-import SelectedChat from "./SelectedChat";
-import NoSelectedChat from "./NoSelectedChat";
 import { useChatStore } from "@/store/useChatStore";
+import SelectedChat from "./chat-container/SelectedChat";
+import NoSelectedChat from "./chat-container/NoSelectedChat";
 
 // eslint-disable-next-line react/prop-types
 const ChatContainer = ({ setOpen }) => {

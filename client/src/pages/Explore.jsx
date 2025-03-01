@@ -1,12 +1,12 @@
 import { usePostStore } from "@/store/usePostStore";
 import useScrollToView from "@/hooks/useScrollToView";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
-import EndOfPost from "@/components/home-explore/EndOfPost";
 import HomeLoading from "@/components/skeleton/HomeLoading";
 import PostsLoading from "@/components/skeleton/PostsLoading";
 import AuthorCard from "@/components/home-explore/AuthorCard";
+import PostsDisplay from "@/components/home-explore/PostsDisplay";
 import NoPostToShow from "@/components/home-explore/NoPostToShow";
-import PostsLayout from "../components/home-explore/PostsLayout";
+import NoMorePosts from "../components/home-explore/NoMorePosts";
 
 const Explore = () => {
   const { viewRef } = useScrollToView();
@@ -22,17 +22,15 @@ const Explore = () => {
     <div className="flex mx-2 md:mx-12 w-full">
       {/* scroll to top ref*/}
       <div ref={viewRef} />
+
       {/* posts display */}
       <div className="flex-1 w-full md:w-7/12">
         {posts.map((post) => (
-          <PostsLayout post={post} key={post.postId} />
+          <PostsDisplay post={post} key={post.postId} />
         ))}
-
         {loading && <PostsLoading />}
-
         <div ref={triggerRef} className="h-12" />
-
-        {posts.length >= totalPosts && <EndOfPost />}
+        {posts.length >= totalPosts && <NoMorePosts />}
       </div>
 
       {/* author card */}

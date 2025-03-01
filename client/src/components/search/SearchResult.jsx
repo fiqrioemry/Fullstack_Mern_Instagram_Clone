@@ -11,7 +11,7 @@ const Results = ({ users, searching, onClick }) => {
   return users.map((user) => (
     <button
       onClick={() => onClick(user)}
-      className="btn-selection mt-2"
+      className="btn-search mt-2"
       key={user.userId}
     >
       <Avatar avatar={user.avatar} />

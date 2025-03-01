@@ -16,13 +16,14 @@ import useAuthChecking from "./hooks/useAuthChecking";
 import { AuthRoute, NonAuthRoute } from "./middleware";
 
 import Layout from "./components/layout/Layout";
-import PostDialog from "./components/modal/PostDialog";
 import ProfileTags from "./components/profile/ProfileTags";
+import PostDialog from "./components/post-detail/PostDialog";
 import PageLoading from "@/components/skeleton/PageLoading";
 import Followers from "./components/profile/info/Followers";
 import ProfileSaved from "./components/profile/ProfileSaved";
 import ProfilePosts from "./components/profile/ProfilePosts";
 import Followings from "./components/profile/info/Followings";
+import FollowDialog from "./components/profile/FollowDialog";
 
 function App() {
   const { checkingAuth, location, background } = useAuthChecking();
@@ -77,8 +78,10 @@ function App() {
 
       {background && (
         <Routes>
-          <Route path=":username/followings" element={<Followings />} />
-          <Route path=":username/followers" element={<Followers />} />
+          <Route path="/:username" element={<FollowDialog />}>
+            <Route path="followings" element={<Followings />} />
+            <Route path="followers" element={<Followers />} />
+          </Route>
           <Route path="p/:id" element={<PostDialog />} />
         </Routes>
       )}

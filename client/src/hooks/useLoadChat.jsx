@@ -4,7 +4,6 @@ import { useChatStore } from "@/store/useChatStore";
 const useLoadChat = () => {
   const {
     chat,
-    loading,
     getChat,
     selectedUser,
     subscribeToMessages,
@@ -21,7 +20,7 @@ const useLoadChat = () => {
     };
   }, [getChat, selectedUser, subscribeToMessages, unsubscribeFromMessages]);
 
-  return { chat, loading, selectedUser };
+  return { chat, selectedUser };
 };
 
 export default useLoadChat;

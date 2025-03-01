@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import ChatList from "./ChatList";
-import UserDisplay from "./UserDisplay";
+import UserDisplay from "./chat-sidebar/UserDisplay";
 import { MessageSquareDiff } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
+import ChatList from "@/components/messages/chat-sidebar/ChatList";
 
 const ChatSidebar = ({ setOpen }) => {
   const { user } = useAuthStore();

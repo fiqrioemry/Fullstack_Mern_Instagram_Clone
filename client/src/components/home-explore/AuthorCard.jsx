@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import MessageDialog from "@/components/modal/MessageDialog";
-import { UserPlus, Linkedin, Globe, Github } from "lucide-react";
+import { Linkedin, Globe, Github } from "lucide-react";
 
 export default function AuthorCard() {
   return (
-    <Card className="w-80 p-4 shadow-lg rounded-2xl text-center bg-white">
+    <Card className="w-64 lg:w-72  p-4 shadow-lg rounded-2xl text-center bg-white">
       {/* Profile Image */}
       <div className="flex justify-center">
         <div className="w-24 h-24 border rounded-full overflow-hidden">
@@ -20,15 +18,6 @@ export default function AuthorCard() {
       <h2 className="text-xl font-semibold mt-3">Ahmad Fiqri Oemry</h2>
       <p className="text-gray-500">Software Engineer | Web Developer</p>
 
-      {/* Action Buttons */}
-      <div className="mt-4 flex justify-center gap-3">
-        <Button className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2">
-          <UserPlus size={16} /> Follow
-        </Button>
-        <MessageDialog />
-      </div>
-
-      {/* Bio */}
       <CardContent className="mt-4 text-sm text-gray-600">
         I Love create seamless & high-performance websites. Lets collaborate
       </CardContent>

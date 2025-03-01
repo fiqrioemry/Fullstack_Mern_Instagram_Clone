@@ -3,16 +3,19 @@ import { useCallback } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "@/components/ui/Avatar";
 import { useUserStore } from "@/store/useUserStore";
+import { usePostStore } from "@/store/usePostStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import PostOptions from "@/components/modal/PostOptions";
 
 const PostAuthor = ({ data }) => {
   const { user } = useAuthStore();
   const { toggleFollow } = useUserStore();
+  const { updatePostsFollowStatus } = usePostStore();
 
   const handleFollow = useCallback(() => {
+    updatePostsFollowStatus(data.userId);
     toggleFollow(data.userId);
-  }, [toggleFollow, data.userId]);
+  }, [toggleFollow, updatePostsFollowStatus, data.userId]);
 
   return (
     <div className="p-2 mt-2 mb-2">

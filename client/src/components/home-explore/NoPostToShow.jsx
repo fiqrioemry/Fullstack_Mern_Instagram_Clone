@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import AuthorCard from "@/components/profile/AuthorCard";
+import AuthorCard from "@/components/home-explore/AuthorCard";
 
 const NoPostToShow = () => {
   return (

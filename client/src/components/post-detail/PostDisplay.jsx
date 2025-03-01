@@ -35,7 +35,7 @@ const PostDisplay = ({ post }) => {
   }, [getComments, post.postId]);
 
   return (
-    <div className="min-h-screen md:h-screen flex flex-col pb-[4rem] md:pb-12 lg:pb-8">
+    <div className="h-screen flex flex-col pb-[4rem] md:pb-12 lg:pb-8">
       <div className="py-4">
         <ArrowLeft onClick={handlePrevious} />
       </div>
