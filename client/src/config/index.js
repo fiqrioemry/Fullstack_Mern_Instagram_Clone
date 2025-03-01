@@ -114,7 +114,7 @@ export const profileControl = [
     label: 'birthday',
     type: 'date',
     placeholder: 'Add your birthday',
-    component: 'input',
+    component: 'date',
   },
   {
     name: 'gender',

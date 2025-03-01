@@ -36,7 +36,7 @@ const ProfileSetting = () => {
             <Button
               type="button"
               className="min-w-32"
-              variant="destructive"
+              variant="secondary"
               onClick={handleCancel}
             >
               cancel
@@ -48,7 +48,7 @@ const ProfileSetting = () => {
               onClick={handleSave}
               disabled={!profileForm.dirty || !profileForm.isValid}
             >
-              save
+              save changes
             </Button>
           </div>
         ) : (
