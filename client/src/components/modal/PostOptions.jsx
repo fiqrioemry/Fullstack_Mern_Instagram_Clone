@@ -15,10 +15,11 @@ const PostOptions = ({ data }) => {
   const location = useLocation().pathname;
   const [open, setOpen] = useState(false);
   const { toggleFollow } = useUserStore();
-  const { deletePost, updatePostsFollowStatus } = usePostStore();
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const { deletePost, updatePostsFollowStatus, removePostsByUserId } =
+    usePostStore();
 
   const handleClose = () => {
     setOpen(false);
@@ -29,7 +30,6 @@ const PostOptions = ({ data }) => {
     setShowConfirmation(true);
   };
   const handleUnfollow = () => {
-    updatePostsFollowStatus(data.userId);
     setSelectedUser(data.userId);
     setShowConfirmation(true);
   };
@@ -47,6 +47,8 @@ const PostOptions = ({ data }) => {
 
   const handleConfirmUnfollow = () => {
     if (selectedUser) toggleFollow(selectedUser);
+    if (location === "/") removePostsByUserId(selectedUser);
+    updatePostsFollowStatus(selectedUser);
     setShowConfirmation(false);
   };
 

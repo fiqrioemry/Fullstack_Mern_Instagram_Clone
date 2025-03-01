@@ -36,7 +36,7 @@ export const usePostStore = create((set, get) => ({
 
   updatePostsFollowStatus: (followingId) => {
     set((state) => {
-      const updatedPosts = state.posts.map((post) =>
+      const updatedPosts = state.posts?.map((post) =>
         post.userId === followingId
           ? { ...post, isFollow: !post.isFollow }
           : post

@@ -8,10 +8,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 const ProfileInfo = ({ profile }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { toggleFollow } = useUserStore();
   const { setSelectedUser } = useChatStore();
+  const { toggleFollow, setCountFollowers } = useUserStore();
 
   const handleFollow = (followingId) => {
+    setCountFollowers();
     toggleFollow(followingId);
   };
 

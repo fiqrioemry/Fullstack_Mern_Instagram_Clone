@@ -1,15 +1,12 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "@/api/callApi";
-import { usePostStore } from "./usePostStore";
-import { useAuthStore } from "./useAuthStore";
 
 export const useUserStore = create((set, get) => ({
   users: [],
   error: null,
   profile: null,
-  followers: null,
-  followings: null,
+  follows: null,
   loading: false,
   searching: false,
 
@@ -27,18 +24,20 @@ export const useUserStore = create((set, get) => ({
   },
 
   getFollowers: async (username) => {
+    set({ follows: null });
     try {
       const followers = await callApi.getFollowers(username);
-      set({ followers });
+      set({ follows: followers });
     } catch (error) {
       toast.error(error.message);
     }
   },
 
   getFollowings: async (username) => {
+    set({ follows: null });
     try {
       const followings = await callApi.getFollowings(username);
-      set({ followings });
+      set({ follows: followings });
     } catch (error) {
       toast.error(error);
     }
@@ -83,9 +82,9 @@ export const useUserStore = create((set, get) => ({
     }));
   },
 
-  setFollowers: (followingId) => {
+  setFollows: (followingId) => {
     set((state) => ({
-      followers: state.followers.map((follow) =>
+      follows: state.follows.map((follow) =>
         follow.userId === followingId
           ? { ...follow, isFollow: !follow.isFollow }
           : follow
@@ -93,20 +92,31 @@ export const useUserStore = create((set, get) => ({
     }));
   },
 
-  setFollowings: (followingId) => {
-    set((state) => ({
-      followings: state.followings.map((follow) =>
-        follow.userId === followingId
-          ? { ...follow, isFollow: !follow.isFollow }
-          : follow
-      ),
-    }));
-  },
   removeFollowings: (followingId) => {
     set((state) => ({
-      followings: state.followings.filter(
-        (follow) => follow.userId !== followingId
-      ),
+      follows: state.follows.filter((follow) => follow.userId !== followingId),
+    }));
+  },
+
+  // for another user profile
+  setCountFollowers: () => {
+    set((state) => ({
+      profile: {
+        ...state.profile,
+        followers:
+          state.profile.followers + (state.profile.isFollowing ? -1 : 1),
+        isFollowing: !state.profile.isFollowing,
+      },
+    }));
+  },
+
+  setCountFollowings: (value) => {
+    set((state) => ({
+      profile: {
+        ...state.profile,
+        followings: state.profile.followings + value,
+        isFollowing: !state.profile.isFollowing,
+      },
     }));
   },
 
@@ -114,36 +124,6 @@ export const useUserStore = create((set, get) => ({
     try {
       const message = await callApi.toggleFollow(followingId);
       toast.success(message);
-
-      get().setFollowings(followingId);
-
-      get().setFollowers(followingId);
-
-      if (window.location.pathname === "/") {
-        usePostStore.getState().removePostsByUserId(followingId);
-      }
-
-      set((state) => ({
-        profile: {
-          ...state.profile,
-          isFollowing:
-            state.profile.userId === followingId
-              ? !state.profile.isFollowing
-              : state.profile.isFollowing,
-        },
-      }));
-
-      if (
-        window.location.pathname.includes(useAuthStore.getState().user.username)
-      ) {
-        get().removeFollowings(followingId);
-        set((state) => ({
-          profile: {
-            ...state.profile,
-            followings: Math.max(0, state.profile.followings - 1),
-          },
-        }));
-      }
     } catch (error) {
       console.log(error);
     }

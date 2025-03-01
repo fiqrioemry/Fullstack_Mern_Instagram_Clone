@@ -10,15 +10,15 @@ import FollowLoading from "@/components/skeleton/FollowLoading";
 
 const Followings = () => {
   const { username } = useParams();
-  const { getFollowings, followings } = useUserStore();
+  const { getFollowings, follows } = useUserStore();
 
   useEffect(() => {
     getFollowings(username);
   }, [getFollowings, username]);
 
-  if (!followings) return <FollowLoading />;
+  if (!follows) return <FollowLoading />;
 
-  if (followings.length === 0) return <NoFollowings />;
+  if (follows.length === 0) return <NoFollowings />;
 
   return (
     <div>
@@ -30,7 +30,7 @@ const Followings = () => {
       </div>
 
       <ScrollArea className="h-80 overflow-y-auto">
-        {followings.map((user) => (
+        {follows.map((user) => (
           <FollowCard data={user} key={user.userId} />
         ))}
       </ScrollArea>

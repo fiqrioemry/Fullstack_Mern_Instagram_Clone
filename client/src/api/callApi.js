@@ -95,7 +95,7 @@ const callApi = {
   toggleFollow: async (followingId) => {
     return authInstance
       .post(`/user/${followingId}/follow`)
-      .then((res) => res.data)
+      .then((res) => res.data.message)
       .catch(errorHandle);
   },
 

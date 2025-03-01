@@ -10,11 +10,19 @@ import ConfirmationBox from "@/components/modal/ConfirmationBox";
 
 const FollowCard = ({ data }) => {
   const { user } = useAuthStore();
-  const { toggleFollow, loading } = useUserStore();
   const [selectedUser, setSelectedUser] = useState(null);
-  const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const handleFollow = () => toggleFollow(data.userId);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const { toggleFollow, setFollows, loading, setCountFollowings, profile } =
+    useUserStore();
+
+  const handleFollow = () => {
+    setFollows(data.userId);
+    if (profile.isMyProfile) {
+      setCountFollowings(1);
+    }
+    toggleFollow(data.userId);
+  };
 
   const handleUnfollowClick = () => {
     setSelectedUser(data.userId);
@@ -23,6 +31,10 @@ const FollowCard = ({ data }) => {
 
   const handleConfirmUnfollow = () => {
     if (selectedUser) toggleFollow(selectedUser);
+    setFollows(selectedUser);
+    if (profile.isMyProfile && data.isFollow) {
+      setCountFollowings(-1);
+    }
     setShowConfirmation(false);
   };
 
