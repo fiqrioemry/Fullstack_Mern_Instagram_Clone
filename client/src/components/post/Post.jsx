@@ -31,9 +31,7 @@ const Post = ({ post }) => {
     <div className="grid grid-cols-10 border border-muted overflow-hidden ">
       {/* Galeri Foto */}
       <div className="hidden md:block lg:col-span-6 h-[90vh] ">
-        <div className="h-full  place-content-center bg-secondary">
-          <Galleries images={post.images} />
-        </div>
+        <Galleries images={post.images} />
       </div>
 
       <div className="col-span-10 lg:col-span-4 h-[80vh] md:h-[90vh]">

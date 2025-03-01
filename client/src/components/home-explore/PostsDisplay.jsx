@@ -22,7 +22,7 @@ const PostsDisplay = ({ post }) => {
     <div className="border-b border-muted ">
       <PostAuthor data={post} />
 
-      <div className="h-96 flex-center overflow-hidden">
+      <div className="h-96">
         <Galleries images={post.images} />
       </div>
 
