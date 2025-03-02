@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { Image } from "lucide-react";
-import { useFileUpload } from "../../hooks/useFileUpload";
+import { useFileUpload } from "@/hooks/useFileUpload";
 
-const AttachComponent = ({ form }) => {
+const AttachImage = ({ form }) => {
   const { singleFile } = useFileUpload(form.setFieldValue, form.values);
 
   return (
@@ -20,4 +20,4 @@ const AttachComponent = ({ form }) => {
   );
 };
 
-export default AttachComponent;
+export default AttachImage;

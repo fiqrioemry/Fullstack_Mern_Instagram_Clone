@@ -1,12 +1,17 @@
 import useLoadChat from "@/hooks/useLoadChat";
+import { chatControl, chatState } from "@/config";
+import { useFormSchema } from "@/hooks/useFormSchema";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ChatAttachPreview from "./chat-container/ChatAttachPreview";
 import ChatInput from "@/components/messages/chat-container/ChatInput";
 import UserDisplay from "@/components/messages/chat-sidebar/UserDisplay";
 import ChatDisplay from "@/components/messages/chat-container/ChatDisplay";
 import ChatContainerLoading from "@/components/skeleton/ChatContainerLoading";
 
 const ChatContainer = () => {
-  const { chat, selectedUser } = useLoadChat();
+  const { chat, sendChat, loading, selectedUser } = useLoadChat();
+
+  const chatForm = useFormSchema(chatState, chatControl, sendChat);
 
   if (!chat) return <ChatContainerLoading />;
 
@@ -22,7 +27,8 @@ const ChatContainer = () => {
       </ScrollArea>
 
       <div className="relative">
-        <ChatInput />
+        {!loading && <ChatAttachPreview form={chatForm} />}
+        <ChatInput form={chatForm} selectedUser={selectedUser} />
       </div>
     </div>
   );

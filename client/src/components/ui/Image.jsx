@@ -5,7 +5,7 @@ const Image = ({ url }) => {
       {url instanceof File || url instanceof Blob ? (
         <img
           src={URL.createObjectURL(url)}
-          className="w-full h-full object-contain "
+          className="object-cover"
           onLoad={(e) => {
             if (e.target.src.startsWith("blob:")) {
               URL.revokeObjectURL(e.target.src);

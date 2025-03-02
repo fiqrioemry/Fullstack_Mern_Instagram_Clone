@@ -5,6 +5,8 @@ const useLoadChat = () => {
   const {
     chat,
     getChat,
+    sendChat,
+    loading,
     selectedUser,
     subscribeToMessages,
     unsubscribeFromMessages,
@@ -20,7 +22,7 @@ const useLoadChat = () => {
     };
   }, [getChat, selectedUser, subscribeToMessages, unsubscribeFromMessages]);
 
-  return { chat, selectedUser };
+  return { chat, sendChat, loading, selectedUser };
 };
 
 export default useLoadChat;

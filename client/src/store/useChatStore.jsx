@@ -38,7 +38,7 @@ export const useChatStore = create((set, get) => ({
   sendChat: async (formData) => {
     const receiverId = get().selectedUser.userId;
     set({ loading: true });
-
+    console.log(formData);
     try {
       const { message, newChat } = await callApi.sendChat(formData, receiverId);
       toast.success(message);

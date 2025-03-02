@@ -4,7 +4,7 @@ import DateComponent from "./DateComponent";
 import { Input } from "@/components/ui/input";
 import SelectComponent from "./SelectComponent";
 import { Textarea } from "@/components/ui/textarea";
-import AttachComponent from "./AttachComponent";
+import AttachComponent from "../messages/chat-container/ChatAttachForm";
 
 function InputForm({ formik, formControl, children, disabled = false }) {
   function renderComponentByType(control) {
