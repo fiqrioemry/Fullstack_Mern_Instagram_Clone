@@ -225,7 +225,9 @@ const callApi = {
 
   sendChat: async (formData, receiverId) => {
     return authInstance
-      .post(`/chat/${receiverId}`, formData)
+      .post(`/chat/${receiverId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       .then((res) => res.data)
       .catch(errorHandle);
   },

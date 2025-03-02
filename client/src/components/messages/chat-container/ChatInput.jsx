@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Send, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { chatControl, chatState } from "@/config";
@@ -10,6 +11,7 @@ const ChatInput = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const chatForm = useFormSchema(chatState, chatControl, sendChat);
 
+  console.log(chatForm.values);
   useEffect(() => {
     if (chatForm.values.image) {
       const imageUrl = URL.createObjectURL(chatForm.values.image);

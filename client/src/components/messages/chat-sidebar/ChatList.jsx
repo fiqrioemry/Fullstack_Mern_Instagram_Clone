@@ -16,7 +16,7 @@ const ChatList = () => {
         <button
           key={chat.userId}
           onClick={() => setSelectedUser(chat)}
-          className="hover:bg-secondary duration-300 w-full flex items-center justify-center md:justify-start p-4"
+          className="duration-300 w-full flex items-center justify-center md:justify-start p-4"
         >
           <UserDisplay user={chat} />
         </button>

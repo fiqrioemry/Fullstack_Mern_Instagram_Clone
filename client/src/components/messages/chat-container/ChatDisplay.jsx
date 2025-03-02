@@ -37,6 +37,13 @@ const ChatDisplay = ({ chat, selectedUser }) => {
                   isSender ? "bg-blue-500 text-foreground" : "bg-secondary"
                 }`}
               >
+                {message.image && (
+                  <img
+                    src={message.image}
+                    alt="attachment"
+                    className="w-48 rounded-md mb-2"
+                  />
+                )}
                 <div className="text-sm">{message.message}</div>
                 <span className="text-xs text-foreground block mt-1">
                   {new Date(message.timestamp).toLocaleTimeString()}
