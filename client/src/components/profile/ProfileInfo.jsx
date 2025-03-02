@@ -20,8 +20,9 @@ const ProfileInfo = ({ profile }) => {
     setSelectedUser(profile);
     navigate("/message");
   };
+
   return (
-    <div className="flex md:flex-row flex-col items-center md:gap-8 gap-2 mb-12">
+    <div className="flex md:flex-row flex-col items-center md:items-start md:gap-8 gap-2 mb-12">
       <div className="w-32 h-32 rounded-full overflow-hidden border-2 flex-shrink-0">
         <img
           src={profile.avatar}
@@ -31,27 +32,21 @@ const ProfileInfo = ({ profile }) => {
       </div>
 
       <div>
-        {profile.isMyProfile ? (
-          <div className="flex flex-col md:flex-row items-center md:gap-12 gap-4">
-            <div className="flex justify-center md:justify-start w-full md:w-1/3">
-              <h3>{profile.username}</h3>
-            </div>
-
-            <div className="flex items-center gap-4 w-full md:w-2/3">
+        <div className="flex flex-col md:flex-row items-center md:gap-12 gap-4">
+          <div className="flex justify-center md:justify-start w-full md:w-1/3">
+            <h3>{profile.username}</h3>
+          </div>
+          {profile.isMyProfile ? (
+            <div className="flex items-center justify-center gap-4 w-full md:w-2/3">
               <Link to="/settings" className="btn-selection">
                 Edit Profile
               </Link>
               <Link to="" className="btn-selection">
                 View Archive
-              </Link>
+              </Link>{" "}
             </div>
-          </div>
-        ) : (
-          <div className="flex flex-col md:flex-row items-center md:gap-20 gap-4">
-            <div className="flex justify-center md:justify-start w-full md:w-1/3">
-              <h3>{profile.username}</h3>
-            </div>
-            <div className="flex items-center gap-4 w-full md:w-2/3">
+          ) : (
+            <div className="flex items-center justify-center gap-4 w-full md:w-2/3">
               <Button
                 className="w-full"
                 onClick={() => handleFollow(profile.userId)}
@@ -67,8 +62,8 @@ const ProfileInfo = ({ profile }) => {
                 Message
               </Button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="flex justify-center md:justify-start items-center gap-6 mt-4">
           <span>{profile.posts} Posts</span>

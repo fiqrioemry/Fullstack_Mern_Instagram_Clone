@@ -120,7 +120,7 @@
     @apply flex items-center justify-between;
   }
   .navbar {
-    @apply flex items-center  h-14 md:hidden  top-0 left-0 right-0  text-center border-b border-muted z-10;
+    @apply flex items-center py-2 md:hidden  top-0 left-0 right-0  text-center border-b border-muted z-10;
   }
 
   .side-navbar {

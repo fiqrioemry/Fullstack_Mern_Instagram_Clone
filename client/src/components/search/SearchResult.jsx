@@ -2,16 +2,18 @@
 import Avatar from "@/components/ui/Avatar";
 import SearchLoading from "@/components/skeleton/SearchLoading";
 
-const Results = ({ users, searching, onClick }) => {
+const SearchResult = ({ users, searching, onClick }) => {
+  if (!users) return;
+
   if (searching) return <SearchLoading />;
 
   if (users.length === 0)
-    return <p className="text-muted-foreground mt-4">No Users Found</p>;
+    return <p className="text-muted-foreground py-2">No Users Found</p>;
 
   return users.map((user) => (
     <button
       onClick={() => onClick(user)}
-      className="btn-search mt-2"
+      className="btn-search mt-2 mb-2"
       key={user.userId}
     >
       <Avatar avatar={user.avatar} />
@@ -23,4 +25,4 @@ const Results = ({ users, searching, onClick }) => {
   ));
 };
 
-export default Results;
+export default SearchResult;

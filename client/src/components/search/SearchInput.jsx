@@ -6,7 +6,7 @@ const SearchInput = ({ searchForm, handleSearch }) => {
     <div className="w-full">
       <Input
         name="username"
-        onClick={handleSearch}
+        onFocus={handleSearch}
         placeholder="Search by username..."
         onChange={searchForm?.handleChange}
         value={searchForm?.values?.username}

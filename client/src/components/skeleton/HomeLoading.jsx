@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const HomeLoading = () => {
   return (
-    <>
+    <div className="flex mx-2 md:mx-8 space-y-2">
       <div className="flex-1 px-2 md:px-8">
         <PostsLoading />
       </div>
@@ -12,7 +12,7 @@ const HomeLoading = () => {
           <Skeleton className="w-80 h-80 rounded-md" />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

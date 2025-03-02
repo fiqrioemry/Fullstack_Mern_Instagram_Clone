@@ -4,6 +4,7 @@ import DateComponent from "./DateComponent";
 import { Input } from "@/components/ui/input";
 import SelectComponent from "./SelectComponent";
 import { Textarea } from "@/components/ui/textarea";
+import AttachComponent from "./AttachComponent";
 
 function InputForm({ formik, formControl, children, disabled = false }) {
   function renderComponentByType(control) {
@@ -73,11 +74,20 @@ function InputForm({ formik, formControl, children, disabled = false }) {
             placeholder={placeholder}
           />
         );
+      case "attachment":
+        return (
+          <AttachComponent
+            form={formik}
+            name={name}
+            label={label}
+            type={type}
+          />
+        );
 
       default:
         return (
           <>
-            <Input
+            <input
               id={label}
               name={name}
               type={type}
@@ -86,6 +96,7 @@ function InputForm({ formik, formControl, children, disabled = false }) {
               disabled={disabled}
               onChange={handleChange}
               placeholder={placeholder}
+              className="w-full"
             />
           </>
         );

@@ -139,16 +139,15 @@ export const chatState = {
 
 export const chatControl = [
   {
-    name: 'image',
-    label: 'image',
-    placeholder: 'Image must less than 1mb',
-    component: 'upload',
-  },
-  {
     name: 'message',
     label: 'message',
     placeholder: 'write a message ...',
-    component: 'input',
+  },
+  {
+    name: 'image',
+    label: 'image',
+    type: 'file',
+    component: 'attachment',
   },
 ];
 

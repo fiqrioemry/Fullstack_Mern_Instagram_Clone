@@ -3,8 +3,8 @@ import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@/store/useUserStore";
 import useHandleSearch from "@/hooks/useHandleSearch";
-import Results from "@/components/search/SearchResult";
 import SearchInput from "@/components/search/SearchInput";
+import SearchResult from "@/components/search/SearchResult";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -22,13 +22,23 @@ const Navbar = () => {
 
   const searchActive = cn(
     openSearch ? "w-0" : "w-14",
-    "overflow-hidden  delay-50 duration-300 ease-in-out transition-all "
+    "overflow-hidden delay-50 duration-300 ease-in-out transition-all"
   );
 
-  const inputActive = cn(openSearch ? "w-full" : "w-96", "duration-300 px-2");
+  const inputActive = cn(
+    openSearch ? "w-full" : "w-auto",
+    "flex-1 relative duration-300 px-2"
+  );
+
+  const resultActive = cn(
+    searchForm?.values?.username?.length > 0 && openSearch
+      ? "max-h-96"
+      : "max-h-0",
+    "absolute top-11 right-0 left-0 bg-background border-b border-muted overflow-hidden z-40 duration-300 ease-in-out px-2 transition-all"
+  );
 
   return (
-    <nav className="navbar">
+    <nav className="navbar ">
       {/* Logo */}
       <div className={searchActive}>
         <div className="flex justify-center">
@@ -40,13 +50,13 @@ const Navbar = () => {
       <div ref={searchRef} className={inputActive}>
         <SearchInput handleSearch={handleSearch} searchForm={searchForm} />
 
-        {searchForm?.values?.username?.length > 0 && (
-          <Results
+        <div className={resultActive}>
+          <SearchResult
             users={users}
             searching={searching}
             onClick={handleNavigate}
           />
-        )}
+        </div>
       </div>
 
       {/* dropdown menu settings */}
