@@ -6,22 +6,21 @@ import SearchInput from "@/components/search/SearchInput";
 import SearchResult from "@/components/search/SearchResult";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 
-// eslint-disable-next-line react/prop-types
-const SearchUserForChat = ({ open, setOpen }) => {
-  const { setSelectedUser } = useChatStore();
-
+const SearchUserForChat = () => {
   const { users, searching, searchUser } = useUserStore();
+
+  const { setSelectedUser, handleOpen, open } = useChatStore();
 
   const { searchForm, searchRef, handleSearch } = useHandleSearch(searchUser);
 
   const handleNewChat = (user) => {
-    setOpen(false);
+    handleOpen();
     searchForm.resetForm();
     setSelectedUser(user);
   };
 
   return (
-    <Dialog open={open} onOpenChange={(prev) => setOpen(prev)}>
+    <Dialog open={open} onOpenChange={handleOpen}>
       <DialogContent>
         <div className="flex justify-end px-4 mb-2">
           <DialogClose asChild>

@@ -1,10 +1,11 @@
-/* eslint-disable react/prop-types */
 import { Button } from "@/components/ui/button";
+import { useChatStore } from "@/store/useChatStore";
 
-const NoChatSelected = ({ setOpen }) => {
+const NoChatSelected = () => {
+  const { handleOpen } = useChatStore();
   return (
     <div className="h-full flex-center">
-      <Button onClick={() => setOpen(true)} variant="accent">
+      <Button onClick={handleOpen} variant="accent">
         Start message
       </Button>
     </div>

@@ -6,8 +6,15 @@ import { useAuthStore } from "./useAuthStore";
 export const useChatStore = create((set, get) => ({
   chat: null,
   chats: null,
+  open: false,
   loading: false,
   selectedUser: null,
+
+  handleOpen: () => {
+    set((state) => ({
+      open: !state.open,
+    }));
+  },
 
   getChats: async () => {
     try {

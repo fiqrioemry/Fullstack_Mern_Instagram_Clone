@@ -1,11 +1,12 @@
-/* eslint-disable react/prop-types */
-import UserDisplay from "./chat-sidebar/UserDisplay";
 import { MessageSquareDiff } from "lucide-react";
+import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import UserDisplay from "./chat-sidebar/UserDisplay";
 import ChatList from "@/components/messages/chat-sidebar/ChatList";
 
-const ChatSidebar = ({ setOpen }) => {
+const ChatSidebar = () => {
   const { user } = useAuthStore();
+  const { handleOpen } = useChatStore();
 
   return (
     <div className="flex flex-col h-full">
@@ -14,7 +15,7 @@ const ChatSidebar = ({ setOpen }) => {
           <UserDisplay user={user} />
         </div>
 
-        <button onClick={() => setOpen(true)} className="btn-secondary">
+        <button onClick={handleOpen} className="btn-secondary">
           <MessageSquareDiff size={36} />
         </button>
       </div>
