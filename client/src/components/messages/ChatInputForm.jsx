@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { Send, X } from "lucide-react";
 import Image from "@/components/ui/Image";
+import { Images, Send, X } from "lucide-react";
 import { useFileUpload } from "@/hooks/useFileUpload";
 
 const ChatInputForm = ({ form, loading }) => {
@@ -10,7 +10,7 @@ const ChatInputForm = ({ form, loading }) => {
     <>
       {/* preview for image */}
       {!loading && form.values.image && (
-        <div className="absolute left-2 bottom-20">
+        <div className="absolute left-2 bottom-16">
           <button
             className="absolute -top-2 -right-2 bg-white rounded-full p-1"
             onClick={() => form.setFieldValue("image", null)}
@@ -23,12 +23,8 @@ const ChatInputForm = ({ form, loading }) => {
           </div>
         </div>
       )}
-
       {/* form input */}
-      <form
-        onSubmit={form.handleSubmit}
-        className=" flex flex-row items-center"
-      >
+      <form onSubmit={form.handleSubmit} className=" flex items-center gap-4">
         {/* text input */}
         <input
           type="text"
@@ -41,6 +37,7 @@ const ChatInputForm = ({ form, loading }) => {
 
         {/* image input */}
         <label htmlFor="file" className="h-5 w-5">
+          <Images />
           <input
             id="file"
             name="image"
@@ -54,7 +51,6 @@ const ChatInputForm = ({ form, loading }) => {
         {/* submit button */}
         <button
           type="submit"
-          disabled={!form.values.message.trim() && !form.values.image}
           className="p-1 btn-accent disabled:cursor-not-allowed"
         >
           <Send className="h-5 w-5" />

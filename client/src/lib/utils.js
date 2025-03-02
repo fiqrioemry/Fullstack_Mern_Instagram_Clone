@@ -53,7 +53,6 @@ const baseValidations = {
       },
     )
     .required('Email or username is required'),
-  message: Yup.string().required('Required'),
   birthday: Yup.date().max(new Date(), 'Cannot be in the future'),
 };
 
