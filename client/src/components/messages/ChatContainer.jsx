@@ -1,17 +1,29 @@
 import useLoadChat from "@/hooks/useLoadChat";
-import SelectedChat from "./chat-container/SelectedChat";
-import NoSelectedChat from "./chat-container/NoSelectedChat";
+import ChatInput from "@/components/messages/chat-container/ChatInput";
+import UserDisplay from "@/components/messages/chat-sidebar/UserDisplay";
+import ChatDisplay from "@/components/messages/chat-container/ChatDisplay";
 import ChatContainerLoading from "@/components/skeleton/ChatContainerLoading";
 
-// eslint-disable-next-line react/prop-types
-const ChatContainer = ({ setOpen }) => {
+const ChatContainer = () => {
   const { chat, selectedUser } = useLoadChat();
-
-  if (!selectedUser) return <NoSelectedChat setOpen={setOpen} />;
 
   if (!chat) return <ChatContainerLoading />;
 
-  return <SelectedChat chat={chat} selectedUser={selectedUser} />;
+  return (
+    <div className="flex flex-col h-full">
+      {/* Chat header */}
+      <div className="flex items-center border-b border-muted py-4 gap-4 px-2">
+        <UserDisplay user={selectedUser} />
+        <div className="block md:hidden">{selectedUser.username}</div>
+      </div>
+
+      {/* Chat display */}
+      <ChatDisplay chat={chat} selectedUser={selectedUser} />
+
+      {/* Chat input */}
+      <ChatInput />
+    </div>
+  );
 };
 
 export default ChatContainer;
