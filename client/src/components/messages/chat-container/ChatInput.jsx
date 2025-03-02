@@ -11,7 +11,6 @@ const ChatInput = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const chatForm = useFormSchema(chatState, chatControl, sendChat);
 
-  console.log(chatForm.values);
   useEffect(() => {
     if (chatForm.values.image) {
       const imageUrl = URL.createObjectURL(chatForm.values.image);
