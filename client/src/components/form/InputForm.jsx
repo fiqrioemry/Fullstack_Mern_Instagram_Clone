@@ -4,7 +4,6 @@ import DateComponent from "./DateComponent";
 import { Input } from "@/components/ui/input";
 import SelectComponent from "./SelectComponent";
 import { Textarea } from "@/components/ui/textarea";
-import AttachComponent from "../messages/chat-container/ChatAttachForm";
 
 function InputForm({ formik, formControl, children, disabled = false }) {
   function renderComponentByType(control) {
@@ -72,15 +71,6 @@ function InputForm({ formik, formControl, children, disabled = false }) {
             formik={formik}
             disabled={disabled}
             placeholder={placeholder}
-          />
-        );
-      case "attachment":
-        return (
-          <AttachComponent
-            form={formik}
-            name={name}
-            label={label}
-            type={type}
           />
         );
 

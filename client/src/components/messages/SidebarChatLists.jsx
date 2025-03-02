@@ -3,7 +3,7 @@ import useLoadChats from "@/hooks/useLoadChats";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ChatListLoading from "@/components/skeleton/ChatListLoading";
 
-const ChatList = () => {
+const SidebarChatLists = () => {
   const { chats, setSelectedUser } = useLoadChats();
 
   if (!chats) return <ChatListLoading />;
@@ -25,4 +25,4 @@ const ChatList = () => {
   );
 };
 
-export default ChatList;
+export default SidebarChatLists;
