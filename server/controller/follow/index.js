@@ -14,7 +14,7 @@ async function followUser(req, res) {
 
   try {
     if (userId === followingId) {
-      return res.status(400).json('Cannot follow yourself');
+      return res.status(400).json({ message: 'Cannot follow yourself' });
     }
 
     const user = await User.findByPk(followingId);
@@ -40,7 +40,7 @@ async function followUser(req, res) {
         transaction: t,
       });
       await t.commit();
-      return res.status(200).json('You unfollowing this user');
+      return res.status(200).json({ message: 'You unfollowing this user' });
     }
 
     await Follow.create(
@@ -50,6 +50,7 @@ async function followUser(req, res) {
       },
       { transaction: t },
     );
+
     await Notification.create(
       {
         senderId: userId,
@@ -60,11 +61,10 @@ async function followUser(req, res) {
     );
 
     await t.commit();
-    return res.status(201).json('You Following this user');
+    return res.status(201).json({ message: 'You Following this user' });
   } catch (error) {
     await t.rollback();
-    console.log(error.message);
-    return res.status(500).json('Failed to follow user');
+    return res.status(500).json({ message: error.message });
   }
 }
 
@@ -77,7 +77,7 @@ async function getFollowers(req, res) {
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
-      return res.status(404).json('User not found');
+      return res.status(404).json({ message: 'User not found' });
     }
 
     const userFollowers = await Follow.findAll({
@@ -122,7 +122,7 @@ async function getFollowers(req, res) {
     return res.status(200).json(followers);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json('Failed to get user followers');
+    return res.status(500).json({ message: error.message });
   }
 }
 
@@ -179,7 +179,7 @@ async function getFollowings(req, res) {
     return res.status(200).json(followings);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json('Failed to get user followings');
+    return res.status(500).json({ message: error.message });
   }
 }
 

@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const { Op } = require('sequelize');
 const cassandra = require('../../config/cassandra');
 const { Chat, Profile, User } = require('../../models');
-const { getReceiverSocketId } = require('../../config/socket');
+const { getReceiverSocketId, io } = require('../../config/socket');
 const uploadToCloudinary = require('../../utils/uploadToCloudinary');
 
 async function getChats(req, res) {
@@ -26,6 +26,9 @@ async function getChats(req, res) {
       ],
     });
 
+    if (!chatsData)
+      return res.status(200).send({ message: 'No Chats was found', chats: [] });
+
     const chats = chatsData.map((chat) => {
       const chatPartner =
         chat.senderId === userId ? chat.receiver : chat.sender;
@@ -47,8 +50,8 @@ async function getChats(req, res) {
 async function sendChat(req, res) {
   const file = req.file;
   const senderId = req.user.userId;
-  const receiverId = Number(req.params.receiverId);
   let { chatId, message } = req.body;
+  const receiverId = req.params.receiverId;
 
   try {
     if (!senderId || !receiverId) {
@@ -78,27 +81,24 @@ async function sendChat(req, res) {
       }
     }
 
-    let media_url = '';
+    let image = '';
     let timestamp = new Date();
 
     if (file?.buffer) {
       try {
-        const uploadedImage = await uploadToCloudinary(
-          file.buffer,
-          file.mimetype,
-        );
-        media_url = uploadedImage.secure_url;
-        await fs.unlink(file.path);
+        uploadedImage = await uploadToCloudinary(file.buffer);
+        image = uploadedImage.secure_url;
       } catch (error) {
-        return res.status(500).json({ message: 'Failed to upload image' });
+        return res.status(500).json({ message: error.message });
       }
     }
 
     const query =
-      'INSERT INTO messages (chat_id, sender_id, receiver_id, message, media_url, timestamp) VALUES (?, ?, ?, ?, ?, ?)';
+      'INSERT INTO messages (chat_id, sender_id, receiver_id, message, image, timestamp) VALUES (?, ?, ?, ?, ?, ?)';
+
     await cassandra.execute(
       query,
-      [chatId, senderId, receiverId, message, media_url, timestamp],
+      [chatId, senderId, receiverId, message, image, timestamp],
       { prepare: true },
     );
 
@@ -107,7 +107,7 @@ async function sendChat(req, res) {
       senderId,
       receiverId,
       message,
-      media_url,
+      image,
       timestamp,
     };
 
@@ -116,19 +116,15 @@ async function sendChat(req, res) {
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('newChat', newChat);
     }
-
     res.status(200).json({ message: 'Chat is sent', newChat });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: 'Failed to send chat', error: error.message });
+    res.status(500).json({ message: error.message });
   }
 }
 
 async function getChat(req, res) {
   const senderId = req.user.userId;
   const receiverId = req.params.receiverId;
-
   try {
     const prevChat = await Chat.findOne({
       where: {
@@ -163,7 +159,7 @@ async function getChat(req, res) {
 
     if (!result || result.rows.length === 0) {
       return res
-        .status(404)
+        .status(200)
         .json({ message: 'no chat found in history', chat: [] });
     }
 
@@ -173,7 +169,7 @@ async function getChat(req, res) {
         senderId: chat.sender_id,
         receiverId: chat.receiver_id,
         message: chat.message,
-        media_url: chat.media_url,
+        image: chat.image,
         timestamp: chat.timestamp,
       };
     });

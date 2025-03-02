@@ -58,13 +58,13 @@ async function updateProfile(req, res) {
     await transaction.commit();
 
     return res.status(200).json({
-      message: 'Profile updated.',
+      message: 'Profile updated',
+      profile,
     });
   } catch (error) {
     await transaction.rollback();
     return res.status(500).json({
-      message: 'Failed to update profile',
-      error: error.message,
+      message: error.message,
     });
   }
 }

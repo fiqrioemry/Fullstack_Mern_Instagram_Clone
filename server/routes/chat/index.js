@@ -1,19 +1,13 @@
-const express = require('express');
+const router = require('express').Router();
 const { upload } = require('../../middleware/media');
-const {
-  sendChat,
-  getChat,
-  getChats,
-  getOnlineUsers,
-} = require('../../controller/chat');
 const isAuthenticate = require('../../middleware/isAuthenticate');
-const router = express.Router();
+const { sendChat, getChat, getChats } = require('../../controller/chat');
 
 router.get('/', isAuthenticate, getChats);
 router.get('/:receiverId', isAuthenticate, getChat);
 router.post(
   '/:receiverId',
-  upload('image').single('file'),
+  upload('image').single('image'),
   isAuthenticate,
   sendChat,
 );

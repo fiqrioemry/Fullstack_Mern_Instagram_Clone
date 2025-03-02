@@ -21,8 +21,9 @@ passport.use(
           const randomToken = speakeasy.totp({
             secret: speakeasy.generateSecret().base32,
             encoding: 'base32',
-            digits: 6,
+            digits: 4,
           });
+
           user = await User.create({
             username:
               profile.displayName.replace(/\s+/g, '').toLowerCase() +

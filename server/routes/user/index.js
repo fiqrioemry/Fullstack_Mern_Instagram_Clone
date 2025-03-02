@@ -4,17 +4,15 @@ const {
   getUserProfile,
   updateProfile,
 } = require('../../controller/user');
-const { getUserPosts } = require('../../controller/post');
-
-const express = require('express');
-const router = express.Router();
-const { upload } = require('../../middleware/media');
-const isAuthenticate = require('../../middleware/isAuthenticate');
 const {
   followUser,
   getFollowers,
   getFollowings,
 } = require('../../controller/follow');
+const { upload } = require('../../middleware/media');
+const { getUserPosts } = require('../../controller/post');
+const isAuthenticate = require('../../middleware/isAuthenticate');
+const router = require('express').Router();
 
 router.get('/profile', isAuthenticate, getMyProfile);
 router.put(

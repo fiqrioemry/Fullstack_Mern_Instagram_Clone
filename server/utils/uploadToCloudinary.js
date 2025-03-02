@@ -1,6 +1,6 @@
 const cloudinary = require('../config/cloudinary');
 
-async function uploadToCloudinary(buffer, mimetype) {
+async function uploadToCloudinary(buffer) {
   try {
     const result = await new Promise((resolve, reject) => {
       cloudinary.uploader

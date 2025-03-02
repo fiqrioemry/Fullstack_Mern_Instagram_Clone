@@ -326,8 +326,7 @@ async function createPost(req, res) {
   } catch (error) {
     await t.rollback();
     return res.status(500).json({
-      message: 'Failed to create new post',
-      error: error.message,
+      message: error.message,
     });
   }
 }
