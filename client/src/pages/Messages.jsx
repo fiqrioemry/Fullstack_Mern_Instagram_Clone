@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useChatStore } from "@/store/useChatStore";
 import ChatSidebar from "@/components/messages/ChatSidebar";
 import ChatContainer from "@/components/messages/ChatContainer";
+import NoChatSelected from "@/components/messages/NoChatSelected";
 import SearchUserForChat from "@/components/messages/SearchUserForChat";
 
 export default function Messages() {
   const [open, setOpen] = useState();
+  const { selectedUser } = useChatStore();
 
   return (
     <div className="flex-1 flex overflow-y-auto md:h-screen h-[calc(100vh-56px-56px)]">
@@ -14,7 +17,11 @@ export default function Messages() {
       </div>
 
       <div className="w-5/6 md:w-3/4 h-full flex flex-col ">
-        <ChatContainer setOpen={setOpen} />
+        {!selectedUser ? (
+          <NoChatSelected setOpen={setOpen} />
+        ) : (
+          <ChatContainer />
+        )}
       </div>
     </div>
   );
