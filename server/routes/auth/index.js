@@ -1,26 +1,15 @@
-const {
-  verifyOTP,
-  userSignIn,
-  userSignUp,
-  sendingOTP,
-  googleAuth,
-  userSignOut,
-  userAuthCheck,
-  userAuthRefresh,
-  googleAuthCallback,
-} = require('../../controller/auth');
+const router = require('express').Router();
+const auth = require('../../controller/auth');
 const isAuthenticate = require('../../middleware/isAuthenticate');
-const express = require('express');
-const router = express.Router();
 
-router.post('/signup', userSignUp);
-router.post('/signin', userSignIn);
-router.post('/signout', userSignOut);
-router.post('/send-otp', sendingOTP);
-router.post('/verify-otp', verifyOTP);
-router.post('/refresh', userAuthRefresh);
-router.get('/me', isAuthenticate, userAuthCheck);
-router.get('/google', googleAuth);
-router.get('/google/callback', googleAuthCallback);
+router.get('/google', auth.googleAuth);
+router.post('/signup', auth.userSignUp);
+router.post('/signin', auth.userSignIn);
+router.post('/signout', auth.userSignOut);
+router.post('/send-otp', auth.sendingOTP);
+router.post('/verify-otp', auth.verifyOTP);
+router.post('/refresh', auth.userAuthRefresh);
+router.get('/me', isAuthenticate, auth.userAuthCheck);
+router.get('/google/callback', auth.googleAuthCallback);
 
 module.exports = router;
