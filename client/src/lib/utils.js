@@ -54,6 +54,13 @@ const baseValidations = {
     )
     .required('Email or username is required'),
   birthday: Yup.date().max(new Date(), 'Cannot be in the future'),
+  message: Yup.string()
+    .trim()
+    .test('is-not-empty', 'Message cannot be empty', function (value) {
+      const { image } = this.parent;
+      return !!image || (value && value.length > 0);
+    }),
+  image: Yup.mixed(),
 };
 
 export const newValidationSchema = (fields = []) => {

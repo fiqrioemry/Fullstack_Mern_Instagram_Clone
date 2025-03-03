@@ -52,6 +52,7 @@ const ChatInputForm = ({ form, loading }) => {
         <button
           type="submit"
           className="p-1 btn-accent disabled:cursor-not-allowed"
+          disabled={!(form.isValid && form.dirty)}
         >
           <Send className="h-5 w-5" />
         </button>
