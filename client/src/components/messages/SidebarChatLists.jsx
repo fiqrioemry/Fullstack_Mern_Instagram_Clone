@@ -1,10 +1,15 @@
+import { useEffect } from "react";
 import UserDisplay from "./UserDisplay";
-import useLoadChats from "@/hooks/useLoadChats";
+import { useChatStore } from "@/store/useChatStore";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ChatListLoading from "@/components/skeleton/ChatListLoading";
 
 const SidebarChatLists = () => {
-  const { chats, setSelectedUser } = useLoadChats();
+  const { chats, setSelectedUser, getChats } = useChatStore();
+
+  useEffect(() => {
+    getChats();
+  }, [getChats]);
 
   if (!chats) return <ChatListLoading />;
 

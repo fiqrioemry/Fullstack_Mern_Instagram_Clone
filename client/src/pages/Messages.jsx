@@ -3,9 +3,14 @@ import ChatSidebar from "@/components/messages/ChatSidebar";
 import ChatContainer from "@/components/messages/ChatContainer";
 import NoChatSelected from "@/components/messages/NoChatSelected";
 import SearchUserForChat from "@/components/messages/SearchUserForChat";
+import { useEffect } from "react";
 
 export default function Messages() {
-  const { selectedUser } = useChatStore();
+  const { setSelectedUser, selectedUser } = useChatStore();
+
+  useEffect(() => {
+    setSelectedUser(null);
+  }, [setSelectedUser]);
 
   return (
     <div className="flex-1 flex overflow-y-auto md:h-screen h-[calc(100vh-56px-56px)]">
