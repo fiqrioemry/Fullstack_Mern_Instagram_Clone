@@ -1,11 +1,11 @@
 import UserDisplay from "./UserDisplay";
-import { MessageSquare } from "lucide-react";
+import { MessageSquarePlus } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useChatStore } from "@/store/useChatStore";
 
 const SidebarHeader = () => {
   const { user } = useAuthStore();
-  const { handleOpen } = useChatStore;
+  const { handleOpen } = useChatStore();
 
   return (
     <div className="border-b border-muted md:flex-between flex-center py-4 px-4">
@@ -14,7 +14,7 @@ const SidebarHeader = () => {
       </div>
 
       <button onClick={handleOpen} className="btn-secondary text-xs md:text-md">
-        <MessageSquare size={36} />
+        <MessageSquarePlus className="h-6 w-6 md:h-8 md:w-8 lg:h-10 lg:w-10" />
       </button>
     </div>
   );
