@@ -7,7 +7,7 @@ router.get('/', isAuthenticate, chat.getChats);
 router.get('/:receiverId', isAuthenticate, chat.getChat);
 router.post(
   '/:receiverId',
-  upload('image').single('image'),
+  upload().single('image'),
   isAuthenticate,
   chat.sendChat,
 );
