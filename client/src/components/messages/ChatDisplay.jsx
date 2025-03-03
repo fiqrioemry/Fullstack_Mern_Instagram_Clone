@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { cn } from "@/lib/utils";
 import Avatar from "@/components/ui/Avatar";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -16,18 +17,20 @@ const ChatDisplay = ({ chat, selectedUser }) => {
           return (
             <div
               key={message.timestamp}
-              className={`flex items-end space-x-2 ${
-                isSender ? "justify-end" : "justify-start"
-              }`}
+              className={cn(
+                isSender ? "justify-end" : "justify-start",
+                "flex items-end space-x-2"
+              )}
             >
               {!isSender && (
                 <Avatar avatar={selectedUser?.avatar} className="w-8 h-8" />
               )}
 
               <div
-                className={`p-3 rounded-lg shadow-md max-w-xs ${
-                  isSender ? "bg-blue-500 text-foreground" : "bg-secondary"
-                }`}
+                className={cn(
+                  isSender ? "bg-blue-500" : "bg-secondary",
+                  "p-3 rounded-lg shadow-md max-w-xs"
+                )}
               >
                 {message.image && (
                   <img
@@ -36,8 +39,20 @@ const ChatDisplay = ({ chat, selectedUser }) => {
                     className="w-48 rounded-md mb-2"
                   />
                 )}
-                <div className="text-start text-sm">{message.message}</div>
-                <span className="text-end text-xs text-foreground block mt-1">
+                <div
+                  className={cn(
+                    isSender ? "text-end" : "text-start",
+                    "text-sm"
+                  )}
+                >
+                  {message.message}
+                </div>
+                <span
+                  className={cn(
+                    isSender ? "text-end" : "text-start",
+                    "block mt-1 text-xs"
+                  )}
+                >
                   {new Date(message.timestamp).toLocaleTimeString()}
                 </span>
               </div>

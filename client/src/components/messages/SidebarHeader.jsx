@@ -1,5 +1,5 @@
 import UserDisplay from "./UserDisplay";
-import { MessageSquarePlus } from "lucide-react";
+import { MessageSquareMore } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useChatStore } from "@/store/useChatStore";
 
@@ -14,7 +14,7 @@ const SidebarHeader = () => {
       </div>
 
       <button onClick={handleOpen} className="btn-secondary text-xs md:text-md">
-        <MessageSquarePlus className="h-6 w-6 md:h-8 md:w-8 lg:h-10 lg:w-10" />
+        <MessageSquareMore className="h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8" />
       </button>
     </div>
   );

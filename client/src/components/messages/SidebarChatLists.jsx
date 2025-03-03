@@ -5,11 +5,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ChatListLoading from "@/components/skeleton/ChatListLoading";
 
 const SidebarChatLists = () => {
-  const { chats, setSelectedUser, getChats } = useChatStore();
+  const { chats, getChats, loading, setSelectedUser } = useChatStore();
 
   useEffect(() => {
     getChats();
-  }, [getChats]);
+  }, [getChats, loading]);
 
   if (!chats) return <ChatListLoading />;
 
