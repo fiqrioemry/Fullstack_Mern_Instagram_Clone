@@ -160,7 +160,7 @@ async function getChat(req, res) {
     if (!result || result.rows.length === 0) {
       return res
         .status(200)
-        .json({ message: 'no chat found in history', chat: [] });
+        .json({ message: 'No chat found in history', chat: [] });
     }
 
     const chat = result.rows.map((chat) => {

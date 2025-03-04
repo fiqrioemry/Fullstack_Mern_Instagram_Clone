@@ -15,41 +15,28 @@ function extractMentions(content) {
 }
 
 async function createComment(req, res) {
-  const { userId } = req.user;
-  const { content, parentId } = req.body;
-  const { postId } = req.params;
+  const userId = req.user.userId;
+  const postId = req.params.postId;
+  const { content } = req.body;
 
   try {
     const post = await Post.findByPk(postId);
     if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    let receiverId = post.userId;
-    let type = 'comment';
-
-    if (parentId) {
-      const parentComment = await Comment.findByPk(parentId);
-      if (!parentComment) {
-        return res.status(404).json({ message: 'Parent comment not found' });
-      }
-
-      receiverId = parentComment.userId;
-      type = 'reply';
-    }
-
     const newComment = await Comment.create({
       userId,
       postId,
-      parentId: parentId || null,
+      parentId: null,
       content,
     });
 
-    if (receiverId !== userId) {
+    if (post.userId !== userId) {
       await Notification.create({
-        receiverId,
+        receiverId: post.userId,
         senderId: userId,
         postId,
         commentId: newComment.id,
-        type,
+        type: 'comment',
       });
     }
 
@@ -73,17 +60,72 @@ async function createComment(req, res) {
       );
     }
 
-    return res.status(201).json('Comment added successfully');
+    return res.status(201).json({ message: 'Comment created' });
   } catch (error) {
-    console.log(error.message);
-    return res.status(500).json('Failed to add comment');
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+async function createReply(req, res) {
+  const userId = req.user.userId;
+  const { postId, parentId } = req.params;
+  const { content } = req.body;
+
+  try {
+    const post = await Post.findByPk(postId);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    const parentComment = await Comment.findByPk(parentId);
+    if (!parentComment)
+      return res.status(404).json({ message: 'Parent comment not found' });
+
+    const newReply = await Comment.create({
+      userId,
+      postId,
+      parentId,
+      content,
+    });
+
+    if (parentComment.userId !== userId) {
+      await Notification.create({
+        receiverId: parentComment.userId,
+        senderId: userId,
+        postId,
+        commentId: newReply.id,
+        type: 'reply',
+      });
+    }
+
+    const mentionedUsernames = extractMentions(content);
+    if (mentionedUsernames.length > 0) {
+      const mentionedUsers = await User.findAll({
+        where: { username: mentionedUsernames },
+        attributes: ['id', 'username'],
+      });
+
+      await Promise.all(
+        mentionedUsers.map((mentionedUser) =>
+          Notification.create({
+            postId,
+            type: 'mention',
+            senderId: userId,
+            receiverId: mentionedUser.id,
+            commentId: newReply.id,
+          }),
+        ),
+      );
+    }
+
+    return res.status(201).json({ message: 'Reply Created' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 }
 
 async function getComments(req, res) {
   const userId = req.user.userId;
   const postId = req.params.postId;
-  const limit = parseInt(req.query.limit) || 10;
+  const limit = parseInt(req.query.limit) || 5;
 
   try {
     const commentsData = await Comment.findAndCountAll({
@@ -116,7 +158,7 @@ async function getComments(req, res) {
     if (commentsData.count === 0) {
       return res
         .status(200)
-        .json({ comments: [], message: 'User has no comment' });
+        .json({ comments: [], message: 'Post has no comment' });
     }
 
     const totalComments = commentsData.count;
@@ -137,8 +179,7 @@ async function getComments(req, res) {
     });
     return res.status(200).json({ comments, totalComments });
   } catch (error) {
-    console.log(error.message);
-    return res.status(500).json('Failed to get comments');
+    return res.status(500).json({ message: error.message });
   }
 }
 
@@ -257,8 +298,7 @@ async function toggleLikeComment(req, res) {
     return res.status(200).json({ message: 'You Liked the comment' });
   } catch (error) {
     await t.rollback();
-    console.log(error.message);
-    return res.status(500).json({ message: 'Failed to toggle like' });
+    return res.status(500).json({ message: error.message });
   }
 }
 
@@ -289,9 +329,11 @@ async function deleteComment(req, res) {
 }
 
 module.exports = {
-  getComments,
   createComment,
+  getComments,
   deleteComment,
   toggleLikeComment,
   getReplies,
+  createReply,
+  deleteReply,
 };

@@ -1,7 +1,6 @@
-const express = require('express');
+const router = require('express').Router();
 const { upload } = require('../../middleware/media');
 const isAuthenticate = require('../../middleware/isAuthenticate');
-const router = express.Router();
 
 // controller
 const {
@@ -14,11 +13,11 @@ const {
   getPostsFromFollowings,
 } = require('../../controller/post');
 const {
-  createComment,
+  getReplies,
   getComments,
   deleteComment,
+  createComment,
   toggleLikeComment,
-  getReplies,
 } = require('../../controller/comment');
 
 router.get('/', isAuthenticate, getPublicPosts);
