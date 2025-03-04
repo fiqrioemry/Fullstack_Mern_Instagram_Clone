@@ -45,8 +45,22 @@ export const useCommentStore = create((set, get) => ({
 
   setComments: (comment) => {
     set((state) => ({
-      comments: { ...state.comments, comment },
+      comments: [comment, ...state.comments],
     }));
+  },
+
+  createComment: async (formData, postId) => {
+    try {
+      const { message, comment } = await callApi.createComment(
+        formData,
+        postId
+      );
+      usePostStore.getState().commentCount(postId);
+      get().setComments(comment);
+      toast.success(message);
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   getComments: async (postId, limit) => {
@@ -58,6 +72,7 @@ export const useCommentStore = create((set, get) => ({
         postId,
         limit
       );
+
       set({ comments, totalComments });
     } catch (error) {
       console.log(error.message);
@@ -65,20 +80,6 @@ export const useCommentStore = create((set, get) => ({
       set((state) => ({
         loading: { ...state.loading, [postId]: false },
       }));
-    }
-  },
-
-  createComment: async (formData, postId) => {
-    try {
-      const { comment, message } = await callApi.createComment(
-        formData,
-        postId
-      );
-      usePostStore.getState().commentCount(postId);
-      get().setComments(comment);
-      toast.success(message);
-    } catch (error) {
-      console.log(error);
     }
   },
 

@@ -17,6 +17,7 @@ const Comments = ({ comments }) => {
     getReplies(comment);
   };
 
+  console.log(comments);
   if (!comments) return <CommentsLoading />;
 
   return (

@@ -122,9 +122,8 @@ export const usePostStore = create((set, get) => ({
     try {
       set({ loading: true });
       const { message } = await callApi.createPost(formData);
-      await get().getPublicPosts();
-
       const username = useAuthStore.getState().user.username;
+      await get().getPublicPosts();
       await get().getUserPosts(username);
       toast.success(message);
     } catch (error) {
