@@ -17,7 +17,6 @@ const Comments = ({ comments }) => {
     getReplies(comment);
   };
 
-  console.log(comments);
   if (!comments) return <CommentsLoading />;
 
   return (
@@ -49,10 +48,7 @@ const Comments = ({ comments }) => {
               )}
 
               {replies[comment.commentId] && (
-                <Replies
-                  parentId={comment.commentId}
-                  replies={replies[comment.commentId]}
-                />
+                <Replies replies={replies[comment.commentId]} />
               )}
             </div>
           </div>

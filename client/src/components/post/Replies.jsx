@@ -7,6 +7,7 @@ import Timestamp from "@/components/post/Timestamp";
 import ReplyButton from "@/components/post/ReplyButton";
 
 const Replies = ({ replies }) => {
+  console.log(replies);
   return (
     <div className="mt-2">
       {replies.map((reply) => (

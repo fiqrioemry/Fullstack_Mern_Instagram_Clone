@@ -18,6 +18,22 @@ export const useCommentStore = create((set, get) => ({
     }));
   },
 
+  createReply: async (formData, postId) => {
+    const comment = get().selectedComment;
+    const commentId = comment?.parentId || comment.commentId;
+    try {
+      const { message } = await callApi.createReply(
+        formData,
+        postId,
+        commentId
+      );
+      get().getReplies({ postId: comment.postId, commentId });
+      toast.success(message);
+    } catch (error) {
+      console.log(error.message);
+    }
+  },
+
   getReplies: async (comment) => {
     const { postId, commentId } = comment;
     try {
@@ -51,12 +67,10 @@ export const useCommentStore = create((set, get) => ({
 
   createComment: async (formData, postId) => {
     try {
-      const { message, comment } = await callApi.createComment(
-        formData,
-        postId
-      );
+      const { message } = await callApi.createComment(formData, postId);
       usePostStore.getState().commentCount(postId);
-      get().setComments(comment);
+      const limit = get().comments.length + 1;
+      await get().getComments(postId, limit);
       toast.success(message);
     } catch (error) {
       console.log(error);
@@ -80,21 +94,6 @@ export const useCommentStore = create((set, get) => ({
       set((state) => ({
         loading: { ...state.loading, [postId]: false },
       }));
-    }
-  },
-
-  createReply: async (formData, postId) => {
-    const commentId = get().selectedComment.commentId;
-    try {
-      const { reply, message } = await callApi.createReply(
-        formData,
-        postId,
-        commentId
-      );
-      get().setReplies(reply, commentId);
-      toast.success(message);
-    } catch (error) {
-      console.log(error.message);
     }
   },
 
@@ -125,22 +124,20 @@ export const useCommentStore = create((set, get) => ({
 
   setLikeReply: (commentId, parentId) => {
     set((state) => {
-      const parentReplies = state.replies[parentId]?.replies || [];
+      const parentReplies = state.replies[parentId] || [];
+
       return {
         replies: {
           ...state.replies,
-          [parentId]: {
-            ...state.replies[parentId],
-            replies: parentReplies.map((reply) =>
-              reply.commentId === commentId
-                ? {
-                    ...reply,
-                    isLiked: !reply.isLiked,
-                    likes: reply.isLiked ? reply.likes - 1 : reply.likes + 1,
-                  }
-                : reply
-            ),
-          },
+          [parentId]: parentReplies.map((reply) =>
+            reply.commentId === commentId
+              ? {
+                  ...reply,
+                  isLiked: !reply.isLiked,
+                  likes: reply.isLiked ? reply.likes - 1 : reply.likes + 1,
+                }
+              : reply
+          ),
         },
       };
     });
