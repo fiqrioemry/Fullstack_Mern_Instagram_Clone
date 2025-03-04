@@ -335,5 +335,4 @@ module.exports = {
   toggleLikeComment,
   getReplies,
   createReply,
-  deleteReply,
 };

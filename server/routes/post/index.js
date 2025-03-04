@@ -13,9 +13,11 @@ const {
   getPostsFromFollowings,
 } = require('../../controller/post');
 const {
-  getReplies,
   getComments,
   deleteComment,
+
+  getReplies,
+  createReply,
   createComment,
   toggleLikeComment,
 } = require('../../controller/comment');
@@ -27,16 +29,15 @@ router.put('/:postId', isAuthenticate, upload().array('images', 5), updatePost);
 router.delete('/:postId', isAuthenticate, deletePost);
 router.get('/:postId', isAuthenticate, getPostDetail);
 
-// post management (crud)
-
-// like & unlike a post
+// like and unlike API Route management
 router.post('/:postId/like/post', isAuthenticate, toggleLikePost);
 router.post('/:commentId/like/comment', isAuthenticate, toggleLikeComment);
 
-// comment management on post
+// comment & reply API Route management
 router.get('/:postId/comments', isAuthenticate, getComments);
 router.post('/:postId/comments', isAuthenticate, createComment);
 router.get('/:postId/comments/:commentId', isAuthenticate, getReplies);
+router.post('/:postId/comments/:commentId', isAuthenticate, createReply);
 router.delete('/:postId/comments/:commentId', isAuthenticate, deleteComment);
 
 module.exports = router;
