@@ -1,31 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
 import Caption from "./Caption";
 import Comments from "./Comments";
 import PostInput from "./PostInput";
 import Galleries from "./Galleries";
 import PostAuthor from "./PostAuthor";
 import PostControl from "./PostControl";
-import { useFormSchema } from "@/hooks/useFormSchema";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { commentControl, commentState } from "@/config";
-import { useCommentStore } from "@/store/useCommentStore";
+import useLoadComments from "@/hooks/useLoadComments";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
 
 const Post = ({ post }) => {
-  const { createComment, getComments, loadingComment } = useCommentStore();
-  const commentForm = useFormSchema(
-    commentState,
-    commentControl,
-    createComment,
-    post.postId
-  );
-
-  useEffect(() => {
-    if (post.postId) {
-      getComments(post.postId);
-    }
-  }, [getComments, post.postId]);
+  const { limit, loading, comments, totalComments, handleLoadMore } =
+    useLoadComments(post);
 
   return (
     <div className="grid grid-cols-10 border border-muted overflow-hidden ">

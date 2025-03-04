@@ -201,9 +201,9 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  getReplies: async (postId, commentId) => {
+  getReplies: async (postId, commentId, limit) => {
     return authInstance
-      .get(`/post/${postId}/comments/${commentId}`)
+      .get(`/post/${postId}/comments/${commentId}?limit=${limit}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
