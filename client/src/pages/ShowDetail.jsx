@@ -1,11 +1,11 @@
-import NotFound from "./NotFound";
 import { useEffect } from "react";
+import NotFound from "./NotFound";
 import { useParams } from "react-router-dom";
 import { usePostStore } from "@/store/usePostStore";
-import DetailDisplay from "@/components/post-detail/DetailDisplay";
-import PostDetailLoading from "@/components/skeleton/PostDetailLoading";
+import ShowDisplay from "@/components/post-detail/ShowDisplay";
+import PostDisplayLoading from "@/components/skeleton/PostDisplayLoading";
 
-const PostDetail = () => {
+const ShowDetail = () => {
   const { id } = useParams();
   const { post, getPostDetail } = usePostStore();
 
@@ -13,11 +13,11 @@ const PostDetail = () => {
     getPostDetail(id);
   }, [getPostDetail, id]);
 
-  if (!post) return <PostDetailLoading />;
+  if (!post) return <PostDisplayLoading />;
 
   if (post.length === 0) return <NotFound />;
 
-  return <DetailDisplay post={post} />;
+  return <ShowDisplay post={post} />;
 };
 
-export default PostDetail;
+export default ShowDetail;

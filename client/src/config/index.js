@@ -133,7 +133,7 @@ export const postState = {
 
 export const chatState = {
   chatId: null,
-  image: null,
+  image: '',
   message: '',
 };
 

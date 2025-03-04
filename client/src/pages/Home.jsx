@@ -4,9 +4,9 @@ import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import HomeLoading from "@/components/skeleton/HomeLoading";
 import PostsLoading from "@/components/skeleton/PostsLoading";
 import AuthorCard from "@/components/home-explore/AuthorCard";
-import NoPostToShow from "@/components/home-explore/NoPostToShow";
+import NoMorePosts from "@/components/home-explore/NoMorePosts";
 import PostsDisplay from "@/components/home-explore/PostsDisplay";
-import NoMorePosts from "../components/home-explore/NoMorePosts";
+import NoPostToShow from "@/components/home-explore/NoPostToShow";
 
 const Home = () => {
   const { viewRef } = useScrollToView();

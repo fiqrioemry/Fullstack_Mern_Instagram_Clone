@@ -1,17 +1,39 @@
 /* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
 import Caption from "@/components/post/Caption";
-import Comments from "@/components/post/Comments";
 import PostInput from "@/components/post/PostInput";
 import Galleries from "@/components/post/Galleries";
-import useLoadComments from "@/hooks/useLoadComments";
 import PostAuthor from "@/components/post/PostAuthor";
 import PostControl from "@/components/post/PostControl";
+import { useFormSchema } from "@/hooks/useFormSchema";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import CommentsLoading from "@/components/skeleton/CommentsLoading";
+import { commentControl, commentState } from "@/config";
+import { useCommentStore } from "@/store/useCommentStore";
+import ShowComments from "@/components/post/ShowComments";
+import LoadMoreButton from "@/components/post/LoadMoreButton";
+import CommentsLoading from "../skeleton/CommentsLoading";
 
-const PostDisplay = ({ post }) => {
-  const { limit, handleLoadMore, comments, commentForm, commentRef, loading } =
-    useLoadComments(post);
+const ShowDisplay = ({ post }) => {
+  const [limit, setLimit] = useState(5);
+  const { createComment, getComments, totalComments, loading } =
+    useCommentStore();
+
+  const commentForm = useFormSchema(
+    commentState,
+    commentControl,
+    createComment,
+    post.postId
+  );
+
+  const handleLoadMore = () => {
+    setLimit((prev) => prev + 5);
+  };
+
+  useEffect(() => {
+    if (post.postId) {
+      getComments(post.postId, limit);
+    }
+  }, [getComments, post.postId, limit]);
 
   return (
     <div className="mx-2 md:mx-8">
@@ -30,13 +52,14 @@ const PostDisplay = ({ post }) => {
             <ScrollArea className="flex-1 border-b border-muted ">
               <div className="p-2">
                 <Caption post={post} />
-                {!comments ? (
-                  <CommentsLoading />
-                ) : (
-                  <Comments formik={commentForm} comments={comments} />
-                )}
 
-                {loading}
+                <ShowComments form={commentForm} />
+
+                {loading && <CommentsLoading />}
+
+                {totalComments <= limit && (
+                  <LoadMoreButton onClick={handleLoadMore} />
+                )}
               </div>
             </ScrollArea>
 
@@ -56,4 +79,4 @@ const PostDisplay = ({ post }) => {
   );
 };
 
-export default PostDisplay;
+export default ShowDisplay;

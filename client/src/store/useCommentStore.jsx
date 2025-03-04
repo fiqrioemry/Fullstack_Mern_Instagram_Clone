@@ -9,17 +9,20 @@ export const useCommentStore = create((set, get) => ({
   loadingReply: {},
   totalReplies: 0,
   totalComments: 0,
-  loadingComment: false,
+  loading: false,
 
-  getComments: async (postId) => {
+  getComments: async (postId, limit) => {
     try {
-      set({ loadingComment: true });
-      const { comments, totalComments } = await callApi.getComments(postId);
+      set({ loading: true });
+      const { comments, totalComments } = await callApi.getComments(
+        postId,
+        limit
+      );
       set({ comments, totalComments });
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     } finally {
-      set({ loadingComment: false });
+      set({ loading: false });
     }
   },
 

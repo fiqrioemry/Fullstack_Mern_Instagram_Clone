@@ -13,7 +13,7 @@ const ChatInputForm = ({ form, loading }) => {
         <div className="absolute left-2 bottom-16">
           <button
             className="absolute -top-2 -right-2 bg-white rounded-full p-1"
-            onClick={() => form.setFieldValue("image", null)}
+            onClick={() => form.setFieldValue("image", "")}
             type="button"
           >
             <X className="w-4 h-4 text-muted-foreground" />

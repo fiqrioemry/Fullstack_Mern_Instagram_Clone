@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const PostDisplayLoading = () => {
+const PostDetailLoading = () => {
   return (
     <div className="h-screen w-full flex md:flex-row flex-col py-8 mx-4 md:mx-8 lg:mx-12 space-x-0 md:space-x-4 mdLspace-y-0 space-y-8">
       <div className="w-full md:w-1/2">
@@ -23,4 +23,4 @@ const PostDisplayLoading = () => {
   );
 };
 
-export default PostDisplayLoading;
+export default PostDetailLoading;

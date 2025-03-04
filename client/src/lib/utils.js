@@ -56,11 +56,22 @@ const baseValidations = {
   birthday: Yup.date().max(new Date(), 'Cannot be in the future'),
   message: Yup.string()
     .trim()
-    .test('is-not-empty', 'Message cannot be empty', function (value) {
-      const { image } = this.parent;
-      return !!image || (value && value.length > 0);
-    }),
-  image: Yup.mixed(),
+    .test(
+      'message-or-image',
+      'Message or image must be provided',
+      function (value) {
+        const { image } = this.parent;
+        return !!image || (value && value.length > 0);
+      },
+    ),
+  image: Yup.mixed().test(
+    'image-or-message',
+    'Message or image must be provided',
+    function (value) {
+      const { message } = this.parent;
+      return !!message || value;
+    },
+  ),
 };
 
 export const newValidationSchema = (fields = []) => {

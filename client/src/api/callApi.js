@@ -180,9 +180,9 @@ const callApi = {
   },
 
   // 🔹 Comment API's
-  getComments: async (postId) => {
+  getComments: async (postId, limit) => {
     return authInstance
-      .get(`/post/${postId}/comments`)
+      .get(`/post/${postId}/comments?limit=${limit}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
