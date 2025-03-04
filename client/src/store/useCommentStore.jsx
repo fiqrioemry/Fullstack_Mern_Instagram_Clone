@@ -74,7 +74,7 @@ export const useCommentStore = create((set, get) => ({
         formData,
         postId
       );
-      await usePostStore.getState().commentCount(postId);
+      usePostStore.getState().commentCount(postId);
       get().setComments(comment);
       toast.success(message);
     } catch (error) {

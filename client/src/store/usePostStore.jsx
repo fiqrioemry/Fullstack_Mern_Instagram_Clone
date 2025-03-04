@@ -54,7 +54,7 @@ export const usePostStore = create((set, get) => ({
 
   commentCount: (postId) => {
     set((state) => ({
-      posts: state.posts.map((post) =>
+      posts: state.posts?.map((post) =>
         post.postId === postId ? { ...post, comments: post.comments + 1 } : post
       ),
     }));

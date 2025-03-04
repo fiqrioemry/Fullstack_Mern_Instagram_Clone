@@ -4,12 +4,13 @@ import Galleries from "@/components/post/Galleries";
 import PostInput from "@/components/post/PostInput";
 import useLoadComments from "@/hooks/useLoadComments";
 import PostAuthor from "@/components/post/PostAuthor";
-import PostControl from "@/components/post/PostControl";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import LoadMoreButton from "@/components/post/LoadMoreButton";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
 import Avatar from "../ui/Avatar";
 import Content from "../post/Content";
+import PostControl from "../post/PostControl";
 
 const DetailDisplay = ({ post }) => {
   const { limit, loading, comments, totalComments, handleLoadMore } =

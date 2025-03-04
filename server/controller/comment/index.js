@@ -60,7 +60,9 @@ async function createComment(req, res) {
       );
     }
 
-    return res.status(201).json({ message: 'Comment created' });
+    return res
+      .status(201)
+      .json({ message: 'Comment created', comment: newComment });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -221,6 +223,7 @@ async function getReplies(req, res) {
     const replies = repliesData.rows.map((reply) => {
       return {
         postId: reply.postId,
+        parentId: reply.parentId,
         commentId: reply.id,
         userId: reply.userId,
         username: reply.user.username,
