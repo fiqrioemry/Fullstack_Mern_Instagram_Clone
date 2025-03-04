@@ -60,7 +60,7 @@ const Comments = ({ comments }) => {
               {replies[comment.commentId] && (
                 <Replies
                   parentId={comment.commentId}
-                  replies={replies[comment.commentId].replies}
+                  replies={replies[comment.commentId]}
                 />
               )}
             </div>

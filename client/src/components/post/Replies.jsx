@@ -9,6 +9,7 @@ import Timestamp from "@/components/ui/Timestamp";
 import { useCommentStore } from "@/store/useCommentStore";
 
 const Replies = ({ replies, parentId }) => {
+  console.log(replies);
   const { likeReply } = useCommentStore();
 
   return (

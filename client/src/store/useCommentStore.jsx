@@ -4,20 +4,50 @@ import callApi from "../api/callApi";
 import { usePostStore } from "./usePostStore";
 
 export const useCommentStore = create((set, get) => ({
+  loading: {},
   replies: {},
   comments: [],
-  loading: {},
-  totalReplies: 0,
+  totalReplies: {},
   totalComments: 0,
   selectedComment: null,
+
+  setReplies: (replies, commentId, totalReplies) => {
+    set((state) => ({
+      replies: { ...state.replies, [commentId]: replies },
+      totalReplies: { ...state.totalReplies, [commentId]: totalReplies },
+    }));
+  },
+
+  getReplies: async (comment) => {
+    const { postId, commentId } = comment;
+    try {
+      set((state) => ({
+        loading: { ...state.loading, [commentId]: true },
+      }));
+
+      const { replies, totalReplies } = await callApi.getReplies(
+        postId,
+        commentId
+      );
+      get().setReplies(replies, commentId, totalReplies);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      set((state) => ({
+        loading: { ...state.loading, [commentId]: false },
+      }));
+    }
+  },
 
   setSelectedComment: (selectedComment) => {
     set({ selectedComment });
   },
 
-  setComments: (comment) => ({
-    comments: { ...get().comments, comment },
-  }),
+  setComments: (comment) => {
+    set((state) => ({
+      comments: { ...state.comments, comment },
+    }));
+  },
 
   getComments: async (postId, limit) => {
     try {
@@ -33,7 +63,7 @@ export const useCommentStore = create((set, get) => ({
       console.log(error.message);
     } finally {
       set((state) => ({
-        loading: { ...state.loading, [postId]: true },
+        loading: { ...state.loading, [postId]: false },
       }));
     }
   },
@@ -49,32 +79,6 @@ export const useCommentStore = create((set, get) => ({
       toast.success(message);
     } catch (error) {
       console.log(error);
-    }
-  },
-
-  setReplies: (replies, commentId) => ({
-    replies: { ...get().replies, [commentId]: replies },
-  }),
-
-  getReplies: async (comment) => {
-    const { postId, commentId } = comment;
-    try {
-      set((state) => ({
-        loading: { ...state.loading, [commentId]: true },
-      }));
-
-      const { replies, totalReplies } = await callApi.getReplies(
-        postId,
-        commentId
-      );
-      set({ totalReplies });
-      get().setReplies(replies, commentId);
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      set((state) => ({
-        loadingReply: { ...state.loading, [commentId]: false },
-      }));
     }
   },
 

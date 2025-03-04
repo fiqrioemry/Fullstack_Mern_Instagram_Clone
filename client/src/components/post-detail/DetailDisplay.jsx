@@ -30,12 +30,12 @@ const DetailDisplay = ({ post }) => {
             <ScrollArea className="flex-1 border-b border-muted p-2">
               <Caption post={post} />
               <Comments comments={comments} />
-              <CommentsLoading loading={loading} />
+              <CommentsLoading loading={loading[post.postId]} />
               <LoadMoreButton
                 limit={limit}
-                loading={loading}
                 total={totalComments}
                 onClick={handleLoadMore}
+                loading={loading[post.postId]}
               />
             </ScrollArea>
 

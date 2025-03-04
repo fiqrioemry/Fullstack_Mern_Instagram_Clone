@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Plus } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import useScrollToView from "@/hooks/useScrollToView";
 
 const LoadMoreButton = ({ onClick, loading, total, limit }) => {
@@ -9,8 +9,8 @@ const LoadMoreButton = ({ onClick, loading, total, limit }) => {
 
   return (
     <div className="flex items-center justify-center">
-      <button onClick={onClick} className="btn-secondary">
-        <Plus />
+      <button onClick={onClick} className="btn-secondary mt-2">
+        <PlusCircle />
       </button>
       <div ref={viewRef} />
     </div>
