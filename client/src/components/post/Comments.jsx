@@ -8,14 +8,16 @@ import ReplyButton from "./ReplyButton.jsx";
 import Avatar from "@/components/ui/Avatar.jsx";
 import Timestamp from "@/components/ui/Timestamp.jsx";
 import { useCommentStore } from "@/store/useCommentStore.jsx";
+import CommentsLoading from "@/components/skeleton/CommentsLoading.jsx";
 
-const Comments = ({ formik }) => {
-  const { replies, getReplies, comments, loadingReply, likeComment } =
-    useCommentStore();
+const Comments = ({ formik, comments }) => {
+  const { replies, getReplies, loadingReply, likeComment } = useCommentStore();
 
   const showReplies = (postId, commentId) => {
     getReplies(postId, commentId);
   };
+
+  if (!comments) return <CommentsLoading />;
 
   return (
     <div className="space-y-4">

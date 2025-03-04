@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import { commentControl, commentState } from "@/config";
 import { useCommentStore } from "@/store/useCommentStore";
 
 const useLoadComments = (post) => {
-  const commentRef = useRef(null);
   const [limit, setLimit] = useState(5);
   const { createComment, getComments, totalComments, comments, loading } =
     useCommentStore();
@@ -18,6 +17,7 @@ const useLoadComments = (post) => {
   const handleLoadMore = () => {
     setLimit((prev) => prev + 5);
   };
+
   useEffect(() => {
     if (post.postId) {
       getComments(post.postId, limit);
@@ -29,7 +29,6 @@ const useLoadComments = (post) => {
     loading,
     comments,
     commentForm,
-    commentRef,
     totalComments,
     handleLoadMore,
   };

@@ -24,7 +24,6 @@ import ProfileSaved from "./components/profile/ProfileSaved";
 import ProfilePosts from "./components/profile/ProfilePosts";
 import Followings from "./components/profile/info/Followings";
 import FollowDialog from "./components/profile/FollowDialog";
-import ShowDetail from "./pages/ShowDetail";
 
 function App() {
   const { checkingAuth, location, background } = useAuthChecking();
@@ -64,7 +63,6 @@ function App() {
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
           <Route path="p/:id" element={<PostDetail />} />
-          <Route path="c/:id" element={<ShowDetail />} />
           <Route path=":username" element={<Profile />}>
             <Route index element={<ProfilePosts />} />
             <Route path="tags" element={<ProfileTags />} />
