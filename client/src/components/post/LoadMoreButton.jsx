@@ -2,8 +2,8 @@
 import { Plus } from "lucide-react";
 import useScrollToView from "@/hooks/useScrollToView";
 
-const LoadMoreButton = ({ onClick, loading, state, total, limit }) => {
-  const { viewRef } = useScrollToView(state, loading);
+const LoadMoreButton = ({ onClick, loading, total, limit }) => {
+  const { viewRef } = useScrollToView(loading);
 
   if (total <= limit) return <div ref={viewRef} />;
 

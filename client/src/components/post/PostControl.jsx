@@ -4,10 +4,15 @@ import LikeButton from "./LikeButton";
 import { formatDateToISO } from "@/lib/utils";
 import { usePostStore } from "@/store/usePostStore";
 import { Bookmark, MessageCircle } from "lucide-react";
+import { useCommentStore } from "@/store/useCommentStore";
 
-const PostControl = ({ post, formik }) => {
+const PostControl = ({ post }) => {
   const { likePost } = usePostStore();
-  const handleComment = () => formik.setFieldValue("postId", post.postId);
+  const { setSelectedComment } = useCommentStore();
+
+  const handleComment = () => {
+    setSelectedComment(post);
+  };
 
   return (
     <div className="space-y-1 py-2">

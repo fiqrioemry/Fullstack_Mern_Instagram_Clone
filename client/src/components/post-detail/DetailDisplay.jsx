@@ -11,14 +11,8 @@ import LoadMoreButton from "@/components/post/LoadMoreButton";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
 
 const DetailDisplay = ({ post }) => {
-  const {
-    limit,
-    loading,
-    comments,
-    commentForm,
-    totalComments,
-    handleLoadMore,
-  } = useLoadComments(post);
+  const { limit, loading, comments, totalComments, handleLoadMore } =
+    useLoadComments(post);
 
   return (
     <div className="mx-2 md:mx-8">
@@ -33,30 +27,24 @@ const DetailDisplay = ({ post }) => {
               <PostAuthor data={post} />
             </div>
 
-            {/* comment & reply */}
-            <ScrollArea className="flex-1 border-b border-muted ">
-              <div className="p-2">
-                <Caption post={post} />
-                <Comments comments={comments} formik={commentForm} />
-                <CommentsLoading loading={loading} />
-                <LoadMoreButton
-                  limit={limit}
-                  state={comments}
-                  loading={loading}
-                  total={totalComments}
-                  onClick={handleLoadMore}
-                />
-              </div>
+            <ScrollArea className="flex-1 border-b border-muted p-2">
+              <Caption post={post} />
+              <Comments comments={comments} />
+              <CommentsLoading loading={loading} />
+              <LoadMoreButton
+                limit={limit}
+                loading={loading}
+                total={totalComments}
+                onClick={handleLoadMore}
+              />
             </ScrollArea>
 
-            {/* post control : reply & saved*/}
             <div className="border-b border-muted px-2">
-              <PostControl post={post} formik={commentForm} />
+              <PostControl post={post} />
             </div>
 
-            {/* input comment */}
             <div className="px-2">
-              <PostInput postId={post.postId} formik={commentForm} />
+              <PostInput postId={post.postId} />
             </div>
           </div>
         </div>

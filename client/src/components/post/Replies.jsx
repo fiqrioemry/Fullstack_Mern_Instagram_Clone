@@ -8,7 +8,7 @@ import Avatar from "@/components/ui/Avatar";
 import Timestamp from "@/components/ui/Timestamp";
 import { useCommentStore } from "@/store/useCommentStore";
 
-const Replies = ({ replies, formik, parentId }) => {
+const Replies = ({ replies, parentId }) => {
   const { likeReply } = useCommentStore();
 
   return (
@@ -36,7 +36,7 @@ const Replies = ({ replies, formik, parentId }) => {
                   id={reply.commentId}
                   parentId={parentId}
                 />
-                <ReplyButton form={formik} parentId={parentId} data={reply} />
+                <ReplyButton data={reply} />
               </div>
             </div>
           </div>

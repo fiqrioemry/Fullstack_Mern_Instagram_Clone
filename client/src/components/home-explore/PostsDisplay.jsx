@@ -1,43 +1,27 @@
 /* eslint-disable react/prop-types */
+import ViewComments from "./ViewComments";
 import Galleries from "@/components/post/Galleries";
 import PostInput from "@/components/post/PostInput";
-import { Link, useLocation } from "react-router-dom";
-import { useFormSchema } from "@/hooks/useFormSchema";
 import PostAuthor from "@/components/post/PostAuthor";
 import PostControl from "@/components/post/PostControl";
-import { commentControl, commentState } from "@/config";
-import { useCommentStore } from "@/store/useCommentStore";
+import PostsLoading from "@/components/skeleton/PostsLoading";
 
-const PostsDisplay = ({ post }) => {
-  const location = useLocation();
-  const { createComment } = useCommentStore();
-  const commentForm = useFormSchema(
-    commentState,
-    commentControl,
-    createComment,
-    post.postId
-  );
-
+const PostsDisplay = ({ posts, loading }) => {
   return (
-    <div className="border-b border-muted ">
-      <PostAuthor data={post} />
+    <div>
+      {posts.map((post) => (
+        <div className="border-b border-muted" key={post.postId}>
+          <PostAuthor data={post} />
+          <div className="h-96">
+            <Galleries images={post.images} />
+          </div>
+          <PostControl post={post} />
+          <ViewComments post={post} />
+          <PostInput postId={post.postId} />
+        </div>
+      ))}
 
-      <div className="h-96">
-        <Galleries images={post.images} />
-      </div>
-
-      <PostControl post={post} formik={commentForm} />
-      <div className="text-foreground">{post.content}</div>
-      {post.comments > 0 && (
-        <Link
-          to={`/p/${post.postId}`}
-          state={{ background: location }}
-          className="text-xs md:text-sm text-muted-foreground"
-        >
-          View all {post.comments} comments
-        </Link>
-      )}
-      <PostInput postId={post.postId} formik={commentForm} />
+      {loading && <PostsLoading />}
     </div>
   );
 };

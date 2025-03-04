@@ -208,6 +208,13 @@ const callApi = {
       .catch(errorHandle);
   },
 
+  createReply: async (formData, postId, commentId) => {
+    return authInstance
+      .post(`/post/${postId}/comments/${commentId}`, formData)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
   // Real Time Chat API's Management :
   getChats: async () => {
     return authInstance

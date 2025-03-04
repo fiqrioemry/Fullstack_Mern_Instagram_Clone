@@ -1,11 +1,14 @@
+/* eslint-disable react/prop-types */
 import { Link, useLocation } from "react-router-dom";
 
-const NoMorePosts = () => {
+const NoMorePosts = ({ limit, total }) => {
   const location = useLocation();
-
   const showButton = location.pathname === "/";
+
+  if (limit <= total) return null;
+
   return (
-    <div className="mb-8">
+    <div className="mt-10">
       <div className="text-center text-muted">
         <p>You have reached the end</p>
         <p>No more post to show</p>

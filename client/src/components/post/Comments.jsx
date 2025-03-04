@@ -10,11 +10,11 @@ import Timestamp from "@/components/ui/Timestamp.jsx";
 import { useCommentStore } from "@/store/useCommentStore.jsx";
 import CommentsLoading from "@/components/skeleton/CommentsLoading.jsx";
 
-const Comments = ({ formik, comments }) => {
-  const { replies, getReplies, loadingReply, likeComment } = useCommentStore();
+const Comments = ({ comments }) => {
+  const { replies, getReplies, loading, likeComment } = useCommentStore();
 
-  const showReplies = (postId, commentId) => {
-    getReplies(postId, commentId);
+  const showReplies = (comment) => {
+    getReplies(comment);
   };
 
   if (!comments) return <CommentsLoading />;
@@ -41,26 +41,17 @@ const Comments = ({ formik, comments }) => {
                   onClick={likeComment}
                   id={comment.commentId}
                 />
-                <ReplyButton
-                  form={formik}
-                  data={comment}
-                  parentId={comment.commentId}
-                />
+
+                <ReplyButton data={comment} />
               </div>
 
               {comment.replies > 0 && !replies[comment.commentId] && (
                 <button
-                  onClick={() =>
-                    showReplies(
-                      comment.postId,
-                      comment.commentId,
-                      comment.username
-                    )
-                  }
+                  onClick={() => showReplies(comment)}
                   className="flex items-center text-xs space-x-2 text-muted-foreground"
                 >
                   <span> View replies ({comment.replies}) </span>
-                  {loadingReply[comment.commentId] && (
+                  {loading[comment.commentId] && (
                     <Loader size={18} className="animate-spin" />
                   )}
                 </button>
@@ -68,7 +59,6 @@ const Comments = ({ formik, comments }) => {
 
               {replies[comment.commentId] && (
                 <Replies
-                  formik={formik}
                   parentId={comment.commentId}
                   replies={replies[comment.commentId].replies}
                 />

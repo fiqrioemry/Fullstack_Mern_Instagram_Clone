@@ -6,14 +6,24 @@ import { usePostStore } from "./usePostStore";
 export const useCommentStore = create((set, get) => ({
   replies: {},
   comments: [],
-  loadingReply: {},
+  loading: {},
   totalReplies: 0,
   totalComments: 0,
-  loading: false,
+  selectedComment: null,
+
+  setSelectedComment: (selectedComment) => {
+    set({ selectedComment });
+  },
+
+  setComments: (comment) => ({
+    comments: { ...get().comments, comment },
+  }),
 
   getComments: async (postId, limit) => {
     try {
-      set({ loading: true });
+      set((state) => ({
+        loading: { ...state.loading, [postId]: true },
+      }));
       const { comments, totalComments } = await callApi.getComments(
         postId,
         limit
@@ -22,23 +32,45 @@ export const useCommentStore = create((set, get) => ({
     } catch (error) {
       console.log(error.message);
     } finally {
-      set({ loading: false });
+      set((state) => ({
+        loading: { ...state.loading, [postId]: true },
+      }));
     }
   },
 
-  getReplies: async (postId, commentId) => {
+  createComment: async (formData, postId) => {
     try {
-      set((state) => ({
-        loadingReply: { ...state.loading, [commentId]: true },
-      }));
-
-      const replies = await callApi.getReplies(postId, commentId);
-
-      set((state) => ({
-        replies: { ...state.replies, [commentId]: replies },
-      }));
+      const { comment, message } = await callApi.createComment(
+        formData,
+        postId
+      );
+      await usePostStore.getState().commentCount(postId);
+      get().setComments(comment);
+      toast.success(message);
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  setReplies: (replies, commentId) => ({
+    replies: { ...get().replies, [commentId]: replies },
+  }),
+
+  getReplies: async (comment) => {
+    const { postId, commentId } = comment;
+    try {
+      set((state) => ({
+        loading: { ...state.loading, [commentId]: true },
+      }));
+
+      const { replies, totalReplies } = await callApi.getReplies(
+        postId,
+        commentId
+      );
+      set({ totalReplies });
+      get().setReplies(replies, commentId);
+    } catch (error) {
+      console.log(error.message);
     } finally {
       set((state) => ({
         loadingReply: { ...state.loading, [commentId]: false },
@@ -46,15 +78,18 @@ export const useCommentStore = create((set, get) => ({
     }
   },
 
-  createComment: async (formData, postId) => {
+  createReply: async (formData, postId) => {
+    const commentId = get().selectedComment.commentId;
     try {
-      const message = await callApi.createComment(formData, postId);
+      const { reply, message } = await callApi.createReply(
+        formData,
+        postId,
+        commentId
+      );
+      get().setReplies(reply, commentId);
       toast.success(message);
-      await get().getComments(postId);
-      await usePostStore.getState().commentCount(postId);
-      await get().getReplies(postId, formData.parentId);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   },
 

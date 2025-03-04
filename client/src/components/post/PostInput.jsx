@@ -1,30 +1,50 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useEffect, useRef } from "react";
 
-const PostInput = ({ postId, formik }) => {
+import { useEffect, useRef } from "react";
+import { useFormSchema } from "@/hooks/useFormSchema";
+import { commentControl, commentState } from "@/config";
+import { useCommentStore } from "@/store/useCommentStore";
+
+const PostInput = ({ postId }) => {
   const inputRef = useRef(null);
 
+  const { selectedPost, selectedComment, createReply, createComment } =
+    useCommentStore();
+
+  const commentForm = useFormSchema(
+    commentState,
+    commentControl,
+    selectedComment?.commentId ? createReply : createComment,
+    postId
+  );
+
   useEffect(() => {
-    if (formik.values.postId === postId && inputRef.current) {
+    //
+    if (selectedComment?.postId === postId && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [formik.values.postId, formik.values.parentId]);
+    //
+    if (selectedComment?.commentId)
+      commentForm.setFieldValue("content", `@${selectedComment?.username} `);
+    //
+  }, [selectedPost, selectedComment]);
 
   return (
-    <form onSubmit={formik.handleSubmit} className="flex items-center py-2 ">
+    <form
+      onSubmit={commentForm?.handleSubmit}
+      className="flex items-center py-2"
+    >
       <input
         ref={inputRef}
         type="text"
         name="content"
         className="input-primary text-sm px-0"
         placeholder="Add a comment..."
-        value={formik.values.content}
-        onChange={formik.handleChange}
+        value={commentForm?.values?.content}
+        onChange={commentForm?.handleChange}
       />
-      <button
-        className="btn-accent"
-        disabled={formik.values.content === "" || !formik.values.content}
-      >
+      <button className="btn-accent" disabled={!commentForm?.values?.content}>
         Post
       </button>
     </form>
