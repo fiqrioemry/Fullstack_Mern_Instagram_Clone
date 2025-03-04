@@ -1,5 +1,3 @@
-import React from "react";
-
 const useLoadReplies = () => {
   return <div></div>;
 };

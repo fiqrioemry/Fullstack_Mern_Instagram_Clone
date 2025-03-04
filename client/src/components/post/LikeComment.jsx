@@ -2,7 +2,7 @@
 import { Heart } from "lucide-react";
 import { useCommentStore } from "@/store/useCommentStore";
 
-const LikeButton = ({ data, size = 14 }) => {
+const LikeComment = ({ data }) => {
   const { likeComment } = useCommentStore();
 
   const handleLike = () => {
@@ -11,8 +11,8 @@ const LikeButton = ({ data, size = 14 }) => {
 
   return (
     <Heart
-      size={size}
-      aria-label="Like Post"
+      size={14}
+      aria-label="Like a comment"
       onClick={handleLike}
       className="btn-secondary text-xs"
       fill={data.isLiked ? "red" : "transparent"}
@@ -21,4 +21,4 @@ const LikeButton = ({ data, size = 14 }) => {
   );
 };
 
-export default LikeButton;
+export default LikeComment;

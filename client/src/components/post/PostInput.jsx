@@ -39,8 +39,8 @@ const PostInput = ({ postId }) => {
         ref={inputRef}
         type="text"
         name="content"
-        className="input-primary text-sm px-0"
         placeholder="Add a comment..."
+        className="input-primary text-sm px-0"
         value={commentForm?.values?.content}
         onChange={commentForm?.handleChange}
       />

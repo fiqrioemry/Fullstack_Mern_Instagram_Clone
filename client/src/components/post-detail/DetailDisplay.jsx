@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import Caption from "@/components/post/Caption";
 import Comments from "@/components/post/Comments";
 import Galleries from "@/components/post/Galleries";
 import PostInput from "@/components/post/PostInput";
@@ -9,6 +8,8 @@ import PostControl from "@/components/post/PostControl";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import LoadMoreButton from "@/components/post/LoadMoreButton";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
+import Avatar from "../ui/Avatar";
+import Content from "../post/Content";
 
 const DetailDisplay = ({ post }) => {
   const { limit, loading, comments, totalComments, handleLoadMore } =
@@ -28,7 +29,10 @@ const DetailDisplay = ({ post }) => {
             </div>
 
             <ScrollArea className="flex-1 border-b border-muted p-2">
-              <Caption post={post} />
+              <div className="flex items-start gap-3">
+                <Avatar avatar={post.avatar} />
+                <Content data={post} />
+              </div>
               <Comments comments={comments} />
               <CommentsLoading loading={loading[post.postId]} />
               <LoadMoreButton

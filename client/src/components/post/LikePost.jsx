@@ -1,17 +1,18 @@
 /* eslint-disable react/prop-types */
 import { Heart } from "lucide-react";
-import { useCommentStore } from "@/store/useCommentStore";
 
-const LikeButton = ({ data, size = 14 }) => {
-  const { likeComment } = useCommentStore();
+import { usePostStore } from "@/store/usePostStore";
+
+const LikePost = ({ data }) => {
+  const { likePost } = usePostStore();
 
   const handleLike = () => {
-    likeComment(data.commentId, data.parentId);
+    likePost(data.postId);
   };
 
   return (
     <Heart
-      size={size}
+      size={24}
       aria-label="Like Post"
       onClick={handleLike}
       className="btn-secondary text-xs"
@@ -21,4 +22,4 @@ const LikeButton = ({ data, size = 14 }) => {
   );
 };
 
-export default LikeButton;
+export default LikePost;

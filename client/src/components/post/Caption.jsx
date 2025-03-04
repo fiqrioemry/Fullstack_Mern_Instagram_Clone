@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
-import Timestamp from "@/components/ui/Timestamp";
 
 const Caption = ({ post }) => {
   return (
@@ -13,13 +12,11 @@ const Caption = ({ post }) => {
         />
       </div>
 
-      {/* Username & Content */}
       <div className="flex-1">
         <Link to={`${post.username}`} className="btn-secondary">
           {post.username}
         </Link>
         <div className="text-xs md:text-sm">{post.content}</div>
-        <Timestamp createdAt={post.createdAt} />
       </div>
     </div>
   );

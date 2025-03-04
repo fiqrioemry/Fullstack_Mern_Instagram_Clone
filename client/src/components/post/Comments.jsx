@@ -1,17 +1,17 @@
 /* eslint-disable react/prop-types */
-import Replies from "./Replies.jsx";
 import { Loader } from "lucide-react";
-import LikeCount from "./LikeCount.jsx";
-import { Link } from "react-router-dom";
-import LikeButton from "./LikeButton.jsx";
-import ReplyButton from "./ReplyButton.jsx";
 import Avatar from "@/components/ui/Avatar.jsx";
-import Timestamp from "@/components/ui/Timestamp.jsx";
+import Replies from "@/components/post/Replies.jsx";
+import Timestamp from "@/components/post/Timestamp.jsx";
+import LikeCount from "@/components/post/LikeCount.jsx";
+import ReplyButton from "@/components/post/ReplyButton.jsx";
 import { useCommentStore } from "@/store/useCommentStore.jsx";
 import CommentsLoading from "@/components/skeleton/CommentsLoading.jsx";
+import Content from "./Content";
+import LikeComment from "./LikeComment";
 
 const Comments = ({ comments }) => {
-  const { replies, getReplies, loading, likeComment } = useCommentStore();
+  const { replies, getReplies, loading } = useCommentStore();
 
   const showReplies = (comment) => {
     getReplies(comment);
@@ -26,22 +26,12 @@ const Comments = ({ comments }) => {
           <div className="flex space-x-3">
             <Avatar avatar={comment.avatar} />
             <div>
-              <div className="space-x-1">
-                <Link to={`/${comment.username}`} className="btn-secondary">
-                  {comment.username}
-                </Link>
-                <span className="text-sm">{comment.content}</span>
-              </div>
+              <Content data={comment} />
 
               <div className="text-xs flex items-center gap-2">
-                <Timestamp createdAt={comment.createdAt} />
+                <Timestamp data={comment} />
                 <LikeCount data={comment} />
-                <LikeButton
-                  data={comment}
-                  onClick={likeComment}
-                  id={comment.commentId}
-                />
-
+                <LikeComment data={comment} />
                 <ReplyButton data={comment} />
               </div>
 
