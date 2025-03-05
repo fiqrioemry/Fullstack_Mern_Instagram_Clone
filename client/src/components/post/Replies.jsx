@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import Content from "./Content";
 import { Loader } from "lucide-react";
 import LikeComment from "./LikeComment";
-import { useEffect, useState } from "react";
 import Avatar from "@/components/ui/Avatar";
+import { useEffect, useState } from "react";
 import LikeCount from "@/components/post/LikeCount";
 import Timestamp from "@/components/post/Timestamp";
 import ReplyButton from "@/components/post/ReplyButton";
@@ -32,7 +33,6 @@ const Replies = ({ comment }) => {
   };
 
   useEffect(() => {
-    // trigger when create a new reply while replies not shown yet, automatically show reply that has been made
     if (replies[comment.commentId] && showReply === false) {
       handleShowReply();
     }
@@ -89,7 +89,7 @@ const Replies = ({ comment }) => {
       {replies[comment.commentId] && showReply && (
         <>
           {replies[comment.commentId]?.map((reply) => (
-            <div className="flex space-x-2 py-2" key={reply.replyId}>
+            <div className="flex space-x-1 py-2" key={reply.replyId}>
               <Avatar avatar={reply.avatar} />
               <div className="flex-1">
                 <Content data={reply} />

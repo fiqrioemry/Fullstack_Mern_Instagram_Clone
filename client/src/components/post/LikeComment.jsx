@@ -10,7 +10,7 @@ const LikeComment = ({ data }) => {
   };
 
   return (
-    <div className="py-2 px-1">
+    <div className="py-2">
       <Heart
         size={14}
         aria-label="Like a comment"

@@ -9,6 +9,7 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import PostDetail from "./pages/PostDetail";
 import Notifications from "./pages/Notifications";
+import PostDetailDialog from "./pages/PostDetailDialog";
 
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
@@ -17,7 +18,6 @@ import { AuthRoute, NonAuthRoute } from "./middleware";
 
 import Layout from "./components/layout/Layout";
 import ProfileTags from "./components/profile/ProfileTags";
-import PostDialog from "./components/post-detail/PostDialog";
 import PageLoading from "@/components/skeleton/PageLoading";
 import Followers from "./components/profile/info/Followers";
 import ProfileSaved from "./components/profile/ProfileSaved";
@@ -81,7 +81,7 @@ function App() {
             <Route path="followings" element={<Followings />} />
             <Route path="followers" element={<Followers />} />
           </Route>
-          <Route path="p/:id" element={<PostDialog />} />
+          <Route path="p/:id" element={<PostDetailDialog />} />
         </Routes>
       )}
     </>

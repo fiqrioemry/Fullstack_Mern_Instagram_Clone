@@ -7,7 +7,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import PostDetailLoading from "@/components/skeleton/PostDetailLoading";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
-const PostDialog = () => {
+const PostDetailDialog = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -48,4 +48,4 @@ const PostDialog = () => {
   );
 };
 
-export default PostDialog;
+export default PostDetailDialog;
