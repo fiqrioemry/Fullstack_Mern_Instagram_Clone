@@ -7,7 +7,6 @@ const ChatHeader = ({ selectedUser }) => {
   return (
     <div className="flex items-center gap-4">
       <Avatar avatar={selectedUser.avatar} />
-
       <div className="flex flex-col items-start text-sm">
         <div>{selectedUser.username}</div>
         <div>

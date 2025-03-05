@@ -12,7 +12,7 @@ const PostsDisplay = ({ posts, loading }) => {
       {posts.map((post) => (
         <div className="border-b border-muted" key={post.postId}>
           <PostAuthor data={post} />
-          <div className="h-96">
+          <div className="min-h-96 max-h-[600px]">
             <Galleries images={post.images} />
           </div>
           <PostControl post={post} />

@@ -89,7 +89,7 @@ const Replies = ({ comment }) => {
       {replies[comment.commentId] && showReply && (
         <>
           {replies[comment.commentId]?.map((reply) => (
-            <div className="flex space-x-1 py-2" key={reply.replyId}>
+            <div className="flex space-x-2 py-2" key={reply.replyId}>
               <Avatar avatar={reply.avatar} />
               <div className="flex-1">
                 <Content data={reply} />

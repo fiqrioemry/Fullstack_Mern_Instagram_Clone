@@ -13,7 +13,7 @@ const CommentButton = ({ data }) => {
       <MessageCircle
         onClick={handleComment}
         className="btn-secondary"
-        aria-label="Comment on Post"
+        aria-label="Comment a Post"
       />
     </div>
   );

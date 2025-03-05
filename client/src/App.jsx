@@ -11,19 +11,19 @@ import PostDetail from "./pages/PostDetail";
 import Notifications from "./pages/Notifications";
 import PostDetailDialog from "./pages/PostDetailDialog";
 
+import Layout from "@/components/layout/Layout";
+import ProfileTags from "@/components/profile/ProfileTags";
+import PageLoading from "@/components/skeleton/PageLoading";
+import Followers from "@/components/profile/info/Followers";
+import ProfileSaved from "@/components/profile/ProfileSaved";
+import ProfilePosts from "@/components/profile/ProfilePosts";
+import Followings from "@/components/profile/info/Followings";
+import FollowDialog from "@/components/profile/FollowDialog";
+
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import useAuthChecking from "./hooks/useAuthChecking";
 import { AuthRoute, NonAuthRoute } from "./middleware";
-
-import Layout from "./components/layout/Layout";
-import ProfileTags from "./components/profile/ProfileTags";
-import PageLoading from "@/components/skeleton/PageLoading";
-import Followers from "./components/profile/info/Followers";
-import ProfileSaved from "./components/profile/ProfileSaved";
-import ProfilePosts from "./components/profile/ProfilePosts";
-import Followings from "./components/profile/info/Followings";
-import FollowDialog from "./components/profile/FollowDialog";
 
 function App() {
   const { checkingAuth, location, background } = useAuthChecking();

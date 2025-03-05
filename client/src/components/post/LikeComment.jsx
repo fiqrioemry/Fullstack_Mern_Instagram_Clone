@@ -13,8 +13,8 @@ const LikeComment = ({ data }) => {
     <div className="py-2">
       <Heart
         size={14}
-        aria-label="Like a comment"
         onClick={handleLike}
+        aria-label="Like a comment"
         className="btn-secondary text-xs"
         fill={data.isLiked ? "red" : "transparent"}
         stroke={data.isLiked ? "red" : "currentColor"}

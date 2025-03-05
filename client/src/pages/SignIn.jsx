@@ -6,6 +6,7 @@ import { useFormSchema } from "@/hooks/useFormSchema";
 import GoogleAuth from "@/components/auth/GoogleAuth";
 import InputButton from "@/components/form/InputButton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+
 const SignIn = () => {
   const { signin, loading } = useAuthStore();
   const signInForm = useFormSchema(
@@ -17,7 +18,7 @@ const SignIn = () => {
   );
 
   return (
-    <div className="screen-center">
+    <div className="h-screen flex items-center justify-center">
       <Card>
         <CardContent className="p-4">
           <div className="py-4 text-center">
@@ -26,7 +27,7 @@ const SignIn = () => {
           <InputForm formik={signInForm} formControl={signInControl}>
             <InputButton formik={signInForm} title="signin" loading={loading} />
           </InputForm>
-          <div className="flex-center py-2">OR</div>
+          <div className="flex items-center justify-center py-2">OR</div>
           <GoogleAuth buttonTitle={"Signin with google"} />
           <CardFooter className="mt-2 space-x-2">
             <span> Dont have an account ? </span>

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const InputButton = ({ formik, title, loading, type = "submit" }) => {
   return (

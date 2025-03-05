@@ -8,15 +8,13 @@ import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 
 const SearchUserForChat = () => {
   const { users, searching, searchUser } = useUserStore();
-
   const { setSelectedUser, handleOpen, open } = useChatStore();
-
   const { searchForm, searchRef, handleSearch } = useHandleSearch(searchUser);
 
   const handleNewChat = (user) => {
     handleOpen();
-    searchForm.resetForm();
     setSelectedUser(user);
+    searchForm.resetForm();
   };
 
   return (

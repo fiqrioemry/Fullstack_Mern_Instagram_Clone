@@ -1,9 +1,9 @@
+import { useEffect } from "react";
 import { useChatStore } from "@/store/useChatStore";
 import ChatSidebar from "@/components/messages/ChatSidebar";
 import ChatContainer from "@/components/messages/ChatContainer";
 import NoChatSelected from "@/components/messages/NoChatSelected";
 import SearchUserForChat from "@/components/messages/SearchUserForChat";
-import { useEffect } from "react";
 
 export default function Messages() {
   const { setSelectedUser, selectedUser } = useChatStore();

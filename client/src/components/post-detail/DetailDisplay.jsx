@@ -15,13 +15,13 @@ const DetailDisplay = ({ post }) => {
     useLoadComments(post);
 
   return (
-    <div className="mx-2 md:mx-8 h-screen flex items-center">
-      <div className="h-[90vh] flex md:flex-row flex-col">
-        <div className="h-full w-full md:w-6/12 lg:w-7/12">
+    <div className="mx-2 md:mx-8 py-6">
+      <div className="h-[90vh] w-full flex md:flex-row flex-col border border-muted">
+        <div className="h-full w-full md:w-6/12 lg:w-7/12 border-r border-muted">
           <Galleries images={post.images} />
         </div>
 
-        <div className="h-full w-full md:w-6/12 lg:w-5/12 border border-muted">
+        <div className="h-full w-full md:w-6/12 lg:w-5/12">
           <div className="flex flex-col h-full">
             <div className="border-b border-muted">
               <PostAuthor data={post} />

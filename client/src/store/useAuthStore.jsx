@@ -9,11 +9,11 @@ const BASE_URL =
 export const useAuthStore = create((set, get) => ({
   step: 1,
   user: null,
+  socket: null,
   loading: false,
+  onlineUsers: [],
   accessToken: null,
   checkingAuth: true,
-  onlineUsers: [],
-  socket: null,
 
   resetStep: () => set({ step: 1 }),
 

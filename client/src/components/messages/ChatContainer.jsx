@@ -33,9 +33,9 @@ const ChatContainer = () => {
       <ScrollArea className="flex-1 overflow-y-auto px-2 text-center border-b border-muted">
         <ChatDisplay
           chat={chat}
-          selectedUser={selectedUser}
-          loading={loading}
           ref={viewRef}
+          loading={loading}
+          selectedUser={selectedUser}
         />
         {loading && chatForm.values.image && <ChatSendLoading />}
         <div ref={viewRef} />

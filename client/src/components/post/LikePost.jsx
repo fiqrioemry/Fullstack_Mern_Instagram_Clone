@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { Heart } from "lucide-react";
-
 import { usePostStore } from "@/store/usePostStore";
 
 const LikePost = ({ data }) => {
@@ -13,8 +12,8 @@ const LikePost = ({ data }) => {
   return (
     <Heart
       size={24}
-      aria-label="Like Post"
       onClick={handleLike}
+      aria-label="Like a Post"
       className="btn-secondary text-xs"
       fill={data.isLiked ? "red" : "transparent"}
       stroke={data.isLiked ? "red" : "currentColor"}

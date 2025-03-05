@@ -17,7 +17,7 @@ const DialogDisplay = ({ post }) => {
   return (
     <div className="h-[75vh] md:h-[95vh] flex md:flex-row flex-col">
       {/* Galeri Foto */}
-      <div className="hidden md:block w-full md:w-6/12 lg:w-7/12">
+      <div className="hidden md:block w-full md:w-6/12 lg:w-7/12 border-r border-muted">
         <Galleries images={post.images} />
       </div>
 

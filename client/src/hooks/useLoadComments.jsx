@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useCommentStore } from "@/store/useCommentStore";
 
 const useLoadComments = (post) => {
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(3);
   const { getComments, totalComments, comments, loading } = useCommentStore();
 
   const handleLoadMore = () => {
-    setLimit((prev) => prev + 5);
+    setLimit((prev) => prev + 3);
   };
 
   useEffect(() => {

@@ -20,8 +20,8 @@ const Profile = () => {
   if (profile.length === 0) return <NotFound />;
 
   return (
-    <div className="flex justify-center">
-      <div className="w-full max-w-xl md:max-w-2xl py-6 mx-2">
+    <div className="flex justify-center py-6 mx-2">
+      <div className="w-full max-w-xl md:max-w-2xl">
         <ProfileInfo profile={profile} />
         <NavTabs profile={profile} />
         <Outlet />

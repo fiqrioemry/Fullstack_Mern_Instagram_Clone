@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-import Content from "./Content";
-import LikeComment from "./LikeComment";
+import Content from "@/components/post/Content";
 import Avatar from "@/components/ui/Avatar.jsx";
 import Replies from "@/components/post/Replies.jsx";
 import useScrollToView from "@/hooks/useScrollToView";
+import LikeComment from "@/components/post/LikeComment";
 import Timestamp from "@/components/post/Timestamp.jsx";
 import LikeCount from "@/components/post/LikeCount.jsx";
 import ReplyButton from "@/components/post/ReplyButton.jsx";
@@ -20,7 +20,7 @@ const Comments = ({ comments, loading }) => {
         <div
           ref={viewRef}
           key={comment.commentId}
-          className="flex space-x-2 py-1"
+          className="flex space-x-2 py-2"
         >
           <Avatar avatar={comment.avatar} />
           <div className="flex-1">

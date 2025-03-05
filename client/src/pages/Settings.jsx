@@ -14,8 +14,8 @@ const Settings = () => {
   if (!profile) return <SettingsLoading />;
 
   return (
-    <div className="flex justify-center">
-      <div className="w-full max-w-xl md:max-w-3xl py-6 mx-2">
+    <div className="flex justify-center py-6 mx-2">
+      <div className="w-full max-w-xl md:max-w-3xl">
         <div className="flex md:flex-row flex-col gap-8">
           <AvatarSetting />
           <ProfileSetting />
