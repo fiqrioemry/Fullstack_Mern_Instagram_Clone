@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-import { Bookmark, Grid2X2, Tags } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
+import { Bookmark, Grid2X2, Tags } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const NavTabs = ({ profile }) => {
   const location = useLocation();
+
   return (
     <Tabs defaultValue={location.pathname}>
       <TabsList className="w-full mb-6">

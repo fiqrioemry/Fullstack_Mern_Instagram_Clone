@@ -9,7 +9,7 @@ const ProfileSaved = () => {
         </div>
       </div>
       <div>
-        <h1 className="text-2xl font-semibold">SAVED</h1>
+        <h1 className="text-2xl font-semibold">saved</h1>
       </div>
       <div className="flex justify-center">
         <div className="max-w-96 text-sm">

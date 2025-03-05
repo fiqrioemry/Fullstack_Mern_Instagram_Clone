@@ -10,7 +10,7 @@ import Image from "@/components/ui/Image";
 
 const Galleries = ({ images }) => {
   return (
-    <Carousel className="h-full flex-center overflow-hidden bg-background">
+    <Carousel className="h-full flex items-center justify-center overflow-hidden bg-background">
       <CarouselContent>
         {images.map((image, index) => (
           <CarouselItem key={index}>

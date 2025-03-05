@@ -9,9 +9,7 @@ import SearchResult from "@/components/search/SearchResult";
 
 const SearchPanel = forwardRef(({ openPanel }, panelRef) => {
   const navigate = useNavigate();
-
   const handleNavigate = (user) => navigate(`/${user.username}`);
-
   const { users, searching, searchTerm, searchForm } = useHandleSearch();
 
   return (

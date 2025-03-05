@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import useLoadChat from "@/hooks/useLoadChat";
-import ChatSendLoading from "./ChatSendLoading";
 import { chatControl, chatState } from "@/config";
 import useScrollToView from "@/hooks/useScrollToView";
 import { useFormSchema } from "@/hooks/useFormSchema";
@@ -9,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ChatHeader from "@/components/messages/ChatHeader";
 import ChatDisplay from "@/components/messages/ChatDisplay";
 import ChatInputForm from "@/components/messages/ChatInputForm";
+import ChatSendLoading from "@/components/skeleton/ChatSendLoading";
 import ChatContainerLoading from "@/components/skeleton/ChatContainerLoading";
 
 const ChatContainer = () => {

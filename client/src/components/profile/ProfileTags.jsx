@@ -11,7 +11,7 @@ const ProfileTags = () => {
   return (
     <div className="text-center space-y-3 py-12">
       <div className="flex items-center justify-center">
-        <div className="p-4  rounded-full border">
+        <div className="p-4 rounded-full border">
           <Camera size={50} />
         </div>
       </div>

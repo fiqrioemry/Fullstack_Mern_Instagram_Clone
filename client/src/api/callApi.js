@@ -7,6 +7,7 @@ const errorHandle = (error) => {
 };
 
 const callApi = {
+  // 🔹Authentication API route management
   authCheck: async () => {
     return authInstance
       .get('/auth/me')
@@ -14,7 +15,6 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  // 🔹Authentication API route management
   signup: async (formData) => {
     return authInstance
       .post('/auth/signup', formData)
@@ -179,7 +179,7 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  // 🔹 Comment API's
+  //🔹Comment API route management
   getComments: async (postId, limit) => {
     return authInstance
       .get(`/post/${postId}/comments?limit=${limit}`)

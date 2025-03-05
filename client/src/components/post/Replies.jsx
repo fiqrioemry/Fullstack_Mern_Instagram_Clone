@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import Content from "./Content";
 import { Loader } from "lucide-react";
-import LikeComment from "./LikeComment";
 import Avatar from "@/components/ui/Avatar";
 import { useEffect, useState } from "react";
+import Content from "@/components/post/Content";
 import LikeCount from "@/components/post/LikeCount";
 import Timestamp from "@/components/post/Timestamp";
+import LikeComment from "@/components/post/LikeComment";
 import ReplyButton from "@/components/post/ReplyButton";
 import { useCommentStore } from "@/store/useCommentStore";
 

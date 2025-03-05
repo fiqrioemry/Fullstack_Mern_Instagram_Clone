@@ -1,8 +1,8 @@
-import Galleries from "../post/Galleries";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ConfirmationBox from "./ConfirmationBox";
 import { postControl, postState } from "@/config";
+import Galleries from "@/components/post/Galleries";
 import { usePostStore } from "@/store/usePostStore";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import { useFileUpload } from "@/hooks/useFileUpload";
