@@ -17,7 +17,14 @@ const Replies = ({ comment }) => {
   const { replies, getReplies, loading } = useCommentStore();
 
   useEffect(() => {
-    if (limit > 0) {
+    if (replies[comment.commentId]) {
+      setShowReply(true);
+      setLimit(3);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (limit > 0 || replies[comment.commentId]) {
       getReplies(comment.postId, comment.commentId, limit);
     }
   }, [getReplies, comment, limit]);
@@ -27,16 +34,9 @@ const Replies = ({ comment }) => {
   };
 
   const handleShowReply = () => {
-    setLimit((prev) => prev + 3);
     setShowReply(true);
+    setLimit((prev) => prev + 3);
   };
-
-  useEffect(() => {
-    // trigger when create a new reply while replies not shown yet, automatically show reply that has been made
-    if (replies[comment.commentId] && showReply === false) {
-      handleShowReply();
-    }
-  }, [replies[comment.commentId]]);
 
   return (
     <div className="mt-2">
@@ -60,7 +60,7 @@ const Replies = ({ comment }) => {
               className="flex items-center space-x-2 text-muted-foreground"
             >
               <span className="text-xs">
-                view replies ({comment.replies - limit})
+                view replies ({comment.replies - limit}){" "}
               </span>
               {loading[comment.commentId] && (
                 <Loader size={18} className="animate-spin" />
@@ -75,7 +75,7 @@ const Replies = ({ comment }) => {
                 <span className="text-xs"> hide replies </span>
               ) : (
                 <span className="text-xs">
-                  view replies ({comment.replies})
+                  view replies ({comment.replies}){" "}
                 </span>
               )}
               {loading[comment.commentId] && (

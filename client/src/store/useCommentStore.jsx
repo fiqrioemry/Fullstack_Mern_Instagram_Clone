@@ -16,6 +16,16 @@ export const useCommentStore = create((set, get) => ({
     }));
   },
 
+  setRepliesCount: (commentId) => {
+    set((state) => ({
+      comments: state.comments.map((comment) =>
+        comment.commentId === commentId
+          ? { ...comment, replies: (comment.replies || 0) + 1 }
+          : comment
+      ),
+    }));
+  },
+
   createReply: async (formData, postId) => {
     const comment = get().selectedComment;
     const commentId = comment?.parentId || comment.commentId;
@@ -26,6 +36,7 @@ export const useCommentStore = create((set, get) => ({
         postId,
         commentId
       );
+      get().setRepliesCount(commentId);
       await get().getReplies(postId, commentId);
       toast.success(message);
     } catch (error) {
