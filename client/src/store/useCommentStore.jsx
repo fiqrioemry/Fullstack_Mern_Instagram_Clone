@@ -26,7 +26,7 @@ export const useCommentStore = create((set, get) => ({
         postId,
         commentId
       );
-      await get().getReplies({ postId: comment.postId, commentId });
+      await get().getReplies(postId, commentId);
       toast.success(message);
     } catch (error) {
       console.log(error.message);
@@ -45,8 +45,7 @@ export const useCommentStore = create((set, get) => ({
     }
   },
 
-  getReplies: async (comment, limit) => {
-    const { postId, commentId } = comment;
+  getReplies: async (postId, commentId, limit) => {
     try {
       set((state) => ({
         loading: { ...state.loading, [commentId]: true },

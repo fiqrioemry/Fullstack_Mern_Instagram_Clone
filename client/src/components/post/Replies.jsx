@@ -17,8 +17,14 @@ const Replies = ({ comment }) => {
   const { replies, getReplies, loading } = useCommentStore();
 
   useEffect(() => {
+    if (replies[comment.commentId]) {
+      setShowReply(true);
+    }
+  }, [replies, comment.commentId]);
+
+  useEffect(() => {
     if (limit > 0) {
-      getReplies(comment, limit);
+      getReplies(comment.postId, comment.commentId, limit);
     }
   }, [getReplies, comment, limit]);
 
@@ -79,7 +85,7 @@ const Replies = ({ comment }) => {
         </>
       )}
 
-      {showReply && (
+      {replies[comment.commentId] && showReply && (
         <>
           {replies[comment.commentId]?.map((reply) => (
             <div className="flex space-x-2 py-2" key={reply.replyId}>
