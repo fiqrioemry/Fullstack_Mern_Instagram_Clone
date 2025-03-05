@@ -140,7 +140,7 @@
   }
 
   .input-primary {
-    @apply w-full outline-none py-1 px-2 bg-background;
+    @apply w-full outline-none py-1 bg-background;
   }
 
   .btn {

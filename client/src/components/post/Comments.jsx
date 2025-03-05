@@ -9,8 +9,11 @@ import LikeCount from "@/components/post/LikeCount.jsx";
 import ReplyButton from "@/components/post/ReplyButton.jsx";
 import { useCommentStore } from "@/store/useCommentStore.jsx";
 import CommentsLoading from "@/components/skeleton/CommentsLoading.jsx";
+import useScrollToView from "../../hooks/useScrollToView";
 
 const Comments = ({ comments }) => {
+  const { viewRef } = useScrollToView(comments);
+
   const { replies, getReplies, loading } = useCommentStore();
 
   const showReplies = (comment) => {
@@ -22,7 +25,7 @@ const Comments = ({ comments }) => {
   return (
     <div className="space-y-4">
       {comments.map((comment) => (
-        <div key={comment.commentId}>
+        <div key={comment.commentId} ref={viewRef}>
           <div className="flex space-x-3">
             <Avatar avatar={comment.avatar} />
             <div>

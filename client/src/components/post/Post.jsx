@@ -36,8 +36,8 @@ const Post = ({ post }) => {
           </div>
 
           {/* comment & reply */}
-          <ScrollArea className="flex-1 border-b border-muted p-2">
-            <div className="flex items-start gap-3">
+          <ScrollArea className="flex-1 border-b border-muted px-2">
+            <div className="flex items-start gap-3 mb-2">
               <Avatar avatar={post.avatar} />
               <Content data={post} />
             </div>

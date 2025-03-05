@@ -7,10 +7,16 @@ import { commentControl, commentState } from "@/config";
 import { useCommentStore } from "@/store/useCommentStore";
 
 const PostInput = ({ postId }) => {
+  const formRef = useRef(null);
   const inputRef = useRef(null);
 
-  const { selectedPost, selectedComment, createReply, createComment } =
-    useCommentStore();
+  const {
+    createReply,
+    createComment,
+    selectedPost,
+    selectedComment,
+    setSelectedComment,
+  } = useCommentStore();
 
   const commentForm = useFormSchema(
     commentState,
@@ -20,18 +26,31 @@ const PostInput = ({ postId }) => {
   );
 
   useEffect(() => {
-    //
     if (selectedComment?.postId === postId && inputRef.current) {
       inputRef.current.focus();
     }
-    //
-    if (selectedComment?.commentId)
+
+    if (selectedComment?.commentId) {
       commentForm.setFieldValue("content", `@${selectedComment?.username} `);
-    //
+    }
   }, [selectedPost, selectedComment]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (formRef.current && !formRef.current.contains(event.target)) {
+        setSelectedComment(null);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <form
+      ref={formRef}
       onSubmit={commentForm?.handleSubmit}
       className="flex items-center py-2"
     >
@@ -40,7 +59,7 @@ const PostInput = ({ postId }) => {
         type="text"
         name="content"
         placeholder="Add a comment..."
-        className="input-primary text-sm px-0"
+        className="input-primary text-sm"
         value={commentForm?.values?.content}
         onChange={commentForm?.handleChange}
       />
