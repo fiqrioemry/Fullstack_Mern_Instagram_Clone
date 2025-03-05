@@ -7,14 +7,12 @@ export const useCommentStore = create((set, get) => ({
   loading: {},
   replies: {},
   comments: [],
-  totalReplies: {},
   totalComments: 0,
   selectedComment: null,
 
-  setReplies: (replies, commentId, totalReplies) => {
+  setReplies: (replies, commentId) => {
     set((state) => ({
       replies: { ...state.replies, [commentId]: replies },
-      totalReplies: { ...state.totalReplies, [commentId]: totalReplies },
     }));
   },
 
@@ -41,13 +39,8 @@ export const useCommentStore = create((set, get) => ({
       set((state) => ({
         loading: { ...state.loading, [commentId]: true },
       }));
-
-      const { replies, totalReplies } = await callApi.getReplies(
-        postId,
-        commentId,
-        limit
-      );
-      get().setReplies(replies, commentId, totalReplies);
+      const { replies } = await callApi.getReplies(postId, commentId, limit);
+      get().setReplies(replies, commentId);
     } catch (error) {
       console.log(error.message);
     } finally {
