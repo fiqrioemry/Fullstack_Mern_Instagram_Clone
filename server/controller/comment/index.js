@@ -16,8 +16,8 @@ function extractMentions(content) {
 
 async function createComment(req, res) {
   const userId = req.user.userId;
+  const content = req.body.content;
   const postId = req.params.postId;
-  const { content } = req.body;
 
   try {
     const post = await Post.findByPk(postId);
@@ -59,10 +59,7 @@ async function createComment(req, res) {
         ),
       );
     }
-
-    return res
-      .status(201)
-      .json({ message: 'Comment created', comment: newComment });
+    return res.status(201).json({ message: 'Comment created' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -70,21 +67,21 @@ async function createComment(req, res) {
 
 async function createReply(req, res) {
   const userId = req.user.userId;
-  const { postId, parentId } = req.params;
-  const { content } = req.body;
+  const { postId, commentId } = req.params;
+  const content = req.body.content;
 
   try {
     const post = await Post.findByPk(postId);
     if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    const parentComment = await Comment.findByPk(parentId);
+    const parentComment = await Comment.findByPk(commentId);
     if (!parentComment)
       return res.status(404).json({ message: 'Parent comment not found' });
 
     const newReply = await Comment.create({
       userId,
       postId,
-      parentId,
+      parentId: commentId,
       content,
     });
 
@@ -127,7 +124,7 @@ async function createReply(req, res) {
 async function getComments(req, res) {
   const userId = req.user.userId;
   const postId = req.params.postId;
-  const limit = parseInt(req.query.limit) || 5;
+  const limit = parseInt(req.query.limit) || 13;
 
   try {
     const commentsData = await Comment.findAndCountAll({
@@ -188,7 +185,7 @@ async function getComments(req, res) {
 async function getReplies(req, res) {
   const userId = req.user.userId;
   const { postId, commentId } = req.params;
-  const limit = parseInt(req.query.limit) || 5;
+  const limit = parseInt(req.query.limit) || 10;
 
   try {
     const repliesData = await Comment.findAndCountAll({
@@ -219,7 +216,6 @@ async function getReplies(req, res) {
         .json({ replies: [], message: 'Comments has no replies' });
     }
 
-    const totalReplies = repliesData.count;
     const replies = repliesData.rows.map((reply) => {
       return {
         postId: reply.postId,
@@ -235,12 +231,10 @@ async function getReplies(req, res) {
         isLiked: reply.likes.some((like) => like.userId === userId),
       };
     });
-    return res.status(200).json({ replies, totalReplies });
+    return res.status(200).json({ replies });
   } catch (error) {
     return res.status(500).json({
-      success: false,
-      message: 'Failed to get replies',
-      error: error.message,
+      message: error.message,
     });
   }
 }
@@ -325,8 +319,7 @@ async function deleteComment(req, res) {
     return res.status(200).json({ message: 'Comment is deleted' });
   } catch (error) {
     return res.status(500).json({
-      message: 'Failed to delete comment',
-      error: error.message,
+      message: error.message,
     });
   }
 }
