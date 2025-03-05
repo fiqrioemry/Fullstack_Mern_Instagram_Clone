@@ -1,12 +1,14 @@
 /* eslint-disable react/prop-types */
-import Caption from "./Caption";
+import Content from "../post/Content";
 import Comments from "./Comments";
 import PostInput from "./PostInput";
 import Galleries from "./Galleries";
 import PostAuthor from "./PostAuthor";
 import PostControl from "./PostControl";
+import Avatar from "@/components/ui/Avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import useLoadComments from "@/hooks/useLoadComments";
+import LoadMoreButton from "@/components/post/LoadMoreButton";
 import CommentsLoading from "@/components/skeleton/CommentsLoading";
 
 const Post = ({ post }) => {
@@ -14,13 +16,13 @@ const Post = ({ post }) => {
     useLoadComments(post);
 
   return (
-    <div className="grid grid-cols-10 border border-muted overflow-hidden ">
+    <div className="h-[75vh] md:h-[95vh] flex md:flex-row flex-col border border-muted ">
       {/* Galeri Foto */}
-      <div className="hidden md:block lg:col-span-6 h-[90vh] ">
+      <div className="hidden md:block w-full md:w-6/12 lg:w-7/12">
         <Galleries images={post.images} />
       </div>
 
-      <div className="col-span-10 lg:col-span-4 h-[80vh] md:h-[90vh]">
+      <div className="w-full h-full md:w-6/12 lg:w-5/12 ">
         <div className="flex flex-col h-full">
           <div className="md:block hidden border-b border-muted">
             <PostAuthor data={post} />
@@ -34,25 +36,29 @@ const Post = ({ post }) => {
           </div>
 
           {/* comment & reply */}
-          <ScrollArea className="flex-1 overflow-y-auto border-b border-muted ">
-            <div className="p-2">
-              <Caption post={post} />
-              {loadingComment ? (
-                <CommentsLoading />
-              ) : (
-                <Comments formik={commentForm} />
-              )}
+          <ScrollArea className="flex-1 border-b border-muted p-2">
+            <div className="flex items-start gap-3">
+              <Avatar avatar={post.avatar} />
+              <Content data={post} />
             </div>
+            <Comments comments={comments} />
+            <CommentsLoading loading={loading[post.postId]} />
+            <LoadMoreButton
+              limit={limit}
+              total={totalComments}
+              onClick={handleLoadMore}
+              loading={loading[post.postId]}
+            />
           </ScrollArea>
 
           {/* post control : reply & saved*/}
           <div className="border-b border-muted px-2">
-            <PostControl post={post} formik={commentForm} />
+            <PostControl post={post} />
           </div>
 
           {/* post input : comment */}
           <div className="px-2">
-            <PostInput postId={post.postId} formik={commentForm} />
+            <PostInput postId={post.postId} />
           </div>
         </div>
       </div>

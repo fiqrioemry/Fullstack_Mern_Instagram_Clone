@@ -29,9 +29,9 @@ const PostDialog = () => {
 
   if (isDesktop) {
     return (
-      <Dialog defaultOpen={true} onOpenChange={(open) => !open && navigate(-1)}>
+      <Dialog open={true} onOpenChange={(open) => !open && navigate(-1)}>
         <DialogTitle>
-          <DialogContent className="md:max-w-5xl p-0 bg-background ">
+          <DialogContent className="md:max-w-5xl p-0 bg-background">
             {post ? <Post post={post} /> : <PostDetailLoading />}
           </DialogContent>
         </DialogTitle>
@@ -40,7 +40,7 @@ const PostDialog = () => {
   }
 
   return (
-    <Drawer defaultOpen={true} onOpenChange={(open) => !open && navigate(-1)}>
+    <Drawer open={true} onOpenChange={(open) => !open && navigate(-1)}>
       <DrawerContent>
         {post ? <Post post={post} /> : <PostDetailLoading />}
       </DrawerContent>
