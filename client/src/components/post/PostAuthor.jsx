@@ -13,30 +13,25 @@ const PostAuthor = ({ data }) => {
   const { updatePostsFollowStatus } = usePostStore();
 
   const handleFollow = useCallback(() => {
-    updatePostsFollowStatus(data.userId);
     toggleFollow(data.userId);
+    updatePostsFollowStatus(data.userId);
   }, [toggleFollow, updatePostsFollowStatus, data.userId]);
 
   return (
-    <div className="p-2 mt-2 mb-2">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <Avatar avatar={data.avatar} />
-          <div className="flex items-center gap-2">
-            <Link className="btn-secondary" to={`/${data.username}`}>
-              {data.username}
-            </Link>
+    <div className="flex items-center gap-2 px-2 py-4">
+      <Avatar avatar={data.avatar} />
+      <div className="flex-1 flex items-center gap-2">
+        <Link className="btn-secondary" to={`/${data.username}`}>
+          {data.username}
+        </Link>
 
-            {data.userId !== user.userId && !data.isFollow && (
-              <button onClick={handleFollow} className="btn-accent">
-                Follow
-              </button>
-            )}
-          </div>
-        </div>
-
-        <PostOptions data={data} />
+        {data.userId !== user.userId && !data.isFollow && (
+          <button onClick={handleFollow} className="btn-accent">
+            Follow
+          </button>
+        )}
       </div>
+      <PostOptions data={data} />
     </div>
   );
 };

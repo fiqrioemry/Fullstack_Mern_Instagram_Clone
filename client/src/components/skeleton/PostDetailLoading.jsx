@@ -16,8 +16,8 @@ const PostDetailLoading = () => {
           <Skeleton className="h-12 w-full " />
         </div>
 
-        <Skeleton className="h-12 w-full " />
-        <Skeleton className="h-12 w-full " />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-12 w-full" />
       </div>
     </div>
   );

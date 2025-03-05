@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import Post from "@/components/post/Post";
 import { usePostStore } from "@/store/usePostStore";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import DialogDisplay from "@/components/post/DialogDisplay";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import PostDetailLoading from "@/components/skeleton/PostDetailLoading";
@@ -32,7 +32,7 @@ const PostDialog = () => {
       <Dialog open={true} onOpenChange={(open) => !open && navigate(-1)}>
         <DialogTitle>
           <DialogContent className="md:max-w-5xl p-0 bg-background">
-            {post ? <Post post={post} /> : <PostDetailLoading />}
+            {post ? <DialogDisplay post={post} /> : <PostDetailLoading />}
           </DialogContent>
         </DialogTitle>
       </Dialog>
@@ -42,7 +42,7 @@ const PostDialog = () => {
   return (
     <Drawer open={true} onOpenChange={(open) => !open && navigate(-1)}>
       <DrawerContent>
-        {post ? <Post post={post} /> : <PostDetailLoading />}
+        {post ? <DialogDisplay post={post} /> : <PostDetailLoading />}
       </DrawerContent>
     </Drawer>
   );

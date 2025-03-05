@@ -1,9 +1,6 @@
-/* eslint-disable react/prop-types */
 import { Skeleton } from "@/components/ui/skeleton";
 
-const CommentsLoading = ({ loading }) => {
-  if (!loading) return null;
-
+const CommentsLoading = () => {
   return (
     <div className="space-y-3">
       {[...Array(3)].map((_, index) => (

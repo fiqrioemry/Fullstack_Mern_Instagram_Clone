@@ -50,8 +50,8 @@ const PostInput = ({ postId }) => {
   return (
     <form
       ref={formRef}
-      onSubmit={commentForm?.handleSubmit}
       className="flex items-center py-2"
+      onSubmit={commentForm?.handleSubmit}
     >
       <input
         ref={inputRef}

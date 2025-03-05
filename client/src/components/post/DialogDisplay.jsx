@@ -1,22 +1,21 @@
 /* eslint-disable react/prop-types */
-import Content from "../post/Content";
 import Comments from "./Comments";
 import PostInput from "./PostInput";
 import Galleries from "./Galleries";
 import PostAuthor from "./PostAuthor";
 import PostControl from "./PostControl";
 import Avatar from "@/components/ui/Avatar";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import Content from "@/components/post/Content";
 import useLoadComments from "@/hooks/useLoadComments";
-import LoadMoreButton from "@/components/post/LoadMoreButton";
-import CommentsLoading from "@/components/skeleton/CommentsLoading";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import LoadMoreComment from "@/components/post/LoadMoreComment";
 
-const Post = ({ post }) => {
+const DialogDisplay = ({ post }) => {
   const { limit, loading, comments, totalComments, handleLoadMore } =
     useLoadComments(post);
 
   return (
-    <div className="h-[75vh] md:h-[95vh] flex md:flex-row flex-col border border-muted ">
+    <div className="h-[75vh] md:h-[95vh] flex md:flex-row flex-col">
       {/* Galeri Foto */}
       <div className="hidden md:block w-full md:w-6/12 lg:w-7/12">
         <Galleries images={post.images} />
@@ -36,18 +35,16 @@ const Post = ({ post }) => {
           </div>
 
           {/* comment & reply */}
-          <ScrollArea className="flex-1 border-b border-muted px-2">
-            <div className="flex items-start gap-3 mb-2">
+          <ScrollArea className="flex-1 border-b border-muted px-2 ">
+            <div className="flex items-start gap-2 mt-2 mb-2">
               <Avatar avatar={post.avatar} />
               <Content data={post} />
             </div>
-            <Comments comments={comments} />
-            <CommentsLoading loading={loading[post.postId]} />
-            <LoadMoreButton
+            <Comments comments={comments} loading={loading[post.postId]} />
+            <LoadMoreComment
               limit={limit}
               total={totalComments}
               onClick={handleLoadMore}
-              loading={loading[post.postId]}
             />
           </ScrollArea>
 
@@ -66,4 +63,4 @@ const Post = ({ post }) => {
   );
 };
 
-export default Post;
+export default DialogDisplay;

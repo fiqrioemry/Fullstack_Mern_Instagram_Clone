@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import Content from "./Content";
-import { useState } from "react";
 import { Loader } from "lucide-react";
 import LikeComment from "./LikeComment";
+import { useEffect, useState } from "react";
 import Avatar from "@/components/ui/Avatar";
 import LikeCount from "@/components/post/LikeCount";
 import Timestamp from "@/components/post/Timestamp";
@@ -12,21 +12,33 @@ import { useCommentStore } from "@/store/useCommentStore";
 const Replies = ({ comment }) => {
   const [limit, setLimit] = useState(0);
 
+  const [showReply, setShowReply] = useState(false);
+
   const { replies, getReplies, loading } = useCommentStore();
 
-  const showReplies = () => {
+  useEffect(() => {
+    if (limit > 0) {
+      getReplies(comment, limit);
+    }
+  }, [getReplies, comment, limit]);
+
+  const handleHideReply = () => {
+    setShowReply((prev) => !prev);
+  };
+
+  const handleShowReply = () => {
+    setShowReply(true);
     setLimit((prev) => prev + 3);
-    getReplies(comment, limit + 3);
   };
 
   return (
     <div className="mt-2">
       {comment.replies > 0 && !replies[comment.commentId] && (
         <button
-          onClick={() => showReplies(comment)}
-          className="flex items-center text-xs space-x-2 text-muted-foreground"
+          onClick={handleShowReply}
+          className="flex items-center space-x-2 text-muted-foreground"
         >
-          <span> View replies ({comment.replies}) </span>
+          <span className="text-xs"> view replies ({comment.replies}) </span>
           {loading[comment.commentId] && (
             <Loader size={18} className="animate-spin" />
           )}
@@ -35,22 +47,30 @@ const Replies = ({ comment }) => {
 
       {comment.replies > 0 && replies[comment.commentId] && (
         <>
-          {comment.replies <= limit ? (
+          {comment.replies > limit && showReply ? (
             <button
-              onClick={() => showReplies(comment)}
-              className="flex items-center text-xs space-x-2 text-muted-foreground"
+              onClick={handleShowReply}
+              className="flex items-center space-x-2 text-muted-foreground"
             >
-              <span> View replies ({comment.replies - limit}) </span>
+              <span className="text-xs">
+                view replies ({comment.replies - limit}){" "}
+              </span>
               {loading[comment.commentId] && (
                 <Loader size={18} className="animate-spin" />
               )}
             </button>
           ) : (
             <button
-              onClick={() => showReplies(comment, 0)}
-              className="flex items-center text-xs space-x-2 text-muted-foreground"
+              onClick={handleHideReply}
+              className="flex items-center space-x-2 text-muted-foreground"
             >
-              <span> hide replies </span>
+              {showReply ? (
+                <span className="text-xs"> hide replies </span>
+              ) : (
+                <span className="text-xs">
+                  view replies ({comment.replies}){" "}
+                </span>
+              )}
               {loading[comment.commentId] && (
                 <Loader size={18} className="animate-spin" />
               )}
@@ -59,22 +79,24 @@ const Replies = ({ comment }) => {
         </>
       )}
 
-      {replies[comment.commentId]?.map((reply) => (
-        <div key={reply.replyId} className="py-1.5">
-          <div className="flex space-x-3">
-            <Avatar avatar={reply.avatar} />
-            <div>
-              <Content data={reply} />
-              <div className="text-xs flex items-center space-x-2">
-                <Timestamp data={reply} />
-                <LikeCount data={reply} />
-                <LikeComment data={reply} />
-                <ReplyButton data={reply} />
+      {showReply && (
+        <>
+          {replies[comment.commentId]?.map((reply) => (
+            <div className="flex space-x-2 py-2" key={reply.replyId}>
+              <Avatar avatar={reply.avatar} />
+              <div className="flex-1">
+                <Content data={reply} />
+                <div className="text-xs flex items-center space-x-2">
+                  <Timestamp data={reply} />
+                  <LikeCount data={reply} />
+                  <ReplyButton data={reply} />
+                </div>
               </div>
+              <LikeComment data={reply} />
             </div>
-          </div>
-        </div>
-      ))}
+          ))}
+        </>
+      )}
     </div>
   );
 };

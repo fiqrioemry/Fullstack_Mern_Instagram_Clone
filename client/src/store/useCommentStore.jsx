@@ -19,17 +19,29 @@ export const useCommentStore = create((set, get) => ({
   createReply: async (formData, postId) => {
     const comment = get().selectedComment;
     const commentId = comment?.parentId || comment.commentId;
+
     try {
       const { message } = await callApi.createReply(
         formData,
         postId,
         commentId
       );
-
       await get().getReplies({ postId: comment.postId, commentId });
       toast.success(message);
     } catch (error) {
       console.log(error.message);
+    }
+  },
+
+  createComment: async (formData, postId) => {
+    try {
+      const { message } = await callApi.createComment(formData, postId);
+      usePostStore.getState().commentCount(postId);
+      const limit = get().comments.length + 1;
+      await get().getComments(postId, limit);
+      toast.success(message);
+    } catch (error) {
+      console.log(error);
     }
   },
 
@@ -52,19 +64,6 @@ export const useCommentStore = create((set, get) => ({
 
   setSelectedComment: (selectedComment) => {
     set({ selectedComment });
-  },
-
-  createComment: async (formData, postId) => {
-    try {
-      const { message } = await callApi.createComment(formData, postId);
-      usePostStore.getState().commentCount(postId);
-
-      const limit = get().comments.length + 1;
-      await get().getComments(postId, limit);
-      toast.success(message);
-    } catch (error) {
-      console.log(error);
-    }
   },
 
   getComments: async (postId, limit) => {

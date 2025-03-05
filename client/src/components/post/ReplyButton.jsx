@@ -1,4 +1,4 @@
-import { useCommentStore } from "../../store/useCommentStore";
+import { useCommentStore } from "@/store/useCommentStore";
 
 /* eslint-disable react/prop-types */
 const ReplyButton = ({ data }) => {

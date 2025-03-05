@@ -10,14 +10,16 @@ const LikeComment = ({ data }) => {
   };
 
   return (
-    <Heart
-      size={14}
-      aria-label="Like a comment"
-      onClick={handleLike}
-      className="btn-secondary text-xs"
-      fill={data.isLiked ? "red" : "transparent"}
-      stroke={data.isLiked ? "red" : "currentColor"}
-    />
+    <div className="py-2 px-1">
+      <Heart
+        size={14}
+        aria-label="Like a comment"
+        onClick={handleLike}
+        className="btn-secondary text-xs"
+        fill={data.isLiked ? "red" : "transparent"}
+        stroke={data.isLiked ? "red" : "currentColor"}
+      />
+    </div>
   );
 };
 
