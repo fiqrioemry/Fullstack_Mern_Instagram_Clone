@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-
 import { useEffect, useRef } from "react";
 import { useFormSchema } from "@/hooks/useFormSchema";
 import { commentControl, commentState } from "@/config";
