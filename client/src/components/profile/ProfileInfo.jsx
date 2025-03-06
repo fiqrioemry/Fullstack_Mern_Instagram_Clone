@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/store/useUserStore";
 import { useChatStore } from "@/store/useChatStore";
@@ -43,7 +42,7 @@ const ProfileInfo = ({ profile }) => {
               </Link>
               <Link to="" className="btn-selection">
                 View Archive
-              </Link>{" "}
+              </Link>
             </div>
           ) : (
             <div className="flex items-center justify-center gap-4 w-full md:w-2/3">

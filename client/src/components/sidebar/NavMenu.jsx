@@ -9,15 +9,22 @@ import {
 import NavItem from "./NavItem";
 import { cn } from "@/lib/utils";
 import Avatar from "@/components/ui/Avatar";
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { CreateNewPost } from "@/components/modal/CreateNewPost";
+import { useUserStore } from "@/store/useUserStore";
 
 // eslint-disable-next-line react/display-name, react/prop-types
 const NavMenu = forwardRef(({ openSearch, handleSearch }, ref) => {
   const { user } = useAuthStore();
 
   const [openCreate, setOpenCreate] = useState(false);
+
+  const { notifications, getNotifications } = useUserStore();
+
+  useEffect(() => {
+    getNotifications();
+  }, [getNotifications]);
 
   const handleCreatePost = () => {
     setOpenCreate((prev) => !prev);
@@ -58,6 +65,7 @@ const NavMenu = forwardRef(({ openSearch, handleSearch }, ref) => {
       <NavItem
         to="/notification"
         label="Notification"
+        notifications={notifications}
         labelClass={labelClass}
         icon={<Bell size={24} />}
       />

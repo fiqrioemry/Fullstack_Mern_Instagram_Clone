@@ -40,7 +40,7 @@ export const useCommentStore = create((set, get) => ({
       await get().getReplies(postId, commentId);
       toast.success(message);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   },
 
@@ -52,7 +52,7 @@ export const useCommentStore = create((set, get) => ({
       await get().getComments(postId, limit);
       toast.success(message);
     } catch (error) {
-      console.log(error);
+      console.error(error.message);
     }
   },
 
@@ -64,7 +64,7 @@ export const useCommentStore = create((set, get) => ({
       const { replies } = await callApi.getReplies(postId, commentId, limit);
       get().setReplies(replies, commentId);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set((state) => ({
         loading: { ...state.loading, [commentId]: false },
@@ -88,7 +88,7 @@ export const useCommentStore = create((set, get) => ({
 
       set({ comments, totalComments });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set((state) => ({
         loading: { ...state.loading, [postId]: false },
@@ -102,7 +102,7 @@ export const useCommentStore = create((set, get) => ({
       toast.success(message);
       await get().getComments(postId);
     } catch (error) {
-      console.log(error);
+      console.error(error.message);
     }
   },
 
@@ -117,7 +117,7 @@ export const useCommentStore = create((set, get) => ({
       }
       toast.success(message);
     } catch (error) {
-      console.log(error);
+      console.error(error.message);
     }
   },
 

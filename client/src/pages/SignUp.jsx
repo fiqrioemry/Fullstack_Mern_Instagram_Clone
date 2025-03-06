@@ -48,7 +48,7 @@ const SignUp = () => {
       <Card className="min-w-80 h-96">
         <CardContent className="p-4">
           <div className="text-center">
-            <h3>LOGO</h3>
+            <h3>Moments</h3>
           </div>
 
           <div className="h-72 pt-6">

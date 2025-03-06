@@ -67,7 +67,7 @@ export const usePostStore = create((set, get) => ({
       set({ posts, totalPosts });
     } catch (error) {
       set({ posts: [] });
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }
@@ -79,7 +79,7 @@ export const usePostStore = create((set, get) => ({
       set({ post });
     } catch (error) {
       set({ post: [] });
-      console.log(error.message);
+      console.error(error.message);
     }
   },
 
@@ -90,7 +90,7 @@ export const usePostStore = create((set, get) => ({
       );
       set({ posts, totalPosts, message });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   },
 
@@ -102,7 +102,7 @@ export const usePostStore = create((set, get) => ({
       set({ posts, totalPosts, message });
     } catch (error) {
       set({ posts: [] });
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }
@@ -114,7 +114,7 @@ export const usePostStore = create((set, get) => ({
       toast.success(message);
       get().setLike(postId);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   },
 
@@ -127,7 +127,7 @@ export const usePostStore = create((set, get) => ({
       await get().getUserPosts(username);
       toast.success(message);
     } catch (error) {
-      toast.error(error.message);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }
@@ -142,7 +142,7 @@ export const usePostStore = create((set, get) => ({
       navigate(`/${returnPath}`);
       toast.success(message);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }

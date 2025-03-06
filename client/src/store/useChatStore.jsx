@@ -43,7 +43,7 @@ export const useChatStore = create((set, get) => ({
       toast.success(message);
       set({ chat: [...get().chat, newChat] });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }

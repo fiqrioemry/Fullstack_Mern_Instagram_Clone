@@ -4,11 +4,21 @@ import callApi from "@/api/callApi";
 
 export const useUserStore = create((set) => ({
   users: null,
-  error: null,
   profile: null,
   follows: null,
   loading: false,
   searching: false,
+  notification: null,
+
+  getNotifications: async () => {
+    try {
+      const { notifications } = await callApi.getNotifications();
+      set({ notifications });
+    } catch (error) {
+      set({ notifications: [] });
+      console.error(error.message);
+    }
+  },
 
   searchUser: async (username) => {
     if (!username.trim()) return;
@@ -18,7 +28,8 @@ export const useUserStore = create((set) => ({
       const users = await callApi.searchUser(username);
       set({ users });
     } catch (error) {
-      set({ users: [], error: error.message });
+      set({ users: [] });
+      console.error(error.message);
     } finally {
       set({ searching: false });
     }
@@ -30,7 +41,7 @@ export const useUserStore = create((set) => ({
       const followers = await callApi.getFollowers(username);
       set({ follows: followers });
     } catch (error) {
-      toast.error(error.message);
+      console.error(error.message);
     }
   },
 
@@ -40,7 +51,7 @@ export const useUserStore = create((set) => ({
       const followings = await callApi.getFollowings(username);
       set({ follows: followings });
     } catch (error) {
-      toast.error(error);
+      console.error(error.message);
     }
   },
 
@@ -51,7 +62,7 @@ export const useUserStore = create((set) => ({
       set({ profile });
     } catch (error) {
       set({ profile: [] });
-      console.log(error.message);
+      console.error(error.message);
     }
   },
 
@@ -62,7 +73,7 @@ export const useUserStore = create((set) => ({
       set({ profile });
     } catch (error) {
       set({ profile: [] });
-      console.log(error.message);
+      console.error(error.message);
     }
   },
 
@@ -73,7 +84,7 @@ export const useUserStore = create((set) => ({
       toast.success(message);
       set({ profile });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     } finally {
       set({ loading: false });
     }
@@ -128,7 +139,7 @@ export const useUserStore = create((set) => ({
       const message = await callApi.toggleFollow(followingId);
       toast.success(message);
     } catch (error) {
-      console.log(error);
+      console.error(error.message);
     }
   },
 }));

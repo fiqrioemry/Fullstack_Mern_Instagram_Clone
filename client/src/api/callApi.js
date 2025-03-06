@@ -69,6 +69,12 @@ const callApi = {
       .catch(errorHandle);
   },
 
+  getNotifications: async () => {
+    return authInstance
+      .get(`/user/notifications`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
   getUserProfile: async (username) => {
     return authInstance
       .get(`/user/${username}`)
@@ -165,6 +171,8 @@ const callApi = {
       .catch(errorHandle);
   },
 
+  //🔹Like and Comment API route management
+
   likePost: async (postId) => {
     return authInstance
       .post(`/post/${postId}/like/post`)
@@ -179,7 +187,6 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  //🔹Comment API route management
   getComments: async (postId, limit) => {
     return authInstance
       .get(`/post/${postId}/comments?limit=${limit}`)

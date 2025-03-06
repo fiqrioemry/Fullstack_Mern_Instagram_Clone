@@ -4,7 +4,13 @@ import { useChatStore } from "@/store/useChatStore";
 import useHandleSearch from "@/hooks/useHandleSearch";
 import SearchInput from "@/components/search/SearchInput";
 import SearchResult from "@/components/search/SearchResult";
-import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 const SearchUserForChat = () => {
   const { users, searching, searchUser } = useUserStore();
@@ -24,6 +30,9 @@ const SearchUserForChat = () => {
           <DialogClose asChild>
             <X />
           </DialogClose>
+          <DialogTitle>
+            <VisuallyHidden>Search a user</VisuallyHidden>
+          </DialogTitle>
         </div>
         <div ref={searchRef} className="px-4 h-[26rem]">
           <SearchInput handleSearch={handleSearch} searchForm={searchForm} />

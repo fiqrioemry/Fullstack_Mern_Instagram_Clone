@@ -22,7 +22,7 @@ const SignIn = () => {
       <Card>
         <CardContent className="p-4">
           <div className="py-4 text-center">
-            <h3>LOGO</h3>
+            <h3>Moments</h3>
           </div>
           <InputForm formik={signInForm} formControl={signInControl}>
             <InputButton formik={signInForm} title="signin" loading={loading} />
