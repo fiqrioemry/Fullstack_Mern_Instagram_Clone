@@ -5,6 +5,7 @@ import callApi from "@/api/callApi";
 export const useUserStore = create((set) => ({
   users: null,
   profile: null,
+  totalFollows: 0,
   follows: null,
   loading: false,
   searching: false,
@@ -38,8 +39,10 @@ export const useUserStore = create((set) => ({
   getFollowers: async (username) => {
     set({ follows: null });
     try {
-      const followers = await callApi.getFollowers(username);
-      set({ follows: followers });
+      const { followers, totalFollowers } = await callApi.getFollowers(
+        username
+      );
+      set({ follows: followers, totalFollows: totalFollowers });
     } catch (error) {
       console.error(error.message);
     }
@@ -48,8 +51,10 @@ export const useUserStore = create((set) => ({
   getFollowings: async (username) => {
     set({ follows: null });
     try {
-      const followings = await callApi.getFollowings(username);
-      set({ follows: followings });
+      const { followings, totalFollowers } = await callApi.getFollowings(
+        username
+      );
+      set({ follows: followings, totalFollows: totalFollowers });
     } catch (error) {
       console.error(error.message);
     }
