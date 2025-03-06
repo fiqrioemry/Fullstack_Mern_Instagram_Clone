@@ -26,9 +26,10 @@ async function getNotifications(req, res) {
         post: notif.post?.content,
         commentId: notif.comment?.id,
         comment: notif.comment?.content,
+        isRead: notif.isRead,
       };
     });
-    res.status(200).json({ notifications, total: notifications.length });
+    res.status(200).json({ notifications });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
