@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
   class Notification extends Model {
     static associate(models) {
       this.belongsTo(models.Post, {
-        foreignKey: 'postId',
+        as: 'post',
         onDelete: 'CASCADE',
       });
       this.belongsTo(models.Comment, {
-        foreignKey: 'commentId',
+        as: 'comment',
         onDelete: 'CASCADE',
       });
 

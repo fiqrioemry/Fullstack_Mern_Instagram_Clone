@@ -28,7 +28,6 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasMany(models.Notification, {
         foreignKey: 'postId',
-        as: 'notifications',
       });
 
       // fix

@@ -33,7 +33,6 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasMany(models.Notification, {
         foreignKey: 'commentId',
-        as: 'notifications',
       });
     }
   }
