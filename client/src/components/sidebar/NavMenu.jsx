@@ -79,7 +79,7 @@ const NavMenu = forwardRef(({ openSearch, handleSearch }, ref) => {
         label="Profile"
         to={`/${user.username}`}
         labelClass={labelClass}
-        icon={<Avatar avatar={user.avatar} />}
+        icon={<Avatar data={user} />}
       />
 
       <CreateNewPost isOpen={openCreate} setIsOpen={setOpenCreate} />

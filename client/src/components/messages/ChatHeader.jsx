@@ -6,7 +6,7 @@ const ChatHeader = ({ selectedUser }) => {
   const { onlineUsers } = useAuthStore();
   return (
     <div className="flex items-center gap-4">
-      <Avatar avatar={selectedUser.avatar} />
+      <Avatar data={selectedUser} />
       <div className="flex flex-col items-start text-sm">
         <div>{selectedUser.username}</div>
         <div>

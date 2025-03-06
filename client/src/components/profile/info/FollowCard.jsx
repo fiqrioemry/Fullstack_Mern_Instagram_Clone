@@ -41,7 +41,7 @@ const FollowCard = ({ data }) => {
   return (
     <div className="flex-between p-3">
       <div className="flex items-center gap-3">
-        <Avatar avatar={data.avatar} />
+        <Avatar data={data} />
         <div>
           <Link to={`/${data.username}`} className="btn-secondary">
             {data.username}

@@ -15,9 +15,8 @@ import useOpenSlidePanel from "@/hooks/useOpenSlidePanel";
 import useOpenMoreOptions from "@/hooks/useOpenMoreOptions";
 import MoreOptions from "@//components/sidebar/MoreOptions";
 import { CreateNewPost } from "@/components/modal/CreateNewPost";
-
 import SearchPanel from "@/components/sidebar/SearchPanel";
-import AvatarIcon from "@/components/sidebar/AvatarIcon";
+import Avatar from "@/components/ui/Avatar";
 
 export default function Sidebar() {
   const { user } = useAuthStore();
@@ -94,7 +93,7 @@ export default function Sidebar() {
           label="Profile"
           to={`/${user.username}`}
           labelClass={labelClass}
-          icon={<AvatarIcon />}
+          icon={<Avatar />}
         />
         <NavItem
           label="More"

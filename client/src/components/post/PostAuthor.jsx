@@ -19,7 +19,7 @@ const PostAuthor = ({ data }) => {
 
   return (
     <div className="flex items-center gap-2 px-2 py-4">
-      <Avatar avatar={data.avatar} />
+      <Avatar data={data} />
       <div className="flex-1 flex items-center gap-2">
         <Link className="btn-secondary" to={`/${data.username}`}>
           {data.username}

@@ -1,8 +1,12 @@
 /* eslint-disable react/prop-types */
-const Avatar = ({ avatar }) => {
+const Avatar = ({ data }) => {
   return (
-    <div className="w-9 h-9 border border-muted overflow-hidden rounded-full flex-shrink-0 ">
-      <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+    <div className="flex-shrink-0">
+      <img
+        src={data.avatar}
+        alt={data.username}
+        className="w-9 h-9 border border-muted rounded-full object-cover"
+      />
     </div>
   );
 };

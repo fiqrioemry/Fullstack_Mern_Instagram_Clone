@@ -37,7 +37,7 @@ const DialogDisplay = ({ post }) => {
           {/* comment & reply */}
           <ScrollArea className="flex-1 border-b border-muted px-2 ">
             <div className="flex items-start gap-2 mt-2 mb-2">
-              <Avatar avatar={post.avatar} />
+              <Avatar data={post} />
               <Content data={post} />
             </div>
             <Comments comments={comments} loading={loading[post.postId]} />

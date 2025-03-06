@@ -25,7 +25,7 @@ const BottomNavbar = () => {
       <CreateNewPost />
 
       <Link to={`/${user.username}`} className="btn-nav flex justify-center">
-        <Avatar avatar={user.avatar} />
+        <Avatar data={user} />
       </Link>
     </div>
   );

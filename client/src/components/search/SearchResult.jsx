@@ -16,7 +16,7 @@ const SearchResult = ({ users, searching, onClick }) => {
       onClick={() => onClick(user)}
       className="btn-search mt-2 mb-2"
     >
-      <Avatar avatar={user.avatar} />
+      <Avatar data={user} />
       <div className="flex flex-col items-start text-xs md:text-sm">
         <div>{user.username}</div>
         <p>{user.fullname}</p>

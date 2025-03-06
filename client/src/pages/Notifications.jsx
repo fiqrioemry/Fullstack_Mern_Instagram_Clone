@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useUserStore } from "@/store/useUserStore";
-import { Link } from "react-router-dom";
+import NotificationsLoading from "@/components/skeleton/NotificationsLoading";
+import NoNotifcationsToShow from "@/components/notifications/NoNotifcationsToShow";
+import NotificationsDisplay from "@/components/notifications/NotificationsDisplay";
 
 const Notifications = () => {
   const { notifications, getNotifications } = useUserStore();
@@ -9,68 +11,11 @@ const Notifications = () => {
     getNotifications();
   }, [getNotifications]);
 
-  if (!notifications)
-    return (
-      <div className="flex flex-col mx-2 md:mx-8 space-y-4">
-        {notifications?.map((notif, index) => {
-          let message = "";
+  if (!notifications) return <NotificationsLoading />;
 
-          switch (notif.type) {
-            case "comment":
-              message = notif.commentId
-                ? `replied to your comment: "${notif.comment}"`
-                : `commented on your post: "${notif.post}"`;
-              break;
+  if (notifications && !notifications.length) return <NoNotifcationsToShow />;
 
-            case "like":
-              message = notif.commentId
-                ? "liked your comment"
-                : "liked your post";
-              break;
-
-            case "mention":
-              message = `mentioned you in a post: "${notif.comment}"`;
-              break;
-
-            case "follow":
-              message = "started following you";
-              break;
-
-            case "reply":
-              message = `replied to your comment: "${notif.comment}"`;
-              break;
-
-            default:
-              message = "sent you a notification";
-          }
-
-          return (
-            <div
-              key={index}
-              className="flex items-center space-x-3 bg-background border border-muted p-3 rounded-lg shadow-md"
-            >
-              {/* Avatar */}
-              <img
-                src={notif.avatar}
-                alt={notif.username}
-                className="w-10 h-10 rounded-full border border-muted object-cover"
-              />
-
-              {/* Username & Notification Message */}
-              <div className="flex-1">
-                <Link
-                  to={`/${notif.username}`}
-                  className="text-sm font-semibold"
-                >
-                  {notif.username}
-                </Link>
-                <p className="text-sm">{message}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    );
+  return <NotificationsDisplay notifications={notifications} />;
 };
 
 export default Notifications;

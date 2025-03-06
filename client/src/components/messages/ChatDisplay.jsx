@@ -22,9 +22,7 @@ const ChatDisplay = ({ chat, selectedUser }) => {
                 "flex items-end space-x-2"
               )}
             >
-              {!isSender && (
-                <Avatar avatar={selectedUser?.avatar} className="w-8 h-8" />
-              )}
+              {!isSender && <Avatar data={selectedUser} className="w-8 h-8" />}
 
               <div
                 className={cn(

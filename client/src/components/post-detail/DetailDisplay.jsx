@@ -29,7 +29,7 @@ const DetailDisplay = ({ post }) => {
 
             <ScrollArea className="flex-1 border-b border-muted p-2">
               <div className="flex items-start gap-2 mb-2">
-                <Avatar avatar={post.avatar} />
+                <Avatar data={post} />
                 <Content data={post} />
               </div>
               <Comments comments={comments} loading={loading[post.postId]} />

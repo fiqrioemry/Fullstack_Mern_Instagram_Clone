@@ -22,7 +22,7 @@ const Comments = ({ comments, loading }) => {
           key={comment.commentId}
           className="flex space-x-2 py-2"
         >
-          <Avatar avatar={comment.avatar} />
+          <Avatar data={comment} />
           <div className="flex-1">
             <div className="flex space-x-2">
               <Content data={comment} />

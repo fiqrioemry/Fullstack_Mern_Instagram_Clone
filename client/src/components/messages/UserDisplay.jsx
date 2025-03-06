@@ -7,8 +7,7 @@ const UserDisplay = ({ user }) => {
 
   return (
     <div className="flex items-center gap-4">
-      <Avatar avatar={user.avatar} />
-
+      <Avatar data={user} />
       <div className="hidden md:flex flex-col items-start text-sm">
         <div>{user.username}</div>
         <div>
