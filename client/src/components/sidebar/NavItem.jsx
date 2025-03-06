@@ -1,22 +1,27 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 
-// eslint-disable-next-line react/display-name
 const NavItem = forwardRef(
-  ({ to, onClick, icon, label, labelClass, notifications = null }, ref) => {
+  ({ to, onClick, icon, label, labelClass, notifications = [] }, ref) => {
     const props = to ? { to } : { onClick };
 
-    const notificationsCount = notifications?.filter(
-      (notif) => notif.isRead === false
-    );
+    const unreadNotifications = notifications.filter((notif) => !notif.isRead);
+    const hasUnreadNotifications = unreadNotifications.length > 0;
+
     return (
-      <Link ref={ref} className="btn-nav relative " {...props}>
+      <Link ref={ref} className="btn-nav relative" {...props}>
+        {/* Icon */}
         <div className="flex items-center justify-center py-2 px-2">{icon}</div>
+
+        {/* Label */}
         <span className={labelClass}>{label}</span>
-        {notifications && notificationsCount.length > 0 && (
+
+        {/* Notification Badge */}
+        {hasUnreadNotifications && (
           <div className="absolute h-4 w-4 rounded-full bg-red-500 text-[10px] bottom-7 left-7 flex items-center justify-center">
-            {notificationsCount.length}
+            {unreadNotifications.length}
           </div>
         )}
       </Link>
