@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsTo(models.Comment, {
-        as: 'parent',
         foreignKey: 'parentId',
         onDelete: 'CASCADE',
       });
+
       this.hasMany(models.Comment, {
         as: 'replies',
         foreignKey: 'parentId',

@@ -23,15 +23,17 @@ module.exports = (sequelize, DataTypes) => {
       // 🔹 Relasi untuk Bookmark (User bisa menyimpan banyak post)
       this.hasMany(models.Bookmark, { foreignKey: 'userId', as: 'bookmarks' });
 
+      // 🔹 Relasi ke Chat
+      this.hasMany(models.Chat, { foreignKey: 'senderId' });
+      this.hasMany(models.Chat, { foreignKey: 'receiverId' });
+
       // 🔹 Relasi untuk Notifikasi
       this.hasMany(models.Notification, {
         foreignKey: 'receiverId',
-        as: 'notifications',
       });
-
-      // 🔹 Relasi ke Chat
-      this.hasMany(models.Chat, { foreignKey: 'senderId', as: 'sender' });
-      this.hasMany(models.Chat, { foreignKey: 'receiverId', as: 'receiver' });
+      this.hasMany(models.Notification, {
+        foreignKey: 'senderId',
+      });
     }
   }
   User.init(

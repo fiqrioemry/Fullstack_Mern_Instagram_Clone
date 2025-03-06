@@ -9,11 +9,17 @@ const {
   getFollowers,
   getFollowings,
 } = require('../../controller/follow');
+const {
+  markAsRead,
+  getNotifications,
+} = require('../../controller/notification');
 const router = require('express').Router();
 const { upload } = require('../../middleware/media');
 const { getUserPosts } = require('../../controller/post');
 const isAuthenticate = require('../../middleware/isAuthenticate');
 
+router.put('/notifications', isAuthenticate, markAsRead);
+router.get('/notifications', isAuthenticate, getNotifications);
 router.get('/profile', isAuthenticate, getMyProfile);
 router.put(
   '/profile',

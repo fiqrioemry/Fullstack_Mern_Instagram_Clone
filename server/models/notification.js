@@ -4,8 +4,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Notification extends Model {
     static associate(models) {
-      this.belongsTo(models.User, { foreignKey: 'receiverId', as: 'receiver' });
-
       this.belongsTo(models.Post, {
         foreignKey: 'postId',
         onDelete: 'CASCADE',
@@ -16,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsTo(models.User, { foreignKey: 'senderId', as: 'sender' });
+      this.belongsTo(models.User, { foreignKey: 'receiverId', as: 'receiver' });
     }
   }
 
@@ -37,15 +36,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+
       type: {
-        type: DataTypes.ENUM(
-          'like',
-          'comment',
-          'follow',
-          'mention',
-          'reply',
-          'message',
-        ),
+        type: DataTypes.ENUM('like', 'comment', 'follow', 'mention', 'reply'),
         allowNull: false,
       },
       isRead: {

@@ -19,13 +19,6 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         scope: { entityType: 'comment' },
       });
-
-      this.hasOne(models.Notification, {
-        foreignKey: 'entityId',
-        constraints: false,
-        scope: { entityType: 'like' },
-        onDelete: 'CASCADE',
-      });
     }
   }
 

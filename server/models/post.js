@@ -19,13 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       });
 
-      this.hasMany(models.PostGallery, {
-        foreignKey: 'postId',
-        as: 'gallery',
-        onDelete: 'CASCADE',
-      });
-
-      this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+      this.belongsTo(models.User, { as: 'user' });
 
       this.hasMany(models.Bookmark, {
         foreignKey: 'postId',
@@ -35,6 +29,12 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Notification, {
         foreignKey: 'postId',
         as: 'notifications',
+      });
+
+      // fix
+      this.hasMany(models.PostGallery, {
+        as: 'gallery',
+        onDelete: 'CASCADE',
       });
     }
   }

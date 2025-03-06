@@ -284,7 +284,7 @@ async function toggleLikeComment(req, res) {
         {
           receiverId: comment.userId,
           senderId: userId,
-          comment: commentId,
+          commentId: commentId,
           type: 'like',
         },
         { transaction: t },

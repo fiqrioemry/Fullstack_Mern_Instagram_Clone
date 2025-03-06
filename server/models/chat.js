@@ -4,8 +4,8 @@ const { Model, DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   class Chat extends Model {
     static associate(models) {
-      this.belongsTo(models.User, { foreignKey: 'senderId', as: 'sender' });
-      this.belongsTo(models.User, { foreignKey: 'receiverId', as: 'receiver' });
+      this.belongsTo(models.User, { as: 'sender' });
+      this.belongsTo(models.User, { as: 'receiver' });
     }
   }
 
