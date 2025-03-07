@@ -105,26 +105,15 @@
   }
 
   .aside {
-    @apply w-20 lg:w-72 md:relative md:block hidden;
+    @apply w-20 lg:w-72 md:relative md:block hidden duration-300;
   }
 
-  .screen-center {
-    @apply h-screen flex items-center justify-center;
-  }
-
-  .flex-center {
-    @apply flex items-center justify-center;
-  }
-
-  .flex-between {
-    @apply flex items-center justify-between;
-  }
   .navbar {
     @apply flex items-center py-2 md:hidden  top-0 left-0 right-0  text-center border-b border-muted z-10;
   }
 
   .side-navbar {
-    @apply absolute top-0 left-0 bottom-0 border-r border-muted-foreground/50 duration-300 bg-background transition-all ease-in p-2 z-30;
+    @apply absolute top-0 left-0 bottom-0 border-r border-muted-foreground/50 duration-300 bg-background transition-all ease-in p-2 z-30 space-y-4;
   }
 
   .bottom-navbar {
@@ -138,8 +127,6 @@
   .input-primary {
     @apply w-full outline-none py-1 bg-background;
   }
-
-  /*  used */
 
   .btn {
     @apply flex items-center justify-center w-full py-3 px-4 gap-4 capitalize;
@@ -159,6 +146,9 @@
 
   .btn-nav {
     @apply py-2 px-2 rounded-md capitalize hover:bg-muted-foreground/10 text-primary;
+  }
+  .btn-toggle {
+    @apply flex items-center gap-x-2 px-4 py-2 m-1.5 rounded-lg font-medium cursor-pointer hover:bg-foreground;
   }
 
   .btn-selection {

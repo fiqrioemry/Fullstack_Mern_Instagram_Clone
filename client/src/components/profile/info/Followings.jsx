@@ -29,7 +29,7 @@ const Followings = () => {
 
   return (
     <div className="flex flex-col h-80">
-      <div className="flex-center p-4 border-b border-muted relative">
+      <div className="flex items-center justify-center p-4 border-b border-muted relative">
         <h4>Followings</h4>
         <DialogClose className="absolute right-3">
           <X size={24} />

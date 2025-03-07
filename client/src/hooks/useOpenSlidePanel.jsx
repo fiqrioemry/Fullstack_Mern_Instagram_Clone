@@ -1,21 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
-const useOpenSearchPanel = () => {
+const useOpenSlidePanel = () => {
   const panelRef = useRef(null);
+
   const [openPanel, setOpenPanel] = useState(false);
 
   const handleOpenPanel = () => {
-    setOpenPanel((prev) => !prev);
-  };
-
-  const handleClosePanel = () => {
-    setOpenPanel(false);
+    setOpenPanel(true);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (openPanel.current && !openPanel.current.contains(event.target)) {
-        handleClosePanel();
+      if (panelRef.current && !panelRef.current.contains(event.target)) {
+        setOpenPanel(false);
       }
     };
 
@@ -25,7 +22,7 @@ const useOpenSearchPanel = () => {
     };
   }, [openPanel]);
 
-  return { handleOpenPanel, panelRef, openPanel };
+  return { handleOpenPanel, openPanel, panelRef };
 };
 
-export default useOpenSearchPanel;
+export default useOpenSlidePanel;

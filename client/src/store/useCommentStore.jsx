@@ -85,7 +85,6 @@ export const useCommentStore = create((set, get) => ({
         postId,
         limit
       );
-
       set({ comments, totalComments });
     } catch (error) {
       console.error(error.message);
@@ -96,11 +95,34 @@ export const useCommentStore = create((set, get) => ({
     }
   },
 
-  deleteComment: async (formData, postId) => {
+  setDeletedComment: (parentId, commentId) => {
+    set((state) => {
+      if (parentId) {
+        return {
+          replies: {
+            ...state.replies,
+            [parentId]:
+              state.replies[parentId]?.filter(
+                (reply) => reply.commentId !== commentId
+              ) || [],
+          },
+        };
+      } else {
+        return {
+          comments: state.comments.filter((c) => c.commentId !== commentId),
+        };
+      }
+    });
+  },
+
+  deleteComment: async (comment) => {
+    const postId = comment?.postId;
+    const parentId = comment?.parentId;
+    const commentId = comment?.commentId;
     try {
-      const message = await callApi.deleteComment(formData, postId);
+      const { message } = await callApi.deleteComment(postId, commentId);
+      get().setDeletedComment(parentId, commentId);
       toast.success(message);
-      await get().getComments(postId);
     } catch (error) {
       console.error(error.message);
     }

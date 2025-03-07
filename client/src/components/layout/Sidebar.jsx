@@ -1,6 +1,5 @@
 import {
   Home,
-  Menu,
   Bell,
   Search,
   Compass,
@@ -8,48 +7,50 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import NavItem from "@/components/sidebar/NavItem";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useUserStore } from "@/store/useUserStore";
+import MoreMenu from "@/components/sidebar/MoreMenu";
 import useOpenSlidePanel from "@/hooks/useOpenSlidePanel";
-import useOpenMoreOptions from "@/hooks/useOpenMoreOptions";
-import MoreOptions from "@//components/sidebar/MoreOptions";
-import { CreateNewPost } from "@/components/modal/CreateNewPost";
 import SearchPanel from "@/components/sidebar/SearchPanel";
-import Avatar from "@/components/ui/Avatar";
+import ProfileMenu from "@/components/sidebar/ProfileMenu";
+import { CreateNewPost } from "@/components/modal/CreateNewPost";
 
-export default function Sidebar() {
-  const { user } = useAuthStore();
+const Sidebar = () => {
+  const location = useLocation();
+
   const [openCreate, setOpenCreate] = useState(false);
+  const currentPath = location.pathname.includes("message");
+  const { notifications, getNotifications } = useUserStore();
   const { handleOpenPanel, openPanel, panelRef } = useOpenSlidePanel();
-  const { moreRef, openMore, setOpenMore, toggleTheme, setToggleTheme } =
-    useOpenMoreOptions();
-
-  const handleOpenCreate = () => {
-    setOpenCreate((prev) => !prev);
-  };
-
-  const handleOpenMore = () => {
-    setOpenMore((prev) => !prev);
-  };
 
   const labelClass = cn(
-    openPanel ? "opacity-0" : "opacity-100",
+    openPanel || currentPath ? "opacity-0" : "opacity-100",
     "duration-300 transition-all ease-in hidden lg:block"
   );
 
+  useEffect(() => {
+    getNotifications();
+  }, [getNotifications]);
+
+  const handleCreatePost = () => {
+    setOpenCreate((prev) => !prev);
+  };
+
   return (
-    <aside className="flex h-screen relative w-72">
+    <aside
+      className={cn(currentPath ? "w-[4.5rem]" : "w-[4.5rem] lg:w-72", "aside")}
+    >
       <SearchPanel
         panelRef={panelRef}
         openPanel={openPanel}
-        handleOpen={handleOpenPanel}
+        handleOpenPanel={handleOpenPanel}
       />
-      <CreateNewPost isOpen={openCreate} setIsOpen={setOpenCreate} />
       <nav
         className={cn(
-          openPanel ? "w-20" : "w-20 lg:w-full",
-          "side-navbar space-y-4"
+          openPanel || currentPath ? "w-[4.5rem]" : "w-[4.5rem] lg:w-full",
+          "side-navbar"
         )}
       >
         <NavItem
@@ -59,8 +60,8 @@ export default function Sidebar() {
           icon={<Home size={24} />}
         />
         <NavItem
-          ref={panelRef}
           label="Search"
+          ref={panelRef}
           labelClass={labelClass}
           onClick={handleOpenPanel}
           icon={<Search size={24} />}
@@ -80,34 +81,22 @@ export default function Sidebar() {
         <NavItem
           to="/notification"
           label="Notification"
+          notifications={notifications}
           labelClass={labelClass}
           icon={<Bell size={24} />}
         />
         <NavItem
           label="Create"
           labelClass={labelClass}
-          onClick={handleOpenCreate}
+          onClick={handleCreatePost}
           icon={<SquarePlus size={24} />}
         />
-        <NavItem
-          label="Profile"
-          to={`/${user.username}`}
-          labelClass={labelClass}
-          icon={<Avatar />}
-        />
-        <NavItem
-          label="More"
-          labelClass={labelClass}
-          onClick={handleOpenMore}
-          icon={<Menu size={24} />}
-        />
-        <MoreOptions
-          open={openMore}
-          moreRef={moreRef}
-          toggleTheme={toggleTheme}
-          setToggleTheme={setToggleTheme}
-        />
+        <ProfileMenu labelClass={labelClass} />
+        <MoreMenu labelClass={labelClass} />
+        <CreateNewPost isOpen={openCreate} setIsOpen={setOpenCreate} />
       </nav>
     </aside>
   );
-}
+};
+
+export default Sidebar;

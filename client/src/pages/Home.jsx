@@ -21,7 +21,7 @@ const Home = () => {
   if (posts.length === 0) return <NoPostToShow />;
 
   return (
-    <div className="flex mx-2 md:mx-8 space-y-2">
+    <div className="flex mx-2 md:mx-8 space-y-2 relative">
       <div ref={viewRef} />
 
       <div className="flex-1 ">

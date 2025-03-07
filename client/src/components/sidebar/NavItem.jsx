@@ -11,9 +11,13 @@ const NavItem = forwardRef(
     const hasUnreadNotifications = unreadNotifications.length > 0;
 
     return (
-      <Link ref={ref} className="btn btn-nav justify-start relative" {...props}>
+      <Link
+        ref={ref}
+        className=" btn btn-nav justify-start  relative"
+        {...props}
+      >
         {/* Icon */}
-        <div className="flex items-center justify-center py-2 px-2">{icon}</div>
+        <div className="h-5 md:h-10 flex items-center px-2">{icon}</div>
 
         {/* Label */}
         <span className={labelClass}>{label}</span>

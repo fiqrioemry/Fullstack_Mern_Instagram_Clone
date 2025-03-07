@@ -56,12 +56,12 @@ export function CreateNewPost({ isOpen, setIsOpen }) {
         open={isOpen}
         onOpenChange={(open) => (!open ? handleCloseDialog() : setIsOpen(open))}
       >
-        <DialogContent className="w-96 max-w-2xl p-0 border-none bg-secondary">
+        <DialogContent className="w-96 max-w-2xl p-0 py-4 rounded-lg border-none bg-secondary">
           <DialogTitle>
             <VisuallyHidden>Search a user</VisuallyHidden>
           </DialogTitle>
           {loading ? (
-            <div className="h-96 flex-center">
+            <div className="h-96 flex items-center justify-center">
               <div className="flex flex-col justify-center items-center">
                 <Loader size={40} className="animate-spin" />
                 <p>Uploading</p>
@@ -69,16 +69,16 @@ export function CreateNewPost({ isOpen, setIsOpen }) {
             </div>
           ) : (
             <div>
-              <div className="text-center border-b py-2">
+              <div className="text-center border-b border-muted py-2">
                 <h4 className="font-semibold">Create New Post</h4>
               </div>
               {formPost.values.images.length > 0 ? (
                 <div>
-                  <div className="relative h-96 flex-center overflow-hidden">
+                  <div className="relative h-96 flex justify-center items-center overflow-hidden">
                     <Galleries images={formPost.values.images} />
                     <div className="absolute bottom-2 left-2">
                       <label htmlFor="post">
-                        <div className="flex-center rounded-full bg-blue-500 h-10 w-10">
+                        <div className="flex justify-center items-center rounded-full bg-blue-500 h-10 w-10">
                           <Plus size={24} />
                         </div>
                         <input
@@ -117,7 +117,7 @@ export function CreateNewPost({ isOpen, setIsOpen }) {
                   onDragOver={handleDragOver}
                   className="h-80 z-10 flex items-center justify-center cursor-pointer bg-muted/50 hover:bg-muted transition-all duration-300"
                 >
-                  <div className="flex-center flex-col">
+                  <div className="flex items-center justify-center flex-col">
                     <CloudUpload size={24} />
                     <label htmlFor="post" className="btn-accent">
                       Select Your Images

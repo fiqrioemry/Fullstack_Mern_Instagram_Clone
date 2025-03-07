@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
-import NavItem from "./NavItem";
-import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
-  DropdownMenuItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import NavItem from "./NavItem";
 import { Link } from "react-router-dom";
 import useTheme from "@/hooks/useTheme";
 import { Label } from "@/components/ui/label";
@@ -15,12 +13,20 @@ import { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Menu, Moon, Sun, LogOut, Settings, ChevronLeft } from "lucide-react";
 
-function NavOptions({ openSearch }) {
+function MoreMenu({ labelClass }) {
   const ref = useRef(null);
   const { signout } = useAuthStore();
   const [open, setOpen] = useState(false);
   const { handleDarkMode, darkMode } = useTheme();
   const [showModeToggle, setShowModeToggle] = useState(false);
+
+  const handleOpen = () => {
+    setOpen((prev) => !prev);
+  };
+
+  const handleToggle = () => {
+    setShowModeToggle((prev) => !prev);
+  };
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -34,18 +40,9 @@ function NavOptions({ openSearch }) {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  const handleOpen = () => {
-    setOpen((prev) => !prev);
-  };
-
-  const labelClass = cn(
-    openSearch ? "opacity-0" : "opacity-100",
-    "duration-300 transition-all ease-in hidden lg:block"
-  );
-
   return (
     <DropdownMenu open={open}>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger className="w-full">
         <NavItem
           label="More"
           onClick={handleOpen}
@@ -53,49 +50,46 @@ function NavOptions({ openSearch }) {
           icon={<Menu size={24} />}
         />
       </DropdownMenuTrigger>
-
-      <DropdownMenuContent ref={ref} className="bg-secondary">
+      <DropdownMenuContent ref={ref} className="bg-secondary p-2">
         {showModeToggle ? (
           <>
-            <DropdownMenuItem onClick={() => setShowModeToggle(false)}>
+            <button className="btn btn-nav py-3 mb-4" onClick={handleToggle}>
               <ChevronLeft />
-              <p className="font-bold ml-1">Switch appearance</p>
-              {darkMode ? (
-                <Moon size={20} className="ml-auto" />
-              ) : (
-                <Sun size={20} className="ml-auto" />
-              )}
-            </DropdownMenuItem>
+              <p>Switch appearance</p>
+              {darkMode ? <Moon /> : <Sun />}
+            </button>
             <Label
               htmlFor="dark-mode"
-              className="flex items-center gap-x-2 px-4 py-2 m-1.5 rounded-lg font-medium cursor-pointer hover:bg-foreground-hover"
+              className="btn btn-nav justify-between py-3 px-4"
             >
               Dark Mode
-              <DropdownMenuItem className="ml-auto p-0">
-                <Switch
-                  id="dark-mode"
-                  checked={darkMode}
-                  onCheckedChange={handleDarkMode}
-                />
-              </DropdownMenuItem>
+              <Switch
+                id="dark-mode"
+                checked={darkMode}
+                onCheckedChange={handleDarkMode}
+              />
             </Label>
           </>
         ) : (
           <>
-            <Link to="/settings">
-              <DropdownMenuItem>
-                <Settings />
-                <span>Settings</span>
-              </DropdownMenuItem>
+            <Link className="btn btn-nav justify-start" to="/settings">
+              <Settings />
+              <span>Settings</span>
             </Link>
-            <DropdownMenuItem onClick={() => setShowModeToggle(true)}>
+            <button
+              className="btn btn-nav justify-start mt-2"
+              onClick={handleToggle}
+            >
               <Moon />
               <span>Switch appearance</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={signout}>
+            </button>
+            <button
+              onClick={signout}
+              className="btn btn-nav justify-start mt-2"
+            >
               <LogOut />
-              <span>Log out</span>
-            </DropdownMenuItem>
+              <span>Signout</span>
+            </button>
           </>
         )}
       </DropdownMenuContent>
@@ -103,4 +97,4 @@ function NavOptions({ openSearch }) {
   );
 }
 
-export default NavOptions;
+export default MoreMenu;

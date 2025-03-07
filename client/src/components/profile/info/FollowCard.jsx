@@ -38,7 +38,7 @@ const FollowCard = ({ data }) => {
   };
 
   return (
-    <div className="flex-between p-3">
+    <div className="flex justify-between items-center p-3">
       <div className="flex items-center gap-3">
         <Avatar data={data} />
         <div>

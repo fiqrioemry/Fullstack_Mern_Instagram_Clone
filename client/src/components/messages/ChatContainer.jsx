@@ -26,7 +26,7 @@ const ChatContainer = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center border-b border-muted py-4 gap-4 px-2">
+      <div className="flex items-center border-b border-muted p-2">
         <ChatHeader selectedUser={selectedUser} />
       </div>
 
@@ -41,7 +41,7 @@ const ChatContainer = () => {
         <div ref={viewRef} />
       </ScrollArea>
 
-      <div className="relative  px-2 py-2">
+      <div className="relative px-2 py-2">
         <ChatInputForm form={chatForm} loading={loading} />
       </div>
     </div>

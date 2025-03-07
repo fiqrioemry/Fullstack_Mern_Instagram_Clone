@@ -9,6 +9,7 @@ import Timestamp from "@/components/post/Timestamp";
 import LikeComment from "@/components/post/LikeComment";
 import ReplyButton from "@/components/post/ReplyButton";
 import { useCommentStore } from "@/store/useCommentStore";
+import CommentOptions from "../modal/CommentOptions";
 
 const Replies = ({ comment }) => {
   const [limit, setLimit] = useState(0);
@@ -97,6 +98,7 @@ const Replies = ({ comment }) => {
                   <Timestamp data={reply} />
                   <LikeCount data={reply} />
                   <ReplyButton data={reply} />
+                  <CommentOptions data={reply} />
                 </div>
               </div>
               <LikeComment data={reply} />

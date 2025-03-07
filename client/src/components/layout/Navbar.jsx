@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import { Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@/store/useUserStore";
+import MoreMenu from "@/components/sidebar/MoreMenu";
 import useHandleSearch from "@/hooks/useHandleSearch";
 import SearchInput from "@/components/search/SearchInput";
 import SearchResult from "@/components/search/SearchResult";
@@ -61,9 +61,7 @@ const Navbar = () => {
 
       {/* dropdown menu settings */}
       <div className={searchActive}>
-        <div className="flex justify-center">
-          <Settings />
-        </div>
+        <MoreMenu labelClass={"hidden"} />
       </div>
     </nav>
   );

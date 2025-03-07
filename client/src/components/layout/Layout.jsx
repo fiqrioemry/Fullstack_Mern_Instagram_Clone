@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-import SideNavbar from "./SideNavbar";
+import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
 import BottomNavbar from "./BottomNavbar";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,7 +9,7 @@ const Layout = () => {
     <main className="flex flex-col">
       <Navbar />
       <div className="flex-1 flex">
-        <SideNavbar />
+        <Sidebar />
         <ScrollArea className="flex-1 overflow-y-auto md:h-screen h-[calc(100vh-56px-56px)]">
           <Outlet />
         </ScrollArea>

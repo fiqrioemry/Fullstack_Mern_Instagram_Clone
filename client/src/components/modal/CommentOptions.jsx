@@ -9,20 +9,21 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Ellipsis } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
-import { usePostStore } from "@/store/usePostStore";
+import { useCommentStore } from "@/store/useCommentStore";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 const CommentOptions = ({ data }) => {
   const { user } = useAuthStore();
   const [open, setOpen] = useState(false);
-  const { deleteComment } = usePostStore();
+  const { deleteComment } = useCommentStore();
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleDelete = () => {
-    deleteComment(data.commentId);
+    deleteComment(data);
+    setOpen(false);
   };
 
   const handleReport = () => {
