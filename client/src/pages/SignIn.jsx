@@ -18,18 +18,18 @@ const SignIn = () => {
   );
 
   return (
-    <div className="h-screen flex items-center justify-center">
-      <Card>
+    <div className="h-screen flex items-center justify-center mx-2">
+      <Card className="max-w-md w-full border-muted">
         <CardContent className="p-4">
           <div className="py-4 text-center">
             <h3>Moments</h3>
           </div>
           <InputForm formik={signInForm} formControl={signInControl}>
-            <InputButton formik={signInForm} title="signin" loading={loading} />
+            <InputButton formik={signInForm} title="Signin" loading={loading} />
           </InputForm>
           <div className="flex items-center justify-center py-2">OR</div>
           <GoogleAuth buttonTitle={"Signin with google"} />
-          <CardFooter className="mt-2 space-x-2">
+          <CardFooter className="mt-2 space-x-2 flex justify-center">
             <span> Dont have an account ? </span>
             <Link to="/signup" className="btn-secondary">
               signup

@@ -10,38 +10,14 @@ export const useCommentStore = create((set, get) => ({
   totalComments: 0,
   selectedComment: null,
 
+  setSelectedComment: (selectedComment) => {
+    set({ selectedComment });
+  },
+
   setReplies: (replies, commentId) => {
     set((state) => ({
       replies: { ...state.replies, [commentId]: replies },
     }));
-  },
-
-  setRepliesCount: (commentId) => {
-    set((state) => ({
-      comments: state.comments.map((comment) =>
-        comment.commentId === commentId
-          ? { ...comment, replies: (comment.replies || 0) + 1 }
-          : comment
-      ),
-    }));
-  },
-
-  createReply: async (formData, postId) => {
-    const comment = get().selectedComment;
-    const commentId = comment?.parentId || comment.commentId;
-
-    try {
-      const { message } = await callApi.createReply(
-        formData,
-        postId,
-        commentId
-      );
-      get().setRepliesCount(commentId);
-      await get().getReplies(postId, commentId);
-      toast.success(message);
-    } catch (error) {
-      console.error(error.message);
-    }
   },
 
   createComment: async (formData, postId) => {
@@ -72,10 +48,6 @@ export const useCommentStore = create((set, get) => ({
     }
   },
 
-  setSelectedComment: (selectedComment) => {
-    set({ selectedComment });
-  },
-
   getComments: async (postId, limit) => {
     try {
       set((state) => ({
@@ -92,6 +64,39 @@ export const useCommentStore = create((set, get) => ({
       set((state) => ({
         loading: { ...state.loading, [postId]: false },
       }));
+    }
+  },
+
+  updateRepliesCount: (commentId, increment = true) => {
+    set((state) => ({
+      comments: state.comments.map((comment) =>
+        comment.commentId === commentId
+          ? {
+              ...comment,
+              replies: Math.max(
+                0,
+                (comment.replies || 0) + (increment ? 1 : -1)
+              ),
+            }
+          : comment
+      ),
+    }));
+  },
+
+  createReply: async (formData, postId) => {
+    const comment = get().selectedComment;
+    const commentId = comment?.parentId || comment.commentId;
+    try {
+      const { message } = await callApi.createReply(
+        formData,
+        postId,
+        commentId
+      );
+      get().updateRepliesCount(commentId);
+      await get().getReplies(postId, commentId);
+      toast.success(message);
+    } catch (error) {
+      console.error(error.message);
     }
   },
 
@@ -122,6 +127,7 @@ export const useCommentStore = create((set, get) => ({
     try {
       const { message } = await callApi.deleteComment(postId, commentId);
       get().setDeletedComment(parentId, commentId);
+      get().updateRepliesCount(parentId, false);
       toast.success(message);
     } catch (error) {
       console.error(error.message);

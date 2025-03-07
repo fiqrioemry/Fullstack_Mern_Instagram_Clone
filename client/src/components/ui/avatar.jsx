@@ -5,7 +5,7 @@ const Avatar = ({ data }) => {
       <img
         src={data.avatar}
         alt={data.username}
-        className="w-9 h-9 border border-muted rounded-full object-cover"
+        className="md:w-9 md:h-9 h-7 w-7 border border-muted rounded-full object-cover"
       />
     </div>
   );

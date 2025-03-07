@@ -19,7 +19,6 @@ import { CreateNewPost } from "@/components/modal/CreateNewPost";
 
 const Sidebar = () => {
   const location = useLocation();
-
   const [openCreate, setOpenCreate] = useState(false);
   const currentPath = location.pathname.includes("message");
   const { notifications, getNotifications } = useUserStore();

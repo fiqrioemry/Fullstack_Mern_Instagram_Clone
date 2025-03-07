@@ -44,8 +44,8 @@ const SignUp = () => {
   }, [resetStep]);
 
   return (
-    <div className="h-screen flex items-center justify-center">
-      <Card className="min-w-80 h-96">
+    <div className="h-screen flex items-center justify-center mx-2">
+      <Card className="max-w-md w-full border-muted">
         <CardContent className="p-4">
           <div className="text-center">
             <h3>Moments</h3>

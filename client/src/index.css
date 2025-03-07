@@ -117,7 +117,7 @@
   }
 
   .bottom-navbar {
-    @apply flex items-center h-14 md:hidden border-t border-muted bottom-0 left-0 right-0 z-10;
+    @apply flex justify-between items-center h-14 gap-2 px-2 md:hidden border-t border-muted bottom-0 left-0 right-0 z-10;
   }
 
   .nav-search {

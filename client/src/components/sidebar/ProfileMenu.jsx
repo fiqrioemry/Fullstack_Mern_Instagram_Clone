@@ -8,14 +8,14 @@ const ProfileMenu = ({ labelClass }) => {
   return (
     <Link
       to={`${user.username}`}
-      className="btn btn-nav justify-start relative"
+      className="btn btn-nav justify-center m:w-auto w-20 md:justify-start relative"
     >
-      <div className="h-10 flex-shrink-0">
+      <div className="h-8 md:h-10 flex-shrink-0">
         <Avatar data={user} />
       </div>
 
       {/* Label */}
-      <span className={labelClass}>Profile</span>
+      {labelClass && <span className={labelClass}>Profile</span>}
     </Link>
   );
 };

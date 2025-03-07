@@ -1,27 +1,39 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import Avatar from "@/components/ui/Avatar";
+import { useAuthStore } from "@/store/useAuthStore";
 import { CreateNewPost } from "@/components/modal/CreateNewPost";
-import { Home, Compass, MessageCircle, Bell } from "lucide-react";
-import ProfileMenu from "../sidebar/ProfileMenu";
-
-const nav_items = [
-  { to: "/", icon: Home },
-  { to: "/explore", icon: Compass },
-  { to: "/notification", icon: Bell },
-  { to: "/message", icon: MessageCircle },
-];
+import { Home, Compass, MessageCircle, SquarePlus, Bell } from "lucide-react";
 
 const BottomNavbar = () => {
+  const { user } = useAuthStore();
+  const [openCreate, setOpenCreate] = useState(false);
+
+  const handleOpen = () => {
+    setOpenCreate((prev) => !prev);
+  };
+
   return (
     <div className="bottom-navbar">
-      {nav_items.map(({ to, icon: Icon }) => (
-        <Link key={to} to={to} className="btn-nav flex justify-center">
-          <Icon size={24} />
-        </Link>
-      ))}
-
-      <CreateNewPost />
-
-      <ProfileMenu labelClass={"hidden"} />
+      <Link to="" className="btn btn-nav w-20">
+        <Home />
+      </Link>
+      <Link to="explore" className="btn btn-nav w-20">
+        <Compass />
+      </Link>
+      <button onClick={handleOpen} className="btn btn-nav w-20">
+        <SquarePlus />
+      </button>
+      <Link to="notification" className="btn btn-nav w-20">
+        <Bell />
+      </Link>
+      <Link to="message" className="btn btn-nav w-20">
+        <MessageCircle />
+      </Link>
+      <Link to={`${user.username}`} className="btn btn-nav w-20">
+        <Avatar data={user} />
+      </Link>
+      <CreateNewPost isOpen={openCreate} setIsOpen={setOpenCreate} />
     </div>
   );
 };

@@ -243,8 +243,9 @@ async function toggleLikeComment(req, res) {
   const userId = req.user.userId;
   const commentId = req.params.commentId;
   const transaction = await sequelize.transaction();
+  console.log('MASYUK');
   try {
-    const comment = await Comment.findByPk(commentId, { transaction: t });
+    const comment = await Comment.findByPk(commentId, { transaction });
 
     if (!comment) {
       await transaction.rollback();
@@ -257,7 +258,7 @@ async function toggleLikeComment(req, res) {
     });
 
     if (like) {
-      await like.destroy({ transaction: t });
+      await like.destroy({ transaction });
 
       await Notification.destroy({
         where: {
@@ -269,7 +270,7 @@ async function toggleLikeComment(req, res) {
         transaction,
       });
 
-      await t.commit();
+      await transaction.commit();
       return res.status(200).json({ message: 'You unliked the comment' });
     }
 
