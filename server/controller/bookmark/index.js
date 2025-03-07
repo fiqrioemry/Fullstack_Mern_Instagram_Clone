@@ -48,10 +48,8 @@ async function getAllSavedPosts(req, res) {
 
     return res.status(200).json({ saved });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
-      message: 'Internal server error',
-      error: error.message,
+      message: error.message,
     });
   }
 }
@@ -59,7 +57,6 @@ async function getAllSavedPosts(req, res) {
 async function toggleSavedPost(req, res) {
   const userId = req.user.userId;
   const postId = req.params.postId;
-
   try {
     const post = await Post.findByPk(postId);
     if (!post) {

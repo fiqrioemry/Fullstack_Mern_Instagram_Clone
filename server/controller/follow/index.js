@@ -119,14 +119,13 @@ async function getFollowers(req, res) {
     const followers = userFollowers.map(({ follower }) => ({
       userId: follower.id,
       username: follower.username,
-      fullname: follower.profile?.fullname || null,
-      avatar: follower.profile?.avatar || null,
+      avatar: follower.profile?.avatar,
+      fullname: follower.profile?.fullname,
       isFollow: myFollowingIds.includes(follower.id),
     }));
 
     return res.status(200).json({ followers, totalFollowers });
   } catch (error) {
-    console.error(error.message);
     return res.status(500).json({ message: error.message });
   }
 }
@@ -182,8 +181,8 @@ async function getFollowings(req, res) {
     const followings = userFollowings.map(({ following }) => ({
       userId: following.id,
       username: following.username,
-      fullname: following.profile?.fullname || null,
-      avatar: following.profile?.avatar || null,
+      avatar: following.profile?.avatar,
+      fullname: following.profile?.fullname,
       isFollow: myFollowingIds.includes(following.id),
     }));
 

@@ -1,11 +1,6 @@
-const router = require('express').Router();
-const { upload } = require('../../middleware/media');
-const isAuthenticate = require('../../middleware/isAuthenticate');
-
 // controller
 const {
   createPost,
-  updatePost,
   deletePost,
   getPostDetail,
   getPublicPosts,
@@ -27,6 +22,10 @@ const {
   toggleLikeComment,
 } = require('../../controller/comment');
 
+const router = require('express').Router();
+const { upload } = require('../../middleware/media');
+const isAuthenticate = require('../../middleware/isAuthenticate');
+
 // saved post API Route management
 router.get('/bookmark', isAuthenticate, getAllSavedPosts);
 router.post('/bookmark/:postId', isAuthenticate, toggleSavedPost);
@@ -35,7 +34,6 @@ router.post('/bookmark/:postId', isAuthenticate, toggleSavedPost);
 router.get('/', isAuthenticate, getPublicPosts);
 router.get('/followings', isAuthenticate, getPostsFromFollowings);
 router.post('/', upload().array('images', 5), isAuthenticate, createPost);
-router.put('/:postId', isAuthenticate, upload().array('images', 5), updatePost);
 router.delete('/:postId', isAuthenticate, deletePost);
 router.get('/:postId', isAuthenticate, getPostDetail);
 

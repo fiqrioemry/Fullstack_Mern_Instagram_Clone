@@ -11,7 +11,7 @@ const { app, server } = require('./config/socket');
 const CLIENT_HOST = process.env.CLIENT_HOST;
 const SERVER_PORT = process.env.SERVER_PORT;
 
-// app.use(limiter);
+app.use(limiter);
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(express.json({ limit: '10mb' }));

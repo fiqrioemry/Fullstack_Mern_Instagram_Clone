@@ -7,6 +7,10 @@ const redis = require('../../config/redis');
 const sendOTP = require('../../utils/sendOTP');
 const { User, Profile } = require('../../models');
 const randomAvatar = require('../../utils/randomAvatar');
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require('../../utils/generateToken');
 
 async function userSignUp(req, res) {
   try {
@@ -37,6 +41,7 @@ async function userSignUp(req, res) {
     });
 
     const avatar = randomAvatar();
+
     await Profile.create({
       userId: newUser.id,
       fullname,
@@ -46,8 +51,7 @@ async function userSignUp(req, res) {
     return res.status(201).json({ message: 'Registration successful' });
   } catch (error) {
     return res.status(500).json({
-      message: 'Registration failed',
-      error: error.message,
+      message: error.message,
     });
   }
 }
@@ -86,23 +90,14 @@ async function userSignIn(req, res) {
       });
     }
 
-    const accessToken = jwt.sign(
-      { userId: user.id },
-      process.env.ACCESS_TOKEN,
-      { expiresIn: '30m' },
-    );
-
-    const refreshToken = jwt.sign(
-      { userId: user.id },
-      process.env.REFRESH_TOKEN,
-      { expiresIn: '7d' },
-    );
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
@@ -111,8 +106,7 @@ async function userSignIn(req, res) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: 'Login failed',
-      error: error.message,
+      message: error.message,
     });
   }
 }
@@ -146,8 +140,7 @@ async function userAuthCheck(req, res) {
     res.status(200).json(payload);
   } catch (error) {
     return res.status(500).json({
-      message: 'Failed to get Authorization',
-      error: error.message,
+      message: error.message,
     });
   }
 }
@@ -175,17 +168,12 @@ async function userAuthRefresh(req, res) {
       });
     }
 
-    const accessToken = jwt.sign(
-      { userId: user.id },
-      process.env.ACCESS_TOKEN,
-      { expiresIn: '30m' },
-    );
+    const accessToken = generateAccessToken(user);
 
     res.status(200).json(accessToken);
   } catch (error) {
     return res.status(500).json({
-      message: 'Failed to refresh token',
-      error: error.message,
+      message: error.message,
     });
   }
 }
@@ -249,9 +237,7 @@ async function sendingOTP(req, res) {
 
     return res.status(200).send({ message: 'OTP Send to Email' });
   } catch (error) {
-    return res
-      .status(500)
-      .send({ message: 'Failed to send OTP', error: error.message });
+    return res.status(500).send({ message: error.message });
   }
 }
 
@@ -268,9 +254,7 @@ async function verifyOTP(req, res) {
       return res.status(200).send({ message: 'OTP Verified.' });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .send({ message: 'An error occurred', error: error.message });
+    return res.status(500).send({ message: error.message });
   }
 }
 
@@ -280,8 +264,8 @@ module.exports = {
   userSignOut,
   sendingOTP,
   verifyOTP,
+  googleAuth,
   userAuthCheck,
   userAuthRefresh,
-  googleAuth,
   googleAuthCallback,
 };

@@ -5,19 +5,18 @@ const {
   Like,
   Profile,
   Comment,
-  sequelize,
-  Notification,
-  PostGallery,
   Bookmark,
+  sequelize,
+  PostGallery,
+  Notification,
 } = require('../../models');
-const fs = require('fs').promises;
 const { Op } = require('sequelize');
 const uploadToCloudinary = require('../../utils/uploadToCloudinary');
 const deleteFromCloudinary = require('../../utils/deleteFromCloudinary');
 
 async function getPostsFromFollowings(req, res) {
   const userId = req.user.userId;
-  const limit = parseInt(req.query.limit) || 5;
+  const limit = parseInt(req.query.limit) || 3;
 
   try {
     const followingsData = await Follow.findAll({
@@ -99,7 +98,6 @@ async function getPostsFromFollowings(req, res) {
 async function getPostDetail(req, res) {
   const userId = req.user.userId;
   const postId = req.params.postId;
-
   try {
     const postData = await Post.findOne({
       where: { id: postId },
@@ -155,14 +153,13 @@ async function getPostDetail(req, res) {
 
     return res.status(200).json(post);
   } catch (error) {
-    console.error(error.message);
-    return res.status(500).json({ message: 'Failed to get user posts' });
+    return res.status(500).json({ message: error.message });
   }
 }
 
 async function getPublicPosts(req, res) {
   const userId = req.user.userId;
-  const limit = parseInt(req.query.limit) || 5;
+  const limit = parseInt(req.query.limit) || 3;
   try {
     const postsData = await Post.findAndCountAll({
       limit,
@@ -214,16 +211,14 @@ async function getPublicPosts(req, res) {
 
     return res.status(200).json({ totalPosts, posts });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: 'Failed to get user posts', error: error.message });
+    return res.status(500).json({ message: error.message });
   }
 }
 
 async function getUserPosts(req, res) {
   const userId = req.user?.userId;
   const username = req.params.username;
-  const limit = parseInt(req.query.limit) || 5;
+  const limit = parseInt(req.query.limit) || 3;
 
   try {
     const user = await User.findOne({
@@ -332,78 +327,9 @@ async function createPost(req, res) {
   }
 }
 
-async function updatePost(req, res) {
-  const { postId } = req.params;
-  const { userId } = req.user;
-  const { content, images } = req.body;
-  const t = await sequelize.transaction();
-
-  try {
-    const post = await Post.findOne({ where: { id: postId, userId } });
-
-    if (!post) {
-      await t.rollback();
-      return res.status(404).json({ message: 'Post not found' });
-    }
-
-    if (content) {
-      post.content = content;
-      await post.save({ transaction: t });
-    }
-
-    const imagesArray = Array.isArray(images) ? images : images ? [images] : [];
-
-    await PostGallery.destroy({
-      where: {
-        postId,
-        image: { [Op.notIn]: imagesArray },
-      },
-      transaction: t,
-    });
-
-    let newImages = [];
-    if (req.files && req.files.length > 0) {
-      const uploadPromises = req.files.map(async (file) => {
-        const uploadedMedia = await uploadToCloudinary(file.path);
-        await fs.unlink(file.path);
-        return uploadedMedia;
-      });
-
-      const uploadedImages = await Promise.all(uploadPromises);
-      newImages = uploadedImages.map((url) => ({
-        postId: post.id,
-        image: url.secure_url,
-      }));
-
-      await PostGallery.bulkCreate(newImages, { transaction: t });
-    }
-
-    const imagesToDelete = await PostGallery.findAll({
-      where: {
-        postId,
-        image: { [Op.notIn]: imagesArray },
-      },
-    });
-
-    for (const img of imagesToDelete) {
-      await deleteFromCloudinary(img.image);
-    }
-
-    await t.commit();
-
-    res.status(200).json({ message: 'Post updated' });
-  } catch (error) {
-    await t.rollback();
-    console.error(error.message);
-    return res.status(500).json({
-      message: 'Failed to update post',
-    });
-  }
-}
-
 async function deletePost(req, res) {
-  const { userId } = req.user;
-  const { postId } = req.params;
+  const userId = req.user.userId;
+  const postId = req.params.postId;
   const t = await sequelize.transaction();
 
   try {
@@ -442,9 +368,9 @@ async function deletePost(req, res) {
     return res.status(200).json({ message: 'Post deleted' });
   } catch (error) {
     await t.rollback();
-    console.error(error.message);
+
     return res.status(500).json({
-      message: 'Failed to delete post',
+      message: error.message,
     });
   }
 }
@@ -452,21 +378,21 @@ async function deletePost(req, res) {
 async function toggleLikePost(req, res) {
   const userId = req.user.userId;
   const postId = req.params.postId;
-  const t = await sequelize.transaction();
+  const transaction = await sequelize.transaction();
   try {
-    const post = await Post.findByPk(postId, { transaction: t });
+    const post = await Post.findByPk(postId, { transaction });
     if (!post) {
-      await t.rollback();
+      await transaction.rollback();
       return res.status(404).json({ message: 'Post not found' });
     }
 
     const like = await Like.findOne({
       where: { userId, entityId: postId, entityType: 'post' },
-      transaction: t,
+      transaction,
     });
 
     if (like) {
-      await like.destroy({ transaction: t });
+      await like.destroy({ transaction });
 
       await Notification.destroy({
         where: {
@@ -475,16 +401,16 @@ async function toggleLikePost(req, res) {
           postId: postId,
           type: 'like',
         },
-        transaction: t,
+        transaction,
       });
 
-      await t.commit();
+      await transaction.commit();
       return res.status(200).json({ message: 'You unliked the Post' });
     }
 
     await Like.create(
       { userId, entityId: postId, entityType: 'post' },
-      { transaction: t },
+      { transaction },
     );
 
     if (post.userId !== userId) {
@@ -495,25 +421,23 @@ async function toggleLikePost(req, res) {
           postId: postId,
           type: 'like',
         },
-        { transaction: t },
+        { transaction },
       );
     }
-    await t.commit();
+    await transaction.commit();
     return res.status(201).json({ message: 'You Liked the post' });
   } catch (error) {
-    await t.rollback();
-    console.log(error.message);
-    return res.status(500).json({ message: 'Failed to toggle like' });
+    await transaction.rollback();
+    return res.status(500).json({ message: error.message });
   }
 }
 
 module.exports = {
-  getPostsFromFollowings,
-  getPublicPosts,
-  getPostDetail,
-  getUserPosts,
   createPost,
-  updatePost,
   deletePost,
+  getUserPosts,
+  getPostDetail,
+  getPublicPosts,
   toggleLikePost,
+  getPostsFromFollowings,
 };

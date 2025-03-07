@@ -168,8 +168,8 @@ async function getChat(req, res) {
         chatId: chat.chat_id,
         senderId: chat.sender_id,
         receiverId: chat.receiver_id,
-        message: chat.message,
         image: chat.image,
+        message: chat.message,
         timestamp: chat.timestamp,
       };
     });

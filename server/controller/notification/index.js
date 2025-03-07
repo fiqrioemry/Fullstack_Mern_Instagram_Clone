@@ -2,7 +2,6 @@ const { Notification, User, Profile, Post, Comment } = require('../../models');
 
 async function getNotifications(req, res) {
   const receiverId = req.user.userId;
-
   try {
     const notificationsData = await Notification.findAll({
       where: { receiverId },
@@ -28,14 +27,14 @@ async function getNotifications(req, res) {
       return {
         id: notif.id,
         type: notif.type,
-        username: notif.sender?.username,
-        avatar: notif.sender?.profile.avatar,
+        isRead: notif.isRead,
         postId: notif.post?.id,
         post: notif.post?.content,
+        createdAt: notif.createdAt,
         commentId: notif.comment?.id,
         comment: notif.comment?.content,
-        isRead: notif.isRead,
-        createdAt: notif.createdAt,
+        username: notif.sender?.username,
+        avatar: notif.sender?.profile.avatar,
       };
     });
     res.status(200).json({ notifications });
@@ -46,7 +45,6 @@ async function getNotifications(req, res) {
 
 async function markAsRead(req, res) {
   const receiverId = req.user.userId;
-
   try {
     await Notification.update({ isRead: true }, { where: { receiverId } });
 

@@ -97,22 +97,20 @@ async function searchUser(req, res) {
     const users = usersData.map((user) => ({
       userId: user.id,
       username: user.username,
-      fullname: user.profile?.fullname || null,
-      avatar: user.profile?.avatar || null,
+      avatar: user.profile?.avatar,
+      fullname: user.profile?.fullname,
     }));
 
     return res.status(200).json(users);
   } catch (error) {
     return res.status(500).json({
-      message: 'Failed to search for users',
-      error: error.message,
+      message: error.message,
     });
   }
 }
 
 async function getMyProfile(req, res) {
   const { userId } = req.user;
-
   try {
     const user = await User.findOne({
       where: { id: userId },
@@ -142,8 +140,7 @@ async function getMyProfile(req, res) {
     return res.status(200).json(profile);
   } catch (error) {
     return res.status(500).json({
-      message: 'Failed to retrieve user detail',
-      error: error.message,
+      message: error.message,
     });
   }
 }
@@ -197,8 +194,7 @@ async function getUserProfile(req, res) {
     return res.status(200).json(profile);
   } catch (error) {
     return res.status(500).json({
-      message: 'Failed to retrieve user profile',
-      error: error.message,
+      message: error.message,
     });
   }
 }

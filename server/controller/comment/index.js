@@ -53,8 +53,8 @@ async function createComment(req, res) {
             postId,
             type: 'mention',
             senderId: userId,
-            receiverId: mentionedUser.id,
             commentId: newComment.id,
+            receiverId: mentionedUser.id,
           }),
         ),
       );
