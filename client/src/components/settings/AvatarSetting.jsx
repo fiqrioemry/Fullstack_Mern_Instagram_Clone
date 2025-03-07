@@ -26,7 +26,7 @@ const AvatarSetting = () => {
       </div>
 
       {/* update avatar form */}
-      <button className="relative btn-selection w-40" disabled={loading}>
+      <button className="relative btn btn-selection" disabled={loading}>
         {loading ? (
           <>
             <Loader className="animate-spin" />

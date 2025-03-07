@@ -21,7 +21,7 @@ const SidebarChatLists = () => {
         <button
           key={chat.userId}
           onClick={() => setSelectedUser(chat)}
-          className="duration-300 w-full flex items-center btn-nav mt-2 justify-center md:justify-start p-2"
+          className="btn btn-nav mt-2 justify-center md:justify-start"
         >
           <UserDisplay user={chat} />
         </button>

@@ -15,7 +15,7 @@ const LikeComment = ({ data }) => {
         size={14}
         onClick={handleLike}
         aria-label="Like a comment"
-        className="btn-secondary text-xs"
+        className="btn-secondary"
         fill={data.isLiked ? "red" : "transparent"}
         stroke={data.isLiked ? "red" : "currentColor"}
       />

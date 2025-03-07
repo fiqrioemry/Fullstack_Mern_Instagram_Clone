@@ -131,10 +131,6 @@
     @apply flex items-center h-14 md:hidden border-t border-muted bottom-0 left-0 right-0 z-10;
   }
 
-  .border-default {
-    @apply border-b border-muted-foreground;
-  }
-
   .nav-search {
     @apply absolute top-0 bottom-0 w-80 px-4 py-2 h-full bg-background border-r border-muted-foreground/50  duration-300 transition-all ease-in z-20;
   }
@@ -143,39 +139,29 @@
     @apply w-full outline-none py-1 bg-background;
   }
 
+  /*  used */
+
   .btn {
-    @apply flex items-center justify-center w-full py-2 px-4 rounded-md capitalize;
-  }
-
-  .btn-nav {
-    @apply flex items-center w-full py-2 px-2 rounded-md capitalize hover:bg-muted-foreground/10 text-primary;
-  }
-
-  .btn-primary {
-    @apply font-medium text-secondary hover:text-secondary/60 cursor-pointer duration-300;
+    @apply flex items-center justify-center w-full py-3 px-4 gap-4 capitalize;
   }
 
   .btn-secondary {
     @apply font-medium text-foreground hover:text-foreground/60 cursor-pointer text-xs md:text-sm duration-300;
   }
 
-  .btn-delete {
-    @apply flex justify-center items-center font-medium text-red-700 hover:text-red-500 cursor-pointer duration-300;
-  }
-
-  .btn-ghost {
-    @apply font-medium text-red-700 hover:text-red-500 cursor-pointer duration-300;
-  }
-
   .btn-accent {
     @apply text-blue-500 hover:text-blue-700 disabled:text-gray-500 font-medium cursor-pointer duration-300;
   }
 
-  .btn-selection {
-    @apply flex justify-center items-center text-sm font-semibold min-w-32 bg-muted-foreground/10 hover:bg-muted-foreground/20 p-2 rounded-md duration-300 gap-4;
+  .btn-delete {
+    @apply font-medium text-red-700 hover:text-red-500 cursor-pointer text-xs md:text-sm duration-300;
   }
 
-  .btn-search {
-    @apply flex justify-start items-center text-sm font-semibold w-full  hover:bg-muted p-2 rounded-md duration-300 gap-4;
+  .btn-nav {
+    @apply py-2 px-2 rounded-md capitalize hover:bg-muted-foreground/10 text-primary;
+  }
+
+  .btn-selection {
+    @apply text-sm font-semibold min-w-32 bg-muted-foreground/10 hover:bg-muted-foreground/20 rounded-md duration-300;
   }
 }

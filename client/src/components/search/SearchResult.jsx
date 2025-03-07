@@ -13,7 +13,7 @@ const SearchResult = ({ users, searching, onClick }) => {
     <button
       key={user.userId}
       onClick={() => onClick(user)}
-      className="btn-search mt-2 mb-2"
+      className="btn btn-nav justify-start"
     >
       <Avatar data={user} />
       <div className="flex flex-col items-start text-xs md:text-sm">

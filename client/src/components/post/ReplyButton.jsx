@@ -8,7 +8,7 @@ const ReplyButton = ({ data }) => {
     setSelectedComment(data);
   };
   return (
-    <button className="text-xs btn-secondary" onClick={handleComment}>
+    <button className="btn-secondary" onClick={handleComment}>
       Reply
     </button>
   );

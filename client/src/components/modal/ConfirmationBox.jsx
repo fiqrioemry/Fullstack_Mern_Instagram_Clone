@@ -13,7 +13,7 @@ const ConfirmationBox = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="py-2 rounded-lg">
         <DialogTitle>
           <VisuallyHidden>Confirmation box</VisuallyHidden>
         </DialogTitle>
@@ -23,12 +23,12 @@ const ConfirmationBox = ({
         </div>
         <div className="mt-4">
           <button
-            className="btn-delete w-full py-4 border-b border-t border-muted"
+            className="btn btn-delete border-b border-t border-muted"
             onClick={onConfirm}
           >
             {confirmLabel}
           </button>
-          <button className="btn-secondary w-full py-4" onClick={onClose}>
+          <button className="btn btn-secondary" onClick={onClose}>
             {cancelLabel}
           </button>
         </div>

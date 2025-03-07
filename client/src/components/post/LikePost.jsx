@@ -14,7 +14,7 @@ const LikePost = ({ data }) => {
       size={24}
       onClick={handleLike}
       aria-label="Like a Post"
-      className="btn-secondary text-xs"
+      className="btn-secondary"
       fill={data.isLiked ? "red" : "transparent"}
       stroke={data.isLiked ? "red" : "currentColor"}
     />

@@ -8,6 +8,7 @@ import Timestamp from "@/components/post/Timestamp.jsx";
 import LikeCount from "@/components/post/LikeCount.jsx";
 import ReplyButton from "@/components/post/ReplyButton.jsx";
 import CommentsLoading from "@/components/skeleton/CommentsLoading.jsx";
+import CommentOptions from "../modal/CommentOptions";
 
 const Comments = ({ comments, loading }) => {
   const { viewRef } = useScrollToView(loading);
@@ -33,6 +34,7 @@ const Comments = ({ comments, loading }) => {
               <Timestamp data={comment} />
               <LikeCount data={comment} />
               <ReplyButton data={comment} />
+              <CommentOptions data={comment} />
             </div>
 
             <Replies comment={comment} />

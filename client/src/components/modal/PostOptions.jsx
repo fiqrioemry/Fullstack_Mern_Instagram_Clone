@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Ellipsis } from "lucide-react";
@@ -68,39 +69,40 @@ const PostOptions = ({ data }) => {
       <DialogTrigger asChild>
         <Ellipsis className="btn-secondary" />
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="rounded-lg">
         <DialogTitle>
           <VisuallyHidden>post options</VisuallyHidden>
         </DialogTitle>
-        <div>
+        <button
+          className="btn btn-delete border-b border-muted"
+          onClick={user.userId === data.userId ? handleDelete : handleReport}
+        >
+          {user.userId === data.userId ? "delete" : "report"}
+        </button>
+        {user.userId !== data.userId && (
           <button
-            className="w-full btn-delete border-b border-muted-foreground/20 py-4"
-            onClick={user.userId === data.userId ? handleDelete : handleReport}
+            className={cn(
+              "btn btn-delete border-b border-muted",
+              !data.isFollow ? "text-blue-500 hover:text-blue-600" : ""
+            )}
+            onClick={data.isFollow ? handleUnfollow : handleFollow}
           >
-            {user.userId === data.userId ? "delete" : "report"}
+            {data.isFollow ? "unfollow" : "follow"}
           </button>
-          {user.userId !== data.userId && (
-            <button
-              className="w-full btn-delete  border-b border-muted-foreground/20 py-4"
-              onClick={data.isFollow ? handleUnfollow : handleFollow}
-            >
-              {data.isFollow ? "unfollow" : "follow"}
-            </button>
-          )}
-          <Link
-            to={
-              location === `/p/${data.postId}`
-                ? `/${data.username}`
-                : `/p/${data.postId}`
-            }
-            className="btn btn-secondary  border-b border-muted-foreground/20 rounded-none py-4"
-          >
-            {location === `/p/${data.postId}` ? "go to profile" : "go to post"}
-          </Link>
-          <button className="btn btn-secondary py-4" onClick={handleClose}>
-            close
-          </button>
-        </div>
+        )}
+        <Link
+          to={
+            location === `/p/${data.postId}`
+              ? `/${data.username}`
+              : `/p/${data.postId}`
+          }
+          className="btn btn-secondary border-b border-muted"
+        >
+          {location === `/p/${data.postId}` ? "go to profile" : "go to post"}
+        </Link>
+        <button className="btn btn-secondary" onClick={handleClose}>
+          close
+        </button>
       </DialogContent>
 
       <ConfirmationBox

@@ -37,10 +37,13 @@ const ProfileInfo = ({ profile }) => {
           </div>
           {profile.isMyProfile ? (
             <div className="flex items-center justify-center gap-4 w-full md:w-2/3">
-              <Link to="/settings" className="btn-selection">
+              <Link to="/settings" className="btn btn-selection">
                 Edit Profile
               </Link>
-              <Link to={`/${profile.username}/saved`} className="btn-selection">
+              <Link
+                to={`/${profile.username}/saved`}
+                className="btn btn-selection"
+              >
                 View Archive
               </Link>
             </div>

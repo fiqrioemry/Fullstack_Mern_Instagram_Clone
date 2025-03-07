@@ -35,22 +35,20 @@ const CommentOptions = ({ data }) => {
       <DialogTrigger asChild>
         <Ellipsis className="btn-secondary" />
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="rounded-lg">
         <DialogTitle>
           <VisuallyHidden>comment options</VisuallyHidden>
         </DialogTitle>
-        <div>
-          <button
-            className="w-full btn-delete border-b border-muted-foreground/20 py-4"
-            onClick={user.userId === data.userId ? handleDelete : handleReport}
-          >
-            {user.userId === data.userId ? "delete" : "report"}
-          </button>
+        <button
+          className="btn btn-delete border-b border-muted"
+          onClick={user.userId === data.userId ? handleDelete : handleReport}
+        >
+          {user.userId === data.userId ? "Delete" : "Report"}
+        </button>
 
-          <button className="btn btn-secondary py-4" onClick={handleClose}>
-            close
-          </button>
-        </div>
+        <button className="btn btn-secondary" onClick={handleClose}>
+          close
+        </button>
       </DialogContent>
     </Dialog>
   );
