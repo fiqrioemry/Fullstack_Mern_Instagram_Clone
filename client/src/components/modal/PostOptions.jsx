@@ -1,4 +1,10 @@
 /* eslint-disable react/prop-types */
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Ellipsis } from "lucide-react";
@@ -6,8 +12,8 @@ import ConfirmationBox from "./ConfirmationBox";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { usePostStore } from "@/store/usePostStore";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 
 const PostOptions = ({ data }) => {
   const { user } = useAuthStore();
@@ -63,6 +69,9 @@ const PostOptions = ({ data }) => {
         <Ellipsis className="btn-secondary" />
       </DialogTrigger>
       <DialogContent>
+        <DialogTitle>
+          <VisuallyHidden>post options</VisuallyHidden>
+        </DialogTitle>
         <div>
           <button
             className="w-full btn-delete border-b border-muted-foreground/20 py-4"

@@ -14,7 +14,7 @@ const FollowDialog = () => {
 
   return (
     <Dialog defaultOpen onOpenChange={(open) => !open && navigate(-1)}>
-      <DialogContent className="sm:w-[400px] p-0 border-none bg-secondary">
+      <DialogContent className="sm:w-[400px] h-80 p-0 border-none bg-secondary">
         <Outlet />
       </DialogContent>
     </Dialog>

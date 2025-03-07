@@ -7,7 +7,7 @@ import { useFileUpload } from "@/hooks/useFileUpload";
 const AvatarSetting = () => {
   const { updateProfile, profile, loading } = useUserStore();
   const avatarForm = useFormSchema(profile, profileControl, updateProfile);
-
+  console.log(profile);
   const { singleFile } = useFileUpload(
     avatarForm.setFieldValue,
     avatarForm.values.avatar,
@@ -20,8 +20,8 @@ const AvatarSetting = () => {
       <div className="w-40 h-40 border border-muted">
         <img
           className="w-full h-full object-cover"
-          src={profile.avatar}
-          alt="avatar picture"
+          src={profile?.avatar}
+          alt={`${profile.username}`}
         />
       </div>
 

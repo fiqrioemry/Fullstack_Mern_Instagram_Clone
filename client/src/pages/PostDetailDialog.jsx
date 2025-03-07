@@ -11,15 +11,14 @@ const PostDetailDialog = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const post = usePostStore((state) => state.post);
-  const setPost = usePostStore((state) => state.setPost);
+  const { post, getPostDetail } = usePostStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   useEffect(() => {
     if (id) {
-      setPost(parseInt(id));
+      getPostDetail(parseInt(id));
     }
-  }, [setPost, id]);
+  }, [getPostDetail, id]);
 
   useEffect(() => {
     if (location.state?.background) {

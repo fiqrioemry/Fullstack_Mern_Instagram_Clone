@@ -1,8 +1,20 @@
 /* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Avatar from "../ui/Avatar";
+import Avatar from "@/components/ui/Avatar";
+import { useUserStore } from "@/store/useUserStore";
 
 const NotificationsDisplay = ({ notifications }) => {
+  const { MarkNotificationsAsRead } = useUserStore();
+
+  const unread = notifications.some((notif) => notif.isRead === false);
+
+  useEffect(() => {
+    if (unread) {
+      MarkNotificationsAsRead();
+    }
+  }, [MarkNotificationsAsRead, unread]);
+
   return (
     <div className="max-w-2xl md:max-w-3xl w-full ">
       <div className="flex flex-col md:py-10 py-4 mx-6 md:mx-12 space-y-4 ">
@@ -19,8 +31,8 @@ const NotificationsDisplay = ({ notifications }) => {
 
             case "like":
               message = notif.commentId
-                ? "liked your comment"
-                : "liked your post";
+                ? `liked your comment : ${notif.comment}`
+                : `liked your post`;
               break;
 
             case "mention":

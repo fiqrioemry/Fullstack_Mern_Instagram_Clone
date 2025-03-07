@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 const ConfirmationBox = ({
   open,
@@ -13,6 +14,9 @@ const ConfirmationBox = ({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
+        <DialogTitle>
+          <VisuallyHidden>Confirmation box</VisuallyHidden>
+        </DialogTitle>
         <div className="text-center space-y-2">
           <h4>{title}</h4>
           <p>{message}</p>

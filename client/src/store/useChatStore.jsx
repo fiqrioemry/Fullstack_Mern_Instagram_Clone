@@ -25,8 +25,7 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  getChat: async () => {
-    const userId = get().selectedUser.userId;
+  getChat: async (userId) => {
     try {
       const { chat } = await callApi.getChat(userId);
       set({ chat });

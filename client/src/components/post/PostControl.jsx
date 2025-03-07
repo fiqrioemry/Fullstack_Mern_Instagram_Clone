@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import LikePost from "./LikePost";
 import LikeCount from "./LikeCount";
-import { Bookmark } from "lucide-react";
 import CommentButton from "./CommentButton";
 import { formatDateToISO } from "@/lib/utils";
+import BookmarkButton from "./BookmarkButton";
 
 const PostControl = ({ post }) => {
   return (
@@ -11,7 +11,7 @@ const PostControl = ({ post }) => {
       <div className="flex items-center gap-4">
         <LikePost data={post} />
         <CommentButton data={post} />
-        <Bookmark className="btn-secondary" />
+        <BookmarkButton data={post} />
       </div>
 
       <div className="text-sm md:text-md">

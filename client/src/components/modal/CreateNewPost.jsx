@@ -8,7 +8,8 @@ import { useFormSchema } from "@/hooks/useFormSchema";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { useState, useCallback, useMemo } from "react";
 import { CloudUpload, Loader, Plus } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
 
 // eslint-disable-next-line react/prop-types
 export function CreateNewPost({ isOpen, setIsOpen }) {
@@ -56,6 +57,9 @@ export function CreateNewPost({ isOpen, setIsOpen }) {
         onOpenChange={(open) => (!open ? handleCloseDialog() : setIsOpen(open))}
       >
         <DialogContent className="w-96 max-w-2xl p-0 border-none bg-secondary">
+          <DialogTitle>
+            <VisuallyHidden>Search a user</VisuallyHidden>
+          </DialogTitle>
           {loading ? (
             <div className="h-96 flex-center">
               <div className="flex flex-col justify-center items-center">

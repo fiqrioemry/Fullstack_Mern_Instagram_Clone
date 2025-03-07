@@ -2,28 +2,28 @@
 import { Link, useLocation } from "react-router-dom";
 import { HeartIcon, MessageCircle } from "lucide-react";
 
-const PostsDisplay = ({ posts }) => {
+const SavedDisplay = ({ saved }) => {
   const location = useLocation();
 
   return (
     <div className="grid grid-cols-3 gap-1">
-      {posts.map((post) => (
+      {saved.map((save) => (
         <div
           className="h-44 md:h-52 overflow-hidden relative"
-          key={post.postId}
+          key={save.postId}
         >
           <Link
-            to={`/p/${post.postId}`}
+            to={`/p/${save.postId}`}
             state={{ background: location }}
             className="absolute top-0 bottom-0 left-0 right-0 hover:bg-black/50 bg-transparent flex-center duration-300"
           >
             <div className="flex items-center gap-4">
               <div className="flex gap-x-2 text-white">
-                {post.likes}
+                {save.likes}
                 <HeartIcon />
               </div>
               <div className="flex gap-x-2 text-white">
-                {post.comments}
+                {save.comments}
                 <MessageCircle />
               </div>
             </div>
@@ -31,7 +31,7 @@ const PostsDisplay = ({ posts }) => {
 
           <img
             className="w-full h-full object-cover"
-            src={post.images[0]}
+            src={save.images[0]}
             alt="image"
           />
         </div>
@@ -40,4 +40,4 @@ const PostsDisplay = ({ posts }) => {
   );
 };
 
-export default PostsDisplay;
+export default SavedDisplay;

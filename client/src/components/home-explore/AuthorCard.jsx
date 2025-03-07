@@ -1,45 +1,40 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Linkedin, Globe, Github } from "lucide-react";
+import { FaGithub, FaLinkedin, FaGlobe } from "react-icons/fa";
 
 export default function AuthorCard() {
   return (
-    <Card className="w-64 lg:w-72  p-4 shadow-lg rounded-2xl text-center bg-white">
-      {/* Profile Image */}
+    <article className="bg-background p-4 border rounded-lg  border-muted">
       <div className="flex justify-center">
-        <div className="w-24 h-24 border rounded-full overflow-hidden">
-          <img
-            src="./author.jpg"
-            alt="avatar"
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <img
+          src="./author.jpg"
+          alt="author"
+          className="w-24 h-24 rounded-full border border-muted object-cover"
+        />
       </div>
-      {/* Name & Title */}
-      <h2 className="text-xl font-semibold mt-3">Ahmad Fiqri Oemry</h2>
-      <p className="text-gray-500">Software Engineer | Web Developer</p>
+      <div className="text-center mt-4">
+        <h4>Ahmad Fiqri Oemry</h4>
+        <p>Software Engineer | Web Developer</p>
+      </div>
 
-      <CardContent className="mt-4 text-sm text-gray-600">
-        I Love create seamless & high-performance websites. Lets collaborate
-      </CardContent>
-
-      {/* Social Links */}
-      <div className="mt-4 flex justify-center gap-4 text-gray-600">
+      <div className="mt-4 flex justify-center gap-4">
         <a
           href="https://www.linkedin.com/in/ahmadfiqrioemry"
-          className="hover:text-blue-600"
+          className="hover:text-blue-500 duration-150"
         >
-          <Linkedin size={20} />
+          <FaLinkedin />
         </a>
-        <a href="https://github.com/fiqrioemry" className="hover:text-pink-600">
-          <Github size={20} />
+        <a
+          href="https://github.com/fiqrioemry"
+          className="hover:text-red-500 duration-150"
+        >
+          <FaGithub />
         </a>
         <a
           href="https://www.ahmadfiqrioemry.com"
-          className="hover:text-gray-800"
+          className="hover:text-green-500 duration-150"
         >
-          <Globe size={20} />
+          <FaGlobe />
         </a>
       </div>
-    </Card>
+    </article>
   );
 }

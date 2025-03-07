@@ -11,7 +11,6 @@ import ConfirmationBox from "@/components/modal/ConfirmationBox";
 const FollowCard = ({ data }) => {
   const { user } = useAuthStore();
   const [selectedUser, setSelectedUser] = useState(null);
-
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { toggleFollow, setFollows, loading, setCountFollowings, profile } =
     useUserStore();

@@ -16,14 +16,14 @@ const NavTabs = ({ profile }) => {
         </Link>
         {profile.isMyProfile && (
           <Link to="saved">
-            <TabsTrigger value="saved">
+            <TabsTrigger value={`/${profile.username}/saved`}>
               <Bookmark /> <span>Saved</span>
             </TabsTrigger>
           </Link>
         )}
 
         <Link to="tags">
-          <TabsTrigger value="tags">
+          <TabsTrigger value={`/${profile.username}/tags`}>
             <Tags /> <span>tags</span>
           </TabsTrigger>
         </Link>

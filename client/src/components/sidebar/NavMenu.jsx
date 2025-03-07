@@ -9,17 +9,17 @@ import {
 import NavItem from "./NavItem";
 import { cn } from "@/lib/utils";
 import Avatar from "@/components/ui/Avatar";
-import { forwardRef, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
-import { CreateNewPost } from "@/components/modal/CreateNewPost";
 import { useUserStore } from "@/store/useUserStore";
+import { forwardRef, useEffect, useState } from "react";
+import { CreateNewPost } from "@/components/modal/CreateNewPost";
 
 // eslint-disable-next-line react/display-name, react/prop-types
 const NavMenu = forwardRef(({ openSearch, handleSearch }, ref) => {
+  const location = useLocation();
   const { user } = useAuthStore();
-
   const [openCreate, setOpenCreate] = useState(false);
-
   const { notifications, getNotifications } = useUserStore();
 
   useEffect(() => {
@@ -31,7 +31,9 @@ const NavMenu = forwardRef(({ openSearch, handleSearch }, ref) => {
   };
 
   const labelClass = cn(
-    openSearch ? "opacity-0" : "opacity-100",
+    openSearch || location.pathname.includes("message")
+      ? "opacity-0"
+      : "opacity-100",
     "duration-300 transition-all ease-in hidden lg:block"
   );
 

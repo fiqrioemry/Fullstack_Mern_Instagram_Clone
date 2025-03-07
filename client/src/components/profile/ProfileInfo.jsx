@@ -40,7 +40,7 @@ const ProfileInfo = ({ profile }) => {
               <Link to="/settings" className="btn-selection">
                 Edit Profile
               </Link>
-              <Link to="" className="btn-selection">
+              <Link to={`/${profile.username}/saved`} className="btn-selection">
                 View Archive
               </Link>
             </div>

@@ -6,31 +6,32 @@ import { useAuthStore } from "./useAuthStore";
 export const usePostStore = create((set, get) => ({
   post: null,
   posts: null,
+  saved: null,
   totalPosts: 0,
   loading: false,
-  message: "",
 
-  setPost: (postId) => {
+  setSavedPost: (postId) => {
     set((state) => ({
-      post: state.posts.find((post) => post.postId === postId) || null,
-    }));
-  },
-
-  setPosts: (postId) => {
-    set((state) => ({
-      posts: state.posts.find((post) => post.postId === postId) || null,
+      posts: state.posts?.map((post) =>
+        post.postId === postId ? { ...post, isSaved: !post.isSaved } : post
+      ),
+      post:
+        state.post?.postId === postId
+          ? { ...state.post, isSaved: !state.post.isSaved }
+          : state.post,
     }));
   },
 
   setDeletedPosts: (postId) => {
     set((state) => ({
-      posts: state.posts.filter((post) => post.postId !== postId) || [],
+      posts: state.posts?.filter((post) => post.postId !== postId) || [],
     }));
   },
 
+  // hapus post yang ada dihalaman home
   removePostsByUserId: (userId) => {
     set((state) => ({
-      posts: state.posts.filter((post) => post.userId !== userId),
+      posts: state.posts?.filter((post) => post.userId !== userId),
     }));
   },
 
@@ -74,6 +75,7 @@ export const usePostStore = create((set, get) => ({
   },
 
   getPostDetail: async (postId) => {
+    set({ post: null });
     try {
       const post = await callApi.getPostDetail(postId);
       set({ post });
@@ -105,6 +107,26 @@ export const usePostStore = create((set, get) => ({
       console.error(error.message);
     } finally {
       set({ loading: false });
+    }
+  },
+
+  getAllSavedPosts: async () => {
+    set({ saved: null });
+    try {
+      const { saved } = await callApi.getAllSavedPosts();
+      set({ saved });
+    } catch (error) {
+      console.error(error.message);
+    }
+  },
+
+  toggleSavedPost: async (postId) => {
+    try {
+      const { message } = await callApi.toggleSavedPost(postId);
+      get().setSavedPost(postId);
+      toast.success(message);
+    } catch (error) {
+      console.error(error.message);
     }
   },
 

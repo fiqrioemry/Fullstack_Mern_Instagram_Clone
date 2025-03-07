@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const FollowLoading = () => {
   return (
     <div>
-      {Array(5)
+      {Array(3)
         .fill(0)
         .map((_, index) => (
           <div key={index} className="flex items-center justify-between p-3">

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import callApi from "@/api/callApi";
 
-export const useUserStore = create((set) => ({
+export const useUserStore = create((set, get) => ({
   users: null,
   profile: null,
   totalFollows: 0,
@@ -21,9 +21,26 @@ export const useUserStore = create((set) => ({
     }
   },
 
+  setNotificationsAsRead: () => {
+    set((state) => ({
+      notifications: state.notifications.map((notification) => ({
+        ...notification,
+        isRead: true,
+      })),
+    }));
+  },
+
+  MarkNotificationsAsRead: async () => {
+    try {
+      await callApi.markNotificationsAsRead();
+      get().setNotificationsAsRead();
+    } catch (error) {
+      console.error(error.message);
+    }
+  },
+
   searchUser: async (username) => {
     if (!username.trim()) return;
-
     set({ users: null, searching: true });
     try {
       const users = await callApi.searchUser(username);
@@ -36,27 +53,33 @@ export const useUserStore = create((set) => ({
     }
   },
 
-  getFollowers: async (username) => {
-    set({ follows: null });
+  getFollowers: async (username, limit) => {
+    set({ loading: true });
     try {
       const { followers, totalFollowers } = await callApi.getFollowers(
-        username
+        username,
+        limit
       );
       set({ follows: followers, totalFollows: totalFollowers });
     } catch (error) {
       console.error(error.message);
+    } finally {
+      set({ loading: false });
     }
   },
 
-  getFollowings: async (username) => {
-    set({ follows: null });
+  getFollowings: async (username, limit) => {
+    set({ loading: true });
     try {
-      const { followings, totalFollowers } = await callApi.getFollowings(
-        username
+      const { followings, totalFollowings } = await callApi.getFollowings(
+        username,
+        limit
       );
-      set({ follows: followings, totalFollows: totalFollowers });
+      set({ follows: followings, totalFollows: totalFollowings });
     } catch (error) {
       console.error(error.message);
+    } finally {
+      set({ loading: false });
     }
   },
 

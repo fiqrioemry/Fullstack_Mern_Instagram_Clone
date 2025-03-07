@@ -75,6 +75,13 @@ const callApi = {
       .then((res) => res.data)
       .catch(errorHandle);
   },
+
+  markNotificationsAsRead: async () => {
+    return authInstance
+      .put(`/user/notifications`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
   getUserProfile: async (username) => {
     return authInstance
       .get(`/user/${username}`)
@@ -105,16 +112,16 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  getFollowers: async (username) => {
+  getFollowers: async (username, limit) => {
     return authInstance
-      .get(`/user/${username}/followers`)
+      .get(`/user/${username}/followers?limit=${limit}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
 
-  getFollowings: async (username) => {
+  getFollowings: async (username, limit) => {
     return authInstance
-      .get(`/user/${username}/followings`)
+      .get(`/user/${username}/followings?limit=${limit}`)
       .then((res) => res.data)
       .catch(errorHandle);
   },
@@ -171,8 +178,21 @@ const callApi = {
       .catch(errorHandle);
   },
 
-  //🔹Like and Comment API route management
+  getAllSavedPosts: async () => {
+    return authInstance
+      .get(`/post/bookmark`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
 
+  toggleSavedPost: async (postId) => {
+    return authInstance
+      .post(`/post/bookmark/${postId}`)
+      .then((res) => res.data)
+      .catch(errorHandle);
+  },
+
+  //🔹Like and Comment API route management
   likePost: async (postId) => {
     return authInstance
       .post(`/post/${postId}/like/post`)

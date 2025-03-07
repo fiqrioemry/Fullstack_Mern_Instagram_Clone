@@ -7,8 +7,7 @@ const SearchResult = ({ users, searching, onClick }) => {
 
   if (searching) return <SearchLoading />;
 
-  if (users.length === 0)
-    return <p className="text-muted-foreground py-2">No Users Found</p>;
+  if (users.length === 0) return <p className="py-2">No Users Found</p>;
 
   return users.map((user) => (
     <button

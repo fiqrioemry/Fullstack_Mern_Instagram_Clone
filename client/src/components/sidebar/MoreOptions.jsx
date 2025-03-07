@@ -16,7 +16,6 @@ function MoreOptions({ open, toggleTheme, setToggleTheme, moreRef }) {
   const { signout } = useAuthStore();
   const { handleDarkMode, darkMode } = useTheme();
 
-  console.log("BUKA");
   return (
     <DropdownMenu open={open} onOpenChange={(open) => !open}>
       <DropdownMenuContent ref={moreRef} className="bg-secondary">

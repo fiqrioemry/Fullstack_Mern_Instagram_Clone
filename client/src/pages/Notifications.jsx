@@ -13,7 +13,7 @@ const Notifications = () => {
 
   if (!notifications) return <NotificationsLoading />;
 
-  if (notifications && !notifications.length) return <NoNotifcationsToShow />;
+  if (notifications.length === 0) return <NoNotifcationsToShow />;
 
   return <NotificationsDisplay notifications={notifications} />;
 };

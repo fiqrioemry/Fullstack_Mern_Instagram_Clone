@@ -11,12 +11,12 @@ const useLoadChat = () => {
     subscribeToMessages,
     unsubscribeFromMessages,
   } = useChatStore();
+
   useEffect(() => {
     if (selectedUser) {
       getChat(selectedUser.userId);
       subscribeToMessages();
     }
-
     return () => {
       unsubscribeFromMessages();
     };
