@@ -15,18 +15,27 @@ async function getNotifications(req, res) {
         { model: Post, as: 'post' },
         { model: Comment, as: 'comment' },
       ],
+      order: [['createdAt', 'DESC']],
     });
+
+    if (!notificationsData)
+      return res.status(200).json({
+        message: 'You dont have any notifications',
+        notifications: [],
+      });
+
     const notifications = notificationsData.map((notif) => {
       return {
         id: notif.id,
         type: notif.type,
-        username: notif.sender.username,
-        avatar: notif.sender.profile.avatar,
+        username: notif.sender?.username,
+        avatar: notif.sender?.profile.avatar,
         postId: notif.post?.id,
         post: notif.post?.content,
         commentId: notif.comment?.id,
         comment: notif.comment?.content,
         isRead: notif.isRead,
+        createdAt: notif.createdAt,
       };
     });
     res.status(200).json({ notifications });
@@ -37,9 +46,11 @@ async function getNotifications(req, res) {
 
 async function markAsRead(req, res) {
   const receiverId = req.user.userId;
+
   try {
     await Notification.update({ isRead: true }, { where: { receiverId } });
-    res.status(200).json({ message: 'Notifications marked as read' });
+
+    res.status(200).json({ message: 'Marked as Read' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -67,8 +67,8 @@ async function createComment(req, res) {
 
 async function createReply(req, res) {
   const userId = req.user.userId;
-  const { postId, commentId } = req.params;
   const content = req.body.content;
+  const { postId, commentId } = req.params;
 
   try {
     const post = await Post.findByPk(postId);
@@ -124,7 +124,7 @@ async function createReply(req, res) {
 async function getComments(req, res) {
   const userId = req.user.userId;
   const postId = req.params.postId;
-  const limit = parseInt(req.query.limit) || 13;
+  const limit = parseInt(req.query.limit) || 3;
 
   try {
     const commentsData = await Comment.findAndCountAll({
@@ -185,7 +185,7 @@ async function getComments(req, res) {
 async function getReplies(req, res) {
   const userId = req.user.userId;
   const { postId, commentId } = req.params;
-  const limit = parseInt(req.query.limit) || 10;
+  const limit = parseInt(req.query.limit) || 3;
 
   try {
     const repliesData = await Comment.findAndCountAll({
@@ -242,19 +242,18 @@ async function getReplies(req, res) {
 async function toggleLikeComment(req, res) {
   const userId = req.user.userId;
   const commentId = req.params.commentId;
-  const t = await sequelize.transaction();
-
+  const transaction = await sequelize.transaction();
   try {
     const comment = await Comment.findByPk(commentId, { transaction: t });
 
     if (!comment) {
-      await t.rollback();
+      await transaction.rollback();
       return res.status(404).json({ message: 'Comment not found' });
     }
 
     const like = await Like.findOne({
       where: { userId, entityId: commentId, entityType: 'comment' },
-      transaction: t,
+      transaction,
     });
 
     if (like) {
@@ -267,7 +266,7 @@ async function toggleLikeComment(req, res) {
           commentId: commentId,
           type: 'like',
         },
-        transaction: t,
+        transaction,
       });
 
       await t.commit();
@@ -276,7 +275,7 @@ async function toggleLikeComment(req, res) {
 
     await Like.create(
       { userId, entityId: commentId, entityType: 'comment' },
-      { transaction: t },
+      { transaction },
     );
 
     if (comment.userId !== userId) {
@@ -287,24 +286,22 @@ async function toggleLikeComment(req, res) {
           commentId: commentId,
           type: 'like',
         },
-        { transaction: t },
+        { transaction },
       );
     }
-
-    await t.commit();
+    await transaction.commit();
     return res.status(200).json({ message: 'You Liked the comment' });
   } catch (error) {
-    await t.rollback();
+    await transaction.rollback();
     return res.status(500).json({ message: error.message });
   }
 }
 
 async function deleteComment(req, res) {
-  const { userId } = req.user;
-  const { commentId } = req.params;
-
+  const userId = req.user.userId;
+  const commentId = req.params.commentId;
   try {
-    const comment = await Comment.findOne({ where: { id: commentId } });
+    const comment = await Comment.findByPk(commentId);
 
     if (!comment) return res.status(404).json({ message: 'Comment not found' });
 
@@ -325,10 +322,10 @@ async function deleteComment(req, res) {
 }
 
 module.exports = {
-  createComment,
+  getReplies,
   getComments,
+  createReply,
+  createComment,
   deleteComment,
   toggleLikeComment,
-  getReplies,
-  createReply,
 };

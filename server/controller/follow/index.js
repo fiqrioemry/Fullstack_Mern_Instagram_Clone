@@ -6,7 +6,6 @@ const {
   Notification,
 } = require('../../models');
 
-// tested
 async function followUser(req, res) {
   const userId = req.user.userId;
   const t = await sequelize.transaction();
@@ -71,7 +70,7 @@ async function followUser(req, res) {
 async function getFollowers(req, res) {
   const userId = req.user.userId;
   const username = req.params.username;
-  const limit = parseInt(req.query.limit) || 5;
+  const limit = parseInt(req.query.limit) || 3;
 
   try {
     const user = await User.findOne({ where: { username } });
@@ -99,11 +98,17 @@ async function getFollowers(req, res) {
       ],
     });
 
+    const totalFollowers = await Follow.count({
+      where: { followingId: user.id },
+    });
+
     if (!userFollowers.length) {
-      return res.status(200).json([]);
+      return res.status(200).json({
+        followers: [],
+        totalFollowers,
+      });
     }
 
-    // Ambil daftar user yang sedang login ikuti
     const myFollowings = await Follow.findAll({
       where: { followerId: userId },
       attributes: ['followingId'],
@@ -119,7 +124,7 @@ async function getFollowers(req, res) {
       isFollow: myFollowingIds.includes(follower.id),
     }));
 
-    return res.status(200).json(followers);
+    return res.status(200).json({ followers, totalFollowers });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: error.message });
@@ -129,7 +134,7 @@ async function getFollowers(req, res) {
 async function getFollowings(req, res) {
   const userId = req.user.userId;
   const username = req.params.username;
-  const limit = parseInt(req.query.limit) || 5;
+  const limit = parseInt(req.query.limit) || 3;
 
   try {
     const user = await User.findOne({ where: { username } });
@@ -157,10 +162,16 @@ async function getFollowings(req, res) {
       ],
     });
 
-    if (!userFollowings.length) {
-      return res.status(200).json([]);
-    }
+    const totalFollowings = await Follow.count({
+      where: { followerId: user.id },
+    });
 
+    if (!userFollowings.length) {
+      return res.status(200).json({
+        followings: [],
+        totalFollowings,
+      });
+    }
     const myFollowings = await Follow.findAll({
       where: { followerId: userId },
       attributes: ['followingId'],
@@ -176,7 +187,7 @@ async function getFollowings(req, res) {
       isFollow: myFollowingIds.includes(following.id),
     }));
 
-    return res.status(200).json(followings);
+    return res.status(200).json({ followings, totalFollowings });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: error.message });

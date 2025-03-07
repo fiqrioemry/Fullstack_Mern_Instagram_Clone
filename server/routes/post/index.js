@@ -12,16 +12,26 @@ const {
   toggleLikePost,
   getPostsFromFollowings,
 } = require('../../controller/post');
-const {
-  getComments,
-  deleteComment,
 
+const {
+  getAllSavedPosts,
+  toggleSavedPost,
+} = require('../../controller/bookmark');
+
+const {
   getReplies,
   createReply,
+  getComments,
   createComment,
+  deleteComment,
   toggleLikeComment,
 } = require('../../controller/comment');
 
+// saved post API Route management
+router.get('/bookmark', isAuthenticate, getAllSavedPosts);
+router.post('/bookmark/:postId', isAuthenticate, toggleSavedPost);
+
+// post API Route manangement
 router.get('/', isAuthenticate, getPublicPosts);
 router.get('/followings', isAuthenticate, getPostsFromFollowings);
 router.post('/', upload().array('images', 5), isAuthenticate, createPost);

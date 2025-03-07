@@ -8,6 +8,7 @@ const {
   sequelize,
   Notification,
   PostGallery,
+  Bookmark,
 } = require('../../models');
 const fs = require('fs').promises;
 const { Op } = require('sequelize');
@@ -47,6 +48,7 @@ async function getPostsFromFollowings(req, res) {
           attributes: ['id', 'username'],
           include: [{ model: Profile, as: 'profile', attributes: ['avatar'] }],
         },
+        { model: Bookmark, as: 'bookmark', attributes: ['id', 'userId'] },
       ],
       distinct: true,
       order: [['createdAt', 'ASC']],
@@ -82,14 +84,14 @@ async function getPostsFromFollowings(req, res) {
       likes: post.likes.length,
       comments: post.comments.length,
       isLiked: post.likes.some((like) => like.userId === userId),
+      isSaved: post.bookmark.some((saved) => saved.userId === userId),
       isFollow: user.Followings.some((follow) => follow.id === post.user.id),
     }));
 
     return res.status(200).json({ totalPosts, posts });
   } catch (error) {
     return res.status(500).json({
-      message: 'Failed to get posts from followings',
-      error: error.message,
+      message: error.message,
     });
   }
 }
@@ -105,6 +107,7 @@ async function getPostDetail(req, res) {
         { model: Like, as: 'likes', attributes: ['id', 'userId'] },
         { model: Comment, as: 'comments', attributes: ['id'] },
         { model: PostGallery, as: 'gallery', attributes: ['image'] },
+        { model: Bookmark, as: 'bookmark', attributes: ['id', 'userId'] },
         {
           model: User,
           as: 'user',
@@ -134,19 +137,20 @@ async function getPostDetail(req, res) {
     });
 
     const post = {
-      userId: postData.user.id,
       postId: postData.id,
-      username: postData.user.username,
+      userId: postData.user.id,
       content: postData.content,
+      username: postData.user.username,
       avatar: postData.user.profile?.avatar,
       images: postData.gallery?.map((g) => g.image) || [],
-      createdAt: postData.createdAt,
       isLiked: postData.likes.some((like) => like.userId === userId),
+      isSaved: postData.bookmark.some((saved) => saved.userId === userId),
       isFollow: user.Followings.some(
         (follow) => follow.id === postData.user.id,
       ),
-      comments: comments,
       likes: likes,
+      comments: comments,
+      createdAt: postData.createdAt,
     };
 
     return res.status(200).json(post);
@@ -163,9 +167,10 @@ async function getPublicPosts(req, res) {
     const postsData = await Post.findAndCountAll({
       limit,
       include: [
-        { model: Like, as: 'likes', attributes: ['id', 'userId'] },
         { model: Comment, as: 'comments', attributes: ['id'] },
+        { model: Like, as: 'likes', attributes: ['id', 'userId'] },
         { model: PostGallery, as: 'gallery', attributes: ['image'] },
+        { model: Bookmark, as: 'bookmark', attributes: ['id', 'userId'] },
         {
           model: User,
           as: 'user',
@@ -195,14 +200,15 @@ async function getPublicPosts(req, res) {
     const posts = postsData.rows.map((post) => ({
       userId: post.user.id,
       postId: post.id,
-      username: post.user.username,
       content: post.content,
+      likes: post.likes.length,
+      createdAt: post.createdAt,
+      username: post.user.username,
+      comments: post.comments.length,
       avatar: post.user.profile?.avatar,
       images: post.gallery?.map((g) => g.image) || [],
-      createdAt: post.createdAt,
-      likes: post.likes.length,
-      comments: post.comments.length,
       isLiked: post.likes.some((like) => like.userId === userId),
+      isSaved: post.bookmark.some((saved) => saved.userId === userId),
       isFollow: user.Followings.some((follow) => follow.id === post.user.id),
     }));
 
@@ -252,11 +258,10 @@ async function getUserPosts(req, res) {
           model: User,
           as: 'user',
           attributes: ['id', 'username'],
-          include: [{ model: Profile, as: 'profile', attributes: ['avatar'] }],
         },
-        { model: PostGallery, as: 'gallery', attributes: ['image'] },
         { model: Like, as: 'likes', attributes: ['id'] },
         { model: Comment, as: 'comments', attributes: ['id'] },
+        { model: PostGallery, as: 'gallery', attributes: ['image'] },
       ],
       order: [['createdAt', 'DESC']],
     });
@@ -271,15 +276,11 @@ async function getUserPosts(req, res) {
 
     const totalPosts = postsData.count;
     const posts = postsData.rows.map((post) => ({
-      userId: post.user.id,
       postId: post.id,
-      username: post.user.username,
-      content: post.content,
-      avatar: post.user.profile?.avatar,
-      images: post.gallery?.map((g) => g.image) || [],
-      createdAt: post.createdAt,
+      userId: post.user.id,
       likes: post.likes.length,
       comments: post.comments.length,
+      images: post.gallery?.map((g) => g.image) || [],
     }));
 
     return res.status(200).json({ totalPosts, posts });

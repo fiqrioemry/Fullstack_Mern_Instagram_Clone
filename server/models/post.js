@@ -22,15 +22,13 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, { as: 'user' });
 
       this.hasMany(models.Bookmark, {
-        foreignKey: 'postId',
-        as: 'bookmarkedBy',
+        as: 'bookmark',
       });
 
       this.hasMany(models.Notification, {
         foreignKey: 'postId',
       });
 
-      // fix
       this.hasMany(models.PostGallery, {
         as: 'gallery',
         onDelete: 'CASCADE',
